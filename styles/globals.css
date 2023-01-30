@@ -1,18 +1,9 @@
-:root, html {
+/* :root, html {
   background-color: #ea5455;
   overflow-x: hidden;
-}
+} */
 
-.testimonials-carousel .slick-next {
-  right: 350px;
-  margin-top: 20px;
-}
-
-.testimonials-carousel .slick-prev {
-  left: 350px;
-  margin-top: 20px;
-}
-
-.wavyLineBreak {
-  stroke: #facf39;
+* {
+  margin: 0;
+  box-sizing: border-box;
 }
