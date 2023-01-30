@@ -1,0 +1,18 @@
+.testimonialsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.smallTitle {
+  margin-bottom: 5px;
+}
+
+.carouselContainer {
+  width: 90%;
+  text-align: center;
+  background: linear-gradient(#f08182, #ea5455);
+  border-radius: 8px;
+  opacity: 80%;
+  padding: 20px 0 30px 0;
+}
