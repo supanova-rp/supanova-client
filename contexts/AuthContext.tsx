@@ -13,47 +13,48 @@ export const useAuth = () => {
 
 export const AuthProvider: React.FC<Props> = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
   
-  const signUp = (email: string, password: string) => {
+  const signup = (email: string, password: string) => {
     return auth.createUserWithEmailAndPassword(email, password)
+  }
+
+  const login = (email: string, password: string) => {
+    return auth.signInWithEmailAndPassword(email, password)
+  }
+
+  const logout = () => {
+    return auth.signOut()
+  }
+
+  const resetPassword = (email: string) => {
+    return auth.sendPasswordResetEmail(email)
   }
 
   useEffect(() => {
     const unsubcribe = auth.onAuthStateChanged(user => {
       setCurrentUser(user)
+      setIsLoading(false)
     })
 
     return unsubcribe;
   }, [])
-
-
-
-  // const onClickSignUp = async () => {
-  //   try {
-  //     const newUser = await createUserWithEmailAndPassword(auth, emailInput, passwordInput);
-
-  //     await updateProfile(newUser.user, { displayName: nameInput });
-
-  //     console.log(auth?.currentUser?.email);
-  //   } catch (error) {
-  //     const errorMessage = error.message || error;
-
-  //     console.log(errorMessage);
-  //   }
-  // };
-
-  // console.log('>>> user: ', user);
-
-
   
   const value = {
     currentUser,
-    signUp,
+    signup,
+    login,
+    logout,
+    resetPassword,
   }
 
   return (
     <AuthContext.Provider value={value}>
-      {children}
+      {/* Only render children when the currentUser has been set */}
+      {!isLoading
+        ? children
+        : null
+      }
     </AuthContext.Provider>
   );
 };

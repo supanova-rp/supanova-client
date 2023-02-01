@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { Card, Form, Button, Container, Alert } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { updateProfile } from 'firebase/auth';
+import Link from 'next/link';
+
 import { useAuth } from '@/contexts/AuthContext';
 
-const Signup = () => {
+const Register = () => {
   const [nameInput, setNameInput] = useState('');
   const [emailInput, setEmailInput] = useState('');
   const [passwordInput, setPasswordInput] = useState('');
@@ -12,7 +14,7 @@ const Signup = () => {
   const [validationError, setValidationError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const { signUp, currentUser } = useAuth();
+  const { signUp } = useAuth();
 
   const onHandleSubmit = async (event) => {
     event.preventDefault();
@@ -35,22 +37,6 @@ const Signup = () => {
       setIsLoading(false);
     }
   };
-
-  // const onClickSignUp = async () => {
-  //   try {
-  //     const newUser = await createUserWithEmailAndPassword(auth, emailInput, passwordInput);
-
-  //     await updateProfile(newUser.user, { displayName: nameInput });
-
-  //     console.log(auth?.currentUser?.email);
-  //   } catch (error) {
-  //     const errorMessage = error.message || error;
-
-  //     console.log(errorMessage);
-  //   }
-  // };
-
-  console.log('>>> user: ', currentUser);
 
   return (
     <Container
@@ -108,10 +94,10 @@ const Signup = () => {
             </Form>
           </Card.Body>
         </Card>
-        <footer className="w-100 text-center mt-2">Already have an account? Log in.</footer>
+        <footer className="w-100 text-center mt-2">Already have an account? <Link href="/login">Log in</Link>.</footer>
       </div>
     </Container>
   );
 };
 
-export default Signup;
+export default Register;
