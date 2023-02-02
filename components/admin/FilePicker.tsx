@@ -12,8 +12,6 @@ const FilePicker = () => {
     return <small className="text-muted">Loading...</small>;
   }
 
-  console.log('>>> filesContent: ', filesContent);
-
   return (
     <div className="d-flex align-items-center mt-3">
       <Button

@@ -1,0 +1,1 @@
+export type SetStringFunction = (parameter: string) => void;

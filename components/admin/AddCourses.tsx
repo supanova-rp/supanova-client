@@ -46,7 +46,7 @@ const AddCourses = () => {
   };
 
   return (
-    <Card className="w-100 p-3 d-flex mh-100">
+    <Card className="w-100 p-3 d-flex mh-100 rounded-0">
       <Card.Body>
         <div className="d-flex justify-content-md-between mb-4 align-items-center">
           <h2 className="mb-0">Add a New Course</h2>
@@ -84,7 +84,6 @@ const AddCourses = () => {
                       value={chapter.title}
                       onChange={(e) => onChangeChapter(index, e)} />
                       <FilePicker />
-                    {/* <p className="mt-2"><strong>Upload your video</strong></p> */}
                   </Form.Group>
                 </div>
                 <div>

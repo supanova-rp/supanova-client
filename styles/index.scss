@@ -2,10 +2,11 @@ body, html, #__next {
   height: 100%;
 }
 
-.icon {
+.icon, .link {
   cursor: pointer;
 }
 
 @import "./login";
 @import "./forgot-password";
 @import "./sidebar";
+@import "./add-users";
