@@ -34,10 +34,9 @@ const Login = () => {
 
   return (
     <Container
-      className="d-flex align-items-center justify-content-center"
-      style={{ minHeight: '100vh' }}>
+      className="d-flex align-items-center justify-content-center min-vh-100">
       <div>
-        <Card className="pt-4" style={{ width: '400px', minHeight: '420px' }}>
+        <Card className="pt-4 login-card">
           <Card.Body>
             <h2 className="text-center mb-3">Log in</h2>
             {validationError

@@ -5,6 +5,7 @@ import { Card, Form, Button } from 'react-bootstrap';
 
 import PlusIcon from '@/icons/plusIcon.svg';
 import MinusIcon from '@/icons/minusIcon.svg'
+import FilePicker from '@/components/admin/FilePicker';
 
 const AddCourses = () => {
   const [titleInput, setTitleInput] = useState('');
@@ -45,10 +46,10 @@ const AddCourses = () => {
   };
 
   return (
-    <Card className="w-100 p-3 d-flex" style={{ minHeight: '100%' }}>
+    <Card className="w-100 p-3 d-flex mh-100">
       <Card.Body>
-        <div className="d-flex justify-content-md-between">
-          <h2>Add a New Course</h2>
+        <div className="d-flex justify-content-md-between mb-4 align-items-center">
+          <h2 className="mb-0">Add a New Course</h2>
           <Button variant="link"><Link href="/home">Back Home</Link></Button>
         </div>
         <Form>
@@ -68,7 +69,7 @@ const AddCourses = () => {
               value={courseDescription}
               onChange={(e) => setCourseDescription(e.target.value)} />
           </Form.Group>
-          <h5 className="my-4">Add your Course Chapters</h5>
+          <h5 className="mt-4 mb-2">Add your Course Chapters</h5>
           {chapters.map((chapter, index) => {
             return (
               <div className="d-flex align-items-center" key={`chapter-${index}`}>
@@ -82,14 +83,15 @@ const AddCourses = () => {
                       required
                       value={chapter.title}
                       onChange={(e) => onChangeChapter(index, e)} />
-                    <p className="mt-2"><strong>Upload your video</strong></p>
+                      <FilePicker />
+                    {/* <p className="mt-2"><strong>Upload your video</strong></p> */}
                   </Form.Group>
                 </div>
                 <div>
                   {chapter.id !== 0
                     ? (
-                      <div style={{ padding: '5px' }} onClick={() => onClickRemoveChapter(chapter.id)}>
-                        <MinusIcon style={{ marginLeft: '15px', cursor: 'pointer' }} />
+                      <div className="ms-2 p-2 icon" onClick={() => onClickRemoveChapter(chapter.id)}>
+                        <MinusIcon />
                       </div>
                     )
                     : null}
@@ -98,9 +100,11 @@ const AddCourses = () => {
             );
           })}
 
-          <div className="mb-4 d-flex align-items-center" onClick={onClickAddANewChapter}>
+          <div className="mb-4 d-flex align-items-center">
             <p className="m-0">Add another chapter</p>
-            <PlusIcon style={{ marginLeft: '5px', cursor: 'pointer' }} />
+            <div className="d-flex align-items-center ms-1 p-2 icon" onClick={onClickAddANewChapter}>
+            <PlusIcon/>
+            </div>
           </div>
         </Form>
         <Button type="submit" className="w-30">Submit</Button>

@@ -34,10 +34,9 @@ const ForgotPassword = () => {
 
   return (
     <Container
-      className="d-flex align-items-center justify-content-center"
-      style={{ minHeight: '100vh' }}>
+      className="d-flex align-items-center justify-content-center min-vh-100">
       <div>
-        <Card className="pt-4" style={{ width: '400px', minHeight: '320px' }}>
+        <Card className="pt-4 forgot-password-card">
           <Card.Body>
             <h2 className="text-center mb-3">Password Reset</h2>
             {validationError
