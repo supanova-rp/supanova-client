@@ -5,11 +5,17 @@ import { useRouter } from 'next/router';
 
 import { useAuth } from '@/contexts/AuthContext';
 
+import HidePasswordIcon from '@/icons/hidePasswordIcon.svg';
+import ShowPasswordIcon from '@/icons/showPasswordIcon.svg';
+
+// TODO: hide/view password
+
 const Login = () => {
   const [emailInput, setEmailInput] = useState('');
   const [passwordInput, setPasswordInput] = useState('');
   const [validationError, setValidationError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isPasswordShowing, setIsPasswordShowing] = useState(false);
 
   const { login } = useAuth();
 
@@ -38,33 +44,51 @@ const Login = () => {
       <div>
         <Card className="pt-4 login-card">
           <Card.Body>
-            <h2 className="text-center mb-3">Log in</h2>
+            <h2 className="text-center mb-3 ">Log in</h2>
             {validationError
               ? <Alert variant="danger">{validationError}</Alert>
               : null
             }
             <Form onSubmit={onHandleLogin}>
-              <Form.Group id="email" className="mb-2">
+              <Form.Group id="email" className="mb-2 pe-4">
                 <Form.Label>Email</Form.Label>
                 <Form.Control
                   type="email"
                   required
                   value={emailInput}
+                  className="login-input"
                   onChange={(e) => setEmailInput(e.target.value)} />
               </Form.Group>
               <Form.Group id="password" className="mb-2">
                 <Form.Label>Password</Form.Label>
-                <Form.Control
-                  type="password"
-                  minLength={8}
+                <div className="d-flex align-items-center">
+                  <Form.Control
+                  type={isPasswordShowing ? 'text' : 'password'}
+                  minLength={6}
                   required
+                  className="logƒin-input"
                   value={passwordInput}
                   onChange={(e) => setPasswordInput(e.target.value)} />
+
+                  {!isPasswordShowing
+                    ? (
+                      <div className="ps-2 icon" onClick={() => setIsPasswordShowing(true)} >
+                        <ShowPasswordIcon/>
+                      </div>
+                    )
+                    : (
+                      <div className="ps-2 icon" onClick={() => setIsPasswordShowing(false)}>
+                        <HidePasswordIcon />
+                      </div>
+                    )
+                  }
+
+                </div>
               </Form.Group>
               <Button
                 disabled={isLoading}
                 type="submit"
-                className="w-100 mt-4">
+                className="mt-4 login-button">
                 Login
               </Button>
             </Form>

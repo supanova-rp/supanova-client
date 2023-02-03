@@ -33,8 +33,7 @@ const ForgotPassword = () => {
   };
 
   return (
-    <Container
-      className="d-flex align-items-center justify-content-center min-vh-100">
+    <Container className="d-flex align-items-center justify-content-center min-vh-100">
       <div>
         <Card className="pt-4 forgot-password-card">
           <Card.Body>
