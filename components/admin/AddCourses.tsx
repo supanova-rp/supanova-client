@@ -1,6 +1,7 @@
 /* eslint-disable react/no-array-index-key */
 import { useState } from 'react';
 import { Card, Form, Button } from 'react-bootstrap';
+import uuid from 'react-uuid';
 
 import FilePicker from '@/components/admin/FilePicker';
 
@@ -12,9 +13,9 @@ import AddMoreInputs from './AddMoreInputs';
 const AddCourses = () => {
   const [titleInput, setTitleInput] = useState('');
   const [courseDescription, setCourseDescription] = useState('');
-  const [chapters, setChapters] = useState([{ id: 0, title: '' }]);
+  const [chapters, setChapters] = useState([{ id: uuid(), title: '' }]);
 
-  const onChangeChapter = (index: number, e) => {
+  const onChangeChapter = (index: string, e) => {
     const updatedChapters = chapters.map((chapter) => {
       if (chapter.id === index) {
         return {
@@ -33,7 +34,7 @@ const AddCourses = () => {
     const updatedChapters = [
       ...chapters,
       {
-        id: chapters.length,
+        id: uuid(),
         title: '',
       },
     ];
@@ -41,7 +42,7 @@ const AddCourses = () => {
     setChapters(updatedChapters);
   };
 
-  const onClickRemoveChapter = (chapterId: number) => {
+  const onClickRemoveChapter = (chapterId: string) => {
     const updatedChapters = chapters.filter((chapter) => chapterId !== chapter.id);
 
     setChapters(updatedChapters);
@@ -74,16 +75,16 @@ const AddCourses = () => {
                 <div>
                   <FormGroup 
                   formId="course-chapter"
-                  className="my-4"
+                  className="my-4 chapter-input"
                   label="Chapter Title"
                   type="text"
                   value={chapter.title}
-                  onChange={(e) => onChangeChapter(index, e)}
+                  onChange={(e) => onChangeChapter(chapter.id, e)}
                   Component={<FilePicker />} />
                 </div>
                 <div>
 
-                  {chapter.id !== 0
+                  {index !== 0
                     ? <RemoveUserInput onClickFunction={() => onClickRemoveChapter(chapter.id)} />
                     : null
                   }

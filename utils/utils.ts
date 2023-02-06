@@ -10,3 +10,11 @@ export const updateUsers = (users, userId: string, userInfoToUpdate) => {
     return user
   })
 }
+
+export const getClassNameSidebarTab = (activeTab: string, tabName: string) => {
+  if (activeTab === tabName ) {
+    return 'btn-primary'
+  }
+
+  return 'btn-light admin-tab'
+}

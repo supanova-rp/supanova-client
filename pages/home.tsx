@@ -1,41 +1,41 @@
-import { Alert, Button, Card } from 'react-bootstrap';
 import { useState } from 'react';
-import { useRouter } from 'next/router';
 
 import { useAuth } from '@/contexts/AuthContext';
 import { usePrivateRoute } from '@/hooks/usePrivateRoute';
 
+import SidebarContainer from '@/components/home/SidebarContainer';
+import NavbarHome from '@/components/home/Navbar';
+import Courses from '@/components/home/Courses';
+import Instructor from '@/components/home/Instructor';
+
 const Home = () => {
   const [logoutError, setLogoutError] = useState('');
+  const [activeTab, setActiveTab] = useState('Curriculum')
 
-  const { logout, currentUser } = useAuth();
-
-  const router = useRouter();
+  const { currentUser } = useAuth();
 
   // TODO: change this with middleware?
   usePrivateRoute();
 
-  const onClickHandleLogOut = async () => {
-    try {
-      await logout();
-      router.push('/login');
-    } catch (e) {
-      setLogoutError('Failed to log out');
+   const renderAdminContent = () => {
+    if (activeTab === 'Curriculum') {
+      return <Courses logoutError={logoutError} />;
     }
+
+    if (activeTab === 'Instructor') {
+      return <Instructor logoutError={logoutError} />;
+    }
+
+    return null;
   };
 
   return (
     <>
-      <Card>
-        <Card.Body>
-          <h2 className="text-center mb-4">Course Curriculum</h2>
-          {logoutError
-            ? <Alert variant="danger">{logoutError}</Alert>
-            : null
-          }
-        </Card.Body>
-      </Card>
-      <Button variant="link" onClick={onClickHandleLogOut}>Log out</Button>
+      <NavbarHome setLogoutError={setLogoutError} />
+      <div className="d-flex h-100">
+        <SidebarContainer activeTab={activeTab} setActiveTab={setActiveTab} />
+        {renderAdminContent()}
+      </div>  
     </>
   );
 };

@@ -1,18 +1,18 @@
 import { useState } from 'react';
-import Sidebar from '@/components/admin/Sidebar';
 
 import AddCourses from '@/components/admin/AddCourses';
 import AddUsers from '@/components/admin/AddUsers';
+import SidebarContainer from '@/components/admin/SidebarContainer';
 
 const Admin = () => {
-  const [activeTab, setActiveTab] = useState('courses');
+  const [activeTab, setActiveTab] = useState('Courses');
 
   const renderAdminContent = () => {
-    if (activeTab === 'courses') {
+    if (activeTab === 'Courses') {
       return <AddCourses />;
     }
 
-    if (activeTab === 'users') {
+    if (activeTab === 'Users') {
       return <AddUsers />;
     }
 
@@ -21,7 +21,7 @@ const Admin = () => {
 
   return (
     <div className="d-flex h-100">
-      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+      <SidebarContainer activeTab={activeTab} setActiveTab={setActiveTab} />
       {renderAdminContent()}
     </div>
   );
