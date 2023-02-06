@@ -3,16 +3,21 @@ import { useState } from 'react';
 import AddCourses from '@/components/admin/AddCourses';
 import AddUsers from '@/components/admin/AddUsers';
 import SidebarContainer from '@/components/admin/SidebarContainer';
+import ModifyCourses from '@/components/admin/ModifyCourses';
 
 const Admin = () => {
-  const [activeTab, setActiveTab] = useState('Courses');
+  const [activeTab, setActiveTab] = useState('New Courses');
 
   const renderAdminContent = () => {
-    if (activeTab === 'Courses') {
+    if (activeTab === 'New Courses') {
       return <AddCourses />;
     }
 
-    if (activeTab === 'Users') {
+    if (activeTab === 'Existing Courses') {
+      return <ModifyCourses />;
+    }
+
+    if (activeTab === 'New Users') {
       return <AddUsers />;
     }
 

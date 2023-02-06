@@ -51,7 +51,7 @@ const AddCourses = () => {
   return (
     <Card className="w-100 p-3 d-flex mh-100 rounded-0">
       <Card.Body>
-        <Navbar title="Add New Courses" />
+        <Navbar title="Add a New Course" />
         <Form>
           <FormGroup 
           formId="title"
@@ -68,15 +68,15 @@ const AddCourses = () => {
             value={courseDescription}
             onChange={(e) => setCourseDescription(e.target.value)}/>
        
-          <h5 className="mt-4 mb-2">Add your Course Chapters</h5>
+          <h5 className="mt-4 mb-2">Add your Course Sections</h5>
           {chapters.map((chapter, index) => {
             return (
               <div className="d-flex align-items-center" key={`chapter-${index}`}>
                 <div>
                   <FormGroup 
-                  formId="course-chapter"
+                  formId="course-section"
                   className="my-4 chapter-input"
-                  label="Chapter Title"
+                  label="Course Section"
                   type="text"
                   value={chapter.title}
                   onChange={(e) => onChangeChapter(chapter.id, e)}
@@ -94,7 +94,7 @@ const AddCourses = () => {
             );
           })}
 
-          <AddMoreInputs title="Add another chapter" onClick={onClickAddNewChapter} />
+          <AddMoreInputs title="Add another section" onClick={onClickAddNewChapter} />
         </Form>
         <Button type="submit" className="w-30">Submit</Button>
       </Card.Body>

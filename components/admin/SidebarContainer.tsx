@@ -18,10 +18,12 @@ const SidebarContainer: React.FC<Props> = ({ activeTab, setActiveTab }) => {
       <div className="col-20">
         <Sidebar 
         setActiveTab={setActiveTab}
-        classNameTab1={getClassNameSidebarTab(activeTab, 'Courses')}
-        classNameTab2={getClassNameSidebarTab(activeTab, 'Users')}
-        tabTitle1="Courses"
-        tabTitle2="Users"/>
+        classNameTab1={getClassNameSidebarTab(activeTab, 'New Courses')}
+        classNameTab2={getClassNameSidebarTab(activeTab, 'Existing Courses')}
+        classNameTab3={getClassNameSidebarTab(activeTab, 'New Users')}
+        tabTitle1="New Courses"
+        tabTitle2="Existing Courses"
+        tabTitle3="New Users"/>
       </div>
     </div>
   );
