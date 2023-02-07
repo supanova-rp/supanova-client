@@ -6,10 +6,18 @@ body, html, #__next {
   cursor: pointer;
 }
 
+a {
+  text-decoration: none;
+  color: white;
+
+  &:hover {
+    transform: scale(1.1);
+    color: white;
+  }
+}
+
 @import "./login";
-@import "./forgot-password";
+@import "./admin";
 @import "./sidebar";
-@import "./add-users";
-@import "./add-courses";
 @import "./navbar";
 @import "./home";

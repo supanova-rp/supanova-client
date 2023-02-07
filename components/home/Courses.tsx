@@ -1,30 +1,19 @@
-import Header from './Header'
+import { useState } from 'react';
 
-interface Props {
-  logoutError: string,
-}
+import { LogoutErrorProps } from '@/index';
 
-const Courses: React.FC<Props> = ({ logoutError }) => {
+import Video from './Video';
+import CoursesList from './CoursesList';
+
+const Courses: React.FC<LogoutErrorProps> = ({ logoutError }) => {
+  const [showVideo, setShowVideo] = useState(false)
+
   return (
     <div>
-      <div>
-        <Header title="Course Curriculum" logoutError={logoutError} />
-      </div>
-      <div>
-        <h5 className="mt-4">Chapter 1: Managing Stakolders</h5>
-        <table className="table table-bordered mt-5">
-          <tbody>
-            <tr>
-              <th>Hello</th>
-              <td>Hello</td>
-            </tr>
-            <tr>
-              <th>Hello</th>
-              <td>Hello</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      {showVideo
+      ? <Video logoutError={logoutError} setShowVideo={setShowVideo} />
+      : <CoursesList logoutError={logoutError} setShowVideo={setShowVideo} />
+    } 
     </div>
   );
 }

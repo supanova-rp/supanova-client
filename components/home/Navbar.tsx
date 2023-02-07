@@ -6,6 +6,7 @@ import SupanovaLogo from '@/images/Supanova-logo.jpeg'
 
 import { useAuth } from '@/contexts/AuthContext';
 import { SetStringFunction } from '@/index';
+import Link from 'next/link';
 
 interface Props {
   setLogoutError: SetStringFunction,
@@ -29,10 +30,11 @@ const NavbarHome: React.FC<Props> = ({ setLogoutError }) => {
   return (
     <Navbar>
       <nav className="navbar w-100 nav p-0">
-        <div className="container">
-          <Image className="navbar-brand" src={SupanovaLogo} alt="Logo" width="80" height="70" />
-          <Button variant="link" className="link-light text-decoration-none nav-link" onClick={onClickHandleLogOut}>Log out</Button>
-        </div>
+        <Image className="navbar-brand" src={SupanovaLogo} alt="Logo" width="80" height="70" />
+        <div className="d-flex align-items-center">
+          <Link href="https://supanova.setmore.com/jamiegarner" target="_blank">Book</Link>
+          <Button variant="link" className="link-light text-decoration-none nav-link ms-4" onClick={onClickHandleLogOut}>Log out</Button>
+        </div>  
       </nav>
     </Navbar>
     );

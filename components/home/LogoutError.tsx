@@ -1,10 +1,7 @@
+import { LogoutErrorProps } from "@/index";
 import { Alert } from "react-bootstrap";
 
-interface Props {
-  logoutError: string,
-}
-
-const LogoutError: React.FC<Props> = ({ logoutError }) => {
+const LogoutError: React.FC<LogoutErrorProps> = ({ logoutError }) => {
   return ( 
     <>
       {logoutError
