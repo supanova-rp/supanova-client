@@ -17,7 +17,7 @@ const SidebarContainer: React.FC<Props> = ({ activeTab, setActiveTab }) => {
     <Card className="rounded-0 sidebar-container-home">
       <Card.Body className="mt-3 w-100">
         <Image src={HomeImage} alt="Stakeholder" height="300" width="300" priority />
-        <h5 className="mt-3">Stakeholder Management</h5>
+        <h5 className="mt-3">The Complete Radiation Course</h5>
         <h6>71 % Complete</h6>
         <div className="row sidebar-container">
           <div className="col-20 p-0">
