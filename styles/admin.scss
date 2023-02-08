@@ -5,3 +5,39 @@
 .email-input {
   width: 250px;
 }
+
+input {
+  display: none;
+}
+
+.file-picker {
+  cursor: pointer;
+  color: #6c757d;
+  border-radius: 0.25rem;
+  border: 1px solid #6c757d;
+  font-size: 0.875rem;
+  padding: 0.25rem 0.5rem;
+  margin-right: 10px;
+
+  &:hover {
+    color: white;
+    background-color: #6c757d;
+  }
+}
+
+.progress-bar-container {
+ height: 25px;
+ width: 25px;
+ margin-left: 10px;
+}
+
+.CircularProgressbar {
+  .CircularProgressbar-text {
+    fill: #f77e1d;
+    font-size: 25px;
+  }
+
+  .CircularProgressbar-path {
+    stroke: #f77e1d
+  } 
+}

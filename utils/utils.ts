@@ -18,3 +18,23 @@ export const getClassNameSidebarTab = (activeTab: string, tabName: string) => {
 
   return 'btn-light admin-tab'
 }
+
+export const getUpdatedSectionsWithAddedVideoInfo = (sections, sectionId: string, key: string, value) => {
+  const updatedSections = sections.map((section) => {
+    if (sectionId === section.id) {
+      return {
+        ...section,
+        video: {
+          ...section.video,
+          [key]: value,
+        }
+      } 
+    }
+
+    return section
+  })
+
+  console.log(updatedSections)
+
+  return updatedSections;
+}

@@ -1,4 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-circular-progressbar/dist/styles.css';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 
