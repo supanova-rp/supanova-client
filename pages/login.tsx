@@ -63,17 +63,17 @@ const Login = () => {
                 <Form.Label>Password</Form.Label>
                 <div className="d-flex align-items-center">
                   <Form.Control
-                  type={isPasswordShowing ? 'text' : 'password'}
-                  minLength={6}
-                  required
-                  className="logƒin-input"
-                  value={passwordInput}
-                  onChange={(e) => setPasswordInput(e.target.value)} />
+                    type={isPasswordShowing ? 'text' : 'password'}
+                    minLength={6}
+                    required
+                    className="logƒin-input"
+                    value={passwordInput}
+                    onChange={(e) => setPasswordInput(e.target.value)} />
 
                   {!isPasswordShowing
                     ? (
-                      <div className="ps-2 icon" onClick={() => setIsPasswordShowing(true)} >
-                        <ShowPasswordIcon/>
+                      <div className="ps-2 icon" onClick={() => setIsPasswordShowing(true)}>
+                        <ShowPasswordIcon />
                       </div>
                     )
                     : (

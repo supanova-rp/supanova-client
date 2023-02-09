@@ -1,5 +1,5 @@
-import { LogoutErrorProps } from "@/index";
-import LogoutError from "./LogoutError"
+import { LogoutErrorProps } from '@/index';
+import LogoutError from './LogoutError';
 
 interface Props extends LogoutErrorProps {
   title: string,
@@ -13,7 +13,7 @@ const Header: React.FC<Props> = ({ title, logoutError }) => {
         <h3 className="my-4">{title}</h3>
       </header>
     </div>
-    );
-}
- 
+  );
+};
+
 export default Header;

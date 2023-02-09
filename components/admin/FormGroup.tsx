@@ -1,5 +1,5 @@
-import React from "react";
-import { Form } from "react-bootstrap";
+import React from 'react';
+import { Form } from 'react-bootstrap';
 
 interface Props {
   formId: string,
@@ -12,20 +12,18 @@ interface Props {
   Component?: React.ReactNode,
 }
 const FormGroup: React.FC<Props> = ({ formId, label, type, className, disabled, onChange, value, Component }) => {
-  return ( 
-    <>
-      <Form.Group id={formId} className={className}>
-        <Form.Label>{label}</Form.Label>
-        <Form.Control
+  return (
+    <Form.Group id={formId} className={className}>
+      <Form.Label>{label}</Form.Label>
+      <Form.Control
         type={type}
         disabled={disabled}
         required
         value={value}
         onChange={onChange} />
-        {Component}
-      </Form.Group>
-    </>
-   );
-}
- 
+      {Component}
+    </Form.Group>
+  );
+};
+
 export default FormGroup;

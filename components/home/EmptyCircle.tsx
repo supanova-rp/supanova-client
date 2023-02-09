@@ -1,11 +1,10 @@
 const EmptyCircle = () => {
-  return ( 
+  return (
     // TODO: center the circle
     <div className="d-flex justify-content-center empty-circle-container">
-      <div className="empty-circle"/>
+      <div className="empty-circle" />
     </div>
-  )
-  
-}
- 
+  );
+};
+
 export default EmptyCircle;

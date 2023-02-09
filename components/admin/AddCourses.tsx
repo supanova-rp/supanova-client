@@ -4,13 +4,12 @@ import { Card, Form, Button, Alert } from 'react-bootstrap';
 import uuid from 'react-uuid';
 
 import FilePicker from '@/components/admin/FilePicker';
+import { getUpdatedSectionsWithAddedVideoInfo } from '@/utils/utils';
+import { API_DOMAIN } from '@/constants/constants';
 import Navbar from './Navbar';
 import RemoveUserInput from './RemoveUser';
 import FormGroup from './FormGroup';
 import AddMoreInputs from './AddMoreInputs';
-
-import { getUpdatedSectionsWithAddedVideoInfo } from '@/utils/utils';
-import { API_DOMAIN } from '@/constants/constants';
 
 export default class AddCourses extends React.Component {
   state = {
@@ -22,14 +21,14 @@ export default class AddCourses extends React.Component {
       video: {
         name: '',
         url: null,
-        uploadProgress: null
-      }
+        uploadProgress: null,
+      },
     }],
     loading: false,
     serverError: null,
     videoMissingError: null,
     successMessage: null,
-  }
+  };
 
   onChangeSection = (index: string, e) => {
     const updatedSectionsWithNewTitle = this.state.sections.map((section) => {
@@ -43,7 +42,7 @@ export default class AddCourses extends React.Component {
       return section;
     });
 
-    this.setState({ sections: updatedSectionsWithNewTitle })
+    this.setState({ sections: updatedSectionsWithNewTitle });
   };
 
   onClickAddNewSection = () => {
@@ -56,73 +55,70 @@ export default class AddCourses extends React.Component {
           name: '',
           url: null,
           uploadProgress: null,
-        }
+        },
       },
     ];
 
-    this.setState({ sections: sectionsWithNewlyAddedSection })
+    this.setState({ sections: sectionsWithNewlyAddedSection });
   };
 
   onClickRemoveSection = (sectionId: string) => {
     const updatedSectionsMinusRemovedSection = this.state.sections.filter((section) => sectionId !== section.id);
 
-    this.setState({ sections: updatedSectionsMinusRemovedSection })
-
+    this.setState({ sections: updatedSectionsMinusRemovedSection });
   };
 
   onFileSelected = (sectionId: string, videoName: string) => {
     const sectionsWithUpdatedVideoName = getUpdatedSectionsWithAddedVideoInfo(this.state.sections, sectionId, 'name', videoName);
 
-    this.setState({ sections: sectionsWithUpdatedVideoName })
-  }
+    this.setState({ sections: sectionsWithUpdatedVideoName });
+  };
 
   onFileUploaded = (sectionId: string, videoUrl: string) => {
     const sectionsWithUpdatedVideoUrl = getUpdatedSectionsWithAddedVideoInfo(this.state.sections, sectionId, 'url', videoUrl);
 
-    this.setState({ sections: sectionsWithUpdatedVideoUrl })
-  }
+    this.setState({ sections: sectionsWithUpdatedVideoUrl });
+  };
 
   onFileUploadProgress = (data, sectionId: string) => {
     const sectionsWithUpdatedVideoUploadProgress = getUpdatedSectionsWithAddedVideoInfo(this.state.sections, sectionId, 'uploadProgress', data.progress);
 
-    this.setState({ sections: sectionsWithUpdatedVideoUploadProgress })
-  }
+    this.setState({ sections: sectionsWithUpdatedVideoUploadProgress });
+  };
 
   onHandleFormSubmit = async (e) => {
     e.preventDefault();
 
-    this.setState({ loading: true, serverError: null, videoMissing: null })
+    this.setState({ loading: true, serverError: null, videoMissing: null });
 
     if (this.state.sections.every((section) => section.video.url !== null)) {
       try {
-
         const response = await fetch(`${API_DOMAIN}/add-course`, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json'},
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             name: this.state.title,
             description: this.state.courseDescription,
             sections: [...this.state.sections],
-          })
-        })
+          }),
+        });
 
-        const result = await response.json()
+        const result = await response.json();
 
         if (!result.error) {
-          this.setState({ successMessage: 'Successfully created new course!'})
+          this.setState({ successMessage: 'Successfully created new course!' });
         }
-
       } catch (e) {
-        console.log(e)
+        console.log(e);
 
-        this.setState({ serverError: 'Creating course failed. Try again.', loading: false })
+        this.setState({ serverError: 'Creating course failed. Try again.', loading: false });
       }
     } else {
-      this.setState({ videoMissingError: 'Please make sure videos for every section are uploaded.', loading: false, })
+      this.setState({ videoMissingError: 'Please make sure videos for every section are uploaded.', loading: false });
     }
-  }
-  
-  render () {
+  };
+
+  render() {
     return (
       <Card className="w-100 p-3 d-flex mh-100 rounded-0">
         <Card.Body>
@@ -140,64 +136,62 @@ export default class AddCourses extends React.Component {
             ? <Alert variant="success">{this.state.successMessage}</Alert>
             : null
           }
-          
+
           <Form onSubmit={this.onHandleFormSubmit}>
-            <FormGroup 
-            formId="title"
-            className="mb-2"
-            label="Course Title"
-            type="text"
-            value={this.state.title}
-            onChange={(e) => this.setState({ title: e.target.value })} />
+            <FormGroup
+              formId="title"
+              className="mb-2"
+              label="Course Title"
+              type="text"
+              value={this.state.title}
+              onChange={(e) => this.setState({ title: e.target.value })} />
             <FormGroup
               formId="description"
               className="mb-2"
               label="Course Description"
               type="text"
               value={this.state.courseDescription}
-              onChange={(e) => this.setState({ courseDescription: e.target.value})}/>
-         
+              onChange={(e) => this.setState({ courseDescription: e.target.value })} />
+
             <h5 className="mt-4 mb-2">Add your Course Sections</h5>
             {this.state.sections.map((section, index) => {
               return (
                 <div className="d-flex align-items-center" key={`chapter-${index}`}>
                   <div>
                     <FormGroup
-                    formId="course-section"
-                    className="my-4 chapter-input"
-                    label="Course Section"
-                    type="text"
-                    value={section.title}
-                    onChange={(e) => this.onChangeSection(section.id, e)}
-                    Component={
-                      <FilePicker
-                      sectionId={section.id}
-                      videoName={section.video.name}
-                      onFileSelected={this.onFileSelected}
-                      onFileUploaded={this.onFileUploaded}
-                      onFileUploadProgress={this.onFileUploadProgress}
-                      uploadProgress={section.video.uploadProgress} />
-                    }/>
+                      formId="course-section"
+                      className="my-4 chapter-input"
+                      label="Course Section"
+                      type="text"
+                      value={section.title}
+                      onChange={(e) => this.onChangeSection(section.id, e)}
+                      Component={(
+                        <FilePicker
+                          sectionId={section.id}
+                          videoName={section.video.name}
+                          onFileSelected={this.onFileSelected}
+                          onFileUploaded={this.onFileUploaded}
+                          onFileUploadProgress={this.onFileUploadProgress}
+                          uploadProgress={section.video.uploadProgress} />
+                      )} />
                   </div>
                   <div>
-  
+
                     {index !== 0
                       ? <RemoveUserInput onClickFunction={() => this.onClickRemoveSection(section.id)} />
                       : null
                     }
-  
+
                   </div>
                 </div>
               );
             })}
-  
+
             <AddMoreInputs title="Add another section" onClick={this.onClickAddNewSection} />
             <Button type="submit" className="w-30" disabled={this.state.loading}>Submit</Button>
           </Form>
         </Card.Body>
       </Card>
     );
-
   }
-
-};
+}

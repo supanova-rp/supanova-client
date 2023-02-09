@@ -3,4 +3,4 @@ export const colors = {
   red: '#dc3545',
   orange: '#f77e1d',
   gray: '#6c757d',
-}
+};

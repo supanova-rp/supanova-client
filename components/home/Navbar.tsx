@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { Button, Navbar } from 'react-bootstrap';
 import { useRouter } from 'next/router';
 
-import SupanovaLogo from '@/images/Supanova-logo.jpeg'
+import SupanovaLogo from '@/images/Supanova-logo.jpeg';
 
 import { useAuth } from '@/contexts/AuthContext';
 import { SetStringFunction } from '@/index';
@@ -13,7 +13,7 @@ interface Props {
 }
 
 const NavbarHome: React.FC<Props> = ({ setLogoutError }) => {
-  const { logout } = useAuth()
+  const { logout } = useAuth();
 
   const router = useRouter();
 
@@ -21,7 +21,7 @@ const NavbarHome: React.FC<Props> = ({ setLogoutError }) => {
     try {
       await logout();
       router.push('/login');
-      setLogoutError('')
+      setLogoutError('');
     } catch (e) {
       setLogoutError('Failed to log out');
     }
@@ -34,10 +34,10 @@ const NavbarHome: React.FC<Props> = ({ setLogoutError }) => {
         <div className="d-flex align-items-center">
           <Link href="https://supanova.setmore.com/jamiegarner" target="_blank">Book</Link>
           <Button variant="link" className="link-light text-decoration-none nav-link ms-5" onClick={onClickHandleLogOut}>Log out</Button>
-        </div>  
+        </div>
       </nav>
     </Navbar>
-    );
-}
- 
+  );
+};
+
 export default NavbarHome;

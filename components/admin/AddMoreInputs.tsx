@@ -1,8 +1,8 @@
-import React from "react";
+import React from 'react';
 
 import PlusIcon from '@/icons/plusIcon.svg';
 
-import { colors } from "@/constants/colorPalette";
+import { colors } from '@/constants/colorPalette';
 
 interface Props {
   onClick: () => void,
@@ -17,7 +17,7 @@ const AddMoreInputs: React.FC<Props> = ({ onClick, title }) => {
         <PlusIcon stroke={colors.green} />
       </div>
     </div>
-    );
-}
- 
+  );
+};
+
 export default AddMoreInputs;

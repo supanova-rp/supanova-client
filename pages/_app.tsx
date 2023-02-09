@@ -5,7 +5,7 @@ import Head from 'next/head';
 
 import { AuthProvider } from '@/contexts/AuthContext';
 
-import 'styles/index.scss'
+import 'styles/index.scss';
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -24,9 +24,9 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta name="theme-color" content="#ffffff" />
         {/* TODO: fix this */}
         <link href="//vjs.zencdn.net/7.10.2/video-js.min.css" rel="stylesheet" />
-        <script src="//vjs.zencdn.net/7.10.2/video.min.js"></script>
+        <script src="//vjs.zencdn.net/7.10.2/video.min.js" />
       </Head>
       <AuthProvider><Component {...pageProps} /></AuthProvider>
     </div>
-  )
+  );
 }

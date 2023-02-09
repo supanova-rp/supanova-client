@@ -17,18 +17,18 @@ import RemoveUserInput from './RemoveUser';
 import AddMoreInputs from './AddMoreInputs';
 
 const AddUsers = () => {
-  const usersDefaultState =  [{ 
+  const usersDefaultState = [{
     id: uuid(),
     name: '',
-    email:'',
+    email: '',
     registered: false,
     regError: false,
-    hasPasswordResetError: false
-  }]
+    hasPasswordResetError: false,
+  }];
 
   const [users, setUsers] = useState(usersDefaultState);
   const [isLoading, setIsLoading] = useState(false);
- 
+
   const { signup, resetPassword } = useAuth();
 
   const onChangeUser = (key: string, userId: string, event: InputEvent) => {
@@ -78,28 +78,27 @@ const AddUsers = () => {
 
       await updateProfile(newUser.user, { displayName: name });
 
-      const usersAfterReg = updateUsers(users, userId, {registered: true, regError: false})
+      const usersAfterReg = updateUsers(users, userId, { registered: true, regError: false });
 
       try {
-        await resetPassword(email)
+        await resetPassword(email);
 
-        const usersAfterPasswordReset = updateUsers(usersAfterReg, userId, {hasPasswordResetError: false})
+        const usersAfterPasswordReset = updateUsers(usersAfterReg, userId, { hasPasswordResetError: false });
 
-        setUsers(usersAfterPasswordReset)
-
+        setUsers(usersAfterPasswordReset);
       } catch (error) {
         console.log('>>> Error sending reset password email: ', error);
 
-        const usersAfterFailedPasswordReset = updateUsers(users, userId, {hasPasswordResetError: true})
+        const usersAfterFailedPasswordReset = updateUsers(users, userId, { hasPasswordResetError: true });
 
-        setUsers(usersAfterFailedPasswordReset)
+        setUsers(usersAfterFailedPasswordReset);
       }
     } catch (error) {
       console.log('>>> Error registering user: ', error);
 
-      const usersAfterFailedReg = updateUsers(users, userId, {regError: true})
+      const usersAfterFailedReg = updateUsers(users, userId, { regError: true });
 
-      setUsers(usersAfterFailedReg)
+      setUsers(usersAfterFailedReg);
     }
 
     setIsLoading(false);
@@ -108,13 +107,13 @@ const AddUsers = () => {
   return (
     <Card className="w-100 p-3 d-flex mh-100 rounded-0">
       <Card.Body>
-        <Navbar title="Add New Users"/>
+        <Navbar title="Add New Users" />
         {users.map((user, index) => {
-            return (
-              <Form onSubmit={(e) => onHandleRegisterUser(e, user.email, user.name, user.id)} key={user.id}>
-                <div className="d-flex align-items-center">
-                  <div className="d-flex">
-                    <FormGroup
+          return (
+            <Form onSubmit={(e) => onHandleRegisterUser(e, user.email, user.name, user.id)} key={user.id}>
+              <div className="d-flex align-items-center">
+                <div className="d-flex">
+                  <FormGroup
                     formId="name"
                     label="Name"
                     type="text"
@@ -122,52 +121,52 @@ const AddUsers = () => {
                     disabled={user.registered}
                     value={user.name}
                     onChange={(e) => onChangeUser('name', user.id, e)} />
-                    <FormGroup
+                  <FormGroup
                     formId="email"
                     label="Email"
                     className="mb-2"
                     type="email"
                     disabled={user.registered}
                     value={user.email}
-                    onChange={(e) => onChangeUser('email', user.id, e)}/>
+                    onChange={(e) => onChangeUser('email', user.id, e)} />
 
-                  </div>
-                  <div className='d-flex flex-row align-items-center mt-4'>
-                    <Button
+                </div>
+                <div className="d-flex flex-row align-items-center mt-4">
+                  <Button
                     type="submit"
                     className="btn-secondary w-30 ms-4"
                     size="sm"
                     disabled={isLoading || user.registered}>
-                      Submit
-                    </Button>
+                    Submit
+                  </Button>
 
-                    {user.regError
+                  {user.regError
                     ? <InputError text="Error adding user" />
                     : null
                     }
 
-                    {user.hasPasswordResetError 
+                  {user.hasPasswordResetError
                     ? <InputError text="Error sending password reset email to user" />
                     : null
                     }
 
-                    {user.registered && !user.hasPasswordResetError
+                  {user.registered && !user.hasPasswordResetError
                     ? <TickIcon stroke={colors.green} className="ms-3" />
                     : null
                     }
-                  
-                    {index !== 0 && !user.registered
-                    ? <RemoveUserInput onClickFunction={() => onClickRemoveUser(user.id)}/>
+
+                  {index !== 0 && !user.registered
+                    ? <RemoveUserInput onClickFunction={() => onClickRemoveUser(user.id)} />
                     : null
                     }
 
-                  </div>
                 </div>
-              </Form>
-            );
-          })}
+              </div>
+            </Form>
+          );
+        })}
 
-        <AddMoreInputs title="Add another user" onClick={onClickAddNewUser} />  
+        <AddMoreInputs title="Add another user" onClick={onClickAddNewUser} />
         <Button type="button" onClick={() => setUsers(usersDefaultState)}>Clear all users</Button>
       </Card.Body>
     </Card>

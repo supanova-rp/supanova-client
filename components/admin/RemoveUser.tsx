@@ -6,13 +6,11 @@ interface Props {
 }
 
 const RemoveUserInput: React.FC<Props> = ({ onClickFunction }) => {
-  return ( 
- 
+  return (
     <div className="ms-2 p-2 icon" onClick={() => onClickFunction()}>
       <MinusIcon stroke={colors.red} />
     </div>
-      
-   );
-}
- 
+  );
+};
+
 export default RemoveUserInput;

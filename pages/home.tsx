@@ -17,7 +17,7 @@ const Home = () => {
   // TODO: change this with middleware?
   usePrivateRoute();
 
-   const renderAdminContent = () => {
+  const renderAdminContent = () => {
     if (activeTab === 'Curriculum') {
       return <Courses logoutError={logoutError} />;
     }
@@ -37,7 +37,7 @@ const Home = () => {
         <div className="ms-5">
           {renderAdminContent()}
         </div>
-      </div>  
+      </div>
     </>
   );
 };

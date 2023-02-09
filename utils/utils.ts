@@ -4,20 +4,20 @@ export const updateUsers = (users, userId: string, userInfoToUpdate) => {
       return {
         ...user,
         ...userInfoToUpdate,
-      }
+      };
     }
 
-    return user
-  })
-}
+    return user;
+  });
+};
 
 export const getClassNameSidebarTab = (activeTab: string, tabName: string) => {
-  if (activeTab === tabName ) {
-    return 'btn-primary'
+  if (activeTab === tabName) {
+    return 'btn-primary';
   }
 
-  return 'btn-light admin-tab'
-}
+  return 'btn-light admin-tab';
+};
 
 export const getUpdatedSectionsWithAddedVideoInfo = (sections, sectionId: string, key: string, value) => {
   const updatedSections = sections.map((section) => {
@@ -27,12 +27,12 @@ export const getUpdatedSectionsWithAddedVideoInfo = (sections, sectionId: string
         video: {
           ...section.video,
           [key]: value,
-        }
-      } 
+        },
+      };
     }
 
-    return section
-  })
+    return section;
+  });
 
   return updatedSections;
-}
+};

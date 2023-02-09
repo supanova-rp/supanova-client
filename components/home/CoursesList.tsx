@@ -1,15 +1,15 @@
-import { curriculumData } from "@/constants/curriculumData"
-import { LogoutErrorProps } from "@/index";
+import { curriculumData } from '@/constants/curriculumData';
+import { LogoutErrorProps } from '@/index';
 
-import Header from "./Header"
-import TableRow from "./TableRow"
+import Header from './Header';
+import TableRow from './TableRow';
 
 interface Props extends LogoutErrorProps {
   setShowVideo: (parameter: boolean) => void,
 }
 
 const CoursesList: React.FC<Props> = ({ logoutError, setShowVideo }) => {
-  return ( 
+  return (
     <>
       <div>
         <Header title="Course Curriculum" logoutError={logoutError} />
@@ -23,22 +23,22 @@ const CoursesList: React.FC<Props> = ({ logoutError, setShowVideo }) => {
               <table className="table table-bordered mt-4">
                 <tbody>
                   {course.sections.map((section, index) => {
-                  return(
-                    <TableRow
-                    key={section.id}
-                    title={`${index + 1}. ${section.title}`}
-                    videoLength={section.videoLength}
-                    setShowVideo={setShowVideo}/> 
-                  ) 
-                })}
+                    return (
+                      <TableRow
+                        key={section.id}
+                        title={`${index + 1}. ${section.title}`}
+                        videoLength={section.videoLength}
+                        setShowVideo={setShowVideo} />
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
-         ) 
+          );
         })}
-      </div>   
+      </div>
     </>
-   );
-}
- 
+  );
+};
+
 export default CoursesList;
