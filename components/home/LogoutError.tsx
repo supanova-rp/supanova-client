@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { LogoutErrorProps } from '@/index';
 import { Alert } from 'react-bootstrap';
 

@@ -10,7 +10,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { colors } from '@/constants/colorPalette';
 import { updateUsers } from '@/utils/utils';
 
-import InputError from './InputError';
+import XIcon from '../XIcon';
 import FormGroup from './FormGroup';
 import Navbar from './Navbar';
 import RemoveUserInput from './RemoveUser';
@@ -141,12 +141,12 @@ const AddUsers = () => {
                   </Button>
 
                   {user.regError
-                    ? <InputError text="Error adding user" />
+                    ? <XIcon text="Error adding user" />
                     : null
                     }
 
                   {user.hasPasswordResetError
-                    ? <InputError text="Error sending password reset email to user" />
+                    ? <XIcon text="Error sending password reset email to user" />
                     : null
                     }
 

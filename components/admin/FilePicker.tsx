@@ -1,9 +1,11 @@
 /* eslint-disable react/no-array-index-key */
+import React, { useRef } from 'react';
 import axios from 'axios';
 
 import TickIcon from '@/icons/tickIcon.svg';
 
 import { colors } from '@/constants/colorPalette';
+
 import ProgressBar from './ProgressBar';
 
 // TODO: error handling when axios timed out
@@ -15,6 +17,7 @@ interface Props {
   onFileUploaded: (paramater1: string, parameter2: string) => void,
   onFileUploadProgress: (parameter1: ProgressEvent, parameter2: string) => void,
   uploadProgress: number | null,
+  onUpdateStateAfterCancellingFileUpload: (parameter: string) => void,
 }
 
 const FilePicker: React.FC<Props> = ({
@@ -24,13 +27,17 @@ const FilePicker: React.FC<Props> = ({
   onFileUploaded,
   onFileUploadProgress,
   uploadProgress,
+  onUpdateStateAfterCancellingFileUpload,
 }) => {
+  const abortControllerRef = useRef<AbortController>(new AbortController());
+
   const uploadFileToS3 = async (uploadUrl: string, file: File) => {
     try {
       await axios.put(uploadUrl, file, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
+        signal: abortControllerRef.current.signal,
         onUploadProgress: (data) => onFileUploadProgress(data, sectionId),
       });
 
@@ -56,12 +63,28 @@ const FilePicker: React.FC<Props> = ({
     }
   };
 
+  const onClickCancelFileUpload = () => {
+    abortControllerRef.current.abort();
+    abortControllerRef.current = new AbortController();
+    onUpdateStateAfterCancellingFileUpload(sectionId);
+  };
+
   const renderUploadProgressIcon = () => {
     if (!uploadProgress) {
       return null;
     }
     if (uploadProgress !== 1) {
-      return <ProgressBar value={uploadProgress} />;
+      return (
+        <div className="upload-file-icons-container">
+          <ProgressBar value={uploadProgress} />
+          <button
+            type="button"
+            className="btn btn-outline-secondary btn-sm ms-2"
+            onClick={onClickCancelFileUpload}>
+            Cancel
+          </button>
+        </div>
+      );
     }
 
     return <TickIcon stroke={colors.green} className="ms-2" />;
@@ -69,7 +92,7 @@ const FilePicker: React.FC<Props> = ({
 
   return (
     <div className="d-flex align-items-center mt-3">
-      <label htmlFor={`inputTag-${sectionId}`} className="file-picker">
+      <label htmlFor={`inputTag-${sectionId}`} className="secondary-btn">
         Select File
         <input name="file-picker" id={`inputTag-${sectionId}`} type="file" accept="video/mp4, video/mov" onChange={handleFileSelected} />
       </label>

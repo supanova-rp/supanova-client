@@ -10,7 +10,7 @@ input {
   display: none;
 }
 
-.file-picker {
+.secondary-btn {
   cursor: pointer;
   color: #6c757d;
   border-radius: 0.25rem;
@@ -38,6 +38,15 @@ input {
   }
 
   .CircularProgressbar-path {
-    stroke: #f77e1d
+    stroke: #f77e1d;
   } 
+}
+
+.admin-container {
+  min-height: 100%;
+}
+
+.upload-file-icons-container {
+  display: flex;
+  align-items: center;
 }

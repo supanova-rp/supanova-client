@@ -12,7 +12,7 @@ import FormGroup from './FormGroup';
 import AddMoreInputs from './AddMoreInputs';
 
 export default class AddCourses extends React.Component {
-  state = {
+  initialState = {
     title: '',
     courseDescription: '',
     sections: [{
@@ -29,6 +29,8 @@ export default class AddCourses extends React.Component {
     videoMissingError: null,
     successMessage: null,
   };
+
+  state = this.initialState;
 
   onChangeSection = (index: string, e) => {
     const updatedSectionsWithNewTitle = this.state.sections.map((section) => {
@@ -86,10 +88,16 @@ export default class AddCourses extends React.Component {
     this.setState({ sections: sectionsWithUpdatedVideoUploadProgress });
   };
 
+  handleSuccessMessageAfterCourseCreation = () => {
+    setTimeout(() => {
+      this.setState({ successMessage: null });
+    }, 3000);
+  };
+
   onHandleFormSubmit = async (e) => {
     e.preventDefault();
 
-    this.setState({ loading: true, serverError: null, videoMissing: null });
+    this.setState({ loading: true, serverError: null, videoMissingError: null });
 
     if (this.state.sections.every((section) => section.video.url !== null)) {
       try {
@@ -106,7 +114,9 @@ export default class AddCourses extends React.Component {
         const result = await response.json();
 
         if (!result.error) {
-          this.setState({ successMessage: 'Successfully created new course!' });
+          this.setState({ ...this.initialState, successMessage: 'Successfully created new course!' });
+
+          this.handleSuccessMessageAfterCourseCreation();
         }
       } catch (e) {
         console.log(e);
@@ -114,13 +124,31 @@ export default class AddCourses extends React.Component {
         this.setState({ serverError: 'Creating course failed. Try again.', loading: false });
       }
     } else {
-      this.setState({ videoMissingError: 'Please make sure videos for every section are uploaded.', loading: false });
+      this.setState({ videoMissingError: 'Please make sure videos are uploaded for every section.', loading: false });
     }
+  };
+
+  onUpdateStateAfterCancellingFileUpload = (sectionId: string) => {
+    const updatedSections = this.state.sections.map((section) => {
+      if (section.id === sectionId) {
+        return {
+          ...section,
+          video: {
+            name: '',
+            url: null,
+            uploadProgress: null,
+          },
+        };
+      }
+
+      return section;
+    });
+    this.setState({ sections: updatedSections });
   };
 
   render() {
     return (
-      <Card className="w-100 p-3 d-flex mh-100 rounded-0">
+      <Card className="w-100 p-3 d-flex rounded-0">
         <Card.Body>
           <Navbar title="Add a New Course" />
 
@@ -172,7 +200,8 @@ export default class AddCourses extends React.Component {
                           onFileSelected={this.onFileSelected}
                           onFileUploaded={this.onFileUploaded}
                           onFileUploadProgress={this.onFileUploadProgress}
-                          uploadProgress={section.video.uploadProgress} />
+                          uploadProgress={section.video.uploadProgress}
+                          onUpdateStateAfterCancellingFileUpload={this.onUpdateStateAfterCancellingFileUpload} />
                       )} />
                   </div>
                   <div>
