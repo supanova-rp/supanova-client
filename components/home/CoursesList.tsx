@@ -15,18 +15,18 @@ const CoursesList: React.FC<Props> = ({ logoutError, setShowVideo }) => {
         <Header title="Course Curriculum" logoutError={logoutError} />
       </div>
       <div>
-        {curriculumData.map((course, index) => {
+        {curriculumData.map((course, courseIndex) => {
           return (
             <div key={`${course.courseTitle} ${course.id}`}>
-              <h5>{`${index + 1}. ${course.courseTitle}`}</h5>
+              <h5>{`${courseIndex + 1}. ${course.courseTitle}`}</h5>
               <p>{course.description}</p>
               <table className="table table-bordered mt-4">
                 <tbody>
-                  {course.sections.map((section, index) => {
+                  {course.sections.map((section, sectionIndex) => {
                     return (
                       <TableRow
                         key={section.id}
-                        title={`${index + 1}. ${section.title}`}
+                        title={`${sectionIndex + 1}. ${section.title}`}
                         videoLength={section.videoLength}
                         setShowVideo={setShowVideo} />
                     );

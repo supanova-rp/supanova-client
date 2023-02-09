@@ -1,17 +1,28 @@
 import React from 'react';
 import { Form } from 'react-bootstrap';
 
+import { InputChangeFunction } from '@/index';
+
 interface Props {
   formId: string,
   label: string,
   type: string,
   className: string,
   disabled?: boolean,
-  onChange: (e: InputEvent) => void,
+  onChange: InputChangeFunction,
   value: string,
   Component?: React.ReactNode,
 }
-const FormGroup: React.FC<Props> = ({ formId, label, type, className, disabled, onChange, value, Component }) => {
+const FormGroup: React.FC<Props> = ({
+  formId,
+  value,
+  label,
+  type,
+  className,
+  disabled,
+  Component,
+  onChange,
+}) => {
   return (
     <Form.Group id={formId} className={className}>
       <Form.Label>{label}</Form.Label>

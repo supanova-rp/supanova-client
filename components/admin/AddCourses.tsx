@@ -1,8 +1,10 @@
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
 import { Card, Form, Button, Alert } from 'react-bootstrap';
+import { AxiosProgressEvent } from 'axios';
 import uuid from 'react-uuid';
 
+import { InputChangeEvent } from '@/index';
 import FilePicker from '@/components/admin/FilePicker';
 import { getUpdatedSectionsWithAddedVideoInfo } from '@/utils/utils';
 import { API_DOMAIN } from '@/constants/constants';
@@ -32,7 +34,7 @@ export default class AddCourses extends React.Component {
 
   state = this.initialState;
 
-  onChangeSection = (index: string, e) => {
+  onChangeSection = (index: string, e: InputChangeEvent) => {
     const updatedSectionsWithNewTitle = this.state.sections.map((section) => {
       if (section.id === index) {
         return {
@@ -82,7 +84,7 @@ export default class AddCourses extends React.Component {
     this.setState({ sections: sectionsWithUpdatedVideoUrl });
   };
 
-  onFileUploadProgress = (data, sectionId: string) => {
+  onFileUploadProgress = (data: AxiosProgressEvent, sectionId: string) => {
     const sectionsWithUpdatedVideoUploadProgress = getUpdatedSectionsWithAddedVideoInfo(this.state.sections, sectionId, 'uploadProgress', data.progress);
 
     this.setState({ sections: sectionsWithUpdatedVideoUploadProgress });
@@ -94,7 +96,7 @@ export default class AddCourses extends React.Component {
     }, 3000);
   };
 
-  onHandleFormSubmit = async (e) => {
+  onHandleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     this.setState({ loading: true, serverError: null, videoMissingError: null });
@@ -118,13 +120,19 @@ export default class AddCourses extends React.Component {
 
           this.handleSuccessMessageAfterCourseCreation();
         }
-      } catch (e) {
-        console.log(e);
+      } catch (error) {
+        console.log(error);
 
-        this.setState({ serverError: 'Creating course failed. Try again.', loading: false });
+        this.setState({
+          loading: false,
+          serverError: 'Creating course failed. Try again.',
+        });
       }
     } else {
-      this.setState({ videoMissingError: 'Please make sure videos are uploaded for every section.', loading: false });
+      this.setState({
+        loading: false,
+        videoMissingError: 'Please make sure videos are uploaded for every section.',
+       });
     }
   };
 

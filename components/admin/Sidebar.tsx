@@ -12,7 +12,15 @@ interface Props {
   tabTitle3?: string,
 }
 
-const Sidebar: React.FC<Props> = ({ classNameTab1, classNameTab2, classNameTab3, setActiveTab, tabTitle1, tabTitle2, tabTitle3 }) => {
+const Sidebar: React.FC<Props> = ({
+  tabTitle1,
+  tabTitle2,
+  tabTitle3,
+  classNameTab1,
+  classNameTab2,
+  classNameTab3,
+  setActiveTab,
+}) => {
   return (
     <div className="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
       <Button

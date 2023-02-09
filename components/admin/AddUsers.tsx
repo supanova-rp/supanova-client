@@ -6,6 +6,7 @@ import { updateProfile } from 'firebase/auth';
 
 import TickIcon from '@/icons/tickIcon.svg';
 
+import { InputChangeEvent } from '@/index';
 import { useAuth } from '@/contexts/AuthContext';
 import { colors } from '@/constants/colorPalette';
 import { updateUsers } from '@/utils/utils';
@@ -31,7 +32,7 @@ const AddUsers = () => {
 
   const { signup, resetPassword } = useAuth();
 
-  const onChangeUser = (key: string, userId: string, event: InputEvent) => {
+  const onChangeUser = (key: string, userId: string, event: InputChangeEvent) => {
     const updatedUsers = users.map((user) => {
       if (user.id === userId) {
         return {
@@ -68,7 +69,7 @@ const AddUsers = () => {
     setUsers(updatedUsers);
   };
 
-  const onHandleRegisterUser = async (event: InputEvent, email: string, name: string, userId: string) => {
+  const onHandleRegisterUser = async (event: InputChangeEvent, email: string, name: string, userId: string) => {
     event.preventDefault();
 
     try {

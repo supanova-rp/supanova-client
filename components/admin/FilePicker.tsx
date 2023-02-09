@@ -1,6 +1,6 @@
 /* eslint-disable react/no-array-index-key */
 import React, { useRef } from 'react';
-import axios from 'axios';
+import axios, { AxiosProgressEvent } from 'axios';
 
 import TickIcon from '@/icons/tickIcon.svg';
 
@@ -15,7 +15,7 @@ interface Props {
   videoName: string,
   onFileSelected: (parameter1: string, parameter2: string) => void,
   onFileUploaded: (paramater1: string, parameter2: string) => void,
-  onFileUploadProgress: (parameter1: ProgressEvent, parameter2: string) => void,
+  onFileUploadProgress: (parameter1: AxiosProgressEvent, parameter2: string) => void,
   uploadProgress: number | null,
   onUpdateStateAfterCancellingFileUpload: (parameter: string) => void,
 }
@@ -38,7 +38,7 @@ const FilePicker: React.FC<Props> = ({
           'Content-Type': 'multipart/form-data',
         },
         signal: abortControllerRef.current.signal,
-        onUploadProgress: (data) => onFileUploadProgress(data, sectionId),
+        onUploadProgress: (data: AxiosProgressEvent) => onFileUploadProgress(data, sectionId),
       });
 
       const videoUrl = uploadUrl.split('?')[0];
