@@ -27,19 +27,16 @@ const FilePicker: React.FC<Props> = ({
 }) => {
   const uploadFileToS3 = async (uploadUrl: string, file: File) => {
     try {
-      const response = await axios.put(uploadUrl, file, {
+      await axios.put(uploadUrl, file, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
         onUploadProgress: (data) => onFileUploadProgress(data, sectionId),
       })
 
-      console.log('>>> response: ', response);
-
       const videoUrl = uploadUrl.split('?')[0];
 
-      console.log('>>> videoUrl: ', videoUrl);
-
+      onFileUploaded(sectionId, videoUrl)
     } catch (error) {
       console.log(error);
     }
@@ -53,11 +50,7 @@ const FilePicker: React.FC<Props> = ({
       const response = await fetch('http://localhost:3001/get-upload-url');
       const result = await response.json();
 
-      console.log('>>> result: ', result);
-
       uploadFileToS3(result.uploadUrl, e.target.files[0])
-
-      onFileUploaded(sectionId, result.uploadUrl)
     } catch (error) {
       console.log(error);
     }

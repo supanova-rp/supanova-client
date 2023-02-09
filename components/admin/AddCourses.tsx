@@ -10,10 +10,11 @@ import FormGroup from './FormGroup';
 import AddMoreInputs from './AddMoreInputs';
 
 import { getUpdatedSectionsWithAddedVideoInfo } from '@/utils/utils';
+import { API_DOMAIN } from '@/constants/constants';
 
 export default class AddCourses extends React.Component {
   state = {
-    titleInput: '',
+    title: '',
     courseDescription: '',
     sections: [{
       id: uuid(),
@@ -90,19 +91,34 @@ export default class AddCourses extends React.Component {
   onHandleFormSubmit = async (e) => {
     e.preventDefault();
 
+    this.setState({ loading: true, serverError: null, videoMissing: null })
+
     if (this.state.sections.every((section) => section.video.url !== null)) {
       try {
-        this.setState({ loading: true, serverError: null, videoMissing: null })
 
-        // Send to server
-        // If no error then reset the form and show success message
+        const response = await fetch(`${API_DOMAIN}/add-course`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            name: this.state.title,
+            description: this.state.courseDescription,
+            sections: [...this.state.sections],
+          })
+        })
+
+        const result = await response.json()
+
+        if (!result.error) {
+          this.setState({ successMessage: 'Successfully created new course!'})
+        }
+
       } catch (e) {
         console.log(e)
 
         this.setState({ serverError: 'Creating course failed. Try again.', loading: false })
       }
     } else {
-      this.setState({ videoMissingError: 'Please select a video file for every course section.' })
+      this.setState({ videoMissingError: 'Please make sure videos for every section are uploaded.', loading: false, })
     }
   }
   
@@ -111,6 +127,7 @@ export default class AddCourses extends React.Component {
       <Card className="w-100 p-3 d-flex mh-100 rounded-0">
         <Card.Body>
           <Navbar title="Add a New Course" />
+
           {this.state.serverError
             ? <Alert variant="danger">{this.state.serverError}</Alert>
             : null
@@ -119,14 +136,19 @@ export default class AddCourses extends React.Component {
             ? <Alert variant="warning">{this.state.videoMissingError}</Alert>
             : null
           }
+          {this.state.successMessage
+            ? <Alert variant="success">{this.state.successMessage}</Alert>
+            : null
+          }
+          
           <Form onSubmit={this.onHandleFormSubmit}>
             <FormGroup 
             formId="title"
             className="mb-2"
             label="Course Title"
             type="text"
-            value={this.state.titleInput}
-            onChange={(e) => this.setState({ titleInput: e.target.value })} />
+            value={this.state.title}
+            onChange={(e) => this.setState({ title: e.target.value })} />
             <FormGroup
               formId="description"
               className="mb-2"

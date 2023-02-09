@@ -34,7 +34,5 @@ export const getUpdatedSectionsWithAddedVideoInfo = (sections, sectionId: string
     return section
   })
 
-  console.log(updatedSections)
-
   return updatedSections;
 }
