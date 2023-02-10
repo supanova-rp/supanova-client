@@ -1,4 +1,6 @@
-export const updateUsers = (users, userId: string, userInfoToUpdate) => {
+import { Sections, UserInfoToUpdate, Users } from '@/index';
+
+export const updateUsers = (users: Users, userId: string, userInfoToUpdate: UserInfoToUpdate) => {
   return users.map((user) => {
     if (user.id === userId) {
       return {
@@ -19,7 +21,7 @@ export const getClassNameSidebarTab = (activeTab: string, tabName: string) => {
   return 'btn-light admin-tab';
 };
 
-export const getUpdatedSectionsWithAddedVideoInfo = (sections, sectionId: string, key: string, value) => {
+export const getUpdatedSectionsWithAddedVideoInfo = (sections: Sections, sectionId: string, key: string, value: string | number | undefined) => {
   const updatedSections = sections.map((section) => {
     if (sectionId === section.id) {
       return {

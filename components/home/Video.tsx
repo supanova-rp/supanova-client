@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/media-has-caption */
 import { Button } from 'react-bootstrap';
 
 import { colors } from '@/constants/colorPalette';
@@ -15,7 +16,7 @@ const Video: React.FC<Props> = ({ logoutError, setShowVideo }) => {
     <>
       <div>
         <div className="d-flex align-items-center">
-          <div className="p-1 clickable chevron-left">
+          <div className="p-1 clickable">
             <ChevronLeft stroke={colors.orange} className="mt-3 me-1" onClick={() => setShowVideo(false)} />
           </div>
           <Header title="1. Managing Stakholders" logoutError={logoutError} />
@@ -23,7 +24,7 @@ const Video: React.FC<Props> = ({ logoutError, setShowVideo }) => {
         <h5 className="my-4">1. Introduction</h5>
         <video
           id="my-player"
-          className="video-js"
+          className="video-js-home"
           controls
           preload="auto"
           poster="//vjs.zencdn.net/v/oceans.png"

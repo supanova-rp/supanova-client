@@ -1,11 +1,30 @@
 import { useState } from 'react';
 
-import AddCourses from '@/components/admin/AddCourses';
-import AddUsers from '@/components/admin/AddUsers';
-import SidebarContainer from '@/components/admin/SidebarContainer';
-import EditCourses from '@/components/admin/EditCourses';
+import { API_DOMAIN } from '@/constants/constants';
+import { ServerSideCourses } from '@/index';
 
-const Admin = () => {
+import AddCourses from '@/components/admin/add-course/AddCourses';
+import AddUsers from '@/components/admin/add-users/AddUsers';
+import SidebarContainer from '@/components/admin/nav-and-sidebars/SidebarContainer';
+import EditCourses from '@/components/admin/edit-courses/EditCourses';
+
+export const getServerSideProps = async () => {
+  const response = await fetch(`${API_DOMAIN}/courses`);
+
+  const courseResults = await response.json();
+
+  return {
+    props: {
+      courses: courseResults,
+    },
+  };
+};
+
+interface Props {
+  courses: ServerSideCourses,
+}
+
+const Admin: React.FC<Props> = ({ courses }) => {
   const [activeTab, setActiveTab] = useState('New Courses');
 
   const renderAdminContent = () => {
@@ -14,7 +33,7 @@ const Admin = () => {
     }
 
     if (activeTab === 'Existing Courses') {
-      return <EditCourses />;
+      return <EditCourses courses={courses} />;
     }
 
     if (activeTab === 'New Users') {

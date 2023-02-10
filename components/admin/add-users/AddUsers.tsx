@@ -11,11 +11,11 @@ import { useAuth } from '@/contexts/AuthContext';
 import { colors } from '@/constants/colorPalette';
 import { updateUsers } from '@/utils/utils';
 
-import XIcon from '../XIcon';
-import FormGroup from './FormGroup';
-import Navbar from './Navbar';
-import RemoveUserInput from './RemoveUser';
-import AddMoreInputs from './AddMoreInputs';
+import XIcon from '../../XIcon';
+import FormGroup from '../FormGroup';
+import Navbar from '../nav-and-sidebars/Navbar';
+import RemoveUserInput from '../RemoveUser';
+import AddMoreInputs from '../AddMoreInputs';
 
 const AddUsers = () => {
   const usersDefaultState = [{
@@ -111,7 +111,7 @@ const AddUsers = () => {
         <Navbar title="Add New Users" />
         {users.map((user, index) => {
           return (
-            <Form onSubmit={(e) => onHandleRegisterUser(e, user.email, user.name, user.id)} key={user.id}>
+            <Form onSubmit={(e: React.FormEvent<HTMLFormElement>) => onHandleRegisterUser(e, user.email, user.name, user.id)} key={user.id}>
               <div className="d-flex align-items-center">
                 <div className="d-flex">
                   <FormGroup
@@ -130,8 +130,8 @@ const AddUsers = () => {
                     disabled={user.registered}
                     value={user.email}
                     onChange={(e) => onChangeUser('email', user.id, e)} />
-
                 </div>
+
                 <div className="d-flex flex-row align-items-center mt-4">
                   <Button
                     type="submit"
@@ -144,24 +144,24 @@ const AddUsers = () => {
                   {user.regError
                     ? <XIcon text="Error adding user" />
                     : null
-                    }
+                  }
 
                   {user.hasPasswordResetError
                     ? <XIcon text="Error sending password reset email to user" />
                     : null
-                    }
+                  }
 
                   {user.registered && !user.hasPasswordResetError
                     ? <TickIcon stroke={colors.green} className="ms-3" />
                     : null
-                    }
+                  }
 
                   {index !== 0 && !user.registered
                     ? <RemoveUserInput onClickFunction={() => onClickRemoveUser(user.id)} />
                     : null
-                    }
-
+                  }
                 </div>
+                
               </div>
             </Form>
           );

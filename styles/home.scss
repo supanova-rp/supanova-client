@@ -34,15 +34,13 @@
 
 .clickable {
   cursor: pointer;
-}
 
-.video-js {
-  height: 500px;
-  width: 900px;
-}
-
-.chevron-left {
   &:hover {
     transform: scale(1.1);
   }
+}
+
+.video-js-home {
+  height: 500px;
+  width: 900px;
 }

@@ -2,7 +2,7 @@ import { Card } from 'react-bootstrap';
 import Image from 'next/image';
 
 import HomeImage from '@/images/Home-image.png';
-import Sidebar from '@/components/admin/Sidebar';
+import Sidebar from '@/components/admin/nav-and-sidebars/Sidebar';
 import { SetStringFunction } from '@/index';
 import { getClassNameSidebarTab } from '@/utils/utils';
 

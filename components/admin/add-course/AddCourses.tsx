@@ -5,13 +5,15 @@ import { AxiosProgressEvent } from 'axios';
 import uuid from 'react-uuid';
 
 import { InputChangeEvent } from '@/index';
-import FilePicker from '@/components/admin/FilePicker';
 import { getUpdatedSectionsWithAddedVideoInfo } from '@/utils/utils';
 import { API_DOMAIN } from '@/constants/constants';
-import Navbar from './Navbar';
-import RemoveUserInput from './RemoveUser';
-import FormGroup from './FormGroup';
-import AddMoreInputs from './AddMoreInputs';
+
+import Navbar from '../nav-and-sidebars/Navbar';
+import FormGroup from '../FormGroup';
+import AddMoreInputs from '../AddMoreInputs';
+import CourseSection from './CourseSection';
+
+// TODO: BUG: unable to attach files when creating another course unless you refresh
 
 export default class AddCourses extends React.Component {
   initialState = {
@@ -66,7 +68,7 @@ export default class AddCourses extends React.Component {
     this.setState({ sections: sectionsWithNewlyAddedSection });
   };
 
-  onClickRemoveSection = (sectionId: string) => {
+  handleRemoveSection = (sectionId: string) => {
     const updatedSectionsMinusRemovedSection = this.state.sections.filter((section) => sectionId !== section.id);
 
     this.setState({ sections: updatedSectionsMinusRemovedSection });
@@ -132,7 +134,7 @@ export default class AddCourses extends React.Component {
       this.setState({
         loading: false,
         videoMissingError: 'Please make sure videos are uploaded for every section.',
-       });
+      });
     }
   };
 
@@ -192,35 +194,16 @@ export default class AddCourses extends React.Component {
             <h5 className="mt-4 mb-2">Add your Course Sections</h5>
             {this.state.sections.map((section, index) => {
               return (
-                <div className="d-flex align-items-center" key={`chapter-${index}`}>
-                  <div>
-                    <FormGroup
-                      formId="course-section"
-                      className="my-4 chapter-input"
-                      label="Course Section"
-                      type="text"
-                      value={section.title}
-                      onChange={(e) => this.onChangeSection(section.id, e)}
-                      Component={(
-                        <FilePicker
-                          sectionId={section.id}
-                          videoName={section.video.name}
-                          onFileSelected={this.onFileSelected}
-                          onFileUploaded={this.onFileUploaded}
-                          onFileUploadProgress={this.onFileUploadProgress}
-                          uploadProgress={section.video.uploadProgress}
-                          onUpdateStateAfterCancellingFileUpload={this.onUpdateStateAfterCancellingFileUpload} />
-                      )} />
-                  </div>
-                  <div>
-
-                    {index !== 0
-                      ? <RemoveUserInput onClickFunction={() => this.onClickRemoveSection(section.id)} />
-                      : null
-                    }
-
-                  </div>
-                </div>
+                <CourseSection
+                  key={section.id}
+                  section={section}
+                  index={index}
+                  onChangeSection={this.onChangeSection}
+                  onFileSelected={this.onFileSelected}
+                  onFileUploaded={this.onFileUploaded}
+                  onFileUploadProgress={this.onFileUploadProgress}
+                  onUpdateStateAfterCancellingFileUpload={this.onUpdateStateAfterCancellingFileUpload}
+                  handleRemoveSection={this.handleRemoveSection} />
               );
             })}
 

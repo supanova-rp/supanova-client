@@ -1,5 +1,5 @@
 /* eslint-disable react/no-array-index-key */
-import React, { useRef } from 'react';
+import React from 'react';
 import axios, { AxiosProgressEvent } from 'axios';
 
 import TickIcon from '@/icons/tickIcon.svg';
@@ -13,24 +13,24 @@ import ProgressBar from './ProgressBar';
 interface Props {
   sectionId: string,
   videoName: string,
+  abortControllerRef: React.MutableRefObject<AbortController>
   onFileSelected: (parameter1: string, parameter2: string) => void,
   onFileUploaded: (paramater1: string, parameter2: string) => void,
   onFileUploadProgress: (parameter1: AxiosProgressEvent, parameter2: string) => void,
   uploadProgress: number | null,
-  onUpdateStateAfterCancellingFileUpload: (parameter: string) => void,
+  onClickCancelFileUpload: React.MouseEventHandler<HTMLButtonElement>
 }
 
 const FilePicker: React.FC<Props> = ({
   sectionId,
   videoName,
+  abortControllerRef,
   onFileSelected,
   onFileUploaded,
   onFileUploadProgress,
   uploadProgress,
-  onUpdateStateAfterCancellingFileUpload,
+  onClickCancelFileUpload,
 }) => {
-  const abortControllerRef = useRef<AbortController>(new AbortController());
-
   const uploadFileToS3 = async (uploadUrl: string, file: File) => {
     try {
       await axios.put(uploadUrl, file, {
@@ -63,12 +63,6 @@ const FilePicker: React.FC<Props> = ({
     }
   };
 
-  const onClickCancelFileUpload = () => {
-    abortControllerRef.current.abort();
-    abortControllerRef.current = new AbortController();
-    onUpdateStateAfterCancellingFileUpload(sectionId);
-  };
-
   const renderUploadProgressIcon = () => {
     if (!uploadProgress) {
       return null;
@@ -94,7 +88,12 @@ const FilePicker: React.FC<Props> = ({
     <div className="d-flex align-items-center mt-3">
       <label htmlFor={`inputTag-${sectionId}`} className="secondary-btn">
         Select File
-        <input name="file-picker" id={`inputTag-${sectionId}`} type="file" accept="video/mp4, video/mov" onChange={handleFileSelected} />
+        <input
+          name="file-picker"
+          id={`inputTag-${sectionId}`}
+          type="file"
+          accept="video/mp4, video/mov"
+          onChange={handleFileSelected} />
       </label>
       {videoName
         ? <small className="my-0 text-muted">{videoName}</small>
