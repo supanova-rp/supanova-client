@@ -2,13 +2,14 @@
 import { ServerSideSection } from '@/index';
 
 interface Props {
-  section: ServerSideSection
+  section: ServerSideSection,
+  index: number,
 }
 
-const Section: React.FC<Props> = ({ section }) => {
+const Section: React.FC<Props> = ({ section, index }) => {
   return (
     <div>
-      <h6 className="mb-0">{section.section_title}</h6>
+      <h6 className="mb-0">{`${index + 1}. ${section.title}`}</h6>
       <video
         id="my-player"
         className="video-js-edit mb-4"

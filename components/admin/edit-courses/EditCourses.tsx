@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Card } from 'react-bootstrap';
+import { Alert, Card } from 'react-bootstrap';
 
 import { ServerSideCourses } from '@/index';
 
@@ -13,12 +13,12 @@ interface Props {
 const EditCourses: React.FC<Props> = ({ courses }) => {
   const [allCourses, setAllCourses] = useState(courses);
 
-  const onClickStartEditingCourse = (courseId: number) => {
+  const onClickHandleEditCourse = (courseId: number, value: boolean) => {
     const updatedCoursesWithEditFlag = allCourses.map((course) => {
-      if (course.course_id === courseId) {
+      if (course.id === courseId) {
         return {
           ...course,
-          isEditing: true,
+          isEditing: value,
         };
       }
 
@@ -30,6 +30,17 @@ const EditCourses: React.FC<Props> = ({ courses }) => {
 
   // TODO: make it so you don't have to refresh edit courses after you just created a course
 
+  if (!allCourses?.length) {
+    return (
+      <Card className="w-100 p-3 d-flex mh-100 rounded-0">
+        <Card.Body>
+          <Navbar title="Edit Courses" />
+          <Alert variant="warning">You don&apos;t have any courses yet.</Alert>
+        </Card.Body>
+      </Card>
+    );
+  }
+
   return (
     <Card className="w-100 p-3 d-flex mh-100 rounded-0">
       <Card.Body>
@@ -38,10 +49,10 @@ const EditCourses: React.FC<Props> = ({ courses }) => {
           {allCourses.map((course, index) => {
             return (
               <Course
-                key={course.course_id}
+                key={course.id}
                 index={index}
                 course={course}
-                onClickStartEditingCourse={onClickStartEditingCourse} />
+                onClickHandleEditCourse={onClickHandleEditCourse} />
             );
           })}
         </div>

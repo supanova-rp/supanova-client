@@ -5,16 +5,16 @@ import EditCourseView from './EditCourseView';
 
 interface Props {
   course: ServerSideCourse,
-  onClickStartEditingCourse: (parameter: number) => void,
+  onClickHandleEditCourse: (parameter1: number, parameter2: boolean) => void,
   index: number,
 }
 
-const Course: React.FC<Props> = ({ course, onClickStartEditingCourse, index }) => {
+const Course: React.FC<Props> = ({ course, onClickHandleEditCourse, index }) => {
   if (course.isEditing) {
-    return <EditCourseView course={course} />;
+    return <EditCourseView course={course} onClickHandleEditCourse={onClickHandleEditCourse} />;
   }
 
-  return <CourseListView course={course} onClickStartEditingCourse={onClickStartEditingCourse} index={index}/>;
+  return <CourseListView course={course} onClickHandleEditCourse={onClickHandleEditCourse} index={index} />;
 };
 
 export default Course;

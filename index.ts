@@ -39,14 +39,14 @@ export type UserInfoToUpdate = {
 };
 
 export type ServerSideSection = {
-  section_id: number,
-  section_title: string,
+  id: number,
+  title: string,
   video_url: string
 };
 
 export type ServerSideCourse = {
-  course_id: number,
-  course_title: string,
+  id: number,
+  title: string,
   description: string,
   sections: ServerSideSection[],
   isEditing?: boolean,

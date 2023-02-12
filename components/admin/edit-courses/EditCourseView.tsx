@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 
 import { ServerSideCourse } from '@/index';
 
@@ -8,14 +8,15 @@ import Section from './Section';
 
 interface Props {
   course: ServerSideCourse,
+  onClickHandleEditCourse: (parameter1: number, parameter2: boolean) => void,
 }
 
-const EditCourseView: React.FC<Props> = ({ course }) => {
-  const [courseTitleInputValue, setCourseTitleInputValue] = useState(course.course_title);
+const EditCourseView: React.FC<Props> = ({ course, onClickHandleEditCourse }) => {
+  const [courseTitleInputValue, setCourseTitleInputValue] = useState(course.title);
   const [courseDescriptionInputValue, setCourseDescriptionInputValue] = useState(course.description);
 
   return (
-    <div className="mb-4">
+    <Form className="mb-4">
       <FormGroup
         formId="course-title"
         value={courseTitleInputValue}
@@ -30,20 +31,21 @@ const EditCourseView: React.FC<Props> = ({ course }) => {
         onChange={(e) => setCourseDescriptionInputValue(e.target.value)}
         type="text"
         className="mb-4" />
-      {course.sections.map((section) => {
-        return <Section key={section.section_id} section={section} />;
+      {course.sections.map((section, index) => {
+        return <Section key={section.id} section={section} index={index} />;
       })}
 
       <div className="mb-5">
-        <Button className="edit-course-save-btn">Save</Button>
+        <Button className="edit-course-save-btn" type="submit">Save</Button>
         <Button
           className="btn-danger"
-          type="button">
-          Delete course
+          type="button"
+          onClick={() => onClickHandleEditCourse(course.id, false)}>
+          Cancel
         </Button>
       </div>
 
-    </div>
+    </Form>
   );
 };
 
