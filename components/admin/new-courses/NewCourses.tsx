@@ -2,46 +2,24 @@
 import React from 'react';
 import { Card, Form, Button, Alert } from 'react-bootstrap';
 import { AxiosProgressEvent } from 'axios';
-import uuid from 'react-uuid';
 
-import { InputChangeEvent } from '@/index';
-import { getUpdatedSectionsWithAddedVideoInfo } from '@/utils/utils';
+import { getInitialCourseState, getUpdatedSectionsWithAddedVideoInfoNewCoursesTab } from '@/utils/utils';
 import { API_DOMAIN } from '@/constants/constants';
 
 import Navbar from '../nav-and-sidebars/Navbar';
 import FormGroup from '../FormGroup';
 import AddMoreInputs from '../AddMoreInputs';
-import CourseSection from './CourseSection';
-
-// TODO: BUG: unable to attach files when creating another course unless you refresh
+import EditSection from '../EditSection';
 
 export default class AddCourses extends React.Component {
-  initialState = {
-    title: '',
-    courseDescription: '',
-    sections: [{
-      id: uuid(),
-      title: '',
-      video: {
-        name: '',
-        url: null,
-        uploadProgress: null,
-      },
-    }],
-    loading: false,
-    serverError: null,
-    videoMissingError: null,
-    successMessage: null,
-  };
+  state = getInitialCourseState();
 
-  state = this.initialState;
-
-  onChangeSection = (index: string, e: InputChangeEvent) => {
+  onChangeSection = (sectionId: number, newInputValue: string) => {
     const updatedSectionsWithNewTitle = this.state.sections.map((section) => {
-      if (section.id === index) {
+      if (section.id === sectionId) {
         return {
           ...section,
-          title: e.target.value,
+          title: newInputValue,
         };
       }
 
@@ -55,7 +33,7 @@ export default class AddCourses extends React.Component {
     const sectionsWithNewlyAddedSection = [
       ...this.state.sections,
       {
-        id: uuid(),
+        id: Date.now(),
         title: '',
         video: {
           name: '',
@@ -68,26 +46,28 @@ export default class AddCourses extends React.Component {
     this.setState({ sections: sectionsWithNewlyAddedSection });
   };
 
-  handleRemoveSection = (sectionId: string) => {
+  handleRemoveSection = (sectionId: number) => {
     const updatedSectionsMinusRemovedSection = this.state.sections.filter((section) => sectionId !== section.id);
 
     this.setState({ sections: updatedSectionsMinusRemovedSection });
   };
 
-  onFileSelected = (sectionId: string, videoName: string) => {
-    const sectionsWithUpdatedVideoName = getUpdatedSectionsWithAddedVideoInfo(this.state.sections, sectionId, 'name', videoName);
+  onFileSelected = (sectionId: number, videoName: string) => {
+    const sectionsWithUpdatedVideoName = getUpdatedSectionsWithAddedVideoInfoNewCoursesTab(this.state.sections, sectionId, 'name', videoName);
+
+    console.log('>>> sectionsWithUpdatedVideoName: ', sectionsWithUpdatedVideoName);
 
     this.setState({ sections: sectionsWithUpdatedVideoName });
   };
 
-  onFileUploaded = (sectionId: string, videoUrl: string) => {
-    const sectionsWithUpdatedVideoUrl = getUpdatedSectionsWithAddedVideoInfo(this.state.sections, sectionId, 'url', videoUrl);
+  onFileUploaded = (sectionId: number, videoUrl: string) => {
+    const sectionsWithUpdatedVideoUrl = getUpdatedSectionsWithAddedVideoInfoNewCoursesTab(this.state.sections, sectionId, 'url', videoUrl);
 
     this.setState({ sections: sectionsWithUpdatedVideoUrl });
   };
 
-  onFileUploadProgress = (data: AxiosProgressEvent, sectionId: string) => {
-    const sectionsWithUpdatedVideoUploadProgress = getUpdatedSectionsWithAddedVideoInfo(this.state.sections, sectionId, 'uploadProgress', data.progress);
+  onFileUploadProgress = (data: AxiosProgressEvent, sectionId: number) => {
+    const sectionsWithUpdatedVideoUploadProgress = getUpdatedSectionsWithAddedVideoInfoNewCoursesTab(this.state.sections, sectionId, 'uploadProgress', data.progress);
 
     this.setState({ sections: sectionsWithUpdatedVideoUploadProgress });
   };
@@ -118,7 +98,7 @@ export default class AddCourses extends React.Component {
         const result = await response.json();
 
         if (!result.error) {
-          this.setState({ ...this.initialState, successMessage: 'Successfully created new course!' });
+          this.setState({ ...getInitialCourseState(), successMessage: 'Successfully created new course!' });
 
           this.handleSuccessMessageAfterCourseCreation();
         }
@@ -138,7 +118,7 @@ export default class AddCourses extends React.Component {
     }
   };
 
-  onUpdateStateAfterCancellingFileUpload = (sectionId: string) => {
+  onUpdateStateAfterCancellingFileUpload = (sectionId: number) => {
     const updatedSections = this.state.sections.map((section) => {
       if (section.id === sectionId) {
         return {
@@ -194,7 +174,7 @@ export default class AddCourses extends React.Component {
             <h5 className="mt-4 mb-2">Add your Course Sections</h5>
             {this.state.sections.map((section, index) => {
               return (
-                <CourseSection
+                <EditSection
                   key={section.id}
                   section={section}
                   index={index}

@@ -2,7 +2,7 @@ import { ServerSideCourse } from '@/index';
 import { colors } from '@/constants/colorPalette';
 
 import EditIcon from '@/icons/editIcon.svg';
-import DeleteIcon from '@/icons/deleteIcon.svg'
+import DeleteIcon from '@/icons/deleteIcon.svg';
 
 import Section from './Section';
 

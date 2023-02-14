@@ -14,7 +14,7 @@ export type Video = {
   uploadProgress: number | null,
 };
 export type Section = {
-  id: string,
+  id: number,
   title: string,
   video: Video,
 };
@@ -41,7 +41,7 @@ export type UserInfoToUpdate = {
 export type ServerSideSection = {
   id: number,
   title: string,
-  video_url: string
+  video_url: string,
 };
 
 export type ServerSideCourse = {

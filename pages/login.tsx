@@ -8,8 +8,6 @@ import { useAuth } from '@/contexts/AuthContext';
 import HidePasswordIcon from '@/icons/hidePasswordIcon.svg';
 import ShowPasswordIcon from '@/icons/showPasswordIcon.svg';
 
-// TODO: hide/view password
-
 const Login = () => {
   const [emailInput, setEmailInput] = useState('');
   const [passwordInput, setPasswordInput] = useState('');

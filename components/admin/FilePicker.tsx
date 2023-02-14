@@ -11,12 +11,12 @@ import ProgressBar from './ProgressBar';
 // TODO: error handling when axios timed out
 
 interface Props {
-  sectionId: string,
-  videoName: string,
-  abortControllerRef: React.MutableRefObject<AbortController>
-  onFileSelected: (parameter1: string, parameter2: string) => void,
-  onFileUploaded: (paramater1: string, parameter2: string) => void,
-  onFileUploadProgress: (parameter1: AxiosProgressEvent, parameter2: string) => void,
+  sectionId: number,
+  videoName?: string,
+  abortController: AbortController,
+  onFileSelected?: (parameter1: number, parameter2: string) => void,
+  onFileUploaded: (paramater1: number, parameter2: string) => void,
+  onFileUploadProgress: (parameter1: AxiosProgressEvent, parameter2: number) => void,
   uploadProgress: number | null,
   onClickCancelFileUpload: React.MouseEventHandler<HTMLButtonElement>
 }
@@ -24,7 +24,7 @@ interface Props {
 const FilePicker: React.FC<Props> = ({
   sectionId,
   videoName,
-  abortControllerRef,
+  abortController,
   onFileSelected,
   onFileUploaded,
   onFileUploadProgress,
@@ -37,11 +37,13 @@ const FilePicker: React.FC<Props> = ({
         headers: {
           'Content-Type': 'multipart/form-data',
         },
-        signal: abortControllerRef.current.signal,
+        signal: abortController.signal,
         onUploadProgress: (data: AxiosProgressEvent) => onFileUploadProgress(data, sectionId),
       });
 
       const videoUrl = uploadUrl.split('?')[0];
+
+      console.log('>>> videoUrl: ', videoUrl);
 
       onFileUploaded(sectionId, videoUrl);
     } catch (error) {
@@ -50,12 +52,19 @@ const FilePicker: React.FC<Props> = ({
   };
 
   const handleFileSelected = async (e) => {
-    onFileSelected(sectionId, e.target.files[0].name);
+    console.log('>>> handleFileSelected: ', e.target.files[0]);
+
+    if (onFileSelected) {
+      onFileSelected(sectionId, e.target.files[0].name);
+    }
 
     try {
       // Get secure/signed AWS S3 url from server
       const response = await fetch('http://localhost:3001/get-upload-url');
       const result = await response.json();
+
+      console.log('>>> result: ', result);
+      console.log('>>> e.target.files[0]: ', e.target.files[0]);
 
       uploadFileToS3(result.uploadUrl, e.target.files[0]);
     } catch (error) {
@@ -67,13 +76,14 @@ const FilePicker: React.FC<Props> = ({
     if (!uploadProgress) {
       return null;
     }
+
     if (uploadProgress !== 1) {
       return (
         <div className="upload-file-icons-container">
           <ProgressBar value={uploadProgress} />
           <button
             type="button"
-            className="btn btn-outline-secondary btn-sm ms-2"
+            className="btn btn-outline-secondary btn-sm ms-3"
             onClick={onClickCancelFileUpload}>
             Cancel
           </button>

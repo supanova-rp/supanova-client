@@ -3,10 +3,10 @@ import { useState } from 'react';
 import { API_DOMAIN } from '@/constants/constants';
 import { ServerSideCourses } from '@/index';
 
-import AddCourses from '@/components/admin/add-course/AddCourses';
+import AddCourses from '@/components/admin/new-courses/NewCourses';
 import AddUsers from '@/components/admin/add-users/AddUsers';
 import SidebarContainer from '@/components/admin/nav-and-sidebars/SidebarContainer';
-import EditCourses from '@/components/admin/edit-courses/EditCourses';
+import EditCourses from '@/components/admin/existing-courses/ExistingCourses';
 
 export const getServerSideProps = async () => {
   const response = await fetch(`${API_DOMAIN}/courses`);

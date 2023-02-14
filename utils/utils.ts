@@ -1,4 +1,4 @@
-import { Sections, UserInfoToUpdate, Users } from '@/index';
+import { Sections, ServerSideCourses, UserInfoToUpdate, Users } from '@/index';
 
 export const updateUsers = (users: Users, userId: string, userInfoToUpdate: UserInfoToUpdate) => {
   return users.map((user) => {
@@ -21,7 +21,7 @@ export const getClassNameSidebarTab = (activeTab: string, tabName: string) => {
   return 'btn-light admin-tab';
 };
 
-export const getUpdatedSectionsWithAddedVideoInfo = (sections: Sections, sectionId: string, key: string, value: string | number | undefined) => {
+export const getUpdatedSectionsWithAddedVideoInfoNewCoursesTab = (sections: Sections, sectionId: number, key: string, value: string | number | undefined) => {
   const updatedSections = sections.map((section) => {
     if (sectionId === section.id) {
       return {
@@ -37,4 +37,46 @@ export const getUpdatedSectionsWithAddedVideoInfo = (sections: Sections, section
   });
 
   return updatedSections;
+};
+
+export const getUpdatedSectionsWithAddedVideoInfoExistingCoursesTab = (courses: ServerSideCourses, sectionId: number, key: string, value: string | number | null | undefined) => {
+  const updatedCourses = courses.map((course) => {
+    const sectionWithUpdatedVideoUrl = course.sections.map((section) => {
+      if (section.id === sectionId) {
+        return {
+          ...section,
+          [key]: value,
+        };
+      }
+
+      return section;
+    });
+
+    return {
+      ...course,
+      sections: sectionWithUpdatedVideoUrl,
+    };
+  });
+
+  return updatedCourses;
+};
+
+export const getInitialCourseState = () => {
+  return {
+    title: '',
+    courseDescription: '',
+    sections: [{
+      id: Date.now(),
+      title: '',
+      video: {
+        name: '',
+        url: null,
+        uploadProgress: null,
+      },
+    }],
+    loading: false,
+    serverError: null,
+    videoMissingError: null,
+    successMessage: null,
+  };
 };

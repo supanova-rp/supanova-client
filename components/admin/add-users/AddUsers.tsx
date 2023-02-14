@@ -14,7 +14,7 @@ import { updateUsers } from '@/utils/utils';
 import XIcon from '../../XIcon';
 import FormGroup from '../FormGroup';
 import Navbar from '../nav-and-sidebars/Navbar';
-import RemoveUserInput from '../RemoveUser';
+import RemoveInput from '../RemoveInput';
 import AddMoreInputs from '../AddMoreInputs';
 
 const AddUsers = () => {
@@ -157,11 +157,10 @@ const AddUsers = () => {
                   }
 
                   {index !== 0 && !user.registered
-                    ? <RemoveUserInput onClickFunction={() => onClickRemoveUser(user.id)} />
+                    ? <RemoveInput onClickFunction={() => onClickRemoveUser(user.id)} />
                     : null
                   }
                 </div>
-                
               </div>
             </Form>
           );
