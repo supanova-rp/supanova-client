@@ -5,6 +5,7 @@ import axios, { AxiosProgressEvent } from 'axios';
 import TickIcon from '@/icons/tickIcon.svg';
 
 import { colors } from '@/constants/colorPalette';
+import { API_DOMAIN } from '@/constants/constants';
 
 import ProgressBar from './ProgressBar';
 
@@ -56,7 +57,7 @@ const FilePicker: React.FC<Props> = ({
 
     try {
       // Get secure/signed AWS S3 url from server
-      const response = await fetch('http://localhost:3001/get-upload-url');
+      const response = await fetch(`${API_DOMAIN}/get-upload-url`);
       const result = await response.json();
 
       uploadFileToS3(result.uploadUrl, e.target.files[0]);
