@@ -8,6 +8,7 @@ import AddCourses from '@/components/admin/new-courses/NewCourses';
 import AddUsers from '@/components/admin/add-users/AddUsers';
 import SidebarContainer from '@/components/admin/nav-and-sidebars/SidebarContainer';
 import EditCourses from '@/components/admin/existing-courses/ExistingCourses';
+import DeleteCourseOverlay from '@/components/overlays/DeleteCourseOverlay';
 
 export const getServerSideProps = async () => {
   const response = await fetch(`${API_DOMAIN}/courses`);
@@ -36,7 +37,11 @@ const Admin: React.FC<Props> = ({ courses }) => {
     }
 
     if (activeTab === 'Existing Courses') {
-      return <EditCourses courses={courses} refreshData={refreshData} />;
+      return (
+        <EditCourses
+          courses={courses}
+          refreshData={refreshData} />
+      );
     }
 
     if (activeTab === 'New Users') {

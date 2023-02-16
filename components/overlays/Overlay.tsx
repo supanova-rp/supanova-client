@@ -1,49 +1,23 @@
+import { colors } from '@/constants/colorPalette';
 import XMarkIcon from '@/icons/xMarkIcon.svg';
 
-const LargeFullScreenOverlay = ({ children, onClick }) => {
+interface Props {
+  onClick: (parameter: boolean) => void,
+  children: React.ReactNode,
+}
+
+const Overlay: React.FC<Props> = ({ onClick, children }) => {
   return (
     <div className="full-screen-overlay-container">
       <div className="overlay" />
-      <StyledOverlayContent>
+      <div className="overlay-content">
         <div className="x-mark-overlay-container">
-          <XMarkIcon />
+          <XMarkIcon onClick={() => onClick(false)} stroke={colors.darkgray} className="clickable" />
         </div>
-        <StyledTitleAvatarsAndButtonContainer>
-          {children}
-        </StyledTitleAvatarsAndButtonContainer>
-      </StyledOverlayContent>
+        {children}
+      </div>
     </div>
   );
 };
 
-const StyledOverlayContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 300px;
-  width: 100%;
-  padding: 20px 0;
-  z-index: 1;
-  background-color: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, .25);
-
-  @media screen and (min-width: 768px) {
-    width: 500px;
-    height: 350px;
-    border-radius: 15px;
-  }
-
-  @media screen and (min-width: 1024px) {
-    height: 400px;
-    width: 600px;
-  }
-`;
-
-const StyledTitleAvatarsAndButtonContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  justify-content: space-around;
-  align-items: center;
-`;
-
-export default LargeFullScreenOverlay;
+export default Overlay;

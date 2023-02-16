@@ -17,15 +17,11 @@ interface Props {
 export default class EditCourses extends React.Component<Props> {
   state = {
     isLoading: false,
-    successMessageSavedCourse: null,
+    successMessage: null,
     errorMessage: null,
-    showDeleteOverlay: false,
     allCourses: this.props.courses,
     savedCourses: this.props.courses,
   };
-
-  // TODO: Handle deleting a whole course with overlay
-  // Overlay needs to be in Admin
 
   onUpdateStateAfterCancellingFileUpload = (sectionId: number) => {
     const coursesWithResetVideoUploadProgress = getUpdatedSectionsWithAddedVideoInfoExistingCoursesTab(this.state.allCourses, sectionId, 'uploadProgress', null);
@@ -130,7 +126,7 @@ export default class EditCourses extends React.Component<Props> {
 
   handleSuccessMessageAfterSavingEditedCourse = () => {
     setTimeout(() => {
-      this.setState({ successMessageSavedCourse: null });
+      this.setState({ successMessage: null });
     }, 3000);
   };
 
@@ -177,7 +173,7 @@ export default class EditCourses extends React.Component<Props> {
             isLoading: false,
             allCourses: updatedCoursesWithEditFlagRemovedForEditedCourse,
             savedCourses: this.getUpdatedSavedCoursesState(editedCourse, courseId),
-            successMessageSavedCourse: 'Successfully saved edited course!',
+            successMessage: 'Successfully saved edited course!',
           });
 
           this.handleSuccessMessageAfterSavingEditedCourse();
@@ -226,8 +222,30 @@ export default class EditCourses extends React.Component<Props> {
     this.setState({ allCourses: coursesWithNewlyAddedSection });
   };
 
-  onClickHandleShowingDeleteOverlay = (value: boolean) => {
-    this.setState({ showDeleteOverlay: value });
+  onClickDeleteCourse = async (courseId: number) => {
+    try {
+      this.setState({ isLoading: true, errorMessage: null });
+
+      const response = await fetch(`${API_DOMAIN}/delete-course`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          course_id: courseId,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!result.error) {
+        this.setState({ successMessage: 'Successfully delete course!' });
+        this.props.refreshData();
+      } else {
+        this.setState({ isLoading: false, errorMessage: 'Deleting course failed. Try again.' });
+      }
+    } catch (e) {
+      console.log(e);
+      this.setState({ isLoading: false, errorMessage: 'Deleting course failed. Try again.' });
+    }
   };
 
   render() {
@@ -246,8 +264,8 @@ export default class EditCourses extends React.Component<Props> {
       <Card className="w-100 p-3 d-flex mh-100 rounded-0">
         <Card.Body>
           <Navbar title="Edit Courses" />
-          {this.state.successMessageSavedCourse
-            ? <Alert variant="success">{this.state.successMessageSavedCourse}</Alert>
+          {this.state.successMessage
+            ? <Alert variant="success">{this.state.successMessage}</Alert>
             : null
           }
           <div>
@@ -269,15 +287,10 @@ export default class EditCourses extends React.Component<Props> {
                   handleRemoveSection={this.handleRemoveSection}
                   onClickAddNewSection={this.onClickAddNewSection}
                   onClickSaveEditedCourse={this.onClickSaveEditedCourse}
-                  onClickHandleShowingDeleteOverlay={this.onClickHandleShowingDeleteOverlay} />
+                  onClickDeleteCourse={this.onClickDeleteCourse} />
               );
             })}
           </div>
-
-          {this.state.showDeleteOverlay
-            ? <Overlay />
-            : null
-          }
         </Card.Body>
       </Card>
     );

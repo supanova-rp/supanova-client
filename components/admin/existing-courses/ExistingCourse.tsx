@@ -21,7 +21,7 @@ interface Props {
   onChangeSectionTitleField: (paramter1: number, parameter2: string) => void,
   onClickCancelEditingCourse: () => void,
   onClickSaveEditedCourse: (e: InputChangeEvent, courseId: string) => void,
-  onClickHandleShowingDeleteOverlay: (paramater: boolean) => void,
+  onClickDeleteCourse: (parameter: number) => void,
 }
 
 const ExistingCourse: React.FC<Props> = ({
@@ -39,7 +39,7 @@ const ExistingCourse: React.FC<Props> = ({
   onChangeCourseField,
   onChangeSectionTitleField,
   onClickSaveEditedCourse,
-  onClickHandleShowingDeleteOverlay,
+  onClickDeleteCourse,
 }) => {
   if (course.isEditing) {
     const alertVariant = errorMessage?.includes('Please') ? 'warning' : 'danger';
@@ -76,9 +76,10 @@ const ExistingCourse: React.FC<Props> = ({
   return (
     <CourseListView
       course={course}
-      onClickHandleShowingDeleteOverlay={onClickHandleShowingDeleteOverlay}
+      index={index}
+      isLoading={isLoading}
       onClickStartEditingCourse={onClickStartEditingCourse}
-      index={index} />
+      onClickDeleteCourse={onClickDeleteCourse} />
   );
 };
 

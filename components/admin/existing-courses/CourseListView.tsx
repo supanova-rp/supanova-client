@@ -1,24 +1,35 @@
+import { useState } from 'react';
+
 import { Course, CourseSection } from '@/index';
 import { colors } from '@/constants/colorPalette';
 
 import EditIcon from '@/icons/editIcon.svg';
 import DeleteIcon from '@/icons/deleteIcon.svg';
 
+import DeleteCourseOverlay from '@/components/overlays/DeleteCourseOverlay';
 import Section from './Section';
 
 interface Props {
   index: number,
   course: Course,
-  onClickHandleShowingDeleteOverlay: (paramater: boolean) => void,
+  isLoading: boolean,
   onClickStartEditingCourse: (parameter1: number, parameter2: boolean) => void,
+  onClickDeleteCourse: (parameter: number) => void,
 }
 
 const CourseListView: React.FC<Props> = ({
   course,
-  onClickHandleShowingDeleteOverlay,
-  onClickStartEditingCourse,
   index,
+  isLoading,
+  onClickStartEditingCourse,
+  onClickDeleteCourse,
 }) => {
+  const [showDeleteCourseOverlay, setShowDeleteCourseOverlay] = useState(false);
+
+  const onClickHandleShowingDeleteOverlay = (value: boolean) => {
+    setShowDeleteCourseOverlay(value);
+  };
+
   return (
     <div className="my-4">
       <div className="d-flex align-items-center mb-2">
@@ -36,6 +47,18 @@ const CourseListView: React.FC<Props> = ({
       {course.sections.map((section: CourseSection, sectionIndex: number) => {
         return <Section key={section.id} section={section} index={sectionIndex} />;
       })}
+
+      {showDeleteCourseOverlay
+        ? (
+          <DeleteCourseOverlay
+            courseId={course.id}
+            isLoading={isLoading}
+            onClickHandleShowingDeleteOverlay={onClickHandleShowingDeleteOverlay}
+            onClickDeleteCourse={onClickDeleteCourse} />
+        )
+        : null
+      }
+
     </div>
   );
 };
