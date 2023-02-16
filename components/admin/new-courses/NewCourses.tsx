@@ -11,7 +11,11 @@ import FormGroup from '../FormGroup';
 import AddMoreInputs from '../AddMoreInputs';
 import EditSection from '../EditSection';
 
-export default class AddCourses extends React.Component {
+interface Props {
+  refreshData: () => void,
+}
+
+export default class AddCourses extends React.Component<Props> {
   state = getInitialCourseState();
 
   onChangeSection = (sectionId: number, newInputValue: string) => {
@@ -53,15 +57,13 @@ export default class AddCourses extends React.Component {
   };
 
   onFileSelected = (sectionId: number, videoName: string) => {
-    const sectionsWithUpdatedVideoName = getUpdatedSectionsWithAddedVideoInfoNewCoursesTab(this.state.sections, sectionId, 'name', videoName);
-
-    console.log('>>> sectionsWithUpdatedVideoName: ', sectionsWithUpdatedVideoName);
+    const sectionsWithUpdatedVideoName = getUpdatedSectionsWithAddedVideoInfoNewCoursesTab(this.state.sections, sectionId, 'videoName', videoName);
 
     this.setState({ sections: sectionsWithUpdatedVideoName });
   };
 
   onFileUploaded = (sectionId: number, videoUrl: string) => {
-    const sectionsWithUpdatedVideoUrl = getUpdatedSectionsWithAddedVideoInfoNewCoursesTab(this.state.sections, sectionId, 'url', videoUrl);
+    const sectionsWithUpdatedVideoUrl = getUpdatedSectionsWithAddedVideoInfoNewCoursesTab(this.state.sections, sectionId, 'videoUrl', videoUrl);
 
     this.setState({ sections: sectionsWithUpdatedVideoUrl });
   };
@@ -81,17 +83,24 @@ export default class AddCourses extends React.Component {
   onHandleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    this.setState({ loading: true, serverError: null, videoMissingError: null });
+    this.setState({ loading: true, errorMessage: null });
 
-    if (this.state.sections.every((section) => section.video.url !== null)) {
+    if (this.state.sections.every((section) => section.videoUrl !== null)) {
       try {
+        const sectionsWithPositions = this.state.sections.map((section, index) => {
+          return {
+            ...section,
+            position: index,
+          };
+        });
+
         const response = await fetch(`${API_DOMAIN}/add-course`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            name: this.state.title,
-            description: this.state.courseDescription,
-            sections: [...this.state.sections],
+            title: this.state.title,
+            description: this.state.description,
+            sections: sectionsWithPositions,
           }),
         });
 
@@ -101,19 +110,26 @@ export default class AddCourses extends React.Component {
           this.setState({ ...getInitialCourseState(), successMessage: 'Successfully created new course!' });
 
           this.handleSuccessMessageAfterCourseCreation();
+          // Makes sure getServerSideProps gets called again so we see our new course in the existing courses tab without refreshing
+          this.props.refreshData();
+        } else {
+          this.setState({
+            loading: false,
+            errorMessage: 'Creating course failed. Try again.',
+          });
         }
       } catch (error) {
         console.log(error);
 
         this.setState({
           loading: false,
-          serverError: 'Creating course failed. Try again.',
+          errorMessage: 'Creating course failed. Try again.',
         });
       }
     } else {
       this.setState({
         loading: false,
-        videoMissingError: 'Please make sure videos are uploaded for every section.',
+        errorMessage: 'Please make sure videos are uploaded for every section.',
       });
     }
   };
@@ -123,11 +139,9 @@ export default class AddCourses extends React.Component {
       if (section.id === sectionId) {
         return {
           ...section,
-          video: {
-            name: '',
-            url: null,
-            uploadProgress: null,
-          },
+          videoName: '',
+          videoUrl: null,
+          uploadProgress: null,
         };
       }
 
@@ -137,19 +151,18 @@ export default class AddCourses extends React.Component {
   };
 
   render() {
+    const alertVariant = this.state.errorMessage?.includes('Please') ? 'warning' : 'danger';
+
     return (
       <Card className="w-100 p-3 d-flex rounded-0">
         <Card.Body>
           <Navbar title="Add a New Course" />
 
-          {this.state.serverError
-            ? <Alert variant="danger">{this.state.serverError}</Alert>
+          {this.state.errorMessage
+            ? <Alert variant={alertVariant}>{this.state.errorMessage}</Alert>
             : null
           }
-          {this.state.videoMissingError
-            ? <Alert variant="warning">{this.state.videoMissingError}</Alert>
-            : null
-          }
+
           {this.state.successMessage
             ? <Alert variant="success">{this.state.successMessage}</Alert>
             : null
@@ -168,8 +181,8 @@ export default class AddCourses extends React.Component {
               className="mb-2"
               label="Course Description"
               type="text"
-              value={this.state.courseDescription}
-              onChange={(e) => this.setState({ courseDescription: e.target.value })} />
+              value={this.state.description}
+              onChange={(e) => this.setState({ description: e.target.value })} />
 
             <h5 className="mt-4 mb-2">Add your Course Sections</h5>
             {this.state.sections.map((section, index) => {

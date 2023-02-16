@@ -1,7 +1,8 @@
 import { useState } from 'react';
 
 import { API_DOMAIN } from '@/constants/constants';
-import { ServerSideCourses } from '@/index';
+import { Courses } from '@/index';
+import { useRefreshData } from '@/hooks/useRefreshData';
 
 import AddCourses from '@/components/admin/new-courses/NewCourses';
 import AddUsers from '@/components/admin/add-users/AddUsers';
@@ -21,19 +22,21 @@ export const getServerSideProps = async () => {
 };
 
 interface Props {
-  courses: ServerSideCourses,
+  courses: Courses,
 }
 
 const Admin: React.FC<Props> = ({ courses }) => {
   const [activeTab, setActiveTab] = useState('New Courses');
 
+  const refreshData = useRefreshData();
+
   const renderAdminContent = () => {
     if (activeTab === 'New Courses') {
-      return <AddCourses />;
+      return <AddCourses refreshData={refreshData} />;
     }
 
     if (activeTab === 'Existing Courses') {
-      return <EditCourses courses={courses} />;
+      return <EditCourses courses={courses} refreshData={refreshData} />;
     }
 
     if (activeTab === 'New Users') {

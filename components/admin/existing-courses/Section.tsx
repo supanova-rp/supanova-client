@@ -1,10 +1,10 @@
 /* eslint-disable jsx-a11y/media-has-caption */
-import { ServerSideSection } from '@/index';
+import { CourseSection } from '@/index';
 import { AxiosProgressEvent } from 'axios';
 import EditSection from '../EditSection';
 
 interface Props {
-  section: ServerSideSection,
+  section: CourseSection,
   isEditing?: boolean,
   index: number,
   onChangeSectionTitleField?: (parameter1: number, parameter2: string) => void,
@@ -12,6 +12,7 @@ interface Props {
   onFileUploadProgress?: (paramater1: AxiosProgressEvent, parameter2: number) => void,
   onUpdateStateAfterCancellingFileUpload?: (parameter: number) => void,
   handleRemoveSection?: (paramater: number) => void,
+  onClickSaveEditedCourse?: (parameter: number) => void,
 }
 
 const Section: React.FC<Props> = ({
@@ -23,6 +24,7 @@ const Section: React.FC<Props> = ({
   onFileUploadProgress,
   onUpdateStateAfterCancellingFileUpload,
   handleRemoveSection,
+  onClickSaveEditedCourse,
 }) => {
   if (isEditing) {
     return (
@@ -34,7 +36,8 @@ const Section: React.FC<Props> = ({
         onFileUploaded={onFileUploaded}
         onFileUploadProgress={onFileUploadProgress}
         onUpdateStateAfterCancellingFileUpload={onUpdateStateAfterCancellingFileUpload}
-        handleRemoveSection={handleRemoveSection} />
+        handleRemoveSection={handleRemoveSection}
+        onClickSaveEditedCourse={onClickSaveEditedCourse} />
     );
   }
 
@@ -47,7 +50,7 @@ const Section: React.FC<Props> = ({
         controls
         preload="auto"
         // poster="//vjs.zencdn.net/v/oceans.png"
-        src={section.video_url} />
+        src={section.videoUrl} />
     </div>
   );
 };

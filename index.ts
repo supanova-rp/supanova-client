@@ -8,18 +8,26 @@ export type InputChangeEvent = React.ChangeEvent<HTMLInputElement>;
 
 export type InputChangeFunction = (e: InputChangeEvent) => void;
 
-export type Video = {
-  name: string,
-  url: string | null,
-  uploadProgress: number | null,
-};
-export type Section = {
+export type CourseSection = {
   id: number,
   title: string,
-  video: Video,
+  videoName?: string,
+  videoUrl: string | null,
+  uploadProgress?: number | null,
 };
 
-export type Sections = Section[];
+export type Course = {
+  id: number,
+  title: string,
+  description: string,
+  isEditing?: boolean,
+  sections: CourseSection[],
+  loading?: boolean,
+  errorMessage?: string | null,
+  successMessage?: string | null,
+};
+
+export type Courses = Course[];
 
 export type User = {
   id: string
@@ -37,19 +45,3 @@ export type UserInfoToUpdate = {
   regError?: boolean,
   hasPasswordResetError?: boolean,
 };
-
-export type ServerSideSection = {
-  id: number,
-  title: string,
-  video_url: string,
-};
-
-export type ServerSideCourse = {
-  id: number,
-  title: string,
-  description: string,
-  sections: ServerSideSection[],
-  isEditing?: boolean,
-};
-
-export type ServerSideCourses = ServerSideCourse[];

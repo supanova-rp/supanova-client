@@ -1,4 +1,4 @@
-import { Sections, ServerSideCourses, UserInfoToUpdate, Users } from '@/index';
+import { Courses, CourseSection, UserInfoToUpdate, Users } from '@/index';
 
 export const updateUsers = (users: Users, userId: string, userInfoToUpdate: UserInfoToUpdate) => {
   return users.map((user) => {
@@ -21,15 +21,12 @@ export const getClassNameSidebarTab = (activeTab: string, tabName: string) => {
   return 'btn-light admin-tab';
 };
 
-export const getUpdatedSectionsWithAddedVideoInfoNewCoursesTab = (sections: Sections, sectionId: number, key: string, value: string | number | undefined) => {
+export const getUpdatedSectionsWithAddedVideoInfoNewCoursesTab = (sections: CourseSection[], sectionId: number, key: string, value: string | number | undefined) => {
   const updatedSections = sections.map((section) => {
     if (sectionId === section.id) {
       return {
         ...section,
-        video: {
-          ...section.video,
-          [key]: value,
-        },
+        [key]: value,
       };
     }
 
@@ -39,7 +36,7 @@ export const getUpdatedSectionsWithAddedVideoInfoNewCoursesTab = (sections: Sect
   return updatedSections;
 };
 
-export const getUpdatedSectionsWithAddedVideoInfoExistingCoursesTab = (courses: ServerSideCourses, sectionId: number, key: string, value: string | number | null | undefined) => {
+export const getUpdatedSectionsWithAddedVideoInfoExistingCoursesTab = (courses: Courses, sectionId: number, key: string, value: string | number | null | undefined) => {
   const updatedCourses = courses.map((course) => {
     const sectionWithUpdatedVideoUrl = course.sections.map((section) => {
       if (section.id === sectionId) {
@@ -63,20 +60,21 @@ export const getUpdatedSectionsWithAddedVideoInfoExistingCoursesTab = (courses: 
 
 export const getInitialCourseState = () => {
   return {
+    id: Date.now(),
     title: '',
-    courseDescription: '',
-    sections: [{
-      id: Date.now(),
-      title: '',
-      video: {
-        name: '',
-        url: null,
+    description: '',
+    isEditing: false,
+    sections: [
+      {
+        id: Date.now(),
+        title: '',
+        videoName: '',
+        videoUrl: null,
         uploadProgress: null,
       },
-    }],
+    ],
     loading: false,
-    serverError: null,
-    videoMissingError: null,
+    errorMessage: null,
     successMessage: null,
   };
 };

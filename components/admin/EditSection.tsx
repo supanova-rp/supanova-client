@@ -2,7 +2,7 @@
 import React from 'react';
 import { AxiosProgressEvent } from 'axios';
 
-import { Section, ServerSideSection } from '@/index';
+import { CourseSection } from '@/index';
 
 import FilePicker from './FilePicker';
 import FormGroup from './FormGroup';
@@ -10,7 +10,7 @@ import RemoveInput from './RemoveInput';
 
 interface Props {
   index: number,
-  section: Section | ServerSideSection,
+  section: CourseSection
   onChangeSection?: (parameter1: number, parameter2: string) => void,
   onFileSelected?: (parameter1: number, parameter2: string) => void,
   onFileUploaded?: (parameter1: number, parameter2: string) => void,
@@ -75,8 +75,6 @@ export default class EditSection extends React.Component<Props> {
   render() {
     const marginStartRemoveSectionIcon = this.props.isEditing ? 'ms-4' : 'ms-2';
 
-    const videoUploadProgress = this.props.isEditing ? this.props.section?.uploadProgress : this.props.section?.video?.uploadProgress;
-
     return (
       <div className="d-flex flex-row align-items-center" key={`chapter-${this.props.index}`}>
         <div>
@@ -90,12 +88,12 @@ export default class EditSection extends React.Component<Props> {
             Component={(
               <FilePicker
                 sectionId={this.props.section.id}
-                videoName={this.props.section?.video?.name}
+                videoName={this.props.section.videoName}
                 abortController={this.abortController}
                 onFileSelected={this.props.onFileSelected}
                 onFileUploaded={this.handleFileUploaded}
                 onFileUploadProgress={this.props.onFileUploadProgress}
-                uploadProgress={videoUploadProgress}
+                uploadProgress={this.props.section.uploadProgress}
                 onClickCancelFileUpload={this.onClickCancelFileUpload} />
             )} />
         </div>
@@ -110,7 +108,7 @@ export default class EditSection extends React.Component<Props> {
                   controls
                   preload="auto"
               // poster="//vjs.zencdn.net/v/oceans.png"
-                  src={this.props.section?.video_url} />
+                  src={this.props.section.videoUrl} />
               </div>
             )
             : null

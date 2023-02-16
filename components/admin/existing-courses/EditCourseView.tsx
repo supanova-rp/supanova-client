@@ -1,13 +1,12 @@
 import { AxiosProgressEvent } from 'axios';
-import { Form } from 'react-bootstrap';
 
-import { ServerSideCourse } from '@/index';
+import { Course } from '@/index';
 
 import FormGroup from '../FormGroup';
 import Section from './Section';
 
 interface Props {
-  course: ServerSideCourse,
+  course: Course,
   onChangeCourseField: (paramter1: number, parameter2: string, parameter3: string) => void,
   onChangeSectionTitleField: (parameter1: number, parameter2: string) => void,
   onFileUploaded: (parameter1: number, parameter2: string) => void,
@@ -26,7 +25,7 @@ const EditCourseView: React.FC<Props> = ({
   handleRemoveSection,
 }) => {
   return (
-    <Form className="mb-4">
+    <div className="mb-4">
       <FormGroup
         formId="course-title"
         value={course.title}
@@ -55,7 +54,7 @@ const EditCourseView: React.FC<Props> = ({
             handleRemoveSection={handleRemoveSection} />
         );
       })}
-    </Form>
+    </div>
   );
 };
 

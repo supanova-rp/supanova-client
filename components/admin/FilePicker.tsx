@@ -43,8 +43,6 @@ const FilePicker: React.FC<Props> = ({
 
       const videoUrl = uploadUrl.split('?')[0];
 
-      console.log('>>> videoUrl: ', videoUrl);
-
       onFileUploaded(sectionId, videoUrl);
     } catch (error) {
       console.log(error);
@@ -52,8 +50,6 @@ const FilePicker: React.FC<Props> = ({
   };
 
   const handleFileSelected = async (e) => {
-    console.log('>>> handleFileSelected: ', e.target.files[0]);
-
     if (onFileSelected) {
       onFileSelected(sectionId, e.target.files[0].name);
     }
@@ -62,9 +58,6 @@ const FilePicker: React.FC<Props> = ({
       // Get secure/signed AWS S3 url from server
       const response = await fetch('http://localhost:3001/get-upload-url');
       const result = await response.json();
-
-      console.log('>>> result: ', result);
-      console.log('>>> e.target.files[0]: ', e.target.files[0]);
 
       uploadFileToS3(result.uploadUrl, e.target.files[0]);
     } catch (error) {

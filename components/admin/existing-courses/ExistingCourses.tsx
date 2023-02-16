@@ -2,31 +2,30 @@ import React from 'react';
 import { Alert, Card } from 'react-bootstrap';
 import { AxiosProgressEvent } from 'axios';
 
-import { ServerSideCourses } from '@/index';
-
+import { Course, Courses, InputChangeEvent } from '@/index';
 import { getUpdatedSectionsWithAddedVideoInfoExistingCoursesTab } from '@/utils/utils';
+import { API_DOMAIN } from '@/constants/constants';
 
 import Navbar from '../nav-and-sidebars/Navbar';
-import Course from './Course';
+import ExistingCourse from './ExistingCourse';
 
 interface Props {
-  courses: ServerSideCourses
+  courses: Courses,
+  refreshData: () => void,
 }
 
 export default class EditCourses extends React.Component<Props> {
   state = {
+    isLoading: false,
+    successMessageSavedCourse: null,
+    errorMessage: null,
+    showDeleteOverlay: false,
     allCourses: this.props.courses,
-    // savedCourses: this.props.courses,
+    savedCourses: this.props.courses,
   };
 
-  // TODO: when you click cancel -> replace the course that was cancelled in allCourses with the course object
-  // in savedCourses
-
-  // TODO: when you click save -> update the course in savedCourses with the course object that was saved from allCourses
-
-  // TODO: handle adding a new section
-
-  // Handle sending all the updated courses to the back end every time you click save
+  // TODO: Handle deleting a whole course with overlay
+  // Overlay needs to be in Admin
 
   onUpdateStateAfterCancellingFileUpload = (sectionId: number) => {
     const coursesWithResetVideoUploadProgress = getUpdatedSectionsWithAddedVideoInfoExistingCoursesTab(this.state.allCourses, sectionId, 'uploadProgress', null);
@@ -35,7 +34,7 @@ export default class EditCourses extends React.Component<Props> {
   };
 
   onFileUploaded = (sectionId: number, videoUrl: string) => {
-    const coursesWithUpdatedVideoUrl = getUpdatedSectionsWithAddedVideoInfoExistingCoursesTab(this.state.allCourses, sectionId, 'video_url', videoUrl);
+    const coursesWithUpdatedVideoUrl = getUpdatedSectionsWithAddedVideoInfoExistingCoursesTab(this.state.allCourses, sectionId, 'videoUrl', videoUrl);
 
     this.setState({ allCourses: coursesWithUpdatedVideoUrl });
   };
@@ -47,7 +46,7 @@ export default class EditCourses extends React.Component<Props> {
   };
 
   handleRemoveSection = (sectionId: number) => {
-    const updatedCourses = this.state.allCourses.map((course) => {
+    const updatedCourses = this.state.allCourses.map((course: Course) => {
       const updatedSectionsMinusRemovedSection = course.sections.filter((section) => sectionId !== section.id);
 
       return {
@@ -59,7 +58,7 @@ export default class EditCourses extends React.Component<Props> {
     this.setState({ allCourses: updatedCourses });
   };
 
-  onClickHandleEditCourse = (courseId: number, value: boolean) => {
+  onClickStartEditingCourse = (courseId: number, value: boolean) => {
     const updatedCoursesWithEditFlag = this.state.allCourses.map((course) => {
       if (course.id === courseId) {
         return {
@@ -72,6 +71,10 @@ export default class EditCourses extends React.Component<Props> {
     });
 
     this.setState({ allCourses: updatedCoursesWithEditFlag });
+  };
+
+  onClickCancelEditingCourse = () => {
+    this.setState({ allCourses: this.state.savedCourses, isLoading: false, errorMessage: null });
   };
 
   onChangeCourseField = (courseId: number, key: string, newInputValue: string) => {
@@ -111,8 +114,120 @@ export default class EditCourses extends React.Component<Props> {
     this.setState({ allCourses: updatedCourses });
   };
 
-  onClickAddNewSection = () => {
+  getUpdatedSavedCoursesState = (editedCourse: Course, courseId: number) => {
+    const updatedSavedCourses = this.state.savedCourses.map((course) => {
+      if (courseId === course.id) {
+        return {
+          ...editedCourse,
+        };
+      }
 
+      return course;
+    });
+
+    return updatedSavedCourses;
+  };
+
+  handleSuccessMessageAfterSavingEditedCourse = () => {
+    setTimeout(() => {
+      this.setState({ successMessageSavedCourse: null });
+    }, 3000);
+  };
+
+  onClickSaveEditedCourse = async (event: InputChangeEvent, courseId: number) => {
+    event.preventDefault();
+
+    const editedCourse = this.state.allCourses.find((course) => course.id === courseId);
+    const editedCourseId = editedCourse?.id;
+
+    const someVideoCurrentlyUploading = editedCourse?.sections.some((section) => {
+      return typeof section.uploadProgress === 'number' && section.uploadProgress < 1;
+    });
+
+    const everySectionHasVideoUrl = editedCourse?.sections.every((section) => section.videoUrl);
+
+    if (!someVideoCurrentlyUploading && everySectionHasVideoUrl) {
+      this.setState({ isLoading: true, errorMessage: null });
+
+      try {
+        const response = await fetch(`${API_DOMAIN}/edit-course`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            edited_course_id: editedCourseId,
+            course: editedCourse,
+          }),
+        });
+
+        const result = await response.json();
+
+        if (!result.error) {
+          const updatedCoursesWithEditFlagRemovedForEditedCourse = this.state.allCourses.map((course) => {
+            if (course.id === editedCourseId) {
+              return {
+                ...course,
+                isEditing: false,
+              };
+            }
+
+            return course;
+          });
+
+          this.setState({
+            isLoading: false,
+            allCourses: updatedCoursesWithEditFlagRemovedForEditedCourse,
+            savedCourses: this.getUpdatedSavedCoursesState(editedCourse, courseId),
+            successMessageSavedCourse: 'Successfully saved edited course!',
+          });
+
+          this.handleSuccessMessageAfterSavingEditedCourse();
+
+          // this hook makes sure getServerSideProps gets called again so we see the updated courses after saving our edits
+          this.props.refreshData();
+        } else {
+          this.setState({
+            isLoading: false,
+            errorMessage: 'Failed to save edited course. Try again.',
+          });
+        }
+      } catch (saveEditedCourseError) {
+        this.setState({
+          isLoading: false,
+          errorMessage: 'Failed to save edited course. Try again.',
+        });
+      }
+    } else {
+      this.setState({
+        isLoading: false,
+        errorMessage: 'Please make sure videos are uploaded for every section.',
+      });
+    }
+  };
+
+  onClickAddNewSection = (courseId: number) => {
+    const coursesWithNewlyAddedSection = this.state.allCourses.map((course) => {
+      if (course.id === courseId) {
+        return {
+          ...course,
+          sections: [
+            ...course.sections,
+            {
+              id: Date.now(),
+              title: '',
+              videoUrl: '',
+            },
+          ],
+        };
+      }
+
+      return course;
+    });
+
+    this.setState({ allCourses: coursesWithNewlyAddedSection });
+  };
+
+  onClickHandleShowingDeleteOverlay = (value: boolean) => {
+    this.setState({ showDeleteOverlay: value });
   };
 
   render() {
@@ -131,24 +246,38 @@ export default class EditCourses extends React.Component<Props> {
       <Card className="w-100 p-3 d-flex mh-100 rounded-0">
         <Card.Body>
           <Navbar title="Edit Courses" />
+          {this.state.successMessageSavedCourse
+            ? <Alert variant="success">{this.state.successMessageSavedCourse}</Alert>
+            : null
+          }
           <div>
             {this.state.allCourses.map((course, index) => {
               return (
-                <Course
+                <ExistingCourse
                   key={course.id}
                   index={index}
                   course={course}
-                  onClickHandleEditCourse={this.onClickHandleEditCourse}
+                  isLoading={this.state.isLoading}
+                  errorMessage={this.state.errorMessage}
+                  onClickStartEditingCourse={this.onClickStartEditingCourse}
+                  onClickCancelEditingCourse={this.onClickCancelEditingCourse}
                   onChangeCourseField={this.onChangeCourseField}
                   onChangeSectionTitleField={this.onChangeSectionTitleField}
                   onFileUploaded={this.onFileUploaded}
                   onFileUploadProgress={this.onFileUploadProgress}
                   onUpdateStateAfterCancellingFileUpload={this.onUpdateStateAfterCancellingFileUpload}
                   handleRemoveSection={this.handleRemoveSection}
-                  onClickAddNewSection={this.onClickAddNewSection} />
+                  onClickAddNewSection={this.onClickAddNewSection}
+                  onClickSaveEditedCourse={this.onClickSaveEditedCourse}
+                  onClickHandleShowingDeleteOverlay={this.onClickHandleShowingDeleteOverlay} />
               );
             })}
           </div>
+
+          {this.state.showDeleteOverlay
+            ? <Overlay />
+            : null
+          }
         </Card.Body>
       </Card>
     );

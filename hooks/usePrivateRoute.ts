@@ -12,6 +12,6 @@ export const usePrivateRoute = () => {
     if (!currentUser) {
       router.push('/login');
     }
-  }, []);
+  }, [currentUser, router]);
 };
 
