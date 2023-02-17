@@ -6,20 +6,21 @@ import EmptyCircle from './EmptyCircle';
 
 interface Props {
   title: string,
-  videoLength: string,
-  setShowVideo: (parameter: boolean) => void,
+  onClickSetCurrentVideo: React.MouseEventHandler<HTMLButtonElement>,
 }
 
-const TableRow: React.FC<Props> = ({ title, videoLength, setShowVideo }) => {
+const TableRow: React.FC<Props> = ({ title, onClickSetCurrentVideo }) => {
   return (
     <tr>
-      <Button className="d-flex align-items-center w-100 rounded-0 btn-light row-buttons" onClick={() => setShowVideo(true)}>
+      <Button
+        className="d-flex
+      align-items-center w-100 rounded-0 btn-light row-buttons"
+        onClick={onClickSetCurrentVideo}>
         <th className="table-header"><EmptyCircle /></th>
         <td>
           <div className="d-flex align-items-center">
             <VideoIcon stroke={colors.gray} className="mx-3" />
             <p className="mb-0 text-secondary me-1">{title}</p>
-            <p className="mb-0 text-secondary">{`(${videoLength})`}</p>
           </div>
         </td>
       </Button>

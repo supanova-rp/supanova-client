@@ -1,24 +1,24 @@
-import { curriculumData } from '@/constants/curriculumData';
-import { LogoutErrorProps } from '@/index';
+import { LogoutErrorProps, Course } from '@/index';
 
 import Header from './Header';
 import TableRow from './TableRow';
 
 interface Props extends LogoutErrorProps {
-  setShowVideo: (parameter: boolean) => void,
+  courses: Course[],
+  onClickSetCurrentVideo: (parameter1: number, parameter2: string, parameter3: number, parameter4: string, parameter5: string) => void,
 }
 
-const CoursesList: React.FC<Props> = ({ logoutError, setShowVideo }) => {
+const CoursesList: React.FC<Props> = ({ logoutError, courses, onClickSetCurrentVideo }) => {
   return (
     <>
       <div>
-        <Header title="Course Curriculum" logoutError={logoutError} />
+        <Header title="All Courses" logoutError={logoutError} />
       </div>
       <div>
-        {curriculumData.map((course, courseIndex) => {
+        {courses?.map((course, courseIndex) => {
           return (
-            <div key={`${course.courseTitle} ${course.id}`}>
-              <h5>{`${courseIndex + 1}. ${course.courseTitle}`}</h5>
+            <div key={`${course.title} ${course.id}`}>
+              <h5>{`${courseIndex + 1}. ${course.title}`}</h5>
               <p>{course.description}</p>
               <table className="table table-bordered mt-4">
                 <tbody>
@@ -27,8 +27,7 @@ const CoursesList: React.FC<Props> = ({ logoutError, setShowVideo }) => {
                       <TableRow
                         key={section.id}
                         title={`${sectionIndex + 1}. ${section.title}`}
-                        videoLength={section.videoLength}
-                        setShowVideo={setShowVideo} />
+                        onClickSetCurrentVideo={() => onClickSetCurrentVideo(courseIndex, course.title, sectionIndex, section.videoUrl, section.title)} />
                     );
                   })}
                 </tbody>

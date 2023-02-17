@@ -2,15 +2,33 @@ import { useState } from 'react';
 
 import { useAuth } from '@/contexts/AuthContext';
 import { usePrivateRoute } from '@/hooks/usePrivateRoute';
+import { API_DOMAIN } from '@/constants/constants';
+import { Course } from '@/index';
 
 import SidebarContainer from '@/components/home/SidebarContainer';
 import NavbarHome from '@/components/home/Navbar';
 import Instructor from '@/components/home/Instructor';
 import Courses from '@/components/home/Courses';
 
-const Home = () => {
+export const getServerSideProps = async () => {
+  const response = await fetch(`${API_DOMAIN}/courses`);
+
+  const courseResults = await response.json();
+
+  return {
+    props: {
+      courses: courseResults,
+    },
+  };
+};
+
+interface Props {
+  courses: Course[],
+}
+
+const Home: React.FC<Props> = ({ courses }) => {
   const [logoutError, setLogoutError] = useState('');
-  const [activeTab, setActiveTab] = useState('Curriculum');
+  const [activeTab, setActiveTab] = useState('Courses');
 
   const { currentUser } = useAuth();
 
@@ -18,8 +36,8 @@ const Home = () => {
   usePrivateRoute();
 
   const renderAdminContent = () => {
-    if (activeTab === 'Curriculum') {
-      return <Courses logoutError={logoutError} />;
+    if (activeTab === 'Courses') {
+      return <Courses logoutError={logoutError} courses={courses} />;
     }
 
     if (activeTab === 'Instructor') {

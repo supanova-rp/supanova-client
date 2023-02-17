@@ -43,3 +43,13 @@ export type UserInfoToUpdate = {
   regError?: boolean,
   hasPasswordResetError?: boolean,
 };
+
+export type CurrentVideo = {
+  courseIndex: number,
+  courseTitle: string,
+  sectionIndex: number,
+  sectionTitle: string,
+  videoUrl: string
+};
+
+export type VideoState = null | CurrentVideo;

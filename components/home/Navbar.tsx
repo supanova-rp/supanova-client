@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { Button, Navbar } from 'react-bootstrap';
 import { useRouter } from 'next/router';
 
-import SupanovaLogo from '@/images/Supanova-logo.jpeg';
+import SupanovaLogo from '@/images/Supanova-logo.png';
 
 import { useAuth } from '@/contexts/AuthContext';
 import { SetStringFunction } from '@/index';
