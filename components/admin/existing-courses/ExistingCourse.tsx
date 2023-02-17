@@ -11,6 +11,8 @@ interface Props {
   course: Course,
   isLoading: boolean,
   errorMessage: string | null,
+  deleteCourseErrorMessage: string | null,
+  showDeleteCourseOverlay: boolean,
   handleRemoveSection: (paramater: number) => void,
   onFileUploaded: (parameter1: number, parameter2: string) => void,
   onFileUploadProgress: (parameter1: AxiosProgressEvent, parameter2: number) => void,
@@ -22,13 +24,16 @@ interface Props {
   onClickCancelEditingCourse: () => void,
   onClickSaveEditedCourse: (e: InputChangeEvent, courseId: string) => void,
   onClickDeleteCourse: (parameter: number) => void,
+  onClickHandleShowingDeleteOverlay: (parameter: boolean) => void,
 }
 
 const ExistingCourse: React.FC<Props> = ({
   index,
   course,
   isLoading,
+  showDeleteCourseOverlay,
   errorMessage,
+  deleteCourseErrorMessage,
   handleRemoveSection,
   onFileUploaded,
   onFileUploadProgress,
@@ -40,6 +45,7 @@ const ExistingCourse: React.FC<Props> = ({
   onChangeSectionTitleField,
   onClickSaveEditedCourse,
   onClickDeleteCourse,
+  onClickHandleShowingDeleteOverlay,
 }) => {
   if (course.isEditing) {
     const alertVariant = errorMessage?.includes('Please') ? 'warning' : 'danger';
@@ -78,8 +84,11 @@ const ExistingCourse: React.FC<Props> = ({
       course={course}
       index={index}
       isLoading={isLoading}
+      deleteCourseErrorMessage={deleteCourseErrorMessage}
+      showDeleteCourseOverlay={showDeleteCourseOverlay}
       onClickStartEditingCourse={onClickStartEditingCourse}
-      onClickDeleteCourse={onClickDeleteCourse} />
+      onClickDeleteCourse={onClickDeleteCourse}
+      onClickHandleShowingDeleteOverlay={onClickHandleShowingDeleteOverlay} />
   );
 };
 

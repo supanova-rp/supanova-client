@@ -46,6 +46,7 @@ const EditCourseView: React.FC<Props> = ({
             key={section.id}
             index={sectionIndex}
             section={section}
+            canRemove={course.sections.length > 1}
             isEditing={course.isEditing}
             onChangeSectionTitleField={onChangeSectionTitleField}
             onFileUploaded={onFileUploaded}

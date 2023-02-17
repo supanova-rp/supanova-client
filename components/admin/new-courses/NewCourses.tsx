@@ -15,6 +15,8 @@ interface Props {
   refreshData: () => void,
 }
 
+// TODO: bug: when you cancel a file upload and pick the same file again, it's not being uploaded
+
 export default class AddCourses extends React.Component<Props> {
   state = getInitialCourseState();
 

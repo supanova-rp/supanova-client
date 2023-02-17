@@ -156,8 +156,8 @@ const AddUsers = () => {
                     : null
                   }
 
-                  {index !== 0 && !user.registered
-                    ? <RemoveInput onClickFunction={() => onClickRemoveUser(user.id)} />
+                  {users?.length > 1 && !user.registered
+                    ? <RemoveInput onClickFunction={() => onClickRemoveUser(user.id)} margin="ms-2 mt-3" />
                     : null
                   }
                 </div>
@@ -166,7 +166,7 @@ const AddUsers = () => {
           );
         })}
 
-        <AddMoreInputs title="Add another user" onClick={onClickAddNewUser} />
+        <AddMoreInputs title="Add another user" onClick={onClickAddNewUser} marginTop="mt-3" />
         <Button type="button" onClick={() => setUsers(usersDefaultState)}>Clear all users</Button>
       </Card.Body>
     </Card>

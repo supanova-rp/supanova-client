@@ -6,6 +6,7 @@ import EditSection from '../EditSection';
 interface Props {
   section: CourseSection,
   isEditing?: boolean,
+  canRemove: boolean,
   index: number,
   onChangeSectionTitleField?: (parameter1: number, parameter2: string) => void,
   onFileUploaded?: (parameter1: number, parameter2: string) => void,
@@ -17,6 +18,7 @@ interface Props {
 
 const Section: React.FC<Props> = ({
   section,
+  canRemove,
   isEditing = false,
   index,
   onChangeSectionTitleField,
@@ -31,6 +33,7 @@ const Section: React.FC<Props> = ({
       <EditSection
         index={index}
         section={section}
+        canRemove={canRemove}
         isEditing={isEditing}
         onChangeSection={onChangeSectionTitleField}
         onFileUploaded={onFileUploaded}

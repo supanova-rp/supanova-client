@@ -27,8 +27,6 @@ export type Course = {
   successMessage?: string | null,
 };
 
-export type Courses = Course[];
-
 export type User = {
   id: string
   name: string,

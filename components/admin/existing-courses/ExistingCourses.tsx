@@ -2,7 +2,7 @@ import React from 'react';
 import { Alert, Card } from 'react-bootstrap';
 import { AxiosProgressEvent } from 'axios';
 
-import { Course, Courses, InputChangeEvent } from '@/index';
+import { Course, InputChangeEvent } from '@/index';
 import { getUpdatedSectionsWithAddedVideoInfoExistingCoursesTab } from '@/utils/utils';
 import { API_DOMAIN } from '@/constants/constants';
 
@@ -10,7 +10,7 @@ import Navbar from '../nav-and-sidebars/Navbar';
 import ExistingCourse from './ExistingCourse';
 
 interface Props {
-  courses: Courses,
+  courses: Course[],
   refreshData: () => void,
 }
 
@@ -19,8 +19,10 @@ export default class EditCourses extends React.Component<Props> {
     isLoading: false,
     successMessage: null,
     errorMessage: null,
+    deleteCourseErrorMessage: null,
     allCourses: this.props.courses,
     savedCourses: this.props.courses,
+    showDeleteCourseOverlay: false,
   };
 
   onUpdateStateAfterCancellingFileUpload = (sectionId: number) => {
@@ -136,6 +138,19 @@ export default class EditCourses extends React.Component<Props> {
     const editedCourse = this.state.allCourses.find((course) => course.id === courseId);
     const editedCourseId = editedCourse?.id;
 
+    // Getting the ids of the deleted sections so the back end can delete them in the table
+    const uneditedVersionOfEditedCourse = this.state.savedCourses.find((course) => course.id === editedCourseId);
+
+    const sectionsThatDontExistInSavedCourse = uneditedVersionOfEditedCourse?.sections.filter((section) => {
+      if (editedCourse?.sections.some((editedCourseSection) => editedCourseSection.id === section.id)) {
+        return false;
+      }
+
+      return true;
+    });
+
+    const idsOfDeletedSections = sectionsThatDontExistInSavedCourse?.map((section) => section.id);
+
     const someVideoCurrentlyUploading = editedCourse?.sections.some((section) => {
       return typeof section.uploadProgress === 'number' && section.uploadProgress < 1;
     });
@@ -145,13 +160,26 @@ export default class EditCourses extends React.Component<Props> {
     if (!someVideoCurrentlyUploading && everySectionHasVideoUrl) {
       this.setState({ isLoading: true, errorMessage: null });
 
+      const sectionsWithPositions = editedCourse?.sections.map((section, index) => {
+        return {
+          ...section,
+          position: index,
+        };
+      });
+
+      const editedCourseWithSectionPositions = {
+        ...editedCourse,
+        sections: sectionsWithPositions,
+      };
+
       try {
         const response = await fetch(`${API_DOMAIN}/edit-course`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             edited_course_id: editedCourseId,
-            course: editedCourse,
+            course: editedCourseWithSectionPositions,
+            deleted_sections_ids: idsOfDeletedSections,
           }),
         });
 
@@ -211,6 +239,7 @@ export default class EditCourses extends React.Component<Props> {
               id: Date.now(),
               title: '',
               videoUrl: '',
+              isNewSection: true,
             },
           ],
         };
@@ -222,29 +251,37 @@ export default class EditCourses extends React.Component<Props> {
     this.setState({ allCourses: coursesWithNewlyAddedSection });
   };
 
-  onClickDeleteCourse = async (courseId: number) => {
+  onClickHandleShowingDeleteOverlay = (value: boolean) => {
+    this.setState({ showDeleteCourseOverlay: (value) });
+  };
+
+  onClickDeleteCourse = async (courseToDeleteId: number) => {
     try {
-      this.setState({ isLoading: true, errorMessage: null });
+      this.setState({ isLoading: true, deleteCourseErrorMessage: null });
 
       const response = await fetch(`${API_DOMAIN}/delete-course`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          course_id: courseId,
+          course_id: courseToDeleteId,
         }),
       });
 
       const result = await response.json();
 
       if (!result.error) {
-        this.setState({ successMessage: 'Successfully delete course!' });
+        this.setState({ showDeleteCourseOverlay: false, isLoading: false });
         this.props.refreshData();
+
+        const coursesMinusDeletedCourse = this.state.allCourses.filter((course) => course.id !== courseToDeleteId);
+
+        this.setState({ allCourses: coursesMinusDeletedCourse, savedCourses: coursesMinusDeletedCourse });
       } else {
-        this.setState({ isLoading: false, errorMessage: 'Deleting course failed. Try again.' });
+        this.setState({ isLoading: false, deleteCourseErrorMessage: 'Deleting course failed. Try again.' });
       }
     } catch (e) {
       console.log(e);
-      this.setState({ isLoading: false, errorMessage: 'Deleting course failed. Try again.' });
+      this.setState({ isLoading: false, deleteCourseErrorMessage: 'Deleting course failed. Try again.' });
     }
   };
 
@@ -276,6 +313,8 @@ export default class EditCourses extends React.Component<Props> {
                   index={index}
                   course={course}
                   isLoading={this.state.isLoading}
+                  deleteCourseErrorMessage={this.state.deleteCourseErrorMessage}
+                  showDeleteCourseOverlay={this.state.showDeleteCourseOverlay}
                   errorMessage={this.state.errorMessage}
                   onClickStartEditingCourse={this.onClickStartEditingCourse}
                   onClickCancelEditingCourse={this.onClickCancelEditingCourse}
@@ -287,7 +326,8 @@ export default class EditCourses extends React.Component<Props> {
                   handleRemoveSection={this.handleRemoveSection}
                   onClickAddNewSection={this.onClickAddNewSection}
                   onClickSaveEditedCourse={this.onClickSaveEditedCourse}
-                  onClickDeleteCourse={this.onClickDeleteCourse} />
+                  onClickDeleteCourse={this.onClickDeleteCourse}
+                  onClickHandleShowingDeleteOverlay={this.onClickHandleShowingDeleteOverlay} />
               );
             })}
           </div>

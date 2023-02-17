@@ -23,9 +23,6 @@ export default function App({ Component, pageProps }: AppProps) {
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
         <meta name="msapplication-TileColor" content="#da532c" />
         <meta name="theme-color" content="#ffffff" />
-        {/* TODO: fix this */}
-        <link href="//vjs.zencdn.net/7.10.2/video-js.min.css" rel="stylesheet" />
-        <script src="//vjs.zencdn.net/7.10.2/video.min.js" />
       </Head>
       <AuthProvider><Component {...pageProps} /></AuthProvider>
     </div>

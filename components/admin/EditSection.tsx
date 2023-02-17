@@ -10,7 +10,8 @@ import RemoveInput from './RemoveInput';
 
 interface Props {
   index: number,
-  section: CourseSection
+  section: CourseSection,
+  canRemove: boolean,
   onChangeSection?: (parameter1: number, parameter2: string) => void,
   onFileSelected?: (parameter1: number, parameter2: string) => void,
   onFileUploaded?: (parameter1: number, parameter2: string) => void,
@@ -115,8 +116,8 @@ export default class EditSection extends React.Component<Props> {
           }
 
           <div>
-            {this.props.index !== 0
-              ? <RemoveInput onClickFunction={this.onClickRemoveSection} marginStart={marginStartRemoveSectionIcon} />
+            {this.props.canRemove
+              ? <RemoveInput onClickFunction={this.onClickRemoveSection} margin={marginStartRemoveSectionIcon} />
               : null
             }
           </div>

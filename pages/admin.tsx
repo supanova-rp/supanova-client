@@ -1,14 +1,13 @@
 import { useState } from 'react';
 
 import { API_DOMAIN } from '@/constants/constants';
-import { Courses } from '@/index';
+import { Course } from '@/index';
 import { useRefreshData } from '@/hooks/useRefreshData';
 
 import AddCourses from '@/components/admin/new-courses/NewCourses';
 import AddUsers from '@/components/admin/add-users/AddUsers';
 import SidebarContainer from '@/components/admin/nav-and-sidebars/SidebarContainer';
 import EditCourses from '@/components/admin/existing-courses/ExistingCourses';
-import DeleteCourseOverlay from '@/components/overlays/DeleteCourseOverlay';
 
 export const getServerSideProps = async () => {
   const response = await fetch(`${API_DOMAIN}/courses`);
@@ -23,7 +22,7 @@ export const getServerSideProps = async () => {
 };
 
 interface Props {
-  courses: Courses,
+  courses: Course[],
 }
 
 const Admin: React.FC<Props> = ({ courses }) => {

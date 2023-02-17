@@ -7,11 +7,12 @@ import { colors } from '@/constants/colorPalette';
 interface Props {
   onClick: () => void,
   title: string,
+  marginTop?: string,
 }
 
-const AddMoreInputs: React.FC<Props> = ({ onClick, title }) => {
+const AddMoreInputs: React.FC<Props> = ({ onClick, title, marginTop }) => {
   return (
-    <div className="mb-4 d-flex align-items-center">
+    <div className={`mb-4 ${marginTop} d-flex align-items-center`}>
       <p className="m-0"><strong>{title}</strong></p>
       <div className="d-flex align-items-center ms-1 p-2 icon" onClick={onClick}>
         <PlusIcon stroke={colors.green} />
