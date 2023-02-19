@@ -1,4 +1,4 @@
-import { Course, InputChangeEvent } from '@/index';
+import { Course, FormSubmitEvent } from '@/index';
 import { AxiosProgressEvent } from 'axios';
 import { Alert, Button, Form } from 'react-bootstrap';
 import AddMoreInputs from '../AddMoreInputs';
@@ -20,9 +20,9 @@ interface Props {
   onClickAddNewSection: (parameter: number) => void,
   onClickStartEditingCourse: (parameter1: number, parameter2: boolean) => void,
   onChangeCourseField: (paramter1: number, parameter2: string, parameter3: string) => void,
-  onChangeSectionTitleField: (paramter1: number, parameter2: string) => void,
+  onChangeSectionTitle: (paramter1: number, parameter2: string) => void,
   onClickCancelEditingCourse: () => void,
-  onClickSaveEditedCourse: (e: InputChangeEvent, courseId: string) => void,
+  onClickSaveEditedCourse: (e: FormSubmitEvent, courseId: number) => void,
   onClickDeleteCourse: (parameter: number) => void,
   onClickHandleShowingDeleteOverlay: (parameter: boolean) => void,
 }
@@ -42,7 +42,7 @@ const ExistingCourse: React.FC<Props> = ({
   onClickStartEditingCourse,
   onClickCancelEditingCourse,
   onChangeCourseField,
-  onChangeSectionTitleField,
+  onChangeSectionTitle,
   onClickSaveEditedCourse,
   onClickDeleteCourse,
   onClickHandleShowingDeleteOverlay,
@@ -60,7 +60,7 @@ const ExistingCourse: React.FC<Props> = ({
         <EditCourseView
           course={course}
           onChangeCourseField={onChangeCourseField}
-          onChangeSectionTitleField={onChangeSectionTitleField}
+          onChangeSectionTitle={onChangeSectionTitle}
           onFileUploaded={onFileUploaded}
           onFileUploadProgress={onFileUploadProgress}
           onUpdateStateAfterCancellingFileUpload={onUpdateStateAfterCancellingFileUpload}

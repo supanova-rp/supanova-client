@@ -5,15 +5,17 @@ export interface LogoutErrorProps {
 }
 
 export type InputChangeEvent = React.ChangeEvent<HTMLInputElement>;
+export type FormSubmitEvent = React.FormEvent<HTMLFormElement>;
 
 export type InputChangeFunction = (e: InputChangeEvent) => void;
+
+export type UploadProgress = number | null | undefined;
 
 export type CourseSection = {
   id: number,
   title: string,
-  videoName?: string,
   videoUrl: string | null,
-  uploadProgress?: number | null,
+  uploadProgress?: UploadProgress,
 };
 
 export type Course = {
@@ -35,8 +37,6 @@ export type User = {
   regError: boolean,
   hasPasswordResetError: boolean,
 };
-
-export type Users = User[];
 
 export type UserInfoToUpdate = {
   registered?: boolean,

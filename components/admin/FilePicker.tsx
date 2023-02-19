@@ -4,6 +4,8 @@ import axios, { AxiosProgressEvent } from 'axios';
 
 import TickIcon from '@/icons/tickIcon.svg';
 
+import { sanitizeArray } from '@/utils/array';
+import { InputChangeEvent, UploadProgress } from '@/index';
 import { colors } from '@/constants/colorPalette';
 import { API_DOMAIN } from '@/constants/constants';
 
@@ -13,20 +15,16 @@ import ProgressBar from './ProgressBar';
 
 interface Props {
   sectionId: number,
-  videoName?: string,
   abortController: AbortController,
-  onFileSelected?: (parameter1: number, parameter2: string) => void,
   onFileUploaded: (paramater1: number, parameter2: string) => void,
   onFileUploadProgress: (parameter1: AxiosProgressEvent, parameter2: number) => void,
-  uploadProgress: number | null,
+  uploadProgress: UploadProgress,
   onClickCancelFileUpload: React.MouseEventHandler<HTMLButtonElement>
 }
 
 const FilePicker: React.FC<Props> = ({
   sectionId,
-  videoName,
   abortController,
-  onFileSelected,
   onFileUploaded,
   onFileUploadProgress,
   uploadProgress,
@@ -50,17 +48,14 @@ const FilePicker: React.FC<Props> = ({
     }
   };
 
-  const handleFileSelected = async (e) => {
-    if (onFileSelected) {
-      onFileSelected(sectionId, e.target.files[0].name);
-    }
-
+  const handleFileSelected = async (e: InputChangeEvent) => {
     try {
       // Get secure/signed AWS S3 url from server
       const response = await fetch(`${API_DOMAIN}/get-upload-url`);
       const result = await response.json();
+      const files = sanitizeArray(e.target?.files);
 
-      uploadFileToS3(result.uploadUrl, e.target.files[0]);
+      uploadFileToS3(result.uploadUrl, files[0]);
     } catch (error) {
       console.log(error);
     }
@@ -99,10 +94,6 @@ const FilePicker: React.FC<Props> = ({
           accept="video/mp4, video/mov"
           onChange={handleFileSelected} />
       </label>
-      {videoName
-        ? <small className="my-0 text-muted">{videoName}</small>
-        : null
-      }
       {renderUploadProgressIcon()}
     </div>
   );

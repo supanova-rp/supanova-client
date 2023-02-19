@@ -11,14 +11,12 @@ import RemoveInput from './RemoveInput';
 interface Props {
   index: number,
   section: CourseSection,
-  canRemove: boolean,
-  onChangeSection?: (parameter1: number, parameter2: string) => void,
-  onFileSelected?: (parameter1: number, parameter2: string) => void,
-  onFileUploaded?: (parameter1: number, parameter2: string) => void,
-  onFileUploadProgress?: (parameter1: AxiosProgressEvent, parameter2: number) => void,
-  onUpdateStateAfterCancellingFileUpload?: (paramater: number) => void,
-  handleRemoveSection?: (parameter: number) => void,
-  isEditing?: boolean,
+  canRemove?: boolean,
+  onChangeSectionTitle: (parameter1: number, parameter2: string) => void,
+  onFileUploaded: (parameter1: number, parameter2: string) => void,
+  onFileUploadProgress: (parameter1: AxiosProgressEvent, parameter2: number) => void,
+  onUpdateStateAfterCancellingFileUpload: (paramater: number) => void,
+  handleRemoveSection: (parameter: number) => void,
 }
 
 export default class EditSection extends React.Component<Props> {
@@ -48,33 +46,25 @@ export default class EditSection extends React.Component<Props> {
 
     this.abortController = new AbortController();
 
-    if (onFileUploaded) {
-      onFileUploaded(sectionId, videoUrl);
-    }
+    onFileUploaded(sectionId, videoUrl);
   };
 
   onClickCancelFileUpload = () => {
-    this.cancelUploadRequest();
-
     const { onUpdateStateAfterCancellingFileUpload, section } = this.props;
 
-    if (onUpdateStateAfterCancellingFileUpload) {
-      onUpdateStateAfterCancellingFileUpload(section.id);
-    }
+    this.cancelUploadRequest();
+    onUpdateStateAfterCancellingFileUpload(section.id);
   };
 
   onClickRemoveSection = () => {
-    this.cancelUploadRequest();
-
     const { handleRemoveSection, section } = this.props;
 
-    if (handleRemoveSection) {
-      handleRemoveSection(section.id);
-    }
+    this.cancelUploadRequest();
+    handleRemoveSection(section.id);
   };
 
   render() {
-    const marginStartRemoveSectionIcon = this.props.isEditing ? 'ms-4' : 'ms-2';
+    const marginStartRemoveSectionIcon = this.props.section.videoUrl ? 'ms-4' : 'ms-2';
 
     return (
       <div className="d-flex flex-row align-items-center" key={`chapter-${this.props.index}`}>
@@ -85,13 +75,11 @@ export default class EditSection extends React.Component<Props> {
             label="Section Title"
             type="text"
             value={this.props.section.title}
-            onChange={(e) => this.props.onChangeSection(this.props.section.id, e.target.value)}
+            onChange={(e) => this.props.onChangeSectionTitle(this.props.section.id, e.target.value)}
             Component={(
               <FilePicker
                 sectionId={this.props.section.id}
-                videoName={this.props.section.videoName}
                 abortController={this.abortController}
-                onFileSelected={this.props.onFileSelected}
                 onFileUploaded={this.handleFileUploaded}
                 onFileUploadProgress={this.props.onFileUploadProgress}
                 uploadProgress={this.props.section.uploadProgress}
@@ -100,7 +88,7 @@ export default class EditSection extends React.Component<Props> {
         </div>
 
         <div className="d-flex align-items-center">
-          {this.props.isEditing
+          {this.props.section.videoUrl
             ? (
               <div className="ms-5">
                 <video
@@ -108,7 +96,6 @@ export default class EditSection extends React.Component<Props> {
                   className="video-js-edit mb-4"
                   controls
                   preload="auto"
-              // poster="//vjs.zencdn.net/v/oceans.png"
                   src={this.props.section.videoUrl} />
               </div>
             )

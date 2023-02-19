@@ -1,6 +1,6 @@
-import { Courses, CourseSection, UserInfoToUpdate, Users } from '@/index';
+import { Course, CourseSection, UserInfoToUpdate, User } from '@/index';
 
-export const updateUsers = (users: Users, userId: string, userInfoToUpdate: UserInfoToUpdate) => {
+export const updateUsers = (users: User[], userId: string, userInfoToUpdate: UserInfoToUpdate) => {
   return users.map((user) => {
     if (user.id === userId) {
       return {
@@ -36,8 +36,10 @@ export const getUpdatedSectionsWithAddedVideoInfoNewCoursesTab = (sections: Cour
   return updatedSections;
 };
 
-export const getUpdatedSectionsWithAddedVideoInfoExistingCoursesTab = (courses: Courses, sectionId: number, key: string, value: string | number | null | undefined) => {
+export const getUpdatedSectionsWithAddedVideoInfoExistingCoursesTab = (courses: Course[], sectionId: number, key: string, value: string | number | null | undefined) => {
   const updatedCourses = courses.map((course) => {
+    // Marie TODO: we could use the function above to update the sections and
+    // maybe rename this something a bit more generic
     const sectionWithUpdatedVideoUrl = course.sections.map((section) => {
       if (section.id === sectionId) {
         return {
@@ -68,13 +70,15 @@ export const getInitialCourseState = () => {
       {
         id: Date.now(),
         title: '',
-        videoName: '',
         videoUrl: null,
         uploadProgress: null,
       },
     ],
     loading: false,
-    errorMessage: null,
+    error: {
+      message: null,
+      type: null,
+    },
     successMessage: null,
   };
 };

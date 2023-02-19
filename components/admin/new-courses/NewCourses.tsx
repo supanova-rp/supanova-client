@@ -20,7 +20,7 @@ interface Props {
 export default class AddCourses extends React.Component<Props> {
   state = getInitialCourseState();
 
-  onChangeSection = (sectionId: number, newInputValue: string) => {
+  onChangeSectionTitle = (sectionId: number, newInputValue: string) => {
     const updatedSectionsWithNewTitle = this.state.sections.map((section) => {
       if (section.id === sectionId) {
         return {
@@ -58,12 +58,6 @@ export default class AddCourses extends React.Component<Props> {
     this.setState({ sections: updatedSectionsMinusRemovedSection });
   };
 
-  onFileSelected = (sectionId: number, videoName: string) => {
-    const sectionsWithUpdatedVideoName = getUpdatedSectionsWithAddedVideoInfoNewCoursesTab(this.state.sections, sectionId, 'videoName', videoName);
-
-    this.setState({ sections: sectionsWithUpdatedVideoName });
-  };
-
   onFileUploaded = (sectionId: number, videoUrl: string) => {
     const sectionsWithUpdatedVideoUrl = getUpdatedSectionsWithAddedVideoInfoNewCoursesTab(this.state.sections, sectionId, 'videoUrl', videoUrl);
 
@@ -85,7 +79,13 @@ export default class AddCourses extends React.Component<Props> {
   onHandleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    this.setState({ loading: true, errorMessage: null });
+    this.setState({
+      loading: true,
+      error: {
+        message: null,
+        type: null,
+      },
+    });
 
     if (this.state.sections.every((section) => section.videoUrl !== null)) {
       try {
@@ -117,7 +117,10 @@ export default class AddCourses extends React.Component<Props> {
         } else {
           this.setState({
             loading: false,
-            errorMessage: 'Creating course failed. Try again.',
+            error: {
+              message: 'Creating course failed. Try again.',
+              type: 'danger',
+            },
           });
         }
       } catch (error) {
@@ -125,13 +128,19 @@ export default class AddCourses extends React.Component<Props> {
 
         this.setState({
           loading: false,
-          errorMessage: 'Creating course failed. Try again.',
+          error: {
+            message: 'Creating course failed. Try again.',
+            type: 'danger',
+          },
         });
       }
     } else {
       this.setState({
         loading: false,
-        errorMessage: 'Please make sure videos are uploaded for every section.',
+        error: {
+          message: 'Please make sure videos are uploaded for every section.',
+          type: 'warning',
+        },
       });
     }
   };
@@ -141,7 +150,6 @@ export default class AddCourses extends React.Component<Props> {
       if (section.id === sectionId) {
         return {
           ...section,
-          videoName: '',
           videoUrl: null,
           uploadProgress: null,
         };
@@ -153,20 +161,24 @@ export default class AddCourses extends React.Component<Props> {
   };
 
   render() {
-    const alertVariant = this.state.errorMessage?.includes('Please') ? 'warning' : 'danger';
+    const { error, successMessage } = this.state;
 
     return (
       <Card className="w-100 p-3 d-flex rounded-0">
         <Card.Body>
           <Navbar title="Add a New Course" />
 
-          {this.state.errorMessage
-            ? <Alert variant={alertVariant}>{this.state.errorMessage}</Alert>
+          {error?.message
+            ? (
+              <Alert variant={error.type || 'warning'}>
+                {error.message}
+              </Alert>
+            )
             : null
           }
 
-          {this.state.successMessage
-            ? <Alert variant="success">{this.state.successMessage}</Alert>
+          {successMessage
+            ? <Alert variant="success">{successMessage}</Alert>
             : null
           }
 
@@ -191,10 +203,10 @@ export default class AddCourses extends React.Component<Props> {
               return (
                 <EditSection
                   key={section.id}
-                  section={section}
                   index={index}
-                  onChangeSection={this.onChangeSection}
-                  onFileSelected={this.onFileSelected}
+                  section={section}
+                  canRemove={this.state.sections.length > 1}
+                  onChangeSectionTitle={this.onChangeSectionTitle}
                   onFileUploaded={this.onFileUploaded}
                   onFileUploadProgress={this.onFileUploadProgress}
                   onUpdateStateAfterCancellingFileUpload={this.onUpdateStateAfterCancellingFileUpload}

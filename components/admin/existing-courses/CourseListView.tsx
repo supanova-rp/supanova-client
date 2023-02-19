@@ -5,7 +5,7 @@ import EditIcon from '@/icons/editIcon.svg';
 import DeleteIcon from '@/icons/deleteIcon.svg';
 
 import DeleteCourseOverlay from '@/components/overlays/DeleteCourseOverlay';
-import Section from './Section';
+import SectionView from './SectionView';
 
 interface Props {
   index: number,
@@ -43,7 +43,9 @@ const CourseListView: React.FC<Props> = ({
       </div>
       <p>{course.description}</p>
       {course.sections.map((section: CourseSection, sectionIndex: number) => {
-        return <Section key={section.id} section={section} canRemove={course.sections.length > 1} index={sectionIndex} />;
+        return (
+          <SectionView key={section.id} index={sectionIndex} section={section} />
+        );
       })}
 
       {showDeleteCourseOverlay

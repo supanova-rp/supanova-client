@@ -3,12 +3,12 @@ import { AxiosProgressEvent } from 'axios';
 import { Course } from '@/index';
 
 import FormGroup from '../FormGroup';
-import Section from './Section';
+import EditSection from '../EditSection';
 
 interface Props {
   course: Course,
   onChangeCourseField: (paramter1: number, parameter2: string, parameter3: string) => void,
-  onChangeSectionTitleField: (parameter1: number, parameter2: string) => void,
+  onChangeSectionTitle: (parameter1: number, parameter2: string) => void,
   onFileUploaded: (parameter1: number, parameter2: string) => void,
   onFileUploadProgress: (parameter1: AxiosProgressEvent, parameter2: number) => void,
   onUpdateStateAfterCancellingFileUpload: (parameter: number) => void,
@@ -18,7 +18,7 @@ interface Props {
 const EditCourseView: React.FC<Props> = ({
   course,
   onChangeCourseField,
-  onChangeSectionTitleField,
+  onChangeSectionTitle,
   onFileUploaded,
   onFileUploadProgress,
   onUpdateStateAfterCancellingFileUpload,
@@ -42,13 +42,12 @@ const EditCourseView: React.FC<Props> = ({
         className="mb-4" />
       {course.sections.map((section, sectionIndex) => {
         return (
-          <Section
+          <EditSection
             key={section.id}
             index={sectionIndex}
             section={section}
             canRemove={course.sections.length > 1}
-            isEditing={course.isEditing}
-            onChangeSectionTitleField={onChangeSectionTitleField}
+            onChangeSectionTitle={onChangeSectionTitle}
             onFileUploaded={onFileUploaded}
             onFileUploadProgress={onFileUploadProgress}
             onUpdateStateAfterCancellingFileUpload={onUpdateStateAfterCancellingFileUpload}

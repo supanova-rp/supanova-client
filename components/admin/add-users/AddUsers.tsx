@@ -6,7 +6,7 @@ import { updateProfile } from 'firebase/auth';
 
 import TickIcon from '@/icons/tickIcon.svg';
 
-import { InputChangeEvent } from '@/index';
+import { InputChangeEvent, FormSubmitEvent } from '@/index';
 import { useAuth } from '@/contexts/AuthContext';
 import { colors } from '@/constants/colorPalette';
 import { updateUsers } from '@/utils/utils';
@@ -69,7 +69,7 @@ const AddUsers = () => {
     setUsers(updatedUsers);
   };
 
-  const onHandleRegisterUser = async (event: InputChangeEvent, email: string, name: string, userId: string) => {
+  const onHandleRegisterUser = async (event: FormSubmitEvent, email: string, name: string, userId: string) => {
     event.preventDefault();
 
     try {
@@ -109,9 +109,9 @@ const AddUsers = () => {
     <Card className="w-100 p-3 d-flex mh-100 rounded-0">
       <Card.Body>
         <Navbar title="Add New Users" />
-        {users.map((user, index) => {
+        {users.map((user) => {
           return (
-            <Form onSubmit={(e: React.FormEvent<HTMLFormElement>) => onHandleRegisterUser(e, user.email, user.name, user.id)} key={user.id}>
+            <Form onSubmit={(e) => onHandleRegisterUser(e, user.email, user.name, user.id)} key={user.id}>
               <div className="d-flex align-items-center">
                 <div className="d-flex">
                   <FormGroup

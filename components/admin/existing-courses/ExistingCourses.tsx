@@ -2,7 +2,7 @@ import React from 'react';
 import { Alert, Card } from 'react-bootstrap';
 import { AxiosProgressEvent } from 'axios';
 
-import { Course, InputChangeEvent } from '@/index';
+import { Course, FormSubmitEvent } from '@/index';
 import { getUpdatedSectionsWithAddedVideoInfoExistingCoursesTab } from '@/utils/utils';
 import { API_DOMAIN } from '@/constants/constants';
 
@@ -90,7 +90,7 @@ export default class EditCourses extends React.Component<Props> {
     this.setState({ allCourses: updatedCourses });
   };
 
-  onChangeSectionTitleField = (sectionId: number, newInputValue: string) => {
+  onChangeSectionTitle = (sectionId: number, newInputValue: string) => {
     const updatedCourses = this.state.allCourses.map((course) => {
       const updatedSections = course.sections.map((section) => {
         if (section.id === sectionId) {
@@ -132,17 +132,22 @@ export default class EditCourses extends React.Component<Props> {
     }, 3000);
   };
 
-  onClickSaveEditedCourse = async (event: InputChangeEvent, courseId: number) => {
+  onClickSaveEditedCourse = async (event: FormSubmitEvent, courseId: number) => {
     event.preventDefault();
 
     const editedCourse = this.state.allCourses.find((course) => course.id === courseId);
-    const editedCourseId = editedCourse?.id;
+
+    if (!editedCourse) {
+      return;
+    }
+
+    const editedCourseId = editedCourse.id;
 
     // Getting the ids of the deleted sections so the back end can delete them in the table
     const uneditedVersionOfEditedCourse = this.state.savedCourses.find((course) => course.id === editedCourseId);
 
     const sectionsThatDontExistInSavedCourse = uneditedVersionOfEditedCourse?.sections.filter((section) => {
-      if (editedCourse?.sections.some((editedCourseSection) => editedCourseSection.id === section.id)) {
+      if (editedCourse.sections.some((editedCourseSection) => editedCourseSection.id === section.id)) {
         return false;
       }
 
@@ -151,16 +156,16 @@ export default class EditCourses extends React.Component<Props> {
 
     const idsOfDeletedSections = sectionsThatDontExistInSavedCourse?.map((section) => section.id);
 
-    const someVideoCurrentlyUploading = editedCourse?.sections.some((section) => {
+    const someVideoCurrentlyUploading = editedCourse.sections.some((section) => {
       return typeof section.uploadProgress === 'number' && section.uploadProgress < 1;
     });
 
-    const everySectionHasVideoUrl = editedCourse?.sections.every((section) => section.videoUrl);
+    const everySectionHasVideoUrl = editedCourse.sections.every((section) => section.videoUrl);
 
     if (!someVideoCurrentlyUploading && everySectionHasVideoUrl) {
       this.setState({ isLoading: true, errorMessage: null });
 
-      const sectionsWithPositions = editedCourse?.sections.map((section, index) => {
+      const sectionsWithPositions = editedCourse.sections.map((section, index) => {
         return {
           ...section,
           position: index,
@@ -319,7 +324,7 @@ export default class EditCourses extends React.Component<Props> {
                   onClickStartEditingCourse={this.onClickStartEditingCourse}
                   onClickCancelEditingCourse={this.onClickCancelEditingCourse}
                   onChangeCourseField={this.onChangeCourseField}
-                  onChangeSectionTitleField={this.onChangeSectionTitleField}
+                  onChangeSectionTitle={this.onChangeSectionTitle}
                   onFileUploaded={this.onFileUploaded}
                   onFileUploadProgress={this.onFileUploadProgress}
                   onUpdateStateAfterCancellingFileUpload={this.onUpdateStateAfterCancellingFileUpload}
