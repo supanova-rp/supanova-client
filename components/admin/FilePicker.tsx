@@ -53,7 +53,7 @@ const FilePicker: React.FC<Props> = ({
       // Get secure/signed AWS S3 url from server
       const response = await fetch(`${API_DOMAIN}/get-upload-url`);
       const result = await response.json();
-      const files = sanitizeArray(e.target?.files);
+      const files = e.target?.files || [];
 
       uploadFileToS3(result.uploadUrl, files[0]);
     } catch (error) {
