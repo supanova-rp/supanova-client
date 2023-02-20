@@ -4,18 +4,20 @@ import Header from './Header';
 import TableRow from './TableRow';
 
 interface Props extends LogoutErrorProps {
-  courses: Course[],
-  onClickSetCurrentVideo: (parameter1: number, parameter2: string, parameter3: number, parameter4: string, parameter5: string) => void,
+  allCourses: Course[],
+  onSelectVideo: (parameter1: number, parameter2: number) => void,
 }
 
-const CoursesList: React.FC<Props> = ({ logoutError, courses, onClickSetCurrentVideo }) => {
+// TODO: fix table styling (borders left and right missing)
+
+const CoursesList: React.FC<Props> = ({ logoutError, allCourses, onSelectVideo }) => {
   return (
     <>
       <div>
         <Header title="All Courses" logoutError={logoutError} />
       </div>
       <div>
-        {courses?.map((course, courseIndex) => {
+        {allCourses.map((course, courseIndex) => {
           return (
             <div key={`${course.title} ${course.id}`}>
               <h5>{`${courseIndex + 1}. ${course.title}`}</h5>
@@ -26,8 +28,9 @@ const CoursesList: React.FC<Props> = ({ logoutError, courses, onClickSetCurrentV
                     return (
                       <TableRow
                         key={section.id}
+                        completed={section.completed}
                         title={`${sectionIndex + 1}. ${section.title}`}
-                        onClickSetCurrentVideo={() => onClickSetCurrentVideo(courseIndex, course.title, sectionIndex, section.videoUrl, section.title)} />
+                        onClickSetCurrentVideoInfo={() => onSelectVideo(courseIndex, sectionIndex)} />
                     );
                   })}
                 </tbody>

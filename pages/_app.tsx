@@ -1,12 +1,12 @@
-/* eslint-disable react/jsx-props-no-spreading */
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'react-circular-progressbar/dist/styles.css';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 
 import { AuthProvider } from '@/contexts/AuthContext';
 
 import 'styles/index.scss';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-circular-progressbar/dist/styles.css';
+import 'video.js/dist/video-js.css';
 
 export default function App({ Component, pageProps }: AppProps) {
   return (

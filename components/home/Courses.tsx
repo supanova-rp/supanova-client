@@ -1,47 +1,59 @@
 import { useState } from 'react';
 
-import { Course, LogoutErrorProps, VideoState } from '@/index';
+import { Course, LogoutErrorProps } from '@/index';
 
-import Video from './Video';
 import CoursesList from './CoursesList';
+import CourseVideoContainer from './CourseVideoContainer';
 
 interface Props extends LogoutErrorProps {
   courses: Course[],
 }
 
 const Courses: React.FC<Props> = ({ logoutError, courses }) => {
-  const [currentVideo, setCurrentVideo] = useState<VideoState>(null);
-  // TODO: replace the above state with the below, change the Video logic for rendering Buttons
-  // const [currentCourseIndex, setCurrentCourseIndex] = useState(null);
-  // const [currentSectionIndex, setCurrentSectionIndex] = useState(null);
+  const [allCourses, setAllCourses] = useState<Course[]>(courses);
+  const [isVideoPlaying, setIsVideoPlaying] = useState<boolean>(false);
+  const [currentCourseIndex, setCurrentCourseIndex] = useState<number>(0);
+  const [currentSectionIndex, setCurrentSectionIndex] = useState<number>(0);
+  const [initialCurrentVideoTime, setInitialCurrentVideoTime] = useState<number>(0);
 
-  // For buttons
+  if (isVideoPlaying) {
+    return (
+      <CourseVideoContainer
+        currentCourseIndex={currentCourseIndex}
+        currentSectionIndex={currentSectionIndex}
+        initialCurrentVideoTime={initialCurrentVideoTime}
+        allCourses={allCourses}
+        logoutError={logoutError}
+        setCurrentCourseIndex={setCurrentCourseIndex}
+        setCurrentSectionIndex={setCurrentSectionIndex}
+        setIsVideoPlaying={setIsVideoPlaying}
+        setAllCourses={setAllCourses} />
+    );
+  }
 
-  // const hasNext = ...
-  // const hasPrev = ...
+  const onSelectVideo = (courseIndex: number, sectionIndex: number) => {
+    // Get the sectionId
+    // if (localStorage.getItem(`section-progress-${sectionId}`)) {
+    //   const localStorageCurrentVideoTimeValue = JSON.parse(localStorage.getItem(`section-progress-${sectionId}`));
 
-  const onClickSetCurrentVideo = (courseIndex: number, courseTitle: string, sectionIndex: number, videoUrl: string, sectionTitle: string) => {
-    setCurrentVideo({ courseIndex, courseTitle, sectionIndex, sectionTitle, videoUrl });
+    //   // update the time of the video
+    //   setInitialCurrentVideoTime(localStorageCurrentVideoTimeValue.currentTime);
+    // }
+    setInitialCurrentVideoTime(10);
+
+    setIsVideoPlaying(true);
+    setCurrentCourseIndex(courseIndex);
+    setCurrentSectionIndex(sectionIndex);
   };
 
   return (
     // TODO: change this
     <div style={{ width: '1000px' }}>
-      {currentVideo
-        ? (
-          <Video
-            logoutError={logoutError}
-            currentVideo={currentVideo}
-            courses={courses}
-            setCurrentVideo={setCurrentVideo} />
-        )
-        : (
-          <CoursesList
-            logoutError={logoutError}
-            courses={courses}
-            onClickSetCurrentVideo={onClickSetCurrentVideo} />
-        )
-    }
+      <CoursesList
+        logoutError={logoutError}
+        allCourses={allCourses}
+        onSelectVideo={onSelectVideo} />
+
     </div>
   );
 };

@@ -16,6 +16,7 @@ export type CourseSection = {
   title: string,
   videoUrl: string | null,
   uploadProgress?: UploadProgress,
+  completed?: boolean,
 };
 
 export type Course = {
@@ -44,12 +45,3 @@ export type UserInfoToUpdate = {
   hasPasswordResetError?: boolean,
 };
 
-export type CurrentVideo = {
-  courseIndex: number,
-  courseTitle: string,
-  sectionIndex: number,
-  sectionTitle: string,
-  videoUrl: string
-};
-
-export type VideoState = null | CurrentVideo;

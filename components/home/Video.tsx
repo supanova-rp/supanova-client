@@ -1,37 +1,62 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable jsx-a11y/media-has-caption */
-import { Dispatch } from 'react';
 import { Button } from 'react-bootstrap';
 
 import { colors } from '@/constants/colorPalette';
 import ChevronLeft from '@/icons/chevronLeft.svg';
+import { Course, LogoutErrorProps } from '@/index';
 
-import { Course, CurrentVideo, LogoutErrorProps, VideoState } from '@/index';
 import Header from './Header';
 
 interface Props extends LogoutErrorProps {
-  currentVideo: CurrentVideo,
-  courses: Course[],
-  setCurrentVideo: Dispatch<VideoState>
+  currentCourseIndex: number,
+  currentSectionIndex: number,
+  initialCurrentVideoTime: number,
+  allCourses: Course[],
+  hasNext: boolean,
+  hasPrev: boolean,
+  onExitVideo: () => void,
+  onChangeVideo: (parameter: string) => void,
+  onVideoEndedMarkSectionAsComplete: () => void,
+  onTimeUpdateSaveToLocalStorage: React.EventHandler<HTMLVideoElement>,
 }
 
-const Video: React.FC<Props> = ({ logoutError, currentVideo, courses, setCurrentVideo }) => {
+const Video: React.FC<Props> = ({
+  logoutError,
+  allCourses,
+  hasNext,
+  hasPrev,
+  initialCurrentVideoTime,
+  currentCourseIndex,
+  currentSectionIndex,
+  onExitVideo,
+  onChangeVideo,
+  onVideoEndedMarkSectionAsComplete,
+  onTimeUpdateSaveToLocalStorage,
+}) => {
+  const currentSection = allCourses[currentCourseIndex].sections[currentSectionIndex];
+
   const renderCorrectButtons = () => {
-    const currentCourse = courses[currentVideo.courseIndex].sections;
-
-    if (currentVideo.sectionIndex + 1 === currentCourse.length) {
-      return <Button onClickShowVideo={() => onClickShowVideo('prev')} type="button">Previous</Button>;
+    if (hasNext) {
+      return <Button onClick={() => onChangeVideo('next')} type="button">Next</Button>;
     }
 
-    if (currentVideo.sectionIndex + 1 > 1 && currentVideo.sectionIndex + 1 < currentCourse.length) {
-      return (
-        <div>
-          <Button onClickShowVideo={() => onClickShowVideo('prev')} type="button">Previous</Button>
-          <Button onClickShowVideo={() => onClickShowVideo('next')} type="button">Next</Button>
-        </div>
-      );
+    if (hasPrev) {
+      return <Button onClick={() => onChangeVideo('prev')}>Previous</Button>;
     }
 
-    return <Button type="button">Next</Button>;
+    return (
+      <div>
+        <Button onClick={() => onChangeVideo('prev')} type="button" className="me-4">Prev</Button>
+        <Button onClick={() => onChangeVideo('next')} type="button">Next</Button>
+      </div>
+    );
+  };
+
+  const onVideoMounted = (ref) => {
+    if (ref && initialCurrentVideoTime) {
+      ref.currentTime = initialCurrentVideoTime;
+    }
   };
 
   return (
@@ -40,19 +65,28 @@ const Video: React.FC<Props> = ({ logoutError, currentVideo, courses, setCurrent
         {/* TODO: find a way to add margin on the chevron */}
         <div className="d-flex align-items-center">
           <div className="p-1 clickable">
-            <ChevronLeft stroke={colors.orange} className="mt-3 me-1" onClick={() => setCurrentVideo(null)} />
+            <ChevronLeft stroke={colors.orange} className="mt-3 me-1" onClick={onExitVideo} />
           </div>
-          <Header title={currentVideo.courseTitle} logoutError={logoutError} />
+          <Header title={allCourses[currentCourseIndex].title} logoutError={logoutError} />
         </div>
-        <h5 className="mt-2 mb-4">{`${currentVideo.sectionIndex + 1}. ${currentVideo.sectionTitle}`}</h5>
-        <video
-          id="my-player"
-          className="video-js-home"
-          controls
-          preload="auto"
-          data-setup="{}">
-          <source src={currentVideo.videoUrl} type="video/mp4" />
-        </video>
+        <h5 className="mt-2 mb-4">{`${currentSectionIndex + 1}. ${currentSection.title}`}</h5>
+        {currentSection.videoUrl
+          ? (
+            <video
+              id="my-player"
+              className="video-js-home"
+              controls
+              preload="auto"
+              data-setup="{}"
+              ref={onVideoMounted}
+              onTimeUpdate={onTimeUpdateSaveToLocalStorage}
+              onEnded={onVideoEndedMarkSectionAsComplete}>
+              <source src={currentSection.videoUrl} type="video/mp4" />
+            </video>
+          )
+          : null
+        }
+
       </div>
       <div>
         {renderCorrectButtons()}

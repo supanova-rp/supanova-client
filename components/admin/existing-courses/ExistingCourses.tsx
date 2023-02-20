@@ -3,7 +3,7 @@ import { Alert, Card } from 'react-bootstrap';
 import { AxiosProgressEvent } from 'axios';
 
 import { Course, FormSubmitEvent } from '@/index';
-import { getUpdatedSectionsWithAddedVideoInfoExistingCoursesTab } from '@/utils/utils';
+import { getUpdatedCourses } from '@/utils/utils';
 import { API_DOMAIN } from '@/constants/constants';
 
 import Navbar from '../nav-and-sidebars/Navbar';
@@ -26,19 +26,19 @@ export default class EditCourses extends React.Component<Props> {
   };
 
   onUpdateStateAfterCancellingFileUpload = (sectionId: number) => {
-    const coursesWithResetVideoUploadProgress = getUpdatedSectionsWithAddedVideoInfoExistingCoursesTab(this.state.allCourses, sectionId, 'uploadProgress', null);
+    const coursesWithResetVideoUploadProgress = getUpdatedCourses(this.state.allCourses, sectionId, 'uploadProgress', null);
 
     this.setState({ allCourses: coursesWithResetVideoUploadProgress });
   };
 
   onFileUploaded = (sectionId: number, videoUrl: string) => {
-    const coursesWithUpdatedVideoUrl = getUpdatedSectionsWithAddedVideoInfoExistingCoursesTab(this.state.allCourses, sectionId, 'videoUrl', videoUrl);
+    const coursesWithUpdatedVideoUrl = getUpdatedCourses(this.state.allCourses, sectionId, 'videoUrl', videoUrl);
 
     this.setState({ allCourses: coursesWithUpdatedVideoUrl });
   };
 
   onFileUploadProgress = (data: AxiosProgressEvent, sectionId: number) => {
-    const coursesWithUpdatedVideoUploadProgress = getUpdatedSectionsWithAddedVideoInfoExistingCoursesTab(this.state.allCourses, sectionId, 'uploadProgress', data.progress);
+    const coursesWithUpdatedVideoUploadProgress = getUpdatedCourses(this.state.allCourses, sectionId, 'uploadProgress', data.progress);
 
     this.setState({ allCourses: coursesWithUpdatedVideoUploadProgress });
   };

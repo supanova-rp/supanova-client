@@ -2,21 +2,27 @@ import { Button } from 'react-bootstrap';
 
 import VideoIcon from '@/icons/videoIcon.svg';
 import { colors } from '@/constants/colorPalette';
-import EmptyCircle from './EmptyCircle';
+
+import SectionProgress from './SectionProgress';
 
 interface Props {
   title: string,
-  onClickSetCurrentVideo: React.MouseEventHandler<HTMLButtonElement>,
+  onClickSetCurrentVideoInfo: React.MouseEventHandler<HTMLButtonElement>,
+  completed?: boolean,
 }
 
-const TableRow: React.FC<Props> = ({ title, onClickSetCurrentVideo }) => {
+const TableRow: React.FC<Props> = ({ title, completed, onClickSetCurrentVideoInfo }) => {
   return (
     <tr>
       <Button
-        className="d-flex
-      align-items-center w-100 rounded-0 btn-light row-buttons"
-        onClick={onClickSetCurrentVideo}>
-        <th className="table-header"><EmptyCircle /></th>
+        className="d-flex align-items-center w-100 rounded-0 btn-light row-buttons"
+        onClick={onClickSetCurrentVideoInfo}>
+        <th className="table-header">
+          {completed
+            ? <SectionProgress className="full-circle" />
+            : <SectionProgress className="empty-circle" />
+          }
+        </th>
         <td>
           <div className="d-flex align-items-center">
             <VideoIcon stroke={colors.gray} className="mx-3" />

@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/media-has-caption */
 import React from 'react';
 import { AxiosProgressEvent } from 'axios';
+import videojs from 'video.js';
 
 import { CourseSection } from '@/index';
 

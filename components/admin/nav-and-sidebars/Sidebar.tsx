@@ -22,6 +22,7 @@ const Sidebar: React.FC<Props> = ({
   setActiveTab,
 }) => {
   return (
+    // TODO: fix sidebar tabs background color (not entirely white)
     <div className="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
       <Button
         className={`rounded-0 ${classNameTab1} text-start ps-3`}

@@ -3,7 +3,7 @@ import React from 'react';
 import { Card, Form, Button, Alert } from 'react-bootstrap';
 import { AxiosProgressEvent } from 'axios';
 
-import { getInitialCourseState, getUpdatedSectionsWithAddedVideoInfoNewCoursesTab } from '@/utils/utils';
+import { getInitialCourseState, getUpdatedSections } from '@/utils/utils';
 import { API_DOMAIN } from '@/constants/constants';
 
 import Navbar from '../nav-and-sidebars/Navbar';
@@ -59,13 +59,13 @@ export default class AddCourses extends React.Component<Props> {
   };
 
   onFileUploaded = (sectionId: number, videoUrl: string) => {
-    const sectionsWithUpdatedVideoUrl = getUpdatedSectionsWithAddedVideoInfoNewCoursesTab(this.state.sections, sectionId, 'videoUrl', videoUrl);
+    const sectionsWithUpdatedVideoUrl = getUpdatedSections(this.state.sections, sectionId, 'videoUrl', videoUrl);
 
     this.setState({ sections: sectionsWithUpdatedVideoUrl });
   };
 
   onFileUploadProgress = (data: AxiosProgressEvent, sectionId: number) => {
-    const sectionsWithUpdatedVideoUploadProgress = getUpdatedSectionsWithAddedVideoInfoNewCoursesTab(this.state.sections, sectionId, 'uploadProgress', data.progress);
+    const sectionsWithUpdatedVideoUploadProgress = getUpdatedSections(this.state.sections, sectionId, 'uploadProgress', data.progress);
 
     this.setState({ sections: sectionsWithUpdatedVideoUploadProgress });
   };

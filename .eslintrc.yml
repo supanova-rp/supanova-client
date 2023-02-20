@@ -51,6 +51,7 @@ rules:
   react/jsx-fragments: 0
   react/jsx-closing-bracket-location: [2, "after-props"]
   react/jsx-curly-newline: 0
+  react/jsx-props-no-spreading: 0
   react/state-in-constructor: 0
   react/static-property-placement: 0
   react/require-default-props: 0

@@ -10,16 +10,23 @@
   border-radius: 50%;
 }
 
-.empty-circle-container {
+.progress-circle-container {
   padding-top: 2px;
   margin-right: 5px;
 }
 
-.empty-circle {
+.progress-circle {
   border-radius: 50%;
   height: 20px;
   width: 20px;
+}
+
+.empty-circle {
   border: 2px solid #f77e1d;
+}
+
+.full-circle {
+  background-color: #f77e1d;
 }
 
 .table-header {
