@@ -14,7 +14,7 @@ interface Props {
 
 const TableRow: React.FC<Props> = ({ title, sectionId, completed, onClickSetCurrentVideoInfo }) => {
   const renderSectionProgressCircle = () => {
-    if (completed || JSON.parse(localStorage.getItem(`section-progress-${sectionId}`)).completed) {
+    if (completed || JSON.parse(localStorage.getItem(`section-progress-${sectionId}`) || '{}').completed) {
       return <SectionProgress className="full-circle" />;
     }
 

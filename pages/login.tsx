@@ -7,6 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 
 import HidePasswordIcon from '@/icons/hidePasswordIcon.svg';
 import ShowPasswordIcon from '@/icons/showPasswordIcon.svg';
+import { FormSubmitEvent } from '@/index';
 
 const Login = () => {
   const [emailInput, setEmailInput] = useState('');
@@ -19,7 +20,7 @@ const Login = () => {
 
   const router = useRouter();
 
-  const onHandleLogin = async (event) => {
+  const onHandleLogin = async (event: FormSubmitEvent) => {
     event.preventDefault();
     try {
       setValidationError('');

@@ -54,7 +54,7 @@ const Video: React.FC<Props> = ({
     );
   };
 
-  const onVideoMounted = (ref) => {
+  const onVideoMounted = (ref: HTMLVideoElement) => {
     if (ref && initialCurrentVideoTime && ref.currentTime !== ref.duration) {
       ref.currentTime = initialCurrentVideoTime;
     }

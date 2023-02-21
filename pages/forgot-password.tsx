@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Alert, Button, Card, Container, Form } from 'react-bootstrap';
 
 import { useAuth } from '@/contexts/AuthContext';
+import { FormSubmitEvent } from '@/index';
 
 const ForgotPassword = () => {
   const [emailInput, setEmailInput] = useState('');
@@ -14,7 +15,7 @@ const ForgotPassword = () => {
 
   // TODO: change the sender e-mail for reset password
 
-  const onHandleResetPassword = async (event) => {
+  const onHandleResetPassword = async (event: FormSubmitEvent) => {
     event.preventDefault();
 
     try {

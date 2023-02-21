@@ -37,7 +37,7 @@ const CourseVideoContainer: React.FC<Props> = ({
 
   const updateInitialCurrentVideoTime = (sectionId: number) => {
     if (localStorage.getItem(`section-progress-${sectionId}`)) {
-      const localStorageCurrentVideoTimeValue = JSON.parse(localStorage.getItem(`section-progress-${sectionId}`)).currentTime;
+      const localStorageCurrentVideoTimeValue = JSON.parse(localStorage.getItem(`section-progress-${sectionId}`) || '{}').currentTime;
 
       setInitialCurrentVideoTime(localStorageCurrentVideoTimeValue);
     } else {

@@ -1,5 +1,7 @@
+import { User as FirebaseUser } from 'firebase/auth';
+
 import { auth } from '@/firebase';
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
 interface Props {
   children: React.ReactNode
@@ -12,41 +14,49 @@ export const useAuth = () => {
 };
 
 export const AuthProvider: React.FC<Props> = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState<FirebaseUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const signup = (email: string, password: string) => {
-    return auth.createUserWithEmailAndPassword(email, password);
-  };
-
-  const login = (email: string, password: string) => {
-    return auth.signInWithEmailAndPassword(email, password);
-  };
-
-  const logout = () => {
-    return auth.signOut();
-  };
-
-  const resetPassword = (email: string) => {
-    return auth.sendPasswordResetEmail(email);
-  };
-
   useEffect(() => {
-    const unsubcribe = auth.onAuthStateChanged((user) => {
+    const unsubcribe = auth.onAuthStateChanged((user: FirebaseUser) => {
       setCurrentUser(user);
       setIsLoading(false);
+
+      if (user) {
+        user.getIdToken().then((token) => {
+          window.localStorage.setItem('auth_token', token);
+        });
+      }
     });
 
     return unsubcribe;
   }, []);
 
-  const value = {
-    currentUser,
-    signup,
-    login,
-    logout,
-    resetPassword,
-  };
+  const value = useMemo(() => {
+    const signup = (email: string, password: string) => {
+      return auth.createUserWithEmailAndPassword(email, password);
+    };
+
+    const login = (email: string, password: string) => {
+      return auth.signInWithEmailAndPassword(email, password);
+    };
+
+    const logout = () => {
+      return auth.signOut();
+    };
+
+    const resetPassword = (email: string) => {
+      return auth.sendPasswordResetEmail(email);
+    };
+
+    return {
+      currentUser,
+      signup,
+      login,
+      logout,
+      resetPassword,
+    };
+  }, [currentUser]);
 
   return (
     <AuthContext.Provider value={value}>

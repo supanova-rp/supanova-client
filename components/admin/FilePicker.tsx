@@ -4,7 +4,6 @@ import axios, { AxiosProgressEvent } from 'axios';
 
 import TickIcon from '@/icons/tickIcon.svg';
 
-import { sanitizeArray } from '@/utils/array';
 import { InputChangeEvent, UploadProgress } from '@/index';
 import { colors } from '@/constants/colorPalette';
 import { API_DOMAIN } from '@/constants/constants';

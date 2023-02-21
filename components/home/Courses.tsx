@@ -41,7 +41,7 @@ const Courses: React.FC<Props> = ({ logoutError, courses }) => {
     const sectionId = allCourses[courseIndex].sections[sectionIndex].id;
 
     if (localStorage.getItem(`section-progress-${sectionId}`)) {
-      const localStorageCurrentVideoTimeValue = JSON.parse(localStorage.getItem(`section-progress-${sectionId}`)).currentTime;
+      const localStorageCurrentVideoTimeValue = JSON.parse(localStorage.getItem(`section-progress-${sectionId}`) || '{}').currentTime;
 
       setInitialCurrentVideoTime(localStorageCurrentVideoTimeValue);
     } else {
