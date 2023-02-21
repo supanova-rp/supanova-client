@@ -16,30 +16,37 @@ const Courses: React.FC<Props> = ({ logoutError, courses }) => {
   const [currentSectionIndex, setCurrentSectionIndex] = useState<number>(0);
   const [initialCurrentVideoTime, setInitialCurrentVideoTime] = useState<number>(0);
 
+  const currentSection = allCourses[currentCourseIndex].sections[currentSectionIndex];
+  const currentSectionId = currentSection.id;
+
   if (isVideoPlaying) {
     return (
       <CourseVideoContainer
         currentCourseIndex={currentCourseIndex}
         currentSectionIndex={currentSectionIndex}
+        currentSectionId={currentSectionId}
+        currentSection={currentSection}
         initialCurrentVideoTime={initialCurrentVideoTime}
         allCourses={allCourses}
         logoutError={logoutError}
         setCurrentCourseIndex={setCurrentCourseIndex}
         setCurrentSectionIndex={setCurrentSectionIndex}
         setIsVideoPlaying={setIsVideoPlaying}
-        setAllCourses={setAllCourses} />
+        setAllCourses={setAllCourses}
+        setInitialCurrentVideoTime={setInitialCurrentVideoTime} />
     );
   }
 
   const onSelectVideo = (courseIndex: number, sectionIndex: number) => {
-    // Get the sectionId
-    // if (localStorage.getItem(`section-progress-${sectionId}`)) {
-    //   const localStorageCurrentVideoTimeValue = JSON.parse(localStorage.getItem(`section-progress-${sectionId}`));
+    const sectionId = allCourses[courseIndex].sections[sectionIndex].id;
 
-    //   // update the time of the video
-    //   setInitialCurrentVideoTime(localStorageCurrentVideoTimeValue.currentTime);
-    // }
-    setInitialCurrentVideoTime(10);
+    if (localStorage.getItem(`section-progress-${sectionId}`)) {
+      const localStorageCurrentVideoTimeValue = JSON.parse(localStorage.getItem(`section-progress-${sectionId}`)).currentTime;
+
+      setInitialCurrentVideoTime(localStorageCurrentVideoTimeValue);
+    } else {
+      setInitialCurrentVideoTime(0);
+    }
 
     setIsVideoPlaying(true);
     setCurrentCourseIndex(courseIndex);

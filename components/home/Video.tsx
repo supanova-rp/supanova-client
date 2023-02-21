@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable jsx-a11y/media-has-caption */
+import { SyntheticEvent } from 'react';
 import { Button } from 'react-bootstrap';
 
 import { colors } from '@/constants/colorPalette';
@@ -18,7 +19,7 @@ interface Props extends LogoutErrorProps {
   onExitVideo: () => void,
   onChangeVideo: (parameter: string) => void,
   onVideoEndedMarkSectionAsComplete: () => void,
-  onTimeUpdateSaveToLocalStorage: React.EventHandler<HTMLVideoElement>,
+  onTimeUpdateSaveToLocalStorage: (e: SyntheticEvent<HTMLVideoElement>) => void,
 }
 
 const Video: React.FC<Props> = ({
@@ -36,7 +37,7 @@ const Video: React.FC<Props> = ({
 }) => {
   const currentSection = allCourses[currentCourseIndex].sections[currentSectionIndex];
 
-  const renderCorrectButtons = () => {
+  const renderDirectionButtons = () => {
     if (hasNext) {
       return <Button onClick={() => onChangeVideo('next')} type="button">Next</Button>;
     }
@@ -54,7 +55,7 @@ const Video: React.FC<Props> = ({
   };
 
   const onVideoMounted = (ref) => {
-    if (ref && initialCurrentVideoTime) {
+    if (ref && initialCurrentVideoTime && ref.currentTime !== ref.duration) {
       ref.currentTime = initialCurrentVideoTime;
     }
   };
@@ -89,7 +90,7 @@ const Video: React.FC<Props> = ({
 
       </div>
       <div>
-        {renderCorrectButtons()}
+        {renderDirectionButtons()}
       </div>
     </div>
   );

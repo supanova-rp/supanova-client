@@ -5,6 +5,7 @@ import TableRow from './TableRow';
 
 interface Props extends LogoutErrorProps {
   allCourses: Course[],
+  logoutError: string,
   onSelectVideo: (parameter1: number, parameter2: number) => void,
 }
 
@@ -29,6 +30,7 @@ const CoursesList: React.FC<Props> = ({ logoutError, allCourses, onSelectVideo }
                       <TableRow
                         key={section.id}
                         completed={section.completed}
+                        sectionId={section.id}
                         title={`${sectionIndex + 1}. ${section.title}`}
                         onClickSetCurrentVideoInfo={() => onSelectVideo(courseIndex, sectionIndex)} />
                     );

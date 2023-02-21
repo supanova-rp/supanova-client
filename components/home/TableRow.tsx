@@ -7,21 +7,27 @@ import SectionProgress from './SectionProgress';
 
 interface Props {
   title: string,
+  sectionId: number,
   onClickSetCurrentVideoInfo: React.MouseEventHandler<HTMLButtonElement>,
   completed?: boolean,
 }
 
-const TableRow: React.FC<Props> = ({ title, completed, onClickSetCurrentVideoInfo }) => {
+const TableRow: React.FC<Props> = ({ title, sectionId, completed, onClickSetCurrentVideoInfo }) => {
+  const renderSectionProgressCircle = () => {
+    if (completed || JSON.parse(localStorage.getItem(`section-progress-${sectionId}`)).completed) {
+      return <SectionProgress className="full-circle" />;
+    }
+
+    return <SectionProgress className="empty-circle" />;
+  };
+
   return (
     <tr>
       <Button
         className="d-flex align-items-center w-100 rounded-0 btn-light row-buttons"
         onClick={onClickSetCurrentVideoInfo}>
         <th className="table-header">
-          {completed
-            ? <SectionProgress className="full-circle" />
-            : <SectionProgress className="empty-circle" />
-          }
+          {renderSectionProgressCircle()}
         </th>
         <td>
           <div className="d-flex align-items-center">
