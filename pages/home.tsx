@@ -48,7 +48,7 @@ const Home: React.FC<Props> = ({ courses }) => {
   };
 
   return (
-    <>
+    <div className="home-container">
       <NavbarHome setLogoutError={setLogoutError} />
       <div className="d-flex h-100">
         <SidebarContainer activeTab={activeTab} setActiveTab={setActiveTab} />
@@ -56,7 +56,7 @@ const Home: React.FC<Props> = ({ courses }) => {
           {renderAdminContent()}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

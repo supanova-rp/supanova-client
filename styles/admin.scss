@@ -33,12 +33,12 @@ input {
 
 .CircularProgressbar {
   .CircularProgressbar-text {
-    fill: #f77e1d;
+    fill: var(--secondary-color);
     font-size: 25px;
   }
 
   .CircularProgressbar-path {
-    stroke: #f77e1d;
+    stroke: var(--secondary-color);
   } 
 }
 
@@ -100,4 +100,10 @@ input {
   display: flex;
   align-self: flex-end;
   margin: 0px 20px 0 0;
+}
+
+.btn-link.nav-link.admin {
+  a {
+    color: var(--link-color);
+  }
 }

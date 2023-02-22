@@ -3,7 +3,12 @@
   margin-top: 20px;
 }
 
-.admin-tab {
+.btn-light.sidebar {
   background-color: white;
   border: none;
+
+  &:hover {
+    background-color: var(--hover-color);
+    border: none;
+  }
 }

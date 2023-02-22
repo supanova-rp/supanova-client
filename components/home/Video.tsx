@@ -37,19 +37,46 @@ const Video: React.FC<Props> = ({
 }) => {
   const currentSection = allCourses[currentCourseIndex].sections[currentSectionIndex];
 
-  const renderDirectionButtons = () => {
+  // TODO: fix this logic
+  // refresh courses data when changing tabs
+
+  const renderDirectionButtons = (className: string) => {
     if (hasNext) {
-      return <Button onClick={() => onChangeVideo('next')} type="button">Next</Button>;
+      return (
+        <Button
+          onClick={() => onChangeVideo('next')}
+          type="button"
+          className={className}>
+          Next
+        </Button>
+      );
     }
 
     if (hasPrev) {
-      return <Button onClick={() => onChangeVideo('prev')}>Previous</Button>;
+      return (
+        <Button
+          onClick={() => onChangeVideo('prev')}
+          className={className}>
+          Previous
+        </Button>
+      );
     }
 
     return (
       <div>
-        <Button onClick={() => onChangeVideo('prev')} type="button" className="me-4">Prev</Button>
-        <Button onClick={() => onChangeVideo('next')} type="button">Next</Button>
+        <Button
+          onClick={() => onChangeVideo('prev')}
+          type="button"
+          className={`me-4 ${className}`}>
+          Prev
+        </Button>
+
+        <Button
+          onClick={() => onChangeVideo('next')}
+          type="button"
+          className={className}>
+          Next
+        </Button>
       </div>
     );
   };
@@ -61,12 +88,12 @@ const Video: React.FC<Props> = ({
   };
 
   return (
-    <div className="ms-4">
+    <div className="mb-4">
       <div>
         {/* TODO: find a way to add margin on the chevron */}
         <div className="d-flex align-items-center">
           <div className="p-1 clickable">
-            <ChevronLeft stroke={colors.orange} className="mt-3 me-1" onClick={onExitVideo} />
+            <ChevronLeft stroke={colors.orange} className="mt-4 me-1" onClick={onExitVideo} />
           </div>
           <Header title={allCourses[currentCourseIndex].title} logoutError={logoutError} />
         </div>
@@ -90,7 +117,7 @@ const Video: React.FC<Props> = ({
 
       </div>
       <div>
-        {renderDirectionButtons()}
+        {renderDirectionButtons('main-button')}
       </div>
     </div>
   );

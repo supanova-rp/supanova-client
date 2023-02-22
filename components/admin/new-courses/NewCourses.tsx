@@ -213,7 +213,7 @@ export default class AddCourses extends React.Component<Props> {
             })}
 
             <AddMoreInputs title="Add another section" onClick={this.onClickAddNewSection} />
-            <Button type="submit" className="w-30" disabled={this.state.loading}>Submit</Button>
+            <Button type="submit" className="w-30 main-button" disabled={this.state.loading}>Submit</Button>
           </Form>
         </Card.Body>
       </Card>

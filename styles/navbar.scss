@@ -1,10 +1,16 @@
 nav {
-  background-color: black;
+  background: var(--primary-color);
   height: 80px;
 }
 
-.nav-link:hover {
-  transform: scale(1.1);
+.nav-link {
+  a {
+    text-decoration: none;
+  }
+
+  &:hover {
+    transform: scale(1.1);
+  }
 }
 
 .logout-error {

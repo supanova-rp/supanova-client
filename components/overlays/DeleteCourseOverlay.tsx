@@ -26,7 +26,7 @@ const DeleteCourseOverlay: React.FC<Props> = ({
           : null
         }
         <div className="mt-3">
-          <Button type="button" onClick={() => onClickHandleShowingDeleteOverlay(false)} className="me-2">Cancel</Button>
+          <Button type="button" onClick={() => onClickHandleShowingDeleteOverlay(false)} className="me-2 secondary-button">Cancel</Button>
           <Button type="button" disabled={isLoading} onClick={() => onClickDeleteCourse(courseId)} className="ms-2 btn-danger">Confirm</Button>
         </div>
       </div>

@@ -59,7 +59,7 @@ const ForgotPassword = () => {
               <Button
                 disabled={isLoading}
                 type="submit"
-                className="w-100 mt-4">
+                className="w-100 mt-4 main-button">
                 Reset Password
               </Button>
             </Form>

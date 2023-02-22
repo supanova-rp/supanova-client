@@ -1,5 +1,11 @@
-.sidebar-container-home {
-  width: 356px;
+.home-container {
+  min-height: 100%;
+}
+
+.card.sidebar-container-home {
+  width: 350px;
+  border: none;
+  border-right: 1px solid var(--hover-color);
 }
 
 .instructor-content-container {
@@ -22,11 +28,11 @@
 }
 
 .empty-circle {
-  border: 2px solid #f77e1d;
+  border: 2px solid var(--secondary-color)
 }
 
 .full-circle {
-  background-color: #f77e1d;
+  background-color: var(--secondary-color)
 }
 
 .table-header {
@@ -34,9 +40,14 @@
   border-right: 1px solid #dee2e6;
 }
 
-.row-buttons {
-  background-color: white;
-  border: 1px solid #dee2e6;
+.btn-light.row-buttons {
+  border-left: 1px solid var(--hover-color);
+  border-right: 1px solid var(--hover-color);
+
+  &:hover {
+    background-color: var(--hover-color);
+    border: none;
+  }
 }
 
 .clickable {
@@ -51,4 +62,8 @@
   height: 450px;
   width: 800px;
   margin-bottom: 20px;
+}
+
+.course-title-home {
+  margin: 40px 0 30px 0;
 }

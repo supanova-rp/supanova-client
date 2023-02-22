@@ -6,7 +6,7 @@ import { getClassNameSidebarTab } from '@/utils/utils';
 
 import Sidebar from '@/components/admin/nav-and-sidebars/Sidebar';
 
-import SupanovaLogo from '@/images/Supanova-logo.png';
+import AtomImage from '@/images/home-image.png';
 
 interface Props {
   activeTab: string,
@@ -17,8 +17,8 @@ const SidebarContainer: React.FC<Props> = ({ activeTab, setActiveTab }) => {
   return (
     <Card className="rounded-0 sidebar-container-home">
       <Card.Body className="mt-3 w-100 d-flex flex-column align-items-center">
-        <Image src={SupanovaLogo} alt="Supanova" height="220" width="300" priority />
-        <h5 className="my-3">The Complete Radiation Protection Course</h5>
+        <Image src={AtomImage} alt="Supanova" height="200" width="200" priority />
+        <h5 className="course-title-home">Radiation Safety Training Course</h5>
         <div className="row sidebar-container">
           <div className="col-20 p-0">
             <Sidebar

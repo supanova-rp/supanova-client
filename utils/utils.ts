@@ -15,10 +15,10 @@ export const updateUsers = (users: User[], userId: string, userInfoToUpdate: Use
 
 export const getClassNameSidebarTab = (activeTab: string, tabName: string) => {
   if (activeTab === tabName) {
-    return 'btn-primary';
+    return 'secondary-button';
   }
 
-  return 'btn-light admin-tab';
+  return 'btn-light sidebar';
 };
 
 export const getUpdatedSections = (sections: CourseSection[], sectionId: number, key: string, value: string | number | null | undefined) => {

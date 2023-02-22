@@ -87,7 +87,7 @@ const Login = () => {
               <Button
                 disabled={isLoading}
                 type="submit"
-                className="mt-4 login-button">
+                className="mt-4 login-button main-button">
                 Login
               </Button>
             </Form>

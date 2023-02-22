@@ -2,20 +2,37 @@ body, html, #__next {
   height: 100%;
 }
 
+:root {
+  --primary-color: #132843;
+  --secondary-color: #F18F0F;
+  --link-color: #3E819A;
+  --hover-color: #e7e6e6;
+}
+
 .icon, .link {
   cursor: pointer;
 }
 
-nav a {
-  text-decoration: none;
-  color: white;
+.btn-primary.main-button {
+  background-color: var(--secondary-color);
+  border: 1px solid var(--secondary-color);
 
   &:hover {
-    transform: scale(1.1);
-    color: white;
+    background-color: #db810d;
+    border: 1px solid #db810d;
   }
 }
 
+
+.btn-primary.secondary-button {
+  background-color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+
+  &:hover {
+    background-color: #18355a;
+    border: 1px solid #18355a;
+  }
+}
 @import "./login";
 @import "./admin";
 @import "./sidebar";
