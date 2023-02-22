@@ -11,7 +11,7 @@ const ForgotPassword = () => {
   const [resetPasswordSuccessMessage, setResetPasswordSuccessMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const { login, resetPassword } = useAuth();
+  const { resetPassword } = useAuth();
 
   // TODO: change the sender e-mail for reset password
 
