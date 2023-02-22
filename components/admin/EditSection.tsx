@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/media-has-caption */
-import React from 'react';
+import React, { createRef } from 'react';
 import { AxiosProgressEvent } from 'axios';
 
 import { CourseSection } from '@/index';
@@ -22,10 +22,13 @@ interface Props {
 export default class EditSection extends React.Component<Props> {
   abortController: AbortController;
 
+  fileInputRef: React.RefObject<HTMLInputElement>;
+
   constructor(props: Props) {
     super(props);
 
     this.abortController = new AbortController();
+    this.fileInputRef = createRef();
   }
 
   componentWillUnmount(): void {
@@ -37,6 +40,10 @@ export default class EditSection extends React.Component<Props> {
   }
 
   cancelUploadRequest = () => {
+    if (this.fileInputRef.current) {
+      this.fileInputRef.current.value = '';
+    }
+
     this.abortController.abort();
     this.abortController = new AbortController();
   };
@@ -80,6 +87,7 @@ export default class EditSection extends React.Component<Props> {
               <FilePicker
                 sectionId={this.props.section.id}
                 abortController={this.abortController}
+                fileInputRef={this.fileInputRef}
                 onFileUploaded={this.handleFileUploaded}
                 onFileUploadProgress={this.props.onFileUploadProgress}
                 uploadProgress={this.props.section.uploadProgress}

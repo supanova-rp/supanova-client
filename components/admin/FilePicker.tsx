@@ -15,6 +15,7 @@ import ProgressBar from './ProgressBar';
 interface Props {
   sectionId: number,
   abortController: AbortController,
+  fileInputRef: React.RefObject<HTMLInputElement>,
   onFileUploaded: (paramater1: number, parameter2: string) => void,
   onFileUploadProgress: (parameter1: AxiosProgressEvent, parameter2: number) => void,
   uploadProgress: UploadProgress,
@@ -24,6 +25,7 @@ interface Props {
 const FilePicker: React.FC<Props> = ({
   sectionId,
   abortController,
+  fileInputRef,
   onFileUploaded,
   onFileUploadProgress,
   uploadProgress,
@@ -31,7 +33,6 @@ const FilePicker: React.FC<Props> = ({
 }) => {
   const uploadFileToS3 = async (uploadUrl: string, file: File) => {
     try {
-      console.log('uploadFileToS3');
       await axios.put(uploadUrl, file, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -44,25 +45,19 @@ const FilePicker: React.FC<Props> = ({
 
       onFileUploaded(sectionId, videoUrl);
     } catch (error) {
-      console.log('uploadFileToS3 fired');
       console.log(error);
     }
   };
 
   const handleFileSelected = async (e: InputChangeEvent) => {
-    console.log('>>> handleFileSelected');
     try {
       // Get secure/signed AWS S3 url from server
       const response = await fetch(`${API_DOMAIN}/get-upload-url`);
       const result = await response.json();
       const files = e.target?.files || [];
 
-      console.log('>>> response: ', response);
-      console.log('>>> result: ', result);
-
       uploadFileToS3(result.uploadUrl, files[0]);
     } catch (error) {
-      console.log('HandlefileSelectedFunc fired');
       console.log(error);
     }
   };
@@ -94,6 +89,7 @@ const FilePicker: React.FC<Props> = ({
       <label htmlFor={`inputTag-${sectionId}`} className="secondary-btn">
         Select File
         <input
+          ref={fileInputRef}
           name="file-picker"
           id={`inputTag-${sectionId}`}
           type="file"
