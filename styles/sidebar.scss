@@ -1,14 +1,14 @@
-.sidebar-container {
-  width: 350px;
+.sidebar-content-container-admin {
   margin-top: 20px;
+  width: 30%;
 }
 
 .btn-light.sidebar {
   background-color: white;
   border: none;
 
-  &:hover {
-    background-color: var(--hover-color);
-    border: none;
+  &:hover, &:active {
+    background-color: var(--hover-color) !important;
+    border: none !important;
   }
 }

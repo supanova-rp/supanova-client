@@ -107,8 +107,7 @@ const CourseVideoContainer: React.FC<Props> = ({
   };
 
   return (
-  // TODO: change this
-    <div style={{ width: '1000px' }}>
+    <div className="ms-4">
       <Video
         logoutError={logoutError}
         allCourses={allCourses}

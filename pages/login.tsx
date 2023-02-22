@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Card, Form, Button, Container, Alert } from 'react-bootstrap';
+import { Card, Form, Button, Alert } from 'react-bootstrap';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 
 import { useAuth } from '@/contexts/AuthContext';
@@ -8,6 +9,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import HidePasswordIcon from '@/icons/hidePasswordIcon.svg';
 import ShowPasswordIcon from '@/icons/showPasswordIcon.svg';
 import { FormSubmitEvent } from '@/index';
+import SupanovaLogo from '@/images/Supanova-logo.png';
 
 const Login = () => {
   const [emailInput, setEmailInput] = useState('');
@@ -38,8 +40,8 @@ const Login = () => {
   };
 
   return (
-    <Container
-      className="d-flex align-items-center justify-content-center min-vh-100">
+    <div className="d-flex flex-column align-items-center justify-content-center login-container">
+      <Image src={SupanovaLogo} alt="Supanova Logo" className="mb-4 login-logo" priority />
       <div>
         <Card className="pt-4 login-card">
           <Card.Body>
@@ -55,7 +57,7 @@ const Login = () => {
                   type="email"
                   required
                   value={emailInput}
-                  className="login-input"
+                  className="email-input"
                   onChange={(e) => setEmailInput(e.target.value)} />
               </Form.Group>
               <Form.Group id="password" className="mb-2">
@@ -65,18 +67,17 @@ const Login = () => {
                     type={isPasswordShowing ? 'text' : 'password'}
                     minLength={6}
                     required
-                    className="logƒin-input"
                     value={passwordInput}
                     onChange={(e) => setPasswordInput(e.target.value)} />
 
                   {!isPasswordShowing
                     ? (
-                      <div className="ps-2 icon" onClick={() => setIsPasswordShowing(true)}>
+                      <div className="ps-3 icon" onClick={() => setIsPasswordShowing(true)}>
                         <ShowPasswordIcon />
                       </div>
                     )
                     : (
-                      <div className="ps-2 icon" onClick={() => setIsPasswordShowing(false)}>
+                      <div className="ps-3 icon" onClick={() => setIsPasswordShowing(false)}>
                         <HidePasswordIcon />
                       </div>
                     )
@@ -91,11 +92,11 @@ const Login = () => {
                 Login
               </Button>
             </Form>
-            <footer className="w-100 text-center mt-4"><Link href="/forgot-password">Forgot password?</Link></footer>
+            <footer className="w-100 text-center mt-4 mb-2 footer-link clickable"><Link href="/forgot-password">Forgot password?</Link></footer>
           </Card.Body>
         </Card>
       </div>
-    </Container>
+    </div>
   );
 };
 

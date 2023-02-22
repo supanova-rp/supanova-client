@@ -87,9 +87,8 @@ const Video: React.FC<Props> = ({
   return (
     <div className="mb-4">
       <div>
-        {/* TODO: find a way to add margin on the chevron */}
         <div className="d-flex align-items-center">
-          <div className="p-1 clickable">
+          <div className="p-1 clickable me-1">
             <ChevronLeft stroke={colors.orange} className="mt-4 me-1" onClick={onExitVideo} />
           </div>
           <Header title={allCourses[currentCourseIndex].title} logoutError={logoutError} />

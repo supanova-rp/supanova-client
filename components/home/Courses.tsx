@@ -53,8 +53,7 @@ const Courses: React.FC<Props> = ({ logoutError, courses }) => {
   };
 
   return (
-    // TODO: change this
-    <div style={{ width: '1000px' }}>
+    <div className="w-100">
       <CoursesList
         logoutError={logoutError}
         allCourses={allCourses}

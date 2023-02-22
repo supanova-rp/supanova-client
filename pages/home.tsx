@@ -50,9 +50,9 @@ const Home: React.FC<Props> = ({ courses }) => {
   return (
     <div className="home-container">
       <NavbarHome setLogoutError={setLogoutError} />
-      <div className="d-flex h-100">
+      <div className="d-flex h-100 w-100">
         <SidebarContainer activeTab={activeTab} setActiveTab={setActiveTab} />
-        <div className="ms-5">
+        <div className="px-5 w-100 min-vh-100">
           {renderAdminContent()}
         </div>
       </div>

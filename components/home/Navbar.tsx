@@ -30,7 +30,7 @@ const NavbarHome: React.FC<Props> = ({ setLogoutError }) => {
   return (
     <Navbar>
       <nav className="navbar w-100 nav px-4 py-0">
-        <Image className="navbar-brand" src={SupanovaLogo} alt="Logo" width="80" height="70" />
+        <Image className="navbar-brand" src={SupanovaLogo} alt="Logo" />
         <div className="d-flex align-items-center">
           <Link href="https://supanova.setmore.com/jamiegarner" target="_blank" className="link-light nav-link">Book</Link>
           <Button variant="link" className="link-light nav-link ms-5" onClick={onClickHandleLogOut}>Log out</Button>

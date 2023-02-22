@@ -13,7 +13,7 @@ interface Props {
 
 const SidebarContainer: React.FC<Props> = ({ activeTab, setActiveTab }) => {
   return (
-    <div className="row sidebar-container">
+    <div className="row sidebar-content-container-admin">
       <div className="col-20">
         <Sidebar
           setActiveTab={setActiveTab}

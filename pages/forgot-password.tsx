@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useState } from 'react';
-import { Alert, Button, Card, Container, Form } from 'react-bootstrap';
+import { Alert, Button, Card, Form } from 'react-bootstrap';
 
 import { useAuth } from '@/contexts/AuthContext';
 import { FormSubmitEvent } from '@/index';
@@ -34,7 +34,7 @@ const ForgotPassword = () => {
   };
 
   return (
-    <Container className="d-flex align-items-center justify-content-center min-vh-100">
+    <div className="d-flex align-items-center justify-content-center login-container">
       <div>
         <Card className="pt-4 forgot-password-card">
           <Card.Body>
@@ -63,11 +63,11 @@ const ForgotPassword = () => {
                 Reset Password
               </Button>
             </Form>
-            <footer className="w-100 text-center mt-4"><Link href="/login">Log in</Link></footer>
+            <footer className="w-100 text-center mt-4 footer-link clickable "><Link href="/login">Log in</Link></footer>
           </Card.Body>
         </Card>
       </div>
-    </Container>
+    </div>
   );
 };
 

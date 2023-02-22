@@ -1,18 +1,38 @@
+.login-container {
+  min-height: 100%;
+  background: linear-gradient(var(--link-color), var(--primary-color));
+}
+
 .login-card {
-  width: 400px;
+  width: 450px;
   min-height: 420px;
+  padding: 0 10px;
 }
 
 .login-button {
-  width: 326px;
+  width: 360px;
 }
 
-.login-input {
-  width: 326px;
-  margin-right: 10px;
+.form-control.email-input {
+  width: 360px;
 }
 
 .forgot-password-card {
   width: 400px;
   min-height: 320px;
- }
+}
+
+.footer-link {
+  a {
+    color: var(--link-color);
+
+    &:hover {
+      color: var(--link-color);
+    }
+  }
+}
+
+.login-logo {
+  height: 150px;
+  width: 200px;
+}

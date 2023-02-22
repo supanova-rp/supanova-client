@@ -1,5 +1,6 @@
 body, html, #__next {
   height: 100%;
+  overflow-x: hidden;
 }
 
 :root {
@@ -17,9 +18,9 @@ body, html, #__next {
   background-color: var(--secondary-color);
   border: 1px solid var(--secondary-color);
 
-  &:hover {
-    background-color: #db810d;
-    border: 1px solid #db810d;
+  &:hover, &:active {
+    background-color: #db810d !important;
+    border: 1px solid #db810d !important;
   }
 }
 
@@ -28,9 +29,9 @@ body, html, #__next {
   background-color: var(--primary-color);
   border: 1px solid var(--primary-color);
 
-  &:hover {
-    background-color: #18355a;
-    border: 1px solid #18355a;
+  &:hover, &:active {
+    background-color: #18355a !important;
+    border: 1px solid #18355a !important;
   }
 }
 @import "./login";

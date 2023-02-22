@@ -2,18 +2,22 @@
   min-height: 100%;
 }
 
-.card.sidebar-container-home {
-  width: 350px;
+.card.sidebar-content-container-home {
   border: none;
   border-right: 1px solid var(--hover-color);
+  width: 30%;
 }
 
-.instructor-content-container {
-  justify-content: center;
+.home-course-image {
+  height: 200px;
+  width: 200px;
 }
 
 .instructor-image {
   border-radius: 50%;
+  width: 90px;
+  height: 80px;
+  margin-right: 20px;
 }
 
 .progress-circle-container {
@@ -44,9 +48,9 @@
   border-left: 1px solid var(--hover-color);
   border-right: 1px solid var(--hover-color);
 
-  &:hover {
-    background-color: var(--hover-color);
-    border: none;
+  &:hover, &:active {
+    background-color: var(--hover-color) !important;
+    border: none !important;
   }
 }
 
@@ -66,4 +70,9 @@
 
 .course-title-home {
   margin: 40px 0 30px 0;
+}
+
+.instructor-container {
+  width: 80%;
+  min-height: 100%;
 }

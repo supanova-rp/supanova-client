@@ -15,11 +15,11 @@ interface Props {
 
 const SidebarContainer: React.FC<Props> = ({ activeTab, setActiveTab }) => {
   return (
-    <Card className="rounded-0 sidebar-container-home">
-      <Card.Body className="mt-3 w-100 d-flex flex-column align-items-center">
-        <Image src={AtomImage} alt="Supanova" height="200" width="200" priority />
+    <Card className="rounded-0 sidebar-content-container-home">
+      <Card.Body className="mt-5 d-flex flex-column align-items-center p-0">
+        <Image src={AtomImage} alt="Supanova" className="home-course-image" priority />
         <h5 className="course-title-home">Radiation Safety Training Course</h5>
-        <div className="row sidebar-container">
+        <div className="row w-100">
           <div className="col-20 p-0">
             <Sidebar
               setActiveTab={setActiveTab}

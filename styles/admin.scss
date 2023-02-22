@@ -19,9 +19,9 @@ input {
   padding: 0.25rem 0.5rem;
   margin-right: 10px;
 
-  &:hover {
-    color: white;
-    background-color: #6c757d;
+  &:hover, &:active {
+    color: white !important;
+    background-color: #6c757d !important;
   }
 }
 
@@ -44,6 +44,7 @@ input {
 
 .admin-container {
   min-height: 100%;
+  width: 100%;
 }
 
 .upload-file-icons-container {

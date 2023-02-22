@@ -7,11 +7,10 @@ import Header from './Header';
 
 const Instructor: React.FC<LogoutErrorProps> = ({ logoutError }) => {
   return (
-    // TODO: change this
-    <div style={{ width: '1000px' }} className="p-4">
+    <div className="p-4 instructor-container">
       <Header title="Meet Your Instructor" logoutError={logoutError} />
-      <div className="d-flex align-items-center instructor-content-container">
-        <Image src={InstructorImage} alt="Instructor" width="110" height="100" className="instructor-image" />
+      <div className="d-flex align-items-center">
+        <Image src={InstructorImage} alt="Instructor" className="instructor-image" />
         <p className="m-0 p-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco. </p>
       </div>
     </div>
