@@ -25,7 +25,7 @@ const SidebarContainer: React.FC<Props> = ({ activeTab, setActiveTab }) => {
               setActiveTab={setActiveTab}
               classNameTab1={getClassNameSidebarTab(activeTab, 'Courses')}
               classNameTab2={getClassNameSidebarTab(activeTab, 'Instructor')}
-              tabTitle1="Curriculum"
+              tabTitle1="Courses"
               tabTitle2="Instructor" />
           </div>
         </div>

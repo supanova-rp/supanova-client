@@ -15,10 +15,10 @@ interface Props extends LogoutErrorProps {
   initialCurrentVideoTime: number,
   allCourses: Course[],
   hasNext: boolean,
-  hasPrev: boolean,
+  hasPrevAndNext: boolean,
   onExitVideo: () => void,
   onChangeVideo: (parameter: string) => void,
-  onVideoEndedMarkSectionAsComplete: () => void,
+  handleOnVideoEnded: () => void,
   onTimeUpdateSaveToLocalStorage: (e: SyntheticEvent<HTMLVideoElement>) => void,
 }
 
@@ -26,21 +26,38 @@ const Video: React.FC<Props> = ({
   logoutError,
   allCourses,
   hasNext,
-  hasPrev,
+  hasPrevAndNext,
   initialCurrentVideoTime,
   currentCourseIndex,
   currentSectionIndex,
   onExitVideo,
   onChangeVideo,
-  onVideoEndedMarkSectionAsComplete,
+  handleOnVideoEnded,
   onTimeUpdateSaveToLocalStorage,
 }) => {
   const currentSection = allCourses[currentCourseIndex].sections[currentSectionIndex];
 
-  // TODO: fix this logic
-  // refresh courses data when changing tabs
-
   const renderDirectionButtons = (className: string) => {
+    if (hasPrevAndNext) {
+      return (
+        <div>
+          <Button
+            onClick={() => onChangeVideo('prev')}
+            type="button"
+            className={`me-4 ${className}`}>
+            Prev
+          </Button>
+
+          <Button
+            onClick={() => onChangeVideo('next')}
+            type="button"
+            className={className}>
+            Next
+          </Button>
+        </div>
+      );
+    }
+
     if (hasNext) {
       return (
         <Button
@@ -52,32 +69,12 @@ const Video: React.FC<Props> = ({
       );
     }
 
-    if (hasPrev) {
-      return (
-        <Button
-          onClick={() => onChangeVideo('prev')}
-          className={className}>
-          Previous
-        </Button>
-      );
-    }
-
     return (
-      <div>
-        <Button
-          onClick={() => onChangeVideo('prev')}
-          type="button"
-          className={`me-4 ${className}`}>
-          Prev
-        </Button>
-
-        <Button
-          onClick={() => onChangeVideo('next')}
-          type="button"
-          className={className}>
-          Next
-        </Button>
-      </div>
+      <Button
+        onClick={() => onChangeVideo('prev')}
+        className={className}>
+        Prev
+      </Button>
     );
   };
 
@@ -108,9 +105,8 @@ const Video: React.FC<Props> = ({
               data-setup="{}"
               ref={onVideoMounted}
               onTimeUpdate={onTimeUpdateSaveToLocalStorage}
-              onEnded={onVideoEndedMarkSectionAsComplete}>
-              <source src={currentSection.videoUrl} type="video/mp4" />
-            </video>
+              onEnded={handleOnVideoEnded}
+              src={currentSection.videoUrl} />
           )
           : null
         }

@@ -10,8 +10,6 @@ import { API_DOMAIN } from '@/constants/constants';
 
 import ProgressBar from './ProgressBar';
 
-// TODO: error handling when axios timed out
-
 interface Props {
   sectionId: number,
   abortController: AbortController,

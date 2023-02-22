@@ -25,7 +25,6 @@ const Courses: React.FC<Props> = ({ logoutError, courses }) => {
         currentCourseIndex={currentCourseIndex}
         currentSectionIndex={currentSectionIndex}
         currentSectionId={currentSectionId}
-        currentSection={currentSection}
         initialCurrentVideoTime={initialCurrentVideoTime}
         allCourses={allCourses}
         logoutError={logoutError}
