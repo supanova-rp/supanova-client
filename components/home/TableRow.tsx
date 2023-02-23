@@ -23,19 +23,17 @@ const TableRow: React.FC<Props> = ({ title, sectionId, completed, onClickSetCurr
 
   return (
     <tr>
-      <Button
-        className="d-flex align-items-center w-100 rounded-0 btn-light row-buttons"
-        onClick={onClickSetCurrentVideoInfo}>
-        <th className="table-header">
+      <td className="section-row-data">
+        <Button
+          className="d-flex align-items-center w-100 rounded-0 btn-light row-buttons"
+          onClick={onClickSetCurrentVideoInfo}>
           {renderSectionProgressCircle()}
-        </th>
-        <td>
           <div className="d-flex align-items-center">
-            <VideoIcon stroke={colors.gray} className="mx-3" />
+            <VideoIcon stroke={colors.darkgray} className="mx-3" />
             <p className="mb-0 text-secondary me-1">{title}</p>
           </div>
-        </td>
-      </Button>
+        </Button>
+      </td>
     </tr>
   );
 };

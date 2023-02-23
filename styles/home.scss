@@ -22,13 +22,15 @@
 
 .progress-circle-container {
   padding-top: 2px;
-  margin-right: 5px;
+  padding-right: 12px;
+  border-right: 1px solid #dee2e6;
 }
 
 .progress-circle {
   border-radius: 50%;
   height: 20px;
   width: 20px;
+  margin-bottom: 2px;
 }
 
 .empty-circle {
@@ -45,13 +47,17 @@
 }
 
 .btn-light.row-buttons {
-  border-left: 1px solid var(--hover-color);
-  border-right: 1px solid var(--hover-color);
+  background: white;
+  border: none;
+  padding: 10px 16px;
 
   &:hover, &:active {
     background-color: var(--hover-color) !important;
-    border: none !important;
   }
+}
+
+.table .section-row-data {
+  padding: 0;
 }
 
 .clickable {
