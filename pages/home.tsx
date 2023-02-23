@@ -1,6 +1,6 @@
 import { useState } from 'react';
+import { Alert } from 'react-bootstrap';
 
-import { useAuth } from '@/contexts/AuthContext';
 import { usePrivateRoute } from '@/hooks/usePrivateRoute';
 import { API_DOMAIN } from '@/constants/constants';
 import { Course } from '@/index';
@@ -30,12 +30,14 @@ const Home: React.FC<Props> = ({ courses }) => {
   const [logoutError, setLogoutError] = useState('');
   const [activeTab, setActiveTab] = useState('Courses');
 
-  const { currentUser } = useAuth();
-
   // TODO: change this with middleware?
   usePrivateRoute();
 
   const renderAdminContent = () => {
+    if (!courses.length) {
+      return <Alert variant="warning" className="mt-4">No courses to see yet...</Alert>;
+    }
+
     if (activeTab === 'Courses') {
       return <Courses logoutError={logoutError} courses={courses} />;
     }

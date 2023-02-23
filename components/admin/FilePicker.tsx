@@ -8,6 +8,7 @@ import { InputChangeEvent, UploadProgress } from '@/index';
 import { colors } from '@/constants/colorPalette';
 import { API_DOMAIN } from '@/constants/constants';
 
+import { useWakeLock } from '@/hooks/useWakeLock';
 import ProgressBar from './ProgressBar';
 
 interface Props {
@@ -29,7 +30,11 @@ const FilePicker: React.FC<Props> = ({
   uploadProgress,
   onClickCancelFileUpload,
 }) => {
+  const { releaseWakeLock, requestWakeLock } = useWakeLock();
+
   const uploadFileToS3 = async (uploadUrl: string, file: File) => {
+    requestWakeLock();
+
     try {
       await axios.put(uploadUrl, file, {
         headers: {
@@ -39,10 +44,14 @@ const FilePicker: React.FC<Props> = ({
         onUploadProgress: (data: AxiosProgressEvent) => onFileUploadProgress(data, sectionId),
       });
 
+      releaseWakeLock();
+
       const videoUrl = uploadUrl.split('?')[0];
 
       onFileUploaded(sectionId, videoUrl);
     } catch (error) {
+      releaseWakeLock();
+
       console.log(error);
     }
   };

@@ -1,18 +1,16 @@
 import { Course, FormSubmitEvent } from '@/index';
 import { AxiosProgressEvent } from 'axios';
 import { Alert, Button, Form } from 'react-bootstrap';
-import AddMoreInputs from '../AddMoreInputs';
 
+import AddMoreInputs from '../AddMoreInputs';
 import CourseListView from './CourseListView';
 import EditCourseView from './EditCourseView';
 
 interface Props {
   index: number,
-  course: Course,
   isLoading: boolean,
+  course: Course,
   errorMessage: string | null,
-  deleteCourseErrorMessage: string | null,
-  showDeleteCourseOverlay: boolean,
   handleRemoveSection: (paramater: number) => void,
   onFileUploaded: (parameter1: number, parameter2: string) => void,
   onFileUploadProgress: (parameter1: AxiosProgressEvent, parameter2: number) => void,
@@ -23,17 +21,14 @@ interface Props {
   onChangeSectionTitle: (paramter1: number, parameter2: string) => void,
   onClickCancelEditingCourse: () => void,
   onClickSaveEditedCourse: (e: FormSubmitEvent, courseId: number) => void,
-  onClickDeleteCourse: (parameter: number) => void,
-  onClickHandleShowingDeleteOverlay: (parameter: boolean) => void,
+  onClickHandleShowingDeleteOverlay: (parameter: number | null) => void,
 }
 
 const ExistingCourse: React.FC<Props> = ({
   index,
   course,
   isLoading,
-  showDeleteCourseOverlay,
   errorMessage,
-  deleteCourseErrorMessage,
   handleRemoveSection,
   onFileUploaded,
   onFileUploadProgress,
@@ -44,7 +39,6 @@ const ExistingCourse: React.FC<Props> = ({
   onChangeCourseField,
   onChangeSectionTitle,
   onClickSaveEditedCourse,
-  onClickDeleteCourse,
   onClickHandleShowingDeleteOverlay,
 }) => {
   if (course.isEditing) {
@@ -83,11 +77,7 @@ const ExistingCourse: React.FC<Props> = ({
     <CourseListView
       course={course}
       index={index}
-      isLoading={isLoading}
-      deleteCourseErrorMessage={deleteCourseErrorMessage}
-      showDeleteCourseOverlay={showDeleteCourseOverlay}
       onClickStartEditingCourse={onClickStartEditingCourse}
-      onClickDeleteCourse={onClickDeleteCourse}
       onClickHandleShowingDeleteOverlay={onClickHandleShowingDeleteOverlay} />
   );
 };

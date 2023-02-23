@@ -6,6 +6,7 @@ import { Course, FormSubmitEvent } from '@/index';
 import { getUpdatedCourses } from '@/utils/utils';
 import { API_DOMAIN } from '@/constants/constants';
 
+import DeleteCourseOverlay from '@/components/overlays/DeleteCourseOverlay';
 import Navbar from '../nav-and-sidebars/Navbar';
 import ExistingCourse from './ExistingCourse';
 
@@ -22,7 +23,7 @@ export default class EditCourses extends React.Component<Props> {
     deleteCourseErrorMessage: null,
     allCourses: this.props.courses,
     savedCourses: this.props.courses,
-    showDeleteCourseOverlay: false,
+    courseIdToDelete: null,
   };
 
   onUpdateStateAfterCancellingFileUpload = (sectionId: number) => {
@@ -256,11 +257,11 @@ export default class EditCourses extends React.Component<Props> {
     this.setState({ allCourses: coursesWithNewlyAddedSection });
   };
 
-  onClickHandleShowingDeleteOverlay = (value: boolean) => {
-    this.setState({ showDeleteCourseOverlay: (value) });
+  onClickHandleShowingDeleteOverlay = (value: number | null) => {
+    this.setState({ courseIdToDelete: value, deleteCourseErrorMessage: null });
   };
 
-  onClickDeleteCourse = async (courseToDeleteId: number) => {
+  onClickDeleteCourse = async () => {
     try {
       this.setState({ isLoading: true, deleteCourseErrorMessage: null });
 
@@ -268,19 +269,18 @@ export default class EditCourses extends React.Component<Props> {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          course_id: courseToDeleteId,
+          course_id: this.state.courseIdToDelete,
         }),
       });
 
       const result = await response.json();
 
       if (!result.error) {
-        this.setState({ showDeleteCourseOverlay: false, isLoading: false });
         this.props.refreshData();
 
-        const coursesMinusDeletedCourse = this.state.allCourses.filter((course) => course.id !== courseToDeleteId);
+        const coursesMinusDeletedCourse = this.state.allCourses.filter((course) => course.id !== this.state.courseIdToDelete);
 
-        this.setState({ allCourses: coursesMinusDeletedCourse, savedCourses: coursesMinusDeletedCourse });
+        this.setState({ isLoading: false, courseIdToDelete: null, allCourses: coursesMinusDeletedCourse, savedCourses: coursesMinusDeletedCourse });
       } else {
         this.setState({ isLoading: false, deleteCourseErrorMessage: 'Deleting course failed. Try again.' });
       }
@@ -303,41 +303,50 @@ export default class EditCourses extends React.Component<Props> {
     }
 
     return (
-      <Card className="w-100 p-3 d-flex mh-100 rounded-0">
-        <Card.Body>
-          <Navbar title="Edit Courses" />
-          {this.state.successMessage
-            ? <Alert variant="success">{this.state.successMessage}</Alert>
-            : null
+      <>
+        <Card className="w-100 p-3 d-flex mh-100 rounded-0">
+          <Card.Body>
+            <Navbar title="Edit Courses" />
+            {this.state.successMessage
+              ? <Alert variant="success">{this.state.successMessage}</Alert>
+              : null
           }
-          <div>
-            {this.state.allCourses.map((course, index) => {
-              return (
-                <ExistingCourse
-                  key={course.id}
-                  index={index}
-                  course={course}
-                  isLoading={this.state.isLoading}
-                  deleteCourseErrorMessage={this.state.deleteCourseErrorMessage}
-                  showDeleteCourseOverlay={this.state.showDeleteCourseOverlay}
-                  errorMessage={this.state.errorMessage}
-                  onClickStartEditingCourse={this.onClickStartEditingCourse}
-                  onClickCancelEditingCourse={this.onClickCancelEditingCourse}
-                  onChangeCourseField={this.onChangeCourseField}
-                  onChangeSectionTitle={this.onChangeSectionTitle}
-                  onFileUploaded={this.onFileUploaded}
-                  onFileUploadProgress={this.onFileUploadProgress}
-                  onUpdateStateAfterCancellingFileUpload={this.onUpdateStateAfterCancellingFileUpload}
-                  handleRemoveSection={this.handleRemoveSection}
-                  onClickAddNewSection={this.onClickAddNewSection}
-                  onClickSaveEditedCourse={this.onClickSaveEditedCourse}
-                  onClickDeleteCourse={this.onClickDeleteCourse}
-                  onClickHandleShowingDeleteOverlay={this.onClickHandleShowingDeleteOverlay} />
-              );
-            })}
-          </div>
-        </Card.Body>
-      </Card>
+            <div>
+              {this.state.allCourses.map((course, index) => {
+                return (
+                  <ExistingCourse
+                    key={course.id}
+                    index={index}
+                    course={course}
+                    isLoading={this.state.isLoading}
+                    errorMessage={this.state.errorMessage}
+                    onClickStartEditingCourse={this.onClickStartEditingCourse}
+                    onClickCancelEditingCourse={this.onClickCancelEditingCourse}
+                    onChangeCourseField={this.onChangeCourseField}
+                    onChangeSectionTitle={this.onChangeSectionTitle}
+                    onFileUploaded={this.onFileUploaded}
+                    onFileUploadProgress={this.onFileUploadProgress}
+                    onUpdateStateAfterCancellingFileUpload={this.onUpdateStateAfterCancellingFileUpload}
+                    handleRemoveSection={this.handleRemoveSection}
+                    onClickAddNewSection={this.onClickAddNewSection}
+                    onClickSaveEditedCourse={this.onClickSaveEditedCourse}
+                    onClickHandleShowingDeleteOverlay={this.onClickHandleShowingDeleteOverlay} />
+                );
+              })}
+            </div>
+          </Card.Body>
+        </Card>
+        {this.state.courseIdToDelete
+          ? (
+            <DeleteCourseOverlay
+              isLoading={this.state.isLoading}
+              deleteCourseErrorMessage={this.state.deleteCourseErrorMessage}
+              onClickHandleShowingDeleteOverlay={this.onClickHandleShowingDeleteOverlay}
+              onClickDeleteCourse={this.onClickDeleteCourse} />
+          )
+          : null
+      }
+      </>
     );
   }
 }

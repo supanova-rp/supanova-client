@@ -44,4 +44,3 @@ export type UserInfoToUpdate = {
   regError?: boolean,
   hasPasswordResetError?: boolean,
 };
-

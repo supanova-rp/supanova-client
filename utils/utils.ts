@@ -14,7 +14,6 @@ export const updateUsers = (users: User[], userId: string, userInfoToUpdate: Use
 };
 
 export const getClassNameSidebarTab = (activeTab: string, tabName: string) => {
-  console.log('>>> activeTab: ', activeTab);
   if (activeTab === tabName) {
     return 'secondary-button';
   }

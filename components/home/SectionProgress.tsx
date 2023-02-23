@@ -7,7 +7,6 @@ interface Props {
 
 const SectionProgress: React.FC<Props> = ({ className }) => {
   return (
-    // TODO: center the circle
     <div className="d-flex justify-content-center progress-circle-container align-items-center">
       {className.includes('full')
         ? (

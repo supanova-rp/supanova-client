@@ -19,7 +19,7 @@ const CoursesList: React.FC<Props> = ({ logoutError, allCourses, onSelectVideo }
           return (
             <div key={`${course.title} ${course.id}`} className="mb-5">
               <h5>{`${courseIndex + 1}. ${course.title}`}</h5>
-              <p>{course.description}</p>
+              <p className="mt-3 mb-4">{course.description}</p>
               <table className="table table-bordered mt-3">
                 <tbody>
                   {course.sections.map((section, sectionIndex) => {
