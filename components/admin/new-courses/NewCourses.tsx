@@ -110,7 +110,7 @@ export default class AddCourses extends React.Component<Props> {
           this.setState({ ...getInitialCourseState(), successMessage: 'Successfully created new course!' });
 
           this.handleSuccessMessageAfterCourseCreation();
-          // Makes sure getServerSideProps gets called again so we see our new course in the existing courses tab without refreshing
+          // Makes sure getServerSideProps gets called again so we see our new course in the Edit Courses tab without refreshing
           this.props.refreshData();
         } else {
           this.setState({

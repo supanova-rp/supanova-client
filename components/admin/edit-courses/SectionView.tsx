@@ -17,7 +17,7 @@ const SectionView: React.FC<Props> = ({
         ? (
           <video
             id="my-player"
-            className="video-js-edit mb-4"
+            className="video-js-edit my-4"
             controls
             preload="auto"
             src={section.videoUrl} />

@@ -7,7 +7,7 @@ import { useRefreshData } from '@/hooks/useRefreshData';
 import AddCourses from '@/components/admin/new-courses/NewCourses';
 import AddUsers from '@/components/admin/add-users/AddUsers';
 import SidebarContainer from '@/components/admin/nav-and-sidebars/SidebarContainer';
-import EditCourses from '@/components/admin/existing-courses/ExistingCourses';
+import EditCourses from '@/components/admin/edit-courses/ExistingCourses';
 
 export const getServerSideProps = async () => {
   const response = await fetch(`${API_DOMAIN}/courses`);
@@ -26,16 +26,16 @@ interface Props {
 }
 
 const Admin: React.FC<Props> = ({ courses }) => {
-  const [activeTab, setActiveTab] = useState('New Courses');
+  const [activeTab, setActiveTab] = useState('Add Course');
 
   const refreshData = useRefreshData();
 
   const renderAdminContent = () => {
-    if (activeTab === 'New Courses') {
+    if (activeTab === 'Add Course') {
       return <AddCourses refreshData={refreshData} />;
     }
 
-    if (activeTab === 'Existing Courses') {
+    if (activeTab === 'Edit Courses') {
       return (
         <EditCourses
           courses={courses}
@@ -43,7 +43,7 @@ const Admin: React.FC<Props> = ({ courses }) => {
       );
     }
 
-    if (activeTab === 'New Users') {
+    if (activeTab === 'Add Users') {
       return <AddUsers />;
     }
 

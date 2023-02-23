@@ -108,7 +108,7 @@ const AddUsers = () => {
   return (
     <Card className="w-100 p-3 d-flex mh-100 rounded-0">
       <Card.Body>
-        <Navbar title="Add New Users" />
+        <Navbar title="Add Users" />
         {users.map((user) => {
           return (
             <Form onSubmit={(e) => onHandleRegisterUser(e, user.email, user.name, user.id)} key={user.id}>
