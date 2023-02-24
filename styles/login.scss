@@ -20,7 +20,14 @@
 .forgot-password-card {
   width: 400px;
   min-height: 320px;
+
+  .forgot-password-alert {
+    margin: 20px 0;
+    padding: 9px;
+  }
 }
+
+
 
 .footer-link {
   a {

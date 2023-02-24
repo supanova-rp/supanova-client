@@ -15,6 +15,12 @@ const ForgotPassword = () => {
 
   // TODO: change the sender e-mail for reset password
 
+  const handleSuccessMessageAfterResettingPassword = () => {
+    setTimeout(() => {
+      setResetPasswordSuccessMessage('');
+    }, 3000);
+  };
+
   const onHandleResetPassword = async (event: FormSubmitEvent) => {
     event.preventDefault();
 
@@ -23,11 +29,13 @@ const ForgotPassword = () => {
       setIsLoading(true);
 
       await resetPassword(emailInput);
-      setResetPasswordSuccessMessage('Check your inbox for further instructions');
+      setResetPasswordSuccessMessage('Check your inbox for further instructions.');
+
+      handleSuccessMessageAfterResettingPassword();
     } catch (error) {
       console.log(error);
       setResetPasswordSuccessMessage('');
-      setValidationError('Failed to reset password');
+      setValidationError('Failed to reset password.');
     }
 
     setIsLoading(false);
@@ -40,11 +48,11 @@ const ForgotPassword = () => {
           <Card.Body>
             <h2 className="text-center mb-3">Password Reset</h2>
             {validationError
-              ? <Alert variant="danger">{validationError}</Alert>
+              ? <Alert variant="danger" className="forgot-password-alert">{validationError}</Alert>
               : null
             }
             {resetPasswordSuccessMessage
-              ? <Alert variant="success">{resetPasswordSuccessMessage}</Alert>
+              ? <Alert variant="success" className="forgot-password-alert">{resetPasswordSuccessMessage}</Alert>
               : null
             }
             <Form onSubmit={onHandleResetPassword}>

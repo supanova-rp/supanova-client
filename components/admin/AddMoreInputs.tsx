@@ -12,7 +12,7 @@ interface Props {
 
 const AddMoreInputs: React.FC<Props> = ({ onClick, title, marginTop }) => {
   return (
-    <div className={`${marginTop} d-flex align-items-center add-more-inputs-container`}>
+    <div className={`mb-4 ${marginTop} d-flex align-items-center`}>
       <p className="m-0"><strong>{title}</strong></p>
       <div className="d-flex align-items-center ms-1 p-2 icon" onClick={onClick}>
         <PlusIcon stroke={colors.green} />
