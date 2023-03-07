@@ -9,7 +9,6 @@ import { useAuth } from '@/contexts/AuthContext';
 import HidePasswordIcon from '@/icons/hidePasswordIcon.svg';
 import ShowPasswordIcon from '@/icons/showPasswordIcon.svg';
 import { FormSubmitEvent } from '@/index';
-import SupanovaLogo from '@/images/Supanova-logo.png';
 
 const Login = () => {
   const [emailInput, setEmailInput] = useState('');
@@ -41,7 +40,7 @@ const Login = () => {
 
   return (
     <div className="d-flex flex-column align-items-center justify-content-center login-container">
-      <Image src={SupanovaLogo} alt="Supanova Logo" className="mb-4 login-logo" priority />
+      <Image src="/images/Supanova-logo.png" alt="Supanova Logo" className="mb-4 login-logo" priority />
       <div>
         <Card className="pt-4 login-card">
           <Card.Body>
