@@ -1,13 +1,32 @@
-import { StrictMode } from 'react';
-import * as ReactDOM from 'react-dom/client';
+import { StrictMode } from "react";
+import ReactDOM from "react-dom/client";
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
 
-import App from './app/app';
+import Home from "./components/home/Home";
+import PageNotFound from "./components/PageNotFound";
+
+import "react-circular-progressbar/dist/styles.css";
+import "video.js/dist/video-js.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./styles/index.scss";
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+  document.getElementById("root") as HTMLElement
 );
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Home />,
+    errorElement: <PageNotFound />
+  },
+]);
+
 root.render(
   <StrictMode>
-    <App />
+    <RouterProvider router={router} />
   </StrictMode>
 );

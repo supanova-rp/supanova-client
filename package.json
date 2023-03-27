@@ -1,6 +1,6 @@
 {
   "name": "supanova-client",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "license": "MIT",
   "scripts": {
     "start": "nx serve",
@@ -9,11 +9,19 @@
   },
   "private": true,
   "dependencies": {
+    "@types/video.js": "^7.3.51",
+    "bootstrap": "^5.2.3",
+    "firebase": "^9.18.0",
+    "firebase-admin": "^11.5.0",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-bootstrap": "^2.7.2",
+    "react-circular-progressbar": "^2.1.0",
+    "react-dom": "18.2.0",
+    "react-router-dom": "^6.9.0",
+    "video.js": "^8.0.4",
+    "vite-plugin-svgr": "^2.4.0"
   },
   "devDependencies": {
-    "@nrwl/cypress": "15.8.9",
     "@nrwl/eslint-plugin-nx": "15.8.9",
     "@nrwl/js": "15.8.9",
     "@nrwl/linter": "15.8.9",
@@ -21,7 +29,6 @@
     "@nrwl/react": "15.8.9",
     "@nrwl/vite": "15.8.9",
     "@nrwl/workspace": "15.8.9",
-    "@testing-library/react": "14.0.0",
     "@types/node": "18.14.2",
     "@types/react": "18.0.28",
     "@types/react-dom": "18.0.11",
@@ -30,7 +37,6 @@
     "@vitejs/plugin-react": "^3.0.0",
     "@vitest/coverage-c8": "~0.25.8",
     "@vitest/ui": "^0.25.8",
-    "cypress": "^12.2.0",
     "eslint": "~8.15.0",
     "eslint-config-prettier": "8.1.0",
     "eslint-plugin-cypress": "^2.10.3",

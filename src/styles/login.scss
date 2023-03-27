@@ -1,0 +1,45 @@
+.login-container {
+  min-height: 100%;
+  background: linear-gradient(var(--link-color), var(--primary-color));
+}
+
+.login-card {
+  width: 450px;
+  min-height: 420px;
+  padding: 0 10px;
+}
+
+.login-button {
+  width: 360px;
+}
+
+.form-control.email-input {
+  width: 360px;
+}
+
+.forgot-password-card {
+  width: 400px;
+  min-height: 320px;
+
+  .forgot-password-alert {
+    margin: 20px 0;
+    padding: 9px;
+  }
+}
+
+
+
+.footer-link {
+  a {
+    color: var(--link-color);
+
+    &:hover {
+      color: var(--link-color);
+    }
+  }
+}
+
+.login-logo {
+  height: 150px;
+  width: 200px;
+}

@@ -1,0 +1,23 @@
+nav {
+  background: var(--primary-color);
+  height: 90px;
+}
+
+.nav-link {
+  a {
+    text-decoration: none;
+  }
+
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+.logout-error {
+  width: 200px;
+}
+
+.navbar-brand {
+  width: 95px;
+  height: 85px;
+}

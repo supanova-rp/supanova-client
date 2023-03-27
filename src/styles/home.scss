@@ -1,0 +1,84 @@
+.home-container {
+  min-height: 100%;
+}
+
+.card.sidebar-content-container-home {
+  border: none;
+  border-right: 1px solid var(--hover-color);
+  width: 30%;
+}
+
+.home-course-image {
+  height: 200px;
+  width: 200px;
+}
+
+.instructor-image {
+  border-radius: 50%;
+  width: 90px;
+  height: 80px;
+  margin-right: 20px;
+}
+
+.progress-circle-container {
+  padding-top: 2px;
+  padding-right: 12px;
+  border-right: 1px solid #dee2e6;
+}
+
+.progress-circle {
+  border-radius: 50%;
+  height: 20px;
+  width: 20px;
+  margin-bottom: 2px;
+}
+
+.empty-circle {
+  border: 2px solid var(--secondary-color)
+}
+
+.full-circle {
+  background-color: var(--secondary-color)
+}
+
+.table-header {
+  width: 50px;
+  border-right: 1px solid #dee2e6;
+}
+
+.btn-light.row-buttons {
+  background: white;
+  border: none;
+  padding: 10px 16px;
+
+  &:hover, &:active {
+    background-color: var(--hover-color) !important;
+  }
+}
+
+.table .section-row-data {
+  padding: 0;
+}
+
+.clickable {
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+.video-js-home {
+  height: 450px;
+  width: 800px;
+  margin-bottom: 20px;
+}
+
+.course-title-home {
+  margin: 40px 0 30px 0;
+}
+
+.instructor-container {
+  width: 80%;
+  min-height: 100%;
+}

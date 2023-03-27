@@ -25,18 +25,6 @@
         "^production"
       ]
     },
-    "e2e": {
-      "inputs": [
-        "default",
-        "^production"
-      ]
-    },
-    "test": {
-      "inputs": [
-        "default",
-        "^production"
-      ]
-    },
     "lint": {
       "inputs": [
         "default",

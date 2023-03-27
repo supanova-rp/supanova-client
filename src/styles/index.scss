@@ -1,0 +1,66 @@
+body, html, #root {
+  height: 100%;
+  overflow-x: hidden;
+}
+
+:root {
+  --primary-color: #132843;
+  --secondary-color: #F18F0F;
+  --link-color: #3E819A;
+  --hover-color: #e7e6e6;
+}
+
+.icon, .link {
+  cursor: pointer;
+}
+
+.main-button.btn-primary {
+  background-color: var(--secondary-color);
+  border: 1px solid var(--secondary-color);
+
+  &:hover, &:active {
+    background-color: #db810d !important;
+    border: 1px solid #db810d !important;
+  }
+}
+
+
+.secondary-button.btn-primary {
+  background-color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+
+  &:hover, &:active {
+    background-color: #18355a !important;
+    border: 1px solid #18355a !important;
+  }
+}
+
+.page-not-found-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  row-gap: 10px;
+  background: linear-gradient(var(--link-color), var(--primary-color));
+
+  h1, p {
+    color: white;
+  }
+
+  .page-not-found-logo {
+    height: 140px;
+    width: 160px;
+  }
+
+  a {
+    text-decoration: none;
+    color: white;
+  }
+}
+
+@import "./login";
+@import "./admin";
+@import "./sidebar";
+@import "./navbar";
+@import "./home";
