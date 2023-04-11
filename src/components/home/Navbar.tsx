@@ -1,6 +1,5 @@
 import { Button, Navbar } from "react-bootstrap";
-import { redirect } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../../contexts/AuthContext";
 import { SetStringFunction } from "../../types/index";
@@ -13,15 +12,17 @@ interface Props {
 
 const NavbarHome: React.FC<Props> = ({ setLogoutError }) => {
   const { logout } = useAuth();
+  const navigate = useNavigate();
 
   const onClickHandleLogOut = async () => {
     try {
       await logout();
       setLogoutError("");
 
-      redirect("/login");
+      navigate("/login", { replace: true });
     } catch (e) {
-      setLogoutError("Failed to log out");
+      console.log(e);
+      setLogoutError("Error logging out. Please try again.");
     }
   };
 

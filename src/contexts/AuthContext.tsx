@@ -43,12 +43,6 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
     const unsubcribe = auth.onAuthStateChanged((user: FirebaseUser | null) => {
       setCurrentUser(user);
       setIsLoading(false);
-
-      if (user) {
-        user.getIdToken().then((token) => {
-          window.localStorage.setItem("auth_token", token);
-        });
-      }
     });
 
     return unsubcribe;

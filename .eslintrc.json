@@ -71,6 +71,7 @@
         ],
         "linebreak-style": 0,
         "object-curly-newline": 0,
+        "no-trailing-spaces": 2,
         "max-len": [
           "error",
           {
@@ -97,6 +98,7 @@
         "import/order": 0,
         "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
         "react/jsx-indent": [2, 2, { "checkAttributes": true, "indentLogicalExpressions": true }],
+        "react/jsx-indent-props": [2, 2],
         "react/no-string-refs": 0,
         "react/prop-types": 0,
         "react/prefer-stateless-function": 0,

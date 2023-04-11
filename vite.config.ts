@@ -8,7 +8,7 @@ export default defineConfig({
   cacheDir: "./node_modules/.vite/supanova-client",
 
   server: {
-    port: 3002,
+    port: 3000,
     host: "localhost",
   },
 

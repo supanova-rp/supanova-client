@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { Alert } from "react-bootstrap";
 
-// import { usePrivateRoute } from "@/hooks/usePrivateRoute";
-import { VITE_API_DOMAIN } from "../../constants/constants";
+import { API_DOMAIN } from "../../constants/constants";
 
 import SidebarContainer from "./SidebarContainer";
 import NavbarHome from "./Navbar";
@@ -14,12 +13,9 @@ const Home = () => {
   const [logoutError, setLogoutError] = useState("");
   const [activeTab, setActiveTab] = useState("Courses");
 
-  // TODO: change this with middleware?
-  // usePrivateRoute();
-
   useEffect(() => {
     const getCourses = async () => {
-      const response = await fetch(`${VITE_API_DOMAIN}/courses`)
+      const response = await fetch(`${API_DOMAIN}/courses`)
       const courseResults = await response.json()
 
       setCourses(courseResults)
