@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 import { Course, LogoutErrorProps } from "../../types/index";
 
@@ -7,16 +7,16 @@ import CourseVideoContainer from "./CourseVideoContainer";
 
 interface Props extends LogoutErrorProps {
   courses: Course[],
+  setCourses: Dispatch<SetStateAction<Course[]>>,
 }
 
-const Courses: React.FC<Props> = ({ logoutError, courses }) => {
-  const [allCourses, setAllCourses] = useState<Course[]>(courses);
+const Courses: React.FC<Props> = ({ logoutError, courses, setCourses }) => {
   const [isVideoPlaying, setIsVideoPlaying] = useState<boolean>(false);
   const [currentCourseIndex, setCurrentCourseIndex] = useState<number>(0);
   const [currentSectionIndex, setCurrentSectionIndex] = useState<number>(0);
   const [initialCurrentVideoTime, setInitialCurrentVideoTime] = useState<number>(0);
 
-  const currentSection = allCourses[currentCourseIndex].sections[currentSectionIndex];
+  const currentSection = courses[currentCourseIndex].sections[currentSectionIndex];
   const currentSectionId = currentSection.id;
 
   if (isVideoPlaying) {
@@ -26,18 +26,18 @@ const Courses: React.FC<Props> = ({ logoutError, courses }) => {
         currentSectionIndex={currentSectionIndex}
         currentSectionId={currentSectionId}
         initialCurrentVideoTime={initialCurrentVideoTime}
-        allCourses={allCourses}
+        courses={courses}
         logoutError={logoutError}
         setCurrentCourseIndex={setCurrentCourseIndex}
         setCurrentSectionIndex={setCurrentSectionIndex}
         setIsVideoPlaying={setIsVideoPlaying}
-        setAllCourses={setAllCourses}
+        setCourses={setCourses}
         setInitialCurrentVideoTime={setInitialCurrentVideoTime} />
     );
   }
 
   const onSelectVideo = (courseIndex: number, sectionIndex: number) => {
-    const sectionId = allCourses[courseIndex].sections[sectionIndex].id;
+    const sectionId = courses[courseIndex].sections[sectionIndex].id;
 
     if (localStorage.getItem(`section-progress-${sectionId}`)) {
       const localStorageCurrentVideoTimeValue = JSON.parse(localStorage.getItem(`section-progress-${sectionId}`) || "{}").currentTime;
@@ -56,9 +56,8 @@ const Courses: React.FC<Props> = ({ logoutError, courses }) => {
     <div className="w-100">
       <CoursesList
         logoutError={logoutError}
-        allCourses={allCourses}
+        courses={courses}
         onSelectVideo={onSelectVideo} />
-
     </div>
   );
 };

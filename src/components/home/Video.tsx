@@ -13,7 +13,7 @@ interface Props extends LogoutErrorProps {
   currentCourseIndex: number,
   currentSectionIndex: number,
   initialCurrentVideoTime: number,
-  allCourses: Course[],
+  courses: Course[],
   hasNext: boolean,
   hasPrevAndNext: boolean,
   onExitVideo: () => void,
@@ -24,7 +24,7 @@ interface Props extends LogoutErrorProps {
 
 const Video: React.FC<Props> = ({
   logoutError,
-  allCourses,
+  courses,
   hasNext,
   hasPrevAndNext,
   initialCurrentVideoTime,
@@ -35,7 +35,7 @@ const Video: React.FC<Props> = ({
   handleOnVideoEnded,
   onTimeUpdateSaveToLocalStorage,
 }) => {
-  const currentSection = allCourses[currentCourseIndex].sections[currentSectionIndex];
+  const currentSection = courses[currentCourseIndex].sections[currentSectionIndex];
 
   const renderDirectionButtons = (className: string) => {
     if (hasPrevAndNext) {
@@ -91,7 +91,7 @@ const Video: React.FC<Props> = ({
           <div className="p-1 clickable me-1">
             <ChevronLeft stroke={colors.orange} className="mt-4 me-1" onClick={onExitVideo} />
           </div>
-          <Header title={allCourses[currentCourseIndex].title} logoutError={logoutError} />
+          <Header title={courses[currentCourseIndex].title} logoutError={logoutError} />
         </div>
         <h5 className="mt-2 mb-4">{`${currentSectionIndex + 1}. ${currentSection.title}`}</h5>
         {currentSection.videoUrl

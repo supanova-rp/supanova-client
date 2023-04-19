@@ -1,19 +1,18 @@
 import { Dispatch, SetStateAction, SyntheticEvent } from "react";
 
-import { Course } from "../../types/index";
+import { Course, LogoutErrorProps } from "../../types/index";
 import Video from "./Video";
 
-interface Props {
+interface Props extends LogoutErrorProps {
   currentCourseIndex: number,
   currentSectionIndex: number,
   currentSectionId: number,
   initialCurrentVideoTime: number,
-  allCourses: Course[],
-  logoutError: string,
+  courses: Course[],
   setCurrentCourseIndex: (parameter: number) => void,
   setCurrentSectionIndex: (parameter: number) => void,
   setIsVideoPlaying: (parameter: boolean) => void,
-  setAllCourses: Dispatch<SetStateAction<Course[]>>,
+  setCourses: Dispatch<SetStateAction<Course[]>>,
   setInitialCurrentVideoTime: Dispatch<SetStateAction<number>>,
 }
 
@@ -22,15 +21,15 @@ const CourseVideoContainer: React.FC<Props> = ({
   currentSectionIndex,
   currentSectionId,
   initialCurrentVideoTime,
-  allCourses,
+  courses,
   logoutError,
   setCurrentCourseIndex,
   setCurrentSectionIndex,
   setIsVideoPlaying,
-  setAllCourses,
+  setCourses,
   setInitialCurrentVideoTime,
 }) => {
-  const hasNext = currentSectionIndex + 1 !== allCourses[currentCourseIndex].sections.length;
+  const hasNext = currentSectionIndex + 1 !== courses[currentCourseIndex].sections.length;
   const hasPrev = currentSectionIndex !== 0;
   const hasPrevAndNext = hasNext && hasPrev;
 
@@ -46,7 +45,7 @@ const CourseVideoContainer: React.FC<Props> = ({
 
   const onChangeVideo = (direction: string) => {
     const newSectionIndex = direction === "next" ? currentSectionIndex + 1 : currentSectionIndex - 1;
-    const newSectionId = allCourses[currentCourseIndex].sections[newSectionIndex].id;
+    const newSectionId = courses[currentCourseIndex].sections[newSectionIndex].id;
 
     setCurrentSectionIndex(newSectionIndex);
     updateInitialCurrentVideoTime(newSectionId);
@@ -67,7 +66,7 @@ const CourseVideoContainer: React.FC<Props> = ({
 
     localStorage.setItem(`section-progress-${currentSectionId}`, JSON.stringify(sectionProgressInfo));
 
-    const updatedSectionsWithVideoCompletedFlag = allCourses[currentCourseIndex].sections.map((section, index) => {
+    const updatedSectionsWithVideoCompletedFlag = courses[currentCourseIndex].sections.map((section, index) => {
       if (index === currentSectionIndex) {
         return {
           ...section,
@@ -78,7 +77,7 @@ const CourseVideoContainer: React.FC<Props> = ({
       return section;
     });
 
-    const updatedCourses = allCourses.map((course, index) => {
+    const updatedCourses = courses.map((course, index) => {
       if (index === currentCourseIndex) {
         return {
           ...course,
@@ -89,7 +88,7 @@ const CourseVideoContainer: React.FC<Props> = ({
       return course;
     });
 
-    setAllCourses(updatedCourses);
+    setCourses(updatedCourses);
   };
 
   const onTimeUpdateSaveToLocalStorage = (e: SyntheticEvent<HTMLVideoElement>) => {
@@ -110,7 +109,7 @@ const CourseVideoContainer: React.FC<Props> = ({
     <div className="ms-4">
       <Video
         logoutError={logoutError}
-        allCourses={allCourses}
+        courses={courses}
         initialCurrentVideoTime={initialCurrentVideoTime}
         hasNext={hasNext}
         hasPrevAndNext={hasPrevAndNext}

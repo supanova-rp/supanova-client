@@ -4,18 +4,18 @@ import Header from "./Header";
 import TableRow from "./TableRow";
 
 interface Props extends LogoutErrorProps {
-  allCourses: Course[],
+  courses: Course[],
   onSelectVideo: (parameter1: number, parameter2: number) => void,
 }
 
-const CoursesList: React.FC<Props> = ({ logoutError, allCourses, onSelectVideo }) => {
+const CoursesList: React.FC<Props> = ({ logoutError, courses, onSelectVideo }) => {
   return (
     <div className="p-4">
       <div>
         <Header title="All Courses" logoutError={logoutError} margin="mb-3" />
       </div>
       <div>
-        {allCourses.map((course, courseIndex) => {
+        {courses.map((course, courseIndex) => {
           return (
             <div key={`${course.title} ${course.id}`} className="mb-5">
               <h5>{`${courseIndex + 1}. ${course.title}`}</h5>
@@ -23,7 +23,7 @@ const CoursesList: React.FC<Props> = ({ logoutError, allCourses, onSelectVideo }
               <table className="table table-bordered mt-3">
                 <tbody>
                   {course.sections.map((section, sectionIndex) => {
-                    const sectionId = allCourses[courseIndex].sections[sectionIndex].id;
+                    const sectionId = courses[courseIndex].sections[sectionIndex].id;
                     const isCompletedInLocalStorage = JSON.parse(localStorage.getItem(`section-progress-${sectionId}`) || "{}").completed;
 
                     return (

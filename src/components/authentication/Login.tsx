@@ -1,6 +1,6 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { Card, Form, Button, Alert } from "react-bootstrap";
-import { Link, redirect, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { PulseLoader } from "react-spinners";
 
 import { useAuth } from "../../contexts/AuthContext";
@@ -28,11 +28,7 @@ const Login = () => {
       setValidationError("");
       setIsLoading(true);
 
-      debugger
-
-      const result = await login(emailInput, passwordInput);
-
-      console.log(">>> result: ", result);
+      await login(emailInput, passwordInput);
 
       navigate("/");
     } catch (error) {

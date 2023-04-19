@@ -3,7 +3,7 @@ import { User as FirebaseUserLib} from "firebase/auth";
 export type SetStringFunction = (parameter: string) => void;
 
 export interface LogoutErrorProps {
-  logoutError: string,
+  logoutError: null | string,
 }
 
 export type InputChangeEvent = React.ChangeEvent<HTMLInputElement>;
