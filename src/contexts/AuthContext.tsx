@@ -16,6 +16,7 @@ import {
 } from "firebase/auth";
 
 import { auth } from "../firebase/firebase";
+import { API_DOMAIN } from "src/constants/constants";
 
 interface Props {
   children: React.ReactNode
@@ -40,12 +41,29 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const unsubcribe = auth.onAuthStateChanged((user: FirebaseUser | null) => {
+    const unsubscribe = auth.onAuthStateChanged( async (user: FirebaseUser | null) => {
+      console.log(">>> user: ", user);
+
+      if (user) {
+        try {
+          await fetch(`${API_DOMAIN}/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({
+              access_token: user.accessToken
+            }),
+          })
+        } catch (e) {
+          console.log(e)
+        }
+      }
+
       setCurrentUser(user);
       setIsLoading(false);
     });
 
-    return unsubcribe;
+    return unsubscribe;
   }, []);
 
   const value = useMemo(() => {
@@ -54,6 +72,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
     };
 
     const login = (email: string, password: string) => {
+      // send a request to the /login endpoint with the access_token of the user in the request body
       return signInWithEmailAndPassword(auth, email, password);
     };
 
