@@ -1,5 +1,4 @@
 import {
-  useMemo,
   useState,
   useEffect,
   useContext,
@@ -11,12 +10,12 @@ import {
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  User as FirebaseUser,
   UserCredential as FirebaseUserCredential,
 } from "firebase/auth";
 
 import { auth } from "../firebase/firebase";
 import { API_DOMAIN } from "src/constants/constants";
+import { FirebaseUser } from "src/types";
 
 interface Props {
   children: React.ReactNode
@@ -42,8 +41,6 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged( async (user: FirebaseUser | null) => {
-      console.log(">>> user: ", user);
-
       if (user) {
         try {
           await fetch(`${API_DOMAIN}/login`, {
@@ -51,7 +48,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
             headers: { "Content-Type": "application/json" },
             credentials: "include",
             body: JSON.stringify({
-              access_token: user.accessToken
+              access_token: user.accessToken,
             }),
           })
         } catch (e) {
@@ -66,32 +63,56 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
     return unsubscribe;
   }, []);
 
-  const value = useMemo(() => {
-    const signup = (email: string, password: string) => {
-      return createUserWithEmailAndPassword(auth, email, password);
-    };
+  const signup = (email: string, password: string) => {
+    return createUserWithEmailAndPassword(auth, email, password);
+  };
 
-    const login = (email: string, password: string) => {
-      // send a request to the /login endpoint with the access_token of the user in the request body
-      return signInWithEmailAndPassword(auth, email, password);
-    };
+  const login = (email: string, password: string) => {
+    return signInWithEmailAndPassword(auth, email, password);
+  };
 
-    const logout = () => {
-      return signOut(auth);
-    };
+  const logout = () => {
+    return signOut(auth);
+  };
 
-    const resetPassword = (email: string) => {
-      return sendPasswordResetEmail(auth, email);
-    };
+  const resetPassword = (email: string) => {
+    return sendPasswordResetEmail(auth, email);
+  };
 
-    return {
-      currentUser,
-      signup,
-      login,
-      logout,
-      resetPassword,
-    };
-  }, [currentUser]);
+  const value = {
+    currentUser,
+    signup,
+    login,
+    logout,
+    resetPassword,
+  };
+
+  // const value = useMemo(() => {
+  //   const signup = (email: string, password: string) => {
+  //     return createUserWithEmailAndPassword(auth, email, password);
+  //   };
+
+  //   const login = (email: string, password: string) => {
+  //     // send a request to the /login endpoint with the access_token of the user in the request body
+  //     return signInWithEmailAndPassword(auth, email, password);
+  //   };
+
+  //   const logout = () => {
+  //     return signOut(auth);
+  //   };
+
+  //   const resetPassword = (email: string) => {
+  //     return sendPasswordResetEmail(auth, email);
+  //   };
+
+  //   return {
+  //     currentUser,
+  //     signup,
+  //     login,
+  //     logout,
+  //     resetPassword,
+  //   };
+  // }, [currentUser]);
 
   return (
     <AuthContext.Provider value={value}>

@@ -1,3 +1,5 @@
+import { User as FirebaseUserLib} from "firebase/auth";
+
 export type SetStringFunction = (parameter: string) => void;
 
 export interface LogoutErrorProps {
@@ -44,3 +46,5 @@ export type UserInfoToUpdate = {
   regError?: boolean,
   hasPasswordResetError?: boolean,
 };
+
+export type FirebaseUser = FirebaseUserLib & {accessToken?: string}

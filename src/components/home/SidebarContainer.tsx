@@ -1,9 +1,9 @@
 import { Card } from "react-bootstrap";
 
 import { SetStringFunction } from "../../types/index";
-// import { getClassNameSidebarTab } from "../../utils/utils";
+import { getClassNameSidebarTab } from "../../utils/utils";
 
-// import Sidebar from "@/components/admin/nav-and-sidebars/Sidebar";
+import Sidebar from "../admin/nav-and-sidebars/Sidebar";
 
 import HomeImage from "../../images/Home-image.png"
 
@@ -20,12 +20,12 @@ const SidebarContainer: React.FC<Props> = ({ activeTab, setActiveTab }) => {
         <h5 className="course-title-home">Radiation Safety Training Course</h5>
         <div className="row w-100">
           <div className="col-20 p-0">
-            {/* <Sidebar
+            <Sidebar
               setActiveTab={setActiveTab}
               classNameTab1={getClassNameSidebarTab(activeTab, "Courses")}
               classNameTab2={getClassNameSidebarTab(activeTab, "Instructor")}
               tabTitle1="Courses"
-              tabTitle2="Instructor" /> */}
+              tabTitle2="Instructor" />
           </div>
         </div>
       </Card.Body>
