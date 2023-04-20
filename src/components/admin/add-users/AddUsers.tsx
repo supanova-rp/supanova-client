@@ -30,7 +30,7 @@ const AddUsers = () => {
   const [users, setUsers] = useState(usersDefaultState);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { signup, resetPassword } = useAuth();
+  const { signup, resetPassword, updateUser } = useAuth();
 
   const onChangeUser = (key: string, userId: string, event: InputChangeEvent) => {
     const updatedUsers = users.map((user) => {
@@ -76,6 +76,8 @@ const AddUsers = () => {
       setIsLoading(true);
 
       const newUser = await signup(email, uuid());
+
+      await updateUser(newUser, name)
 
       await updateProfile(newUser.user, { displayName: name });
 

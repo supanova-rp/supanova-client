@@ -11,7 +11,7 @@ interface Props extends LogoutErrorProps {
   courses: Course[],
   setCurrentCourseIndex: (parameter: number) => void,
   setCurrentSectionIndex: (parameter: number) => void,
-  setIsVideoPlaying: (parameter: boolean) => void,
+  setIsVideoShowing: (parameter: boolean) => void,
   setCourses: Dispatch<SetStateAction<Course[]>>,
   setInitialCurrentVideoTime: Dispatch<SetStateAction<number>>,
 }
@@ -25,7 +25,7 @@ const CourseVideoContainer: React.FC<Props> = ({
   logoutError,
   setCurrentCourseIndex,
   setCurrentSectionIndex,
-  setIsVideoPlaying,
+  setIsVideoShowing,
   setCourses,
   setInitialCurrentVideoTime,
 }) => {
@@ -53,7 +53,7 @@ const CourseVideoContainer: React.FC<Props> = ({
 
   const onExitVideo = () => {
     setInitialCurrentVideoTime(0);
-    setIsVideoPlaying(false);
+    setIsVideoShowing(false);
     setCurrentCourseIndex(0);
     setCurrentSectionIndex(0);
   };

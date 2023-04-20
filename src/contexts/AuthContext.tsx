@@ -11,6 +11,8 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   UserCredential as FirebaseUserCredential,
+  updateProfile,
+  UserCredential,
 } from "firebase/auth";
 
 import { auth } from "../firebase/firebase";
@@ -27,6 +29,7 @@ type AuthContextType = {
   login: (email: string, password: string) => Promise<FirebaseUserCredential>,
   logout: () => Promise<void>,
   resetPassword: (email: string) => Promise<void>,
+  updateUser: (newUser: UserCredential, name: string) => Promise<void>,
 };
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
@@ -79,12 +82,17 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
     return sendPasswordResetEmail(auth, email);
   };
 
+  const updateUser = (newUser: UserCredential, name: string) => {
+    return updateProfile(newUser.user, { displayName: name });
+  }
+
   const value = {
     currentUser,
     signup,
     login,
     logout,
     resetPassword,
+    updateUser,
   };
 
   // const value = useMemo(() => {
