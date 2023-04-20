@@ -1,5 +1,5 @@
 import { Component } from "react";
-import { Alert, Card } from "react-bootstrap";
+import { Alert } from "react-bootstrap";
 import { AxiosProgressEvent } from "axios";
 import { PulseLoader } from "react-spinners";
 
@@ -149,11 +149,19 @@ export default class EditCourses extends Component {
     }, 3000);
   };
 
+  onError = (errorMessage: string) => {
+    this.setState({
+      areActionsDisabled: false,
+      errorMessage,
+    });
+  }
+
   onClickSaveEditedCourse = async (event: FormSubmitEvent, courseId: number) => {
     event.preventDefault();
 
     const editedCourse = this.state.allCourses.find((course) => course.id === courseId);
 
+    // To prevent Typescript errors
     if (!editedCourse) {
       return;
     }
@@ -177,9 +185,7 @@ export default class EditCourses extends Component {
       return typeof section.uploadProgress === "number" && section.uploadProgress < 1;
     });
 
-    const everySectionHasVideoUrl = editedCourse.sections.every((section) => section.videoUrl);
-
-    if (!someVideoCurrentlyUploading && everySectionHasVideoUrl) {
+    if (!someVideoCurrentlyUploading) {
       this.setState({ areActionsDisabled: true, errorMessage: null });
 
       const sectionsWithPositions = editedCourse.sections.map((section, index) => {
@@ -228,22 +234,15 @@ export default class EditCourses extends Component {
 
           this.handleSuccessMessageAfterSavingEditedCourse();
         } else {
-          this.setState({
-            areActionsDisabled: false,
-            errorMessage: "Failed to save edited course. Try again.",
-          });
+          this.onError("Failed to save edited course. Try again.")
         }
       } catch (saveEditedCourseError) {
-        this.setState({
-          areActionsDisabled: false,
-          errorMessage: "Failed to save edited course. Try again.",
-        });
+        console.log(">>> saveEditedCourseError: ", saveEditedCourseError);
+
+        this.onError("Failed to save edited course. Try again.")
       }
     } else {
-      this.setState({
-        areActionsDisabled: false,
-        errorMessage: "Please make sure videos are uploaded for every section.",
-      });
+      this.onError("Please make sure videos are uploaded for every section.")
     }
   };
 
