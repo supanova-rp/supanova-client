@@ -95,33 +95,6 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
     updateUser,
   };
 
-  // const value = useMemo(() => {
-  //   const signup = (email: string, password: string) => {
-  //     return createUserWithEmailAndPassword(auth, email, password);
-  //   };
-
-  //   const login = (email: string, password: string) => {
-  //     // send a request to the /login endpoint with the access_token of the user in the request body
-  //     return signInWithEmailAndPassword(auth, email, password);
-  //   };
-
-  //   const logout = () => {
-  //     return signOut(auth);
-  //   };
-
-  //   const resetPassword = (email: string) => {
-  //     return sendPasswordResetEmail(auth, email);
-  //   };
-
-  //   return {
-  //     currentUser,
-  //     signup,
-  //     login,
-  //     logout,
-  //     resetPassword,
-  //   };
-  // }, [currentUser]);
-
   return (
     <AuthContext.Provider value={value}>
       {/* Only render children when the currentUser has been set */}
