@@ -69,3 +69,24 @@ export const getInitialCourseState = () => {
     successMessage: null,
   };
 };
+
+export const areSomeVideosCurrentlyUploading = (editedCourse: Course) => {
+  return editedCourse.sections.some((section) => {
+    return typeof section.uploadProgress === "number" && section.uploadProgress < 1;
+  });
+}
+
+export const getUpdatedCoursesWithEditFlagRemovedForEditedCourse = (editedCourseId: number, allCourses: Course[]) => {
+  const updatedCoursesWithEditFlagRemovedForEditedCourse = allCourses.map((course) => {
+    if (course.id === editedCourseId) {
+      return {
+        ...course,
+        isEditing: false,
+      };
+    }
+
+    return course;
+  });
+
+  return updatedCoursesWithEditFlagRemovedForEditedCourse;
+}

@@ -4,7 +4,7 @@ import { AxiosProgressEvent } from "axios";
 import { PulseLoader } from "react-spinners";
 
 import { Course, FormSubmitEvent } from "../../../types/index";
-import { getUpdatedCourses } from "../../../utils/utils"
+import { areSomeVideosCurrentlyUploading, getUpdatedCourses, getUpdatedCoursesWithEditFlagRemovedForEditedCourse } from "../../../utils/utils"
 import { API_DOMAIN } from "../../../constants/constants";
 import { colors } from "src/constants/colorPalette";
 
@@ -149,11 +149,61 @@ export default class EditCourses extends Component {
     }, 3000);
   };
 
-  onError = (errorMessage: string) => {
+  onError = (errorMessage: string, error = "") => {
+    if (error) {
+      console.log(">>> error: ", error);
+    }
+
     this.setState({
       areActionsDisabled: false,
       errorMessage,
     });
+  }
+
+  getDeletedSectionsIds = (editedCourse: Course) => {
+    // Getting the ids of the deleted sections so the back end can delete them in the table
+    const uneditedVersionOfEditedCourse = this.state.savedCourses.find((course) => course.id === editedCourse.id);
+
+    const sectionsThatDontExistInSavedCourse = uneditedVersionOfEditedCourse?.sections.filter((section) => {
+      if (editedCourse.sections.some((editedCourseSection) => editedCourseSection.id === section.id)) {
+        return false;
+      }
+
+      return true;
+    });
+
+    const idsOfDeletedSections = sectionsThatDontExistInSavedCourse?.map((section) => section.id);
+
+    return idsOfDeletedSections;
+  }
+
+  getEditedCourseWithSectionPositions = (editedCourse: Course) => {
+    const sectionsWithPositions = editedCourse.sections.map((section, index) => {
+      return {
+        ...section,
+        position: index,
+      };
+    });
+
+    const editedCourseWithSectionPositions = {
+      ...editedCourse,
+      sections: sectionsWithPositions,
+    };
+
+    return editedCourseWithSectionPositions;
+  }
+
+  onSuccessfullySavedEditedCourse = (editedCourse: Course, courseId: number) => {
+    const editedCourseId = editedCourse.id
+
+    this.setState({
+      areActionsDisabled: false,
+      allCourses: getUpdatedCoursesWithEditFlagRemovedForEditedCourse(editedCourseId, this.state.allCourses),
+      savedCourses: this.getUpdatedSavedCoursesState(editedCourse, courseId),
+      successMessage: "Successfully saved edited course!",
+    });
+
+    this.handleSuccessMessageAfterSavingEditedCourse();
   }
 
   onClickSaveEditedCourse = async (event: FormSubmitEvent, courseId: number) => {
@@ -168,37 +218,8 @@ export default class EditCourses extends Component {
 
     const editedCourseId = editedCourse.id;
 
-    // Getting the ids of the deleted sections so the back end can delete them in the table
-    const uneditedVersionOfEditedCourse = this.state.savedCourses.find((course) => course.id === editedCourseId);
-
-    const sectionsThatDontExistInSavedCourse = uneditedVersionOfEditedCourse?.sections.filter((section) => {
-      if (editedCourse.sections.some((editedCourseSection) => editedCourseSection.id === section.id)) {
-        return false;
-      }
-
-      return true;
-    });
-
-    const idsOfDeletedSections = sectionsThatDontExistInSavedCourse?.map((section) => section.id);
-
-    const someVideoCurrentlyUploading = editedCourse.sections.some((section) => {
-      return typeof section.uploadProgress === "number" && section.uploadProgress < 1;
-    });
-
-    if (!someVideoCurrentlyUploading) {
+    if (!areSomeVideosCurrentlyUploading(editedCourse)) {
       this.setState({ areActionsDisabled: true, errorMessage: null });
-
-      const sectionsWithPositions = editedCourse.sections.map((section, index) => {
-        return {
-          ...section,
-          position: index,
-        };
-      });
-
-      const editedCourseWithSectionPositions = {
-        ...editedCourse,
-        sections: sectionsWithPositions,
-      };
 
       try {
         const response = await fetch(`${API_DOMAIN}/edit-course`, {
@@ -206,40 +227,21 @@ export default class EditCourses extends Component {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             edited_course_id: editedCourseId,
-            course: editedCourseWithSectionPositions,
-            deleted_sections_ids: idsOfDeletedSections,
+            course: this.getEditedCourseWithSectionPositions(editedCourse),
+            deleted_sections_ids: this.getDeletedSectionsIds(editedCourse),
           }),
         });
 
         const result = await response.json();
 
         if (!result.error) {
-          const updatedCoursesWithEditFlagRemovedForEditedCourse = this.state.allCourses.map((course) => {
-            if (course.id === editedCourseId) {
-              return {
-                ...course,
-                isEditing: false,
-              };
-            }
+          this.onSuccessfullySavedEditedCourse(editedCourse, courseId)
 
-            return course;
-          });
-
-          this.setState({
-            areActionsDisabled: false,
-            allCourses: updatedCoursesWithEditFlagRemovedForEditedCourse,
-            savedCourses: this.getUpdatedSavedCoursesState(editedCourse, courseId),
-            successMessage: "Successfully saved edited course!",
-          });
-
-          this.handleSuccessMessageAfterSavingEditedCourse();
         } else {
           this.onError("Failed to save edited course. Try again.")
         }
       } catch (saveEditedCourseError) {
-        console.log(">>> saveEditedCourseError: ", saveEditedCourseError);
-
-        this.onError("Failed to save edited course. Try again.")
+        this.onError("Failed to save edited course. Try again.", saveEditedCourseError as string)
       }
     } else {
       this.onError("Please make sure videos are uploaded for every section.")
@@ -308,36 +310,33 @@ export default class EditCourses extends Component {
   render() {
     if (this.state.isLoading) {
       return (
-        <ExistingCoursesContainer
-          renderContent={() => (
-            <div className="w-100 h-100 d-flex justify-content-center align-items-center pb-5">
-              <PulseLoader color={colors.orange} className="pb-5"/>
-            </div>
-          )} />
+        <ExistingCoursesContainer>
+          <div className="w-100 h-100 d-flex justify-content-center align-items-center pb-5">
+            <PulseLoader color={colors.orange} className="pb-5"/>
+          </div>
+        </ExistingCoursesContainer>
       )
     }
 
     if (!this.state.allCourses.length) {
       return (
-        <ExistingCoursesContainer
-          renderContent={() => (
-            <Alert variant="warning">You don&apos;t have any courses yet.</Alert>
-          )} />
+        <ExistingCoursesContainer>
+          <Alert variant="warning">You don&apos;t have any courses yet.</Alert>
+        </ExistingCoursesContainer>
       );
     }
 
     return (
       <>
-        <ExistingCoursesContainer
-          renderContent={() => (
-            <>
-              {this.state.successMessage
+        <ExistingCoursesContainer>
+          <>
+            {this.state.successMessage
                 ? <Alert variant="success">{this.state.successMessage}</Alert>
                 : null
-              }
+            }
 
-              <div>
-                {this.state.allCourses.map((course, index) => {
+            <div>
+              {this.state.allCourses.map((course, index) => {
                   return (
                     <ExistingCourse
                       key={course.id}
@@ -358,9 +357,10 @@ export default class EditCourses extends Component {
                       onClickHandleShowingDeleteOverlay={this.onClickHandleShowingDeleteOverlay} />
                   );
                 })}
-              </div>
-            </>
-          )}/>
+            </div>
+
+          </>
+        </ExistingCoursesContainer>
 
         {this.state.courseIdToDelete
           ? (
