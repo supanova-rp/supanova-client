@@ -11,12 +11,15 @@ import { colors } from "src/constants/colorPalette";
 import DeleteCourseOverlay from "../../overlays/DeleteCourseOverlay";
 import ExistingCourse from "./ExistingCourse";
 import ExistingCoursesContainer from "./ExistingCoursesContainer";
+import Error from "src/components/Error";
+import CourseErrorLoadingHandler from "src/components/CourseErrorLoadingHandler";
 
 type EditCoursesState = {
   isLoading: boolean,
   areActionsDisabled: boolean,
   successMessage: null | string,
-  errorMessage: null | string,
+  courseErrorMessage: null | string,
+  coursesErrorMessage: null | string,
   deleteCourseErrorMessage: null | string,
   allCourses: [] | Course[],
   savedCourses: [] | Course[],
@@ -28,19 +31,31 @@ export default class EditCourses extends Component {
     isLoading: true,
     areActionsDisabled: false,
     successMessage: null,
-    errorMessage: null,
+    courseErrorMessage: null,
+    coursesErrorMessage: null,
     deleteCourseErrorMessage: null,
     allCourses: [],
     savedCourses: [],
     courseIdToDelete: null,
   };
 
-  async componentDidMount () {
+  getCourses = async () => {
+    this.setState({ isLoading: true, courseErrorMessage: null })
+
+    try {
       const response = await fetch(`${API_DOMAIN}/courses`);
       const courseResults = await response.json();
 
-      this.setState({ allCourses: courseResults, savedCourses: courseResults, isLoading: false })
-    };
+        this.setState({ allCourses: courseResults, savedCourses: courseResults, isLoading: false })
+      } catch (e) {
+        this.setState({ coursesErrorMessage: "Loading courses failed.", isLoading: false})
+        console.log(">>> e: ", e);
+      }
+  }
+
+  componentDidMount () {
+    this.getCourses()
+  };
 
   onUpdateStateAfterCancellingFileUpload = (sectionId: number) => {
     const coursesWithResetVideoUploadProgress = getUpdatedCourses(this.state.allCourses, sectionId, "uploadProgress", null);
@@ -89,7 +104,7 @@ export default class EditCourses extends Component {
   };
 
   onClickCancelEditingCourse = () => {
-    this.setState({ allCourses: this.state.savedCourses, areActionsDisabled: false, errorMessage: null });
+    this.setState({ allCourses: this.state.savedCourses, areActionsDisabled: false, courseErrorMessage: null });
   };
 
   onChangeCourseField = (courseId: number, key: string, newInputValue: string) => {
@@ -149,14 +164,14 @@ export default class EditCourses extends Component {
     }, 3000);
   };
 
-  onError = (errorMessage: string, error = "") => {
+  onError = (courseErrorMessage: string, error = "") => {
     if (error) {
       console.log(">>> error: ", error);
     }
 
     this.setState({
       areActionsDisabled: false,
-      errorMessage,
+      courseErrorMessage,
     });
   }
 
@@ -219,7 +234,7 @@ export default class EditCourses extends Component {
     const editedCourseId = editedCourse.id;
 
     if (!areSomeVideosCurrentlyUploading(editedCourse)) {
-      this.setState({ areActionsDisabled: true, errorMessage: null });
+      this.setState({ areActionsDisabled: true, courseErrorMessage: null });
 
       try {
         const response = await fetch(`${API_DOMAIN}/edit-course`, {
@@ -308,28 +323,16 @@ export default class EditCourses extends Component {
   };
 
   render() {
-    if (this.state.isLoading) {
-      return (
-        <ExistingCoursesContainer>
-          <div className="w-100 h-100 d-flex justify-content-center align-items-center pb-5">
-            <PulseLoader color={colors.orange} className="pb-5"/>
-          </div>
-        </ExistingCoursesContainer>
-      )
-    }
-
-    if (!this.state.allCourses.length) {
-      return (
-        <ExistingCoursesContainer>
-          <Alert variant="warning">You don&apos;t have any courses yet.</Alert>
-        </ExistingCoursesContainer>
-      );
-    }
+    const {isLoading, allCourses, coursesErrorMessage} = this.state
 
     return (
       <>
         <ExistingCoursesContainer>
-          <>
+          <CourseErrorLoadingHandler
+            isLoading={isLoading}
+            error={coursesErrorMessage}
+            onClick={this.getCourses}
+            courses={allCourses}>
             {this.state.successMessage
                 ? <Alert variant="success">{this.state.successMessage}</Alert>
                 : null
@@ -343,7 +346,7 @@ export default class EditCourses extends Component {
                       index={index}
                       course={course}
                       areActionsDisabled={this.state.areActionsDisabled}
-                      errorMessage={this.state.errorMessage}
+                      courseErrorMessage={this.state.courseErrorMessage}
                       onClickStartEditingCourse={this.onClickStartEditingCourse}
                       onClickCancelEditingCourse={this.onClickCancelEditingCourse}
                       onChangeCourseField={this.onChangeCourseField}
@@ -358,8 +361,7 @@ export default class EditCourses extends Component {
                   );
                 })}
             </div>
-
-          </>
+          </CourseErrorLoadingHandler>
         </ExistingCoursesContainer>
 
         {this.state.courseIdToDelete
@@ -373,6 +375,7 @@ export default class EditCourses extends Component {
           : null
         }
       </>
+
     );
   }
 }

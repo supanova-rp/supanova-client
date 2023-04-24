@@ -10,7 +10,7 @@ interface Props {
   index: number,
   areActionsDisabled: boolean,
   course: Course,
-  errorMessage: string | null,
+  courseErrorMessage: string | null,
   handleRemoveSection: (paramater: number) => void,
   onFileUploaded: (parameter1: number, parameter2: string) => void,
   onFileUploadProgress: (parameter1: AxiosProgressEvent, parameter2: number) => void,
@@ -28,7 +28,7 @@ const ExistingCourse: React.FC<Props> = ({
   index,
   course,
   areActionsDisabled,
-  errorMessage,
+  courseErrorMessage,
   handleRemoveSection,
   onFileUploaded,
   onFileUploadProgress,
@@ -42,12 +42,12 @@ const ExistingCourse: React.FC<Props> = ({
   onClickHandleShowingDeleteOverlay,
 }) => {
   if (course.isEditing) {
-    const alertVariant = errorMessage?.includes("Please") ? "warning" : "danger";
+    const alertVariant = courseErrorMessage?.includes("Please") ? "warning" : "danger";
 
     return (
       <Form onSubmit={(e) => onClickSaveEditedCourse(e, course.id)}>
-        {errorMessage
-          ? <Alert variant={alertVariant}>{errorMessage}</Alert>
+        {courseErrorMessage
+          ? <Alert variant={alertVariant}>{courseErrorMessage}</Alert>
           : null
         }
 

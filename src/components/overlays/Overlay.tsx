@@ -1,9 +1,8 @@
 import { colors } from "../../constants/colorPalette";
 import { ReactComponent as XMarkIcon} from "../../icons/xMarkIcon.svg";
 
-interface Props {
+interface Props extends React.PropsWithChildren {
   onClick: (parameter: number | null) => void,
-  children: React.ReactNode,
 }
 
 const Overlay: React.FC<Props> = ({ onClick, children }) => {

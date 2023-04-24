@@ -19,10 +19,6 @@ import { auth } from "../firebase/firebase";
 import { API_DOMAIN } from "src/constants/constants";
 import { FirebaseUser } from "src/types";
 
-interface Props {
-  children: React.ReactNode
-}
-
 type AuthContextType = {
   currentUser: FirebaseUser | null,
   signup: (email: string, password: string) => Promise<FirebaseUserCredential>,
@@ -38,7 +34,7 @@ export const useAuth = () => {
   return useContext(AuthContext);
 };
 
-export const AuthProvider: React.FC<Props> = ({ children }) => {
+export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<FirebaseUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -86,6 +82,16 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
     return updateProfile(newUser.user, { displayName: name });
   }
 
+  const getIsAdmin = () => {
+    return currentUser?.getIdTokenResult()
+      .then((result) => {
+        return result.claims.admin
+      })
+      .catch(() => {
+        return false
+      })
+  }
+
   const value = {
     currentUser,
     signup,
@@ -93,6 +99,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
     logout,
     resetPassword,
     updateUser,
+    getIsAdmin,
   };
 
   return (

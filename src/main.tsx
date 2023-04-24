@@ -15,6 +15,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import Home from "./components/home/Home";
 import PageNotFound from "./components/PageNotFound";
 import Admin from "./components/admin/Admin";
+import AdminRoute from "./components/admin/AdminRoute";
 import ForgotPassword from "./components/authentication/ForgotPassword";
 import Login from "./components/authentication/Login";
 
@@ -30,7 +31,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/admin",
-    element: <Admin />,
+    element: (
+      <AdminRoute>
+        <Admin />
+      </AdminRoute>
+    ),
   },
   {
     path: "/forgot-password",

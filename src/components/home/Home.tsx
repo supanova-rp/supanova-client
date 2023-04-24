@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Alert, Button } from "react-bootstrap";
+import { Alert } from "react-bootstrap";
 import { PulseLoader } from "react-spinners";
 
 import { API_DOMAIN } from "../../constants/constants";
@@ -10,6 +10,8 @@ import SidebarContainer from "./SidebarContainer";
 import NavbarHome from "./Navbar";
 import Instructor from "./Instructor";
 import Courses from "./Courses";
+import Error from "../Error";
+import CourseErrorLoadingHandler from "../CourseErrorLoadingHandler";
 
 const Home = () => {
   const [courses, setCourses] = useState<[] | Course[]>([]);
@@ -40,27 +42,6 @@ const Home = () => {
   }, [])
 
   const renderAdminContent = () => {
-    if (coursesError) {
-      return (
-        <div className="mt-4">
-          <Alert variant="danger">{coursesError}</Alert>
-          <Button className="main-button" onClick={getCourses}>Try again</Button>
-        </div>
-      )
-    }
-
-    if (isLoading) {
-      return (
-        <div className="w-100 h-100 d-flex justify-content-center align-items-center pb-5">
-          <PulseLoader color={colors.orange} className="m-5" />
-        </div>
-      )
-    }
-
-    if (!courses.length) {
-      return <Alert variant="warning" className="mt-4">No courses to see yet...</Alert>;
-    }
-
     if (activeTab === "Courses") {
       return <Courses logoutError={logoutError} courses={courses} setCourses={setCourses} />;
     }
@@ -78,7 +59,14 @@ const Home = () => {
       <div className="d-flex h-100 w-100">
         <SidebarContainer activeTab={activeTab} setActiveTab={setActiveTab} />
         <div className="px-5 w-100 min-vh-100">
-          {renderAdminContent()}
+          <CourseErrorLoadingHandler
+            error={coursesError}
+            onClick={getCourses}
+            isLoading={isLoading}
+            courses={courses}>
+            {renderAdminContent()}
+          </CourseErrorLoadingHandler>
+
         </div>
       </div>
     </div>
