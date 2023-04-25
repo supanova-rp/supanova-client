@@ -5,7 +5,7 @@ import { getClassNameSidebarTab } from "../../utils/utils";
 
 import Sidebar from "../admin/nav-and-sidebars/Sidebar";
 
-import HomeImage from "../../images/Home-image.png"
+import HomeImage from "../../images/Home-image.png";
 
 interface Props {
   activeTab: string,
@@ -16,7 +16,10 @@ const SidebarContainer: React.FC<Props> = ({ activeTab, setActiveTab }) => {
   return (
     <Card className="rounded-0 sidebar-content-container-home">
       <Card.Body className="mt-5 d-flex flex-column align-items-center p-0">
-        <img src={HomeImage} alt="Supanova" className="home-course-image" />
+        <img
+          src={HomeImage}
+          alt="Supanova"
+          className="home-course-image" />
         <h5 className="course-title-home">Radiation Safety Training Course</h5>
         <div className="row w-100">
           <div className="col-20 p-0">

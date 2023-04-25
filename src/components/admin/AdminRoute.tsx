@@ -1,20 +1,54 @@
+/* eslint-disable react/jsx-no-useless-fragment */
+import { useEffect, useState } from "react";
+import { PulseLoader } from "react-spinners";
+
+import { colors } from "src/constants/colorPalette";
+
 import { useAuth } from "src/contexts/AuthContext";
 
-const AdminRoute = ({ children }: React.PropsWithChildren): React.ReactNode => {
+import PageErrorScreen from "../PageErrorScreen";
+
+const AdminRoute = ({ children }: React.PropsWithChildren) => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
+
   const { getIsAdmin } = useAuth();
 
-  const isAdmin = getIsAdmin();
+  useEffect(() => {
+    const verifyIsAdmin = async () => {
+      try {
+        const isAdmin = await getIsAdmin();
 
-  // TODO: move this into useEffect
-  getIsAdmin().then((isAdmin: boolean) => {
-    console.log(">>> isAdmin: ", isAdmin);
-  });
+        setIsLoading(false);
+        setIsAdmin(isAdmin);
+      } catch(e) {
+        console.log(">>> isAdminError: ", e);
+        setIsLoading(false);
+        setIsAdmin(false);
+      }
+    };
 
-  // TODO: show loader while getIsAdmin is being called
+    verifyIsAdmin();
 
-  // TODO: if !isAdmin, show error
+  }, [getIsAdmin]);
 
-  return children;
-}
+  if (isLoading) {
+    return (
+      <div className="d-flex flex-column align-items-center justify-content-center h-100">
+        <PulseLoader color={colors.orange} />
+      </div>
+    );
+  }
+
+  if (!isAdmin) {
+    return (
+      <PageErrorScreen
+        title="Oops!"
+        text="You are trying to access a page that requires Admin access..." />
+    );
+  }
+
+  return <>{children}</>;
+};
 
 export default AdminRoute;

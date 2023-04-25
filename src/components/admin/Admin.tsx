@@ -28,7 +28,9 @@ const Admin = () => {
 
   return (
     <div className="d-flex admin-container">
-      <SidebarContainer activeTab={activeTab} setActiveTab={setActiveTab} />
+      <SidebarContainer
+        activeTab={activeTab}
+        setActiveTab={setActiveTab} />
       {renderAdminContent()}
     </div>
   );

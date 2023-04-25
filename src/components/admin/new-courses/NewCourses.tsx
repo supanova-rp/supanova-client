@@ -93,6 +93,7 @@ export default class AddCourses extends Component {
         const response = await fetch(`${API_DOMAIN}/add-course`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
           body: JSON.stringify({
             title: this.state.title,
             description: this.state.description,
@@ -206,8 +207,13 @@ export default class AddCourses extends Component {
               );
             })}
 
-            <AddMoreInputs title="Add another section" onClick={this.onClickAddNewSection} />
-            <Button type="submit" className="w-30 main-button" disabled={this.state.loading}>Submit</Button>
+            <AddMoreInputs
+              title="Add another section"
+              onClick={this.onClickAddNewSection} />
+            <Button
+              type="submit"
+              className="w-30 main-button"
+              disabled={this.state.loading}>Submit</Button>
           </Form>
         </Card.Body>
       </Card>

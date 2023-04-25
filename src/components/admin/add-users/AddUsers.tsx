@@ -77,7 +77,7 @@ const AddUsers = () => {
 
       const newUser = await signup(email, uuid());
 
-      await updateUser(newUser, name)
+      await updateUser(newUser, name);
 
       await updateProfile(newUser.user, { displayName: name });
 
@@ -113,7 +113,9 @@ const AddUsers = () => {
         <Navbar title="Add Users" />
         {users.map((user) => {
           return (
-            <Form onSubmit={(e) => onHandleRegisterUser(e, user.email, user.name, user.id)} key={user.id}>
+            <Form
+              onSubmit={(e) => onHandleRegisterUser(e, user.email, user.name, user.id)}
+              key={user.id}>
               <div className="d-flex align-items-center">
                 <div className="d-flex">
                   <FormGroup
@@ -154,12 +156,16 @@ const AddUsers = () => {
                   }
 
                   {user.registered && !user.hasPasswordResetError
-                    ? <TickIcon stroke={colors.green} className="ms-3" />
+                    ? <TickIcon
+                        stroke={colors.green}
+                        className="ms-3" />
                     : null
                   }
 
                   {users?.length > 1 && !user.registered
-                    ? <RemoveInput onClickFunction={() => onClickRemoveUser(user.id)} margin="ms-2 mt-3" />
+                    ? <RemoveInput
+                        onClickFunction={() => onClickRemoveUser(user.id)}
+                        margin="ms-2 mt-3" />
                     : null
                   }
                 </div>
@@ -168,8 +174,14 @@ const AddUsers = () => {
           );
         })}
 
-        <AddMoreInputs title="Add another user" onClick={onClickAddNewUser} marginTop="mt-3" />
-        <Button type="button" onClick={() => setUsers(usersDefaultState)} className="main-button">Clear all users</Button>
+        <AddMoreInputs
+          title="Add another user"
+          onClick={onClickAddNewUser}
+          marginTop="mt-3" />
+        <Button
+          type="button"
+          onClick={() => setUsers(usersDefaultState)}
+          className="main-button">Clear all users</Button>
       </Card.Body>
     </Card>
   );

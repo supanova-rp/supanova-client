@@ -59,9 +59,14 @@ const ExistingCourse: React.FC<Props> = ({
           onFileUploadProgress={onFileUploadProgress}
           onUpdateStateAfterCancellingFileUpload={onUpdateStateAfterCancellingFileUpload}
           handleRemoveSection={handleRemoveSection} />
-        <AddMoreInputs title="Add another section" onClick={() => onClickAddNewSection(course.id)} />
+        <AddMoreInputs
+          title="Add another section"
+          onClick={() => onClickAddNewSection(course.id)} />
         <div className="mb-5">
-          <Button className="edit-course-save-btn secondary-button" type="submit" disabled={areActionsDisabled}>Save</Button>
+          <Button
+            className="edit-course-save-btn secondary-button"
+            type="submit"
+            disabled={areActionsDisabled}>Save</Button>
           <Button
             className="btn-danger"
             type="button"

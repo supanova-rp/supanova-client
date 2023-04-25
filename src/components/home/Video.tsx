@@ -89,9 +89,14 @@ const Video: React.FC<Props> = ({
       <div>
         <div className="d-flex align-items-center">
           <div className="p-1 clickable me-1">
-            <ChevronLeft stroke={colors.orange} className="mt-4 me-1" onClick={onExitVideo} />
+            <ChevronLeft
+              stroke={colors.orange}
+              className="mt-4 me-1"
+              onClick={onExitVideo} />
           </div>
-          <Header title={courses[currentCourseIndex].title} logoutError={logoutError} />
+          <Header
+            title={courses[currentCourseIndex].title}
+            logoutError={logoutError} />
         </div>
         <h5 className="mt-2 mb-4">{`${currentSectionIndex + 1}. ${currentSection.title}`}</h5>
         {currentSection.videoUrl

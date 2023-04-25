@@ -23,7 +23,11 @@ const Sidebar: React.FC<Props> = ({
   setActiveTab,
 }) => {
   return (
-    <div className="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+    <div
+      className="nav flex-column nav-pills"
+      id="v-pills-tab"
+      role="tablist"
+      aria-orientation="vertical">
       <Button
         className={`rounded-0 ${classNameTab1} text-start ps-3`}
         onClick={() => setActiveTab(tabTitle1)}>{tabTitle1}

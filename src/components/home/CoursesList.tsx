@@ -12,12 +12,17 @@ const CoursesList: React.FC<Props> = ({ logoutError, courses, onSelectVideo }) =
   return (
     <div className="p-4">
       <div>
-        <Header title="All Courses" logoutError={logoutError} margin="mb-3" />
+        <Header
+          title="All Courses"
+          logoutError={logoutError}
+          margin="mb-3" />
       </div>
       <div>
         {courses.map((course, courseIndex) => {
           return (
-            <div key={`${course.title} ${course.id}`} className="mb-5">
+            <div
+              key={`${course.title} ${course.id}`}
+              className="mb-5">
               <h5>{`${courseIndex + 1}. ${course.title}`}</h5>
               <p className="mt-3 mb-4">{course.description}</p>
               <table className="table table-bordered mt-3">

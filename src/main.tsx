@@ -13,7 +13,7 @@ import "./styles/index.scss";
 import { AuthProvider } from "./contexts/AuthContext";
 
 import Home from "./components/home/Home";
-import PageNotFound from "./components/PageNotFound";
+import PageErrorScreen from "./components/PageErrorScreen";
 import Admin from "./components/admin/Admin";
 import AdminRoute from "./components/admin/AdminRoute";
 import ForgotPassword from "./components/authentication/ForgotPassword";
@@ -27,7 +27,9 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <Home />,
-    errorElement: <PageNotFound />
+    errorElement: <PageErrorScreen
+      title="Oops"
+      text="The page you were looking for could not be found..." />
   },
   {
     path: "/admin",

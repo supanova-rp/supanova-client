@@ -8,7 +8,7 @@ import { FormSubmitEvent } from "../../types/index";
 
 import { ReactComponent as HidePasswordIcon } from "../../icons/hidePasswordIcon.svg";
 import { ReactComponent as ShowPasswordIcon } from "../../icons/showPasswordIcon.svg";
-import SupanovaLogo from "../../images/Supanova-logo.png"
+import SupanovaLogo from "../../images/Supanova-logo.png";
 import { colors } from "src/constants/colorPalette";
 
 const Login = () => {
@@ -45,7 +45,10 @@ const Login = () => {
         ? <PulseLoader color={colors.orange} />
         : (
           <>
-            <img src={SupanovaLogo} alt="Supanova Logo" className="mb-4 login-logo" />
+            <img
+              src={SupanovaLogo}
+              alt="Supanova Logo"
+              className="mb-4 login-logo" />
             <div>
               <Card className="pt-4 login-card">
                 <Card.Body>
@@ -55,7 +58,9 @@ const Login = () => {
                     : null
                   }
                   <Form onSubmit={onHandleLogin}>
-                    <Form.Group id="email" className="mb-2 pe-4">
+                    <Form.Group
+                      id="email"
+                      className="mb-2 pe-4">
                       <Form.Label>Email</Form.Label>
                       <Form.Control
                         type="email"
@@ -64,7 +69,9 @@ const Login = () => {
                         className="email-input"
                         onChange={(e) => setEmailInput(e.target.value)} />
                     </Form.Group>
-                    <Form.Group id="password" className="mb-2">
+                    <Form.Group
+                      id="password"
+                      className="mb-2">
                       <Form.Label>Password</Form.Label>
                       <div className="d-flex align-items-center">
                         <Form.Control
@@ -76,12 +83,16 @@ const Login = () => {
 
                         {!isPasswordShowing
                           ? (
-                            <div className="ps-3 icon" onClick={() => setIsPasswordShowing(true)}>
+                            <div
+                              className="ps-3 icon"
+                              onClick={() => setIsPasswordShowing(true)}>
                               <ShowPasswordIcon />
                             </div>
                           )
                           : (
-                            <div className="ps-3 icon" onClick={() => setIsPasswordShowing(false)}>
+                            <div
+                              className="ps-3 icon"
+                              onClick={() => setIsPasswordShowing(false)}>
                               <HidePasswordIcon />
                             </div>
                           )

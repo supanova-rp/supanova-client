@@ -35,7 +35,10 @@ const CourseListView: React.FC<Props> = ({
       <p className="mb-4">{course.description}</p>
       {course.sections.map((section: CourseSection, sectionIndex: number) => {
         return (
-          <SectionView key={section.id} index={sectionIndex} section={section} />
+          <SectionView
+            key={section.id}
+            index={sectionIndex}
+            section={section} />
         );
       })}
     </div>

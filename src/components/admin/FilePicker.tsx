@@ -59,7 +59,9 @@ const FilePicker: React.FC<Props> = ({
   const handleFileSelected = async (e: InputChangeEvent) => {
     try {
       // Get secure/signed AWS S3 url from server
-      const response = await fetch(`${API_DOMAIN}/get-upload-url`);
+      const response = await fetch(`${API_DOMAIN}/get-upload-url`, {
+        credentials: "include",
+      });
       const result = await response.json();
       const files = e.target?.files || [];
 
@@ -88,12 +90,16 @@ const FilePicker: React.FC<Props> = ({
       );
     }
 
-    return <TickIcon stroke={colors.green} className="ms-2" />;
+    return <TickIcon
+      stroke={colors.green}
+      className="ms-2" />;
   };
 
   return (
     <div className="d-flex align-items-center mt-3">
-      <label htmlFor={`inputTag-${sectionId}`} className="secondary-btn">
+      <label
+        htmlFor={`inputTag-${sectionId}`}
+        className="secondary-btn">
         Select File
         <input
           ref={fileInputRef}

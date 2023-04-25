@@ -11,7 +11,10 @@ const Overlay: React.FC<Props> = ({ onClick, children }) => {
       <div className="overlay min-vh-100" />
       <div className="overlay-content">
         <div className="x-mark-overlay-container">
-          <XMarkIcon onClick={() => onClick(null)} stroke={colors.darkgray} className="clickable" />
+          <XMarkIcon
+            onClick={() => onClick(null)}
+            stroke={colors.darkgray}
+            className="clickable" />
         </div>
         <div className="d-flex justify-content-center overlay-text-container">
           {children}

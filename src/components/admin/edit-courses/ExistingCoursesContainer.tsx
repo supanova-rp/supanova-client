@@ -11,6 +11,6 @@ const ExistingCoursesContainer: React.FC<React.PropsWithChildren> = ({ children 
       </Card.Body>
     </Card>
    );
-}
+};
 
 export default ExistingCoursesContainer;

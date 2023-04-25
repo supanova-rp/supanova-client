@@ -1,7 +1,7 @@
 import { Button } from "react-bootstrap";
 
-import { ReactComponent as VideoIcon } from "../../icons/videoIcon.svg"
-import { colors } from "../../constants/colorPalette"
+import { ReactComponent as VideoIcon } from "../../icons/videoIcon.svg";
+import { colors } from "../../constants/colorPalette";
 
 import SectionProgress from "./SectionProgress";
 
@@ -29,7 +29,9 @@ const TableRow: React.FC<Props> = ({ title, sectionId, completed, onClickSetCurr
           onClick={onClickSetCurrentVideoInfo}>
           {renderSectionProgressCircle()}
           <div className="d-flex align-items-center">
-            <VideoIcon stroke={colors.darkgray} className="mx-3" />
+            <VideoIcon
+              stroke={colors.darkgray}
+              className="mx-3" />
             <p className="mb-0 text-secondary me-1">{title}</p>
           </div>
         </Button>

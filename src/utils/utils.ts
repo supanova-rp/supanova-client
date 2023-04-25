@@ -1,3 +1,4 @@
+import { API_DOMAIN } from "src/constants/constants";
 import { Course, CourseSection, UserInfoToUpdate, User } from "../types/index";
 
 export const updateUsers = (users: User[], userId: string, userInfoToUpdate: UserInfoToUpdate) => {
@@ -74,7 +75,7 @@ export const areSomeVideosCurrentlyUploading = (editedCourse: Course) => {
   return editedCourse.sections.some((section) => {
     return typeof section.uploadProgress === "number" && section.uploadProgress < 1;
   });
-}
+};
 
 export const getUpdatedCoursesWithEditFlagRemovedForEditedCourse = (editedCourseId: number, allCourses: Course[]) => {
   const updatedCoursesWithEditFlagRemovedForEditedCourse = allCourses.map((course) => {
@@ -89,4 +90,28 @@ export const getUpdatedCoursesWithEditFlagRemovedForEditedCourse = (editedCourse
   });
 
   return updatedCoursesWithEditFlagRemovedForEditedCourse;
+};
+
+interface GetRequestOptions {
+  endpoint: string,
+  onSuccess: (result: Course[]) => void,
+  onError: (error: string) => void,
 }
+
+export const getRequest = async ({ endpoint, onSuccess, onError }: GetRequestOptions) => {
+  try {
+    const response = await fetch(`${API_DOMAIN}${endpoint}`, {
+      credentials: "include",
+    });
+
+    const result = await response.json();
+
+    if (!result.error) {
+      onSuccess(result);
+    } else {
+      onError(result.error);
+    }
+  } catch (e) {
+    onError(e as string);
+  }
+};

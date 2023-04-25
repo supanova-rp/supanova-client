@@ -4,7 +4,7 @@ import { AxiosProgressEvent } from "axios";
 
 import { CourseSection } from "../../types/index";
 
-import FilePicker from "./FilePicker"
+import FilePicker from "./FilePicker";
 import FormGroup from "./FormGroup";
 import RemoveInput from "./RemoveInput";
 
@@ -74,7 +74,9 @@ export default class EditSection extends React.Component<Props> {
     const marginStartRemoveSectionIcon = this.props.section.videoUrl ? "ms-4" : "ms-2";
 
     return (
-      <div className="d-flex flex-row align-items-center" key={`chapter-${this.props.index}`}>
+      <div
+        className="d-flex flex-row align-items-center"
+        key={`chapter-${this.props.index}`}>
         <div>
           <FormGroup
             formId={`course-section-${this.props.section.id}`}
@@ -112,7 +114,9 @@ export default class EditSection extends React.Component<Props> {
 
           <div>
             {this.props.canRemove
-              ? <RemoveInput onClickFunction={this.onClickRemoveSection} margin={marginStartRemoveSectionIcon} />
+              ? <RemoveInput
+                  onClickFunction={this.onClickRemoveSection}
+                  margin={marginStartRemoveSectionIcon} />
               : null
             }
           </div>

@@ -1,17 +1,19 @@
 import { Component } from "react";
 import { Alert } from "react-bootstrap";
 import { AxiosProgressEvent } from "axios";
-import { PulseLoader } from "react-spinners";
 
 import { Course, FormSubmitEvent } from "../../../types/index";
-import { areSomeVideosCurrentlyUploading, getUpdatedCourses, getUpdatedCoursesWithEditFlagRemovedForEditedCourse } from "../../../utils/utils"
+import {
+  areSomeVideosCurrentlyUploading,
+  getRequest,
+  getUpdatedCourses,
+  getUpdatedCoursesWithEditFlagRemovedForEditedCourse
+} from "../../../utils/utils";
 import { API_DOMAIN } from "../../../constants/constants";
-import { colors } from "src/constants/colorPalette";
 
 import DeleteCourseOverlay from "../../overlays/DeleteCourseOverlay";
 import ExistingCourse from "./ExistingCourse";
 import ExistingCoursesContainer from "./ExistingCoursesContainer";
-import Error from "src/components/Error";
 import CourseErrorLoadingHandler from "src/components/CourseErrorLoadingHandler";
 
 type EditCoursesState = {
@@ -19,7 +21,6 @@ type EditCoursesState = {
   areActionsDisabled: boolean,
   successMessage: null | string,
   courseErrorMessage: null | string,
-  coursesErrorMessage: null | string,
   deleteCourseErrorMessage: null | string,
   allCourses: [] | Course[],
   savedCourses: [] | Course[],
@@ -32,7 +33,6 @@ export default class EditCourses extends Component {
     areActionsDisabled: false,
     successMessage: null,
     courseErrorMessage: null,
-    coursesErrorMessage: null,
     deleteCourseErrorMessage: null,
     allCourses: [],
     savedCourses: [],
@@ -40,21 +40,17 @@ export default class EditCourses extends Component {
   };
 
   getCourses = async () => {
-    this.setState({ isLoading: true, courseErrorMessage: null })
+    this.setState({ isLoading: true, courseErrorMessage: null });
 
-    try {
-      const response = await fetch(`${API_DOMAIN}/courses`);
-      const courseResults = await response.json();
-
-        this.setState({ allCourses: courseResults, savedCourses: courseResults, isLoading: false })
-      } catch (e) {
-        this.setState({ coursesErrorMessage: "Loading courses failed.", isLoading: false})
-        console.log(">>> e: ", e);
-      }
-  }
+    getRequest({
+      endpoint: "/courses",
+      onSuccess: this.onSuccess,
+      onError: (error) => this.onError("Loading courses failed", error),
+    });
+  };
 
   componentDidMount () {
-    this.getCourses()
+    this.getCourses();
   };
 
   onUpdateStateAfterCancellingFileUpload = (sectionId: number) => {
@@ -104,7 +100,11 @@ export default class EditCourses extends Component {
   };
 
   onClickCancelEditingCourse = () => {
-    this.setState({ allCourses: this.state.savedCourses, areActionsDisabled: false, courseErrorMessage: null });
+    this.setState({
+      allCourses: this.state.savedCourses,
+      areActionsDisabled: false,
+      courseErrorMessage: null
+    });
   };
 
   onChangeCourseField = (courseId: number, key: string, newInputValue: string) => {
@@ -164,16 +164,23 @@ export default class EditCourses extends Component {
     }, 3000);
   };
 
+  onSuccess = (result: Course[]) => {
+    this.setState({
+      allCourses: result,
+      savedCourses: result,
+      isLoading: false
+    });
+  };
+
   onError = (courseErrorMessage: string, error = "") => {
-    if (error) {
-      console.log(">>> error: ", error);
-    }
+    console.log(">>> error: ", error || courseErrorMessage);
 
     this.setState({
       areActionsDisabled: false,
       courseErrorMessage,
+      isLoading: false,
     });
-  }
+  };
 
   getDeletedSectionsIds = (editedCourse: Course) => {
     // Getting the ids of the deleted sections so the back end can delete them in the table
@@ -190,7 +197,7 @@ export default class EditCourses extends Component {
     const idsOfDeletedSections = sectionsThatDontExistInSavedCourse?.map((section) => section.id);
 
     return idsOfDeletedSections;
-  }
+  };
 
   getEditedCourseWithSectionPositions = (editedCourse: Course) => {
     const sectionsWithPositions = editedCourse.sections.map((section, index) => {
@@ -206,10 +213,10 @@ export default class EditCourses extends Component {
     };
 
     return editedCourseWithSectionPositions;
-  }
+  };
 
   onSuccessfullySavedEditedCourse = (editedCourse: Course, courseId: number) => {
-    const editedCourseId = editedCourse.id
+    const editedCourseId = editedCourse.id;
 
     this.setState({
       areActionsDisabled: false,
@@ -219,7 +226,7 @@ export default class EditCourses extends Component {
     });
 
     this.handleSuccessMessageAfterSavingEditedCourse();
-  }
+  };
 
   onClickSaveEditedCourse = async (event: FormSubmitEvent, courseId: number) => {
     event.preventDefault();
@@ -240,6 +247,7 @@ export default class EditCourses extends Component {
         const response = await fetch(`${API_DOMAIN}/edit-course`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
           body: JSON.stringify({
             edited_course_id: editedCourseId,
             course: this.getEditedCourseWithSectionPositions(editedCourse),
@@ -250,16 +258,16 @@ export default class EditCourses extends Component {
         const result = await response.json();
 
         if (!result.error) {
-          this.onSuccessfullySavedEditedCourse(editedCourse, courseId)
+          this.onSuccessfullySavedEditedCourse(editedCourse, courseId);
 
         } else {
-          this.onError("Failed to save edited course. Try again.")
+          this.onError("Failed to save edited course. Try again.", result.error);
         }
       } catch (saveEditedCourseError) {
-        this.onError("Failed to save edited course. Try again.", saveEditedCourseError as string)
+        this.onError("Failed to save edited course. Try again.", saveEditedCourseError as string);
       }
     } else {
-      this.onError("Please make sure videos are uploaded for every section.")
+      this.onError("Please make sure videos are uploaded for every section.");
     }
   };
 
@@ -297,6 +305,7 @@ export default class EditCourses extends Component {
       const response = await fetch(`${API_DOMAIN}/delete-course`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({
           course_id: this.state.courseIdToDelete,
         }),
@@ -323,14 +332,14 @@ export default class EditCourses extends Component {
   };
 
   render() {
-    const {isLoading, allCourses, coursesErrorMessage} = this.state
+    const { isLoading, allCourses, courseErrorMessage } = this.state;
 
     return (
       <>
         <ExistingCoursesContainer>
           <CourseErrorLoadingHandler
             isLoading={isLoading}
-            error={coursesErrorMessage}
+            error={courseErrorMessage}
             onClick={this.getCourses}
             courses={allCourses}>
             {this.state.successMessage
@@ -339,7 +348,7 @@ export default class EditCourses extends Component {
             }
 
             <div>
-              {this.state.allCourses.map((course, index) => {
+              {allCourses.map((course, index) => {
                   return (
                     <ExistingCourse
                       key={course.id}

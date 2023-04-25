@@ -26,6 +26,7 @@ type AuthContextType = {
   logout: () => Promise<void>,
   resetPassword: (email: string) => Promise<void>,
   updateUser: (newUser: UserCredential, name: string) => Promise<void>,
+  getIsAdmin: () => Promise<boolean>
 };
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
@@ -49,9 +50,9 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
             body: JSON.stringify({
               access_token: user.accessToken,
             }),
-          })
+          });
         } catch (e) {
-          console.log(e)
+          console.log(e);
         }
       }
 
@@ -80,17 +81,20 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 
   const updateUser = (newUser: UserCredential, name: string) => {
     return updateProfile(newUser.user, { displayName: name });
-  }
+  };
 
-  const getIsAdmin = () => {
-    return currentUser?.getIdTokenResult()
-      .then((result) => {
-        return result.claims.admin
-      })
-      .catch(() => {
-        return false
-      })
-  }
+  const getIsAdmin = async () => {
+      try {
+        const response = await currentUser?.getIdTokenResult();
+        const result = await response?.claims.admin;
+
+        return result;
+      } catch(e) {
+        return false;
+      }
+  };
+
+  // TODO: add useMemo back in here
 
   const value = {
     currentUser,

@@ -1,16 +1,12 @@
 import { useEffect, useState } from "react";
-import { Alert } from "react-bootstrap";
-import { PulseLoader } from "react-spinners";
 
-import { API_DOMAIN } from "../../constants/constants";
-import { colors } from "src/constants/colorPalette";
 import { Course } from "src/types";
+import { getRequest } from "src/utils/utils";
 
 import SidebarContainer from "./SidebarContainer";
 import NavbarHome from "./Navbar";
 import Instructor from "./Instructor";
 import Courses from "./Courses";
-import Error from "../Error";
 import CourseErrorLoadingHandler from "../CourseErrorLoadingHandler";
 
 const Home = () => {
@@ -21,29 +17,38 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const getCourses = async () => {
-    setIsLoading(true)
-    setCoursesError(null)
+    setIsLoading(true);
+    setCoursesError(null);
 
-    try {
-      const response = await fetch(`${API_DOMAIN}/courses`)
-      const courseResults = await response.json()
-
-      setCourses(courseResults)
-      setIsLoading(false)
-    } catch (e) {
-      console.log(e)
-      setCoursesError("Loading courses failed.")
-      setIsLoading(false)
-    }
-  }
+     getRequest({
+      endpoint: "/courses",
+      onSuccess,
+      onError: (error) => onError("Loading courses failed", error),
+    });
+  };
 
   useEffect(() => {
     getCourses();
-  }, [])
+  }, []);
+
+  const onSuccess = (result: Course[]) => {
+    setIsLoading(false);
+    setCourses(result);
+  };
+
+  const onError = (courseErrorMessage: string, error = "") => {
+    console.log(">>> error: ", error || courseErrorMessage);
+
+    setIsLoading(false);
+    setCoursesError(courseErrorMessage);
+  };
 
   const renderAdminContent = () => {
     if (activeTab === "Courses") {
-      return <Courses logoutError={logoutError} courses={courses} setCourses={setCourses} />;
+      return <Courses
+        logoutError={logoutError}
+        courses={courses}
+        setCourses={setCourses} />;
     }
 
     if (activeTab === "Instructor") {
@@ -57,7 +62,9 @@ const Home = () => {
     <div className="home-container">
       <NavbarHome setLogoutError={setLogoutError} />
       <div className="d-flex h-100 w-100">
-        <SidebarContainer activeTab={activeTab} setActiveTab={setActiveTab} />
+        <SidebarContainer
+          activeTab={activeTab}
+          setActiveTab={setActiveTab} />
         <div className="px-5 w-100 min-vh-100">
           <CourseErrorLoadingHandler
             error={coursesError}

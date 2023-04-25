@@ -10,7 +10,9 @@ const Navbar: React.FC<Props> = ({ title }) => {
   return (
     <div className="d-flex justify-content-md-between mb-4 align-items-center">
       <h2 className="mb-0">{title}</h2>
-      <Button variant="link" className="nav-link admin"><Link to="/">Back Home</Link></Button>
+      <Button
+        variant="link"
+        className="nav-link admin"><Link to="/">Back Home</Link></Button>
     </div>
   );
 };

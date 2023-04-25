@@ -8,7 +8,9 @@ interface Props {
 
 const RemoveInput: React.FC<Props> = ({ onClickFunction, margin }) => {
   return (
-    <div className={`${margin} mb-3 p-2 icon`} onClick={onClickFunction}>
+    <div
+      className={`${margin} mb-3 p-2 icon`}
+      onClick={onClickFunction}>
       <MinusIcon stroke={colors.red} />
     </div>
   );

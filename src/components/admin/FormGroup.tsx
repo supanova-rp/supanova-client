@@ -24,7 +24,9 @@ const FormGroup: React.FC<Props> = ({
   onChange,
 }) => {
   return (
-    <Form.Group id={formId} className={className}>
+    <Form.Group
+      id={formId}
+      className={className}>
       <Form.Label>{label}</Form.Label>
       <Form.Control
         type={type}
