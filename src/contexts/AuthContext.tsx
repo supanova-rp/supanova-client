@@ -3,7 +3,9 @@ import {
   useEffect,
   useContext,
   createContext,
+  useMemo,
 } from "react";
+import { useNavigate } from "react-router-dom";
 
 import {
   signOut,
@@ -15,11 +17,12 @@ import {
   UserCredential,
 } from "firebase/auth";
 
-import { auth } from "../firebase/firebase";
-import { API_DOMAIN } from "src/constants/constants";
 import { FirebaseUser } from "src/types";
+import { API_DOMAIN } from "src/constants/constants";
+import { auth } from "../firebase/firebase";
+import useUpdateEffect from "src/hooks/useUpdateEffect";
 
-type AuthContextType = {
+export type AuthContextType = {
   currentUser: FirebaseUser | null,
   signup: (email: string, password: string) => Promise<FirebaseUserCredential>,
   login: (email: string, password: string) => Promise<FirebaseUserCredential>,
@@ -29,7 +32,7 @@ type AuthContextType = {
   getIsAdmin: () => Promise<boolean>
 };
 
-const AuthContext = createContext<AuthContextType>({} as AuthContextType);
+export const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
 export const useAuth = () => {
   return useContext(AuthContext);
@@ -38,6 +41,14 @@ export const useAuth = () => {
 export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<FirebaseUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  const navigate = useNavigate();
+
+  useUpdateEffect(() => {
+    if (!currentUser) {
+      navigate("/login", { replace: true });
+    }
+  }, [currentUser]);
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged( async (user: FirebaseUser | null) => {
@@ -63,48 +74,49 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
     return unsubscribe;
   }, []);
 
-  const signup = (email: string, password: string) => {
-    return createUserWithEmailAndPassword(auth, email, password);
-  };
+  // To make sure we have the most updated currentUser
+  const value = useMemo(() => {
+    const signup = (email: string, password: string) => {
+      return createUserWithEmailAndPassword(auth, email, password);
+    };
 
-  const login = (email: string, password: string) => {
-    return signInWithEmailAndPassword(auth, email, password);
-  };
+    const login = (email: string, password: string) => {
+      return signInWithEmailAndPassword(auth, email, password);
+    };
 
-  const logout = () => {
-    return signOut(auth);
-  };
+    const logout = () => {
+      return signOut(auth);
+    };
 
-  const resetPassword = (email: string) => {
-    return sendPasswordResetEmail(auth, email);
-  };
+    const resetPassword = (email: string) => {
+      return sendPasswordResetEmail(auth, email);
+    };
 
-  const updateUser = (newUser: UserCredential, name: string) => {
-    return updateProfile(newUser.user, { displayName: name });
-  };
+    const updateUser = (newUser: UserCredential, name: string) => {
+      return updateProfile(newUser.user, { displayName: name });
+    };
 
-  const getIsAdmin = async () => {
-      try {
-        const response = await currentUser?.getIdTokenResult();
-        const result = await response?.claims.admin;
+    const getIsAdmin = async () => {
+        try {
+          const response = await currentUser?.getIdTokenResult();
+          const result = await response?.claims.admin;
 
-        return result;
-      } catch(e) {
-        return false;
-      }
-  };
+          return result;
+        } catch(e) {
+          return false;
+        }
+    };
 
-  // TODO: add useMemo back in here
-
-  const value = {
-    currentUser,
-    signup,
-    login,
-    logout,
-    resetPassword,
-    updateUser,
-    getIsAdmin,
-  };
+    return {
+      currentUser,
+      signup,
+      login,
+      logout,
+      resetPassword,
+      updateUser,
+      getIsAdmin,
+    };
+  }, [currentUser]);
 
   return (
     <AuthContext.Provider value={value}>

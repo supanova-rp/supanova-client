@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, Form, Button, Alert } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { PulseLoader } from "react-spinners";
@@ -18,9 +18,16 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isPasswordShowing, setIsPasswordShowing] = useState(false);
 
-  const { login } = useAuth();
-
   const navigate = useNavigate();
+
+  const { login, currentUser } = useAuth();
+
+  useEffect(() => {
+    // Make sure we only navigate to login when we have a currentUser
+    if (currentUser) {
+      navigate("/");
+    }
+  }, [currentUser]);
 
   const onHandleLogin = async (event: FormSubmitEvent) => {
     event.preventDefault();
@@ -29,8 +36,6 @@ const Login = () => {
       setIsLoading(true);
 
       await login(emailInput, passwordInput);
-
-      navigate("/");
     } catch (error) {
       console.log(error);
       setValidationError("Wrong email and/or password");

@@ -10,6 +10,7 @@ import {
   getUpdatedCoursesWithEditFlagRemovedForEditedCourse
 } from "../../../utils/utils";
 import { API_DOMAIN } from "../../../constants/constants";
+import { AuthContext, AuthContextType } from "src/contexts/AuthContext";
 
 import DeleteCourseOverlay from "../../overlays/DeleteCourseOverlay";
 import ExistingCourse from "./ExistingCourse";
@@ -38,14 +39,18 @@ export default class EditCourses extends Component {
     savedCourses: [],
     courseIdToDelete: null,
   };
+  context: AuthContextType;
 
-  getCourses = async () => {
+  static contextType = AuthContext;
+
+  getCourses = () => {
     this.setState({ isLoading: true, courseErrorMessage: null });
 
     getRequest({
       endpoint: "/courses",
       onSuccess: this.onSuccess,
       onError: (error) => this.onError("Loading courses failed", error),
+      onUnauthorised: this.onUnauthorised,
     });
   };
 
@@ -182,6 +187,12 @@ export default class EditCourses extends Component {
     });
   };
 
+  onUnauthorised = () => {
+    const { logout } = this.context;
+
+    logout();
+  };
+
   getDeletedSectionsIds = (editedCourse: Course) => {
     // Getting the ids of the deleted sections so the back end can delete them in the table
     const uneditedVersionOfEditedCourse = this.state.savedCourses.find((course) => course.id === editedCourse.id);
@@ -261,7 +272,11 @@ export default class EditCourses extends Component {
           this.onSuccessfullySavedEditedCourse(editedCourse, courseId);
 
         } else {
-          this.onError("Failed to save edited course. Try again.", result.error);
+          if (response.status === 401) {
+            this.onUnauthorised();
+          } else {
+            this.onError("Failed to save edited course. Try again.", result.error);
+          }
         }
       } catch (saveEditedCourseError) {
         this.onError("Failed to save edited course. Try again.", saveEditedCourseError as string);
@@ -323,7 +338,11 @@ export default class EditCourses extends Component {
           savedCourses: coursesMinusDeletedCourse
         });
       } else {
-        this.setState({ areActionsDisabled: false, deleteCourseErrorMessage: "Deleting course failed. Try again." });
+        if (response.status === 401) {
+          this.onUnauthorised();
+        } else {
+          this.onError("Deleting course failed. Try again.", result.error);
+        }
       }
     } catch (e) {
       console.log(e);

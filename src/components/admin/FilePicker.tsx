@@ -4,11 +4,17 @@ import axios, { AxiosProgressEvent } from "axios";
 
 import { ReactComponent as TickIcon } from "../../icons/tickIcon.svg";
 
-import { InputChangeEvent, UploadProgress } from "../../types/index";
+import {
+  InputChangeEvent,
+  UploadProgress,
+  UploadUrlResponse
+} from "../../types/index";
 import { colors } from "../../constants/colorPalette";
-import { API_DOMAIN } from "../../constants/constants";
 
 import { useWakeLock } from "../../hooks/useWakeLock";
+import { getRequest } from "src/utils/utils";
+import { useAuth } from "src/contexts/AuthContext";
+
 import ProgressBar from "./ProgressBar";
 
 interface Props {
@@ -31,6 +37,7 @@ const FilePicker: React.FC<Props> = ({
   onClickCancelFileUpload,
 }) => {
   const { releaseWakeLock, requestWakeLock } = useWakeLock();
+  const { logout } = useAuth();
 
   const uploadFileToS3 = async (uploadUrl: string, file: File) => {
     requestWakeLock();
@@ -56,19 +63,27 @@ const FilePicker: React.FC<Props> = ({
     }
   };
 
-  const handleFileSelected = async (e: InputChangeEvent) => {
-    try {
-      // Get secure/signed AWS S3 url from server
-      const response = await fetch(`${API_DOMAIN}/get-upload-url`, {
-        credentials: "include",
-      });
-      const result = await response.json();
-      const files = e.target?.files || [];
+  const onSuccess = (e: InputChangeEvent, result: UploadUrlResponse) => {
+    const files = e.target?.files || [];
 
-      uploadFileToS3(result.uploadUrl, files[0]);
-    } catch (error) {
-      console.log(error);
-    }
+    uploadFileToS3(result.uploadUrl, files[0]);
+  };
+
+  const onError = (error: string) => {
+    console.log(">>> error: ", error);
+  };
+
+  const onUnauthorised = () => {
+    logout();
+  };
+
+  const handleFileSelected = (e: InputChangeEvent) => {
+    getRequest({
+      endpoint: "/get-upload-url",
+      onSuccess: (result) => onSuccess(e, result),
+      onError,
+      onUnauthorised,
+    });
   };
 
   const renderUploadProgressIcon = () => {

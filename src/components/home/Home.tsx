@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import { Course } from "src/types";
 import { getRequest } from "src/utils/utils";
+import { useAuth } from "src/contexts/AuthContext";
 
 import SidebarContainer from "./SidebarContainer";
 import NavbarHome from "./Navbar";
@@ -15,8 +16,11 @@ const Home = () => {
   const [activeTab, setActiveTab] = useState<string>("Courses");
   const [coursesError, setCoursesError] = useState<null | string>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
-  const getCourses = async () => {
+  const { getIsAdmin, logout } = useAuth();
+
+  const getCourses = () => {
     setIsLoading(true);
     setCoursesError(null);
 
@@ -24,10 +28,22 @@ const Home = () => {
       endpoint: "/courses",
       onSuccess,
       onError: (error) => onError("Loading courses failed", error),
+      onUnauthorised,
     });
   };
 
+  const verifyIsAdmin = async () => {
+    try {
+      const result = await getIsAdmin();
+
+      setIsAdmin(result);
+    } catch(e) {
+      console.log(">>> isAdminError: ", e);
+    }
+  };
+
   useEffect(() => {
+    verifyIsAdmin();
     getCourses();
   }, []);
 
@@ -41,6 +57,10 @@ const Home = () => {
 
     setIsLoading(false);
     setCoursesError(courseErrorMessage);
+  };
+
+  const onUnauthorised = () => {
+    logout();
   };
 
   const renderAdminContent = () => {
@@ -60,7 +80,9 @@ const Home = () => {
 
   return (
     <div className="home-container">
-      <NavbarHome setLogoutError={setLogoutError} />
+      <NavbarHome
+        setLogoutError={setLogoutError}
+        isAdmin={isAdmin} />
       <div className="d-flex h-100 w-100">
         <SidebarContainer
           activeTab={activeTab}

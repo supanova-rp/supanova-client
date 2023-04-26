@@ -17,10 +17,10 @@ const AdminRoute = ({ children }: React.PropsWithChildren) => {
   useEffect(() => {
     const verifyIsAdmin = async () => {
       try {
-        const isAdmin = await getIsAdmin();
+        const result = await getIsAdmin();
 
         setIsLoading(false);
-        setIsAdmin(isAdmin);
+        setIsAdmin(result);
       } catch(e) {
         console.log(">>> isAdminError: ", e);
         setIsLoading(false);

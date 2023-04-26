@@ -1,8 +1,8 @@
-import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 import {
-  createBrowserRouter,
-  RouterProvider,
+  BrowserRouter,
+  Route,
+  Routes,
 } from "react-router-dom";
 
 import "react-circular-progressbar/dist/styles.css";
@@ -23,36 +23,34 @@ const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Home />,
-    errorElement: <PageErrorScreen
-      title="Oops"
-      text="The page you were looking for could not be found..." />
-  },
-  {
-    path: "/admin",
-    element: (
-      <AdminRoute>
-        <Admin />
-      </AdminRoute>
-    ),
-  },
-  {
-    path: "/forgot-password",
-    element: <ForgotPassword />,
-  },
-  {
-    path: "/login",
-    element: <Login />,
-  }
-]);
-
 root.render(
-  <StrictMode>
+  <BrowserRouter>
     <AuthProvider>
-      <RouterProvider router={router} />
+      <Routes>
+        <Route
+          path="/"
+          element={<Home />} />
+        <Route
+          path="/admin"
+          element={(
+            <AdminRoute>
+              <Admin />
+            </AdminRoute>
+          )} />
+        <Route
+          path="/forgot-password"
+          element={<ForgotPassword />} />
+        <Route
+          path="/login"
+          element={<Login />} />
+        <Route
+          path="*"
+          element={(
+            <PageErrorScreen
+              title="Oops"
+              text="The page you were looking for could not be found..." />
+          )}/>
+      </Routes>
     </AuthProvider>
-  </StrictMode>
+  </BrowserRouter>
 );

@@ -48,3 +48,7 @@ export type UserInfoToUpdate = {
 };
 
 export type FirebaseUser = FirebaseUserLib & {accessToken?: string}
+
+export type UploadUrlResponse = {
+  uploadUrl: string,
+}

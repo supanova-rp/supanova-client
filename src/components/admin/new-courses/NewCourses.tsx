@@ -5,6 +5,7 @@ import { AxiosProgressEvent } from "axios";
 
 import { getInitialCourseState, getUpdatedSections } from "../../../utils/utils";
 import { API_DOMAIN } from "../../../constants/constants";
+import { AuthContext, AuthContextType } from "src/contexts/AuthContext";
 
 import Navbar from "../nav-and-sidebars/Navbar";
 import FormGroup from "../FormGroup";
@@ -12,7 +13,11 @@ import AddMoreInputs from "../AddMoreInputs";
 import EditSection from "../EditSection";
 
 export default class AddCourses extends Component {
+  context: AuthContextType;
+
   state = getInitialCourseState();
+
+  static contextType = AuthContext;
 
   onChangeSectionTitle = (sectionId: number, newInputValue: string) => {
     const updatedSectionsWithNewTitle = this.state.sections.map((section) => {
@@ -70,6 +75,24 @@ export default class AddCourses extends Component {
     }, 3000);
   };
 
+  onError = (errorMessage: string, errorType: string, error = "") => {
+    console.log(">>> saveNewCourseError: ", error || errorMessage);
+
+    this.setState({
+      loading: false,
+      error: {
+        message: errorMessage,
+        type: errorType,
+      },
+    });
+  };
+
+  onUnauthorised = () => {
+    const { logout } = this.context;
+
+    logout();
+  };
+
   onHandleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -108,13 +131,11 @@ export default class AddCourses extends Component {
 
           this.handleSuccessMessageAfterCourseCreation();
         } else {
-          this.setState({
-            loading: false,
-            error: {
-              message: "Creating course failed. Try again.",
-              type: "danger",
-            },
-          });
+          if (response.status === 401) {
+            this.onUnauthorised();
+          } else {
+            this.onError("Creating course failed. Try again.", "danger", result.error);
+          }
         }
       } catch (error) {
         console.log(error);

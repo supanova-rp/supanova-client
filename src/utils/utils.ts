@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { API_DOMAIN } from "src/constants/constants";
 import { Course, CourseSection, UserInfoToUpdate, User } from "../types/index";
 
@@ -94,11 +95,12 @@ export const getUpdatedCoursesWithEditFlagRemovedForEditedCourse = (editedCourse
 
 interface GetRequestOptions {
   endpoint: string,
-  onSuccess: (result: Course[]) => void,
+  onSuccess: (result: any) => void,
   onError: (error: string) => void,
+  onUnauthorised: () => void,
 }
 
-export const getRequest = async ({ endpoint, onSuccess, onError }: GetRequestOptions) => {
+export const getRequest = async ({ endpoint, onSuccess, onError, onUnauthorised }: GetRequestOptions) => {
   try {
     const response = await fetch(`${API_DOMAIN}${endpoint}`, {
       credentials: "include",
@@ -107,9 +109,14 @@ export const getRequest = async ({ endpoint, onSuccess, onError }: GetRequestOpt
     const result = await response.json();
 
     if (!result.error) {
+      console.log(">>> result: ", result);
       onSuccess(result);
     } else {
-      onError(result.error);
+      if (response.status === 401) {
+        onUnauthorised();
+      } else {
+        onError(result.error);
+      }
     }
   } catch (e) {
     onError(e as string);

@@ -1,5 +1,5 @@
 import { Button, Navbar } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { useAuth } from "../../contexts/AuthContext";
 import { SetStringFunction } from "../../types/index";
@@ -8,18 +8,17 @@ import SupanovaLogo from "../../images/Supanova-logo.png";
 
 interface Props {
   setLogoutError: SetStringFunction,
+  isAdmin: boolean,
 }
 
-const NavbarHome: React.FC<Props> = ({ setLogoutError }) => {
+const NavbarHome: React.FC<Props> = ({ setLogoutError, isAdmin }) => {
   const { logout } = useAuth();
-  const navigate = useNavigate();
 
   const onClickHandleLogOut = async () => {
     try {
       await logout();
       setLogoutError("");
 
-      navigate("/login", { replace: true });
     } catch (e) {
       console.log(e);
       setLogoutError("Error logging out. Please try again.");
@@ -34,17 +33,28 @@ const NavbarHome: React.FC<Props> = ({ setLogoutError }) => {
           src={SupanovaLogo}
           alt="Logo" />
         <div className="d-flex align-items-center">
-          <Link
-            to="/admin"
-            className="link-light nav-link">Admin</Link>
+          {isAdmin
+            ? (
+              <Link
+                to="/admin"
+                className="link-light nav-link">
+                Admin
+              </Link>
+            )
+            : null
+          }
           <Link
             to="https://supanovadev.setmore.com/jamiegarner"
             target="_blank"
-            className="link-light nav-link">Book</Link>
+            className="link-light nav-link">
+            Book
+          </Link>
           <Button
             variant="link"
             className="link-light nav-link"
-            onClick={onClickHandleLogOut}>Log out</Button>
+            onClick={onClickHandleLogOut}>
+            Log out
+          </Button>
         </div>
       </nav>
     </Navbar>
