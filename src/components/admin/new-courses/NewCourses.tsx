@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { Card, Form, Button, Alert } from "react-bootstrap";
 import { AxiosProgressEvent } from "axios";
 
-import { getInitialCourseState, getUpdatedSections } from "../../../utils/utils";
+import { getInitialCourseState, getUpdatedSections, request } from "../../../utils/utils";
 import { API_DOMAIN } from "../../../constants/constants";
 import { AuthContext, AuthContextType } from "src/contexts/AuthContext";
 
@@ -75,6 +75,15 @@ export default class AddCourses extends Component {
     }, 3000);
   };
 
+  onSuccessfullyAddedNewCourse = () => {
+    this.setState({
+      ...getInitialCourseState(),
+      successMessage: "Successfully created new course!"
+    });
+
+    this.handleSuccessMessageAfterCourseCreation();
+  };
+
   onError = (errorMessage: string, errorType: string, error = "") => {
     console.log(">>> saveNewCourseError: ", error || errorMessage);
 
@@ -105,7 +114,6 @@ export default class AddCourses extends Component {
     });
 
     if (this.state.sections.every((section) => section.videoUrl !== null)) {
-      try {
         const sectionsWithPositions = this.state.sections.map((section, index) => {
           return {
             ...section,
@@ -113,41 +121,20 @@ export default class AddCourses extends Component {
           };
         });
 
-        const response = await fetch(`${API_DOMAIN}/add-course`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({
-            title: this.state.title,
-            description: this.state.description,
-            sections: sectionsWithPositions,
-          }),
-        });
+        const requestBody = {
+          title: this.state.title,
+          description: this.state.description,
+          sections: sectionsWithPositions,
+        };
 
-        const result = await response.json();
-
-        if (!result.error) {
-          this.setState({ ...getInitialCourseState(), successMessage: "Successfully created new course!" });
-
-          this.handleSuccessMessageAfterCourseCreation();
-        } else {
-          if (response.status === 401) {
-            this.onUnauthorised();
-          } else {
-            this.onError("Creating course failed. Try again.", "danger", result.error);
-          }
-        }
-      } catch (error) {
-        console.log(error);
-
-        this.setState({
-          loading: false,
-          error: {
-            message: "Creating course failed. Try again.",
-            type: "danger",
-          },
-        });
-      }
+      request({
+        endpoint: "/add-course",
+        method: "POST",
+        requestBody,
+        onSuccess: this.onSuccessfullyAddedNewCourse,
+        onError: (addNewCourseError: string) => this.onError("Creating course failed. Try again.", "danger", addNewCourseError),
+        onUnauthorised: this.onUnauthorised,
+      });
     } else {
       this.setState({
         loading: false,

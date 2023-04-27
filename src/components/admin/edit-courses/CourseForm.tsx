@@ -15,7 +15,7 @@ interface Props {
   handleRemoveSection: (parameter: number) => void,
 }
 
-const EditCourseView: React.FC<Props> = ({
+const CourseForm: React.FC<Props> = ({
   course,
   onChangeCourseField,
   onChangeSectionTitle,
@@ -58,4 +58,4 @@ const EditCourseView: React.FC<Props> = ({
   );
 };
 
-export default EditCourseView;
+export default CourseForm;

@@ -2,20 +2,24 @@ import { Component } from "react";
 import { Alert } from "react-bootstrap";
 import { AxiosProgressEvent } from "axios";
 
-import { Course, FormSubmitEvent } from "../../../types/index";
+import {
+  Course,
+  FormSubmitEvent
+} from "../../../types/index";
 import {
   areSomeVideosCurrentlyUploading,
   getRequest,
   getUpdatedCourses,
-  getUpdatedCoursesWithEditFlagRemovedForEditedCourse
+  getUpdatedCoursesWithEditFlagRemovedForEditedCourse,
+  request
 } from "../../../utils/utils";
-import { API_DOMAIN } from "../../../constants/constants";
 import { AuthContext, AuthContextType } from "src/contexts/AuthContext";
 
 import DeleteCourseOverlay from "../../overlays/DeleteCourseOverlay";
-import ExistingCourse from "./ExistingCourse";
 import ExistingCoursesContainer from "./ExistingCoursesContainer";
 import CourseErrorLoadingHandler from "src/components/CourseErrorLoadingHandler";
+import CoursesListView from "./CoursesListView";
+import EditingCourseContainer from "./EditingCourseContainer";
 
 type EditCoursesState = {
   isLoading: boolean,
@@ -26,11 +30,13 @@ type EditCoursesState = {
   allCourses: [] | Course[],
   savedCourses: [] | Course[],
   courseIdToDelete: null | number,
+  editingCourseId: null | number,
 }
 
 export default class EditCourses extends Component {
   state: EditCoursesState = {
     isLoading: true,
+    editingCourseId: null,
     areActionsDisabled: false,
     successMessage: null,
     courseErrorMessage: null,
@@ -49,7 +55,7 @@ export default class EditCourses extends Component {
     getRequest({
       endpoint: "/courses",
       onSuccess: this.onSuccess,
-      onError: (error) => this.onError("Loading courses failed", error),
+      onError: (error: string) => this.onError("Loading courses failed", error),
       onUnauthorised: this.onUnauthorised,
     });
   };
@@ -89,19 +95,8 @@ export default class EditCourses extends Component {
     this.setState({ allCourses: updatedCourses });
   };
 
-  onClickStartEditingCourse = (courseId: number, value: boolean) => {
-    const updatedCoursesWithEditFlag = this.state.allCourses.map((course) => {
-      if (course.id === courseId) {
-        return {
-          ...course,
-          isEditing: value,
-        };
-      }
-
-      return course;
-    });
-
-    this.setState({ allCourses: updatedCoursesWithEditFlag });
+  onClickStartEditingCourse = (courseId: number | null) => {
+    this.setState({ editingCourseId: courseId });
   };
 
   onClickCancelEditingCourse = () => {
@@ -226,17 +221,28 @@ export default class EditCourses extends Component {
     return editedCourseWithSectionPositions;
   };
 
-  onSuccessfullySavedEditedCourse = (editedCourse: Course, courseId: number) => {
-    const editedCourseId = editedCourse.id;
+  onSuccessfullySavedEditedCourse = (edited_course: Course) => {
+    const editedCourseId = edited_course.id;
 
     this.setState({
       areActionsDisabled: false,
       allCourses: getUpdatedCoursesWithEditFlagRemovedForEditedCourse(editedCourseId, this.state.allCourses),
-      savedCourses: this.getUpdatedSavedCoursesState(editedCourse, courseId),
+      savedCourses: this.getUpdatedSavedCoursesState(edited_course, editedCourseId),
       successMessage: "Successfully saved edited course!",
     });
 
     this.handleSuccessMessageAfterSavingEditedCourse();
+  };
+
+  onSuccessfullyDeletedCourse = () => {
+    const coursesMinusDeletedCourse = this.state.allCourses.filter((course) => course.id !== this.state.courseIdToDelete);
+
+    this.setState({
+      areActionsDisabled: false,
+      courseIdToDelete: null,
+      allCourses: coursesMinusDeletedCourse,
+      savedCourses: coursesMinusDeletedCourse
+    });
   };
 
   onClickSaveEditedCourse = async (event: FormSubmitEvent, courseId: number) => {
@@ -254,33 +260,20 @@ export default class EditCourses extends Component {
     if (!areSomeVideosCurrentlyUploading(editedCourse)) {
       this.setState({ areActionsDisabled: true, courseErrorMessage: null });
 
-      try {
-        const response = await fetch(`${API_DOMAIN}/edit-course`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({
-            edited_course_id: editedCourseId,
-            course: this.getEditedCourseWithSectionPositions(editedCourse),
-            deleted_sections_ids: this.getDeletedSectionsIds(editedCourse),
-          }),
-        });
+      const requestBody = {
+        edited_course_id: editedCourseId,
+        edited_course: this.getEditedCourseWithSectionPositions(editedCourse),
+        deleted_sections_ids: this.getDeletedSectionsIds(editedCourse),
+      };
 
-        const result = await response.json();
-
-        if (!result.error) {
-          this.onSuccessfullySavedEditedCourse(editedCourse, courseId);
-
-        } else {
-          if (response.status === 401) {
-            this.onUnauthorised();
-          } else {
-            this.onError("Failed to save edited course. Try again.", result.error);
-          }
-        }
-      } catch (saveEditedCourseError) {
-        this.onError("Failed to save edited course. Try again.", saveEditedCourseError as string);
-      }
+      request({
+        endpoint: "/edit-course",
+        method: "PUT",
+        requestBody,
+        onSuccess: () => this.onSuccessfullySavedEditedCourse(requestBody.edited_course),
+        onError: (saveEditedCourseError: string) => this.onError("Failed to save edited course. Try again.", saveEditedCourseError),
+        onUnauthorised: this.onUnauthorised,
+      });
     } else {
       this.onError("Please make sure videos are uploaded for every section.");
     }
@@ -314,44 +307,26 @@ export default class EditCourses extends Component {
   };
 
   onClickDeleteCourse = async () => {
-    try {
-      this.setState({ areActionsDisabled: true, deleteCourseErrorMessage: null });
+    this.setState({ areActionsDisabled: true, deleteCourseErrorMessage: null });
 
-      const response = await fetch(`${API_DOMAIN}/delete-course`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({
-          course_id: this.state.courseIdToDelete,
-        }),
-      });
+    const requestBody = {
+      course_id: this.state.courseIdToDelete,
+    };
 
-      const result = await response.json();
-
-      if (!result.error) {
-        const coursesMinusDeletedCourse = this.state.allCourses.filter((course) => course.id !== this.state.courseIdToDelete);
-
-        this.setState({
-          areActionsDisabled: false,
-          courseIdToDelete: null,
-          allCourses: coursesMinusDeletedCourse,
-          savedCourses: coursesMinusDeletedCourse
-        });
-      } else {
-        if (response.status === 401) {
-          this.onUnauthorised();
-        } else {
-          this.onError("Deleting course failed. Try again.", result.error);
-        }
-      }
-    } catch (e) {
-      console.log(e);
-      this.setState({ areActionsDisabled: false, deleteCourseErrorMessage: "Deleting course failed. Try again." });
-    }
+    request({
+      endpoint: "/delete-course",
+      method: "DELETE",
+      requestBody,
+      onSuccess: this.onSuccessfullyDeletedCourse,
+      onError: (deleteCourseError: string) => this.onError("Deleting course failed. Try again.", deleteCourseError),
+      onUnauthorised: this.onUnauthorised
+    });
   };
 
   render() {
-    const { isLoading, allCourses, courseErrorMessage } = this.state;
+    const { isLoading, allCourses, courseErrorMessage, editingCourseId } = this.state;
+
+    const editingCourse = allCourses.find((course) => course.id === editingCourseId);
 
     return (
       <>
@@ -362,33 +337,29 @@ export default class EditCourses extends Component {
             onClick={this.getCourses}
             courses={allCourses}>
             {this.state.successMessage
-                ? <Alert variant="success">{this.state.successMessage}</Alert>
-                : null
+              ? <Alert variant="success">{this.state.successMessage}</Alert>
+              : null
             }
 
-            <div>
-              {allCourses.map((course, index) => {
-                  return (
-                    <ExistingCourse
-                      key={course.id}
-                      index={index}
-                      course={course}
-                      areActionsDisabled={this.state.areActionsDisabled}
-                      courseErrorMessage={this.state.courseErrorMessage}
-                      onClickStartEditingCourse={this.onClickStartEditingCourse}
-                      onClickCancelEditingCourse={this.onClickCancelEditingCourse}
-                      onChangeCourseField={this.onChangeCourseField}
-                      onChangeSectionTitle={this.onChangeSectionTitle}
-                      onFileUploaded={this.onFileUploaded}
-                      onFileUploadProgress={this.onFileUploadProgress}
-                      onUpdateStateAfterCancellingFileUpload={this.onUpdateStateAfterCancellingFileUpload}
-                      handleRemoveSection={this.handleRemoveSection}
-                      onClickAddNewSection={this.onClickAddNewSection}
-                      onClickSaveEditedCourse={this.onClickSaveEditedCourse}
-                      onClickHandleShowingDeleteOverlay={this.onClickHandleShowingDeleteOverlay} />
-                  );
-                })}
-            </div>
+            {editingCourseId
+              ? (
+                <EditingCourseContainer
+                  editingCourse={editingCourse}
+                  onClickStartEditingCourse={this.onClickStartEditingCourse}
+                  onClickHandleShowingDeleteOverlay={this.onClickHandleShowingDeleteOverlay}  />
+              )
+              : (
+                <table className="table table-bordered mt-3">
+                  {allCourses.map((course) => {
+                    return (
+                      <CoursesListView
+                        course={course}
+                        onClickStartEditingCourse={this.onClickStartEditingCourse}/>
+                    );
+                  })}
+                </table>
+              )
+            }
           </CourseErrorLoadingHandler>
         </ExistingCoursesContainer>
 

@@ -109,7 +109,6 @@ export const getRequest = async ({ endpoint, onSuccess, onError, onUnauthorised 
     const result = await response.json();
 
     if (!result.error) {
-      console.log(">>> result: ", result);
       onSuccess(result);
     } else {
       if (response.status === 401) {
@@ -118,7 +117,42 @@ export const getRequest = async ({ endpoint, onSuccess, onError, onUnauthorised 
         onError(result.error);
       }
     }
-  } catch (e) {
-    onError(e as string);
+  } catch (error) {
+    onError(error as string);
+  }
+};
+
+interface RequestOptions {
+  endpoint: string,
+  method: string,
+  requestBody: any,
+  onSuccess: (result: any) => void,
+  onError: (error: string) => void,
+  onUnauthorised: () => void,
+}
+
+export const request = async ({ endpoint, method, requestBody, onSuccess, onError, onUnauthorised} : RequestOptions) => {
+  try {
+    const response = await fetch(`${API_DOMAIN}${endpoint}`, {
+      method,
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(requestBody),
+    });
+
+    const result = await response.json();
+
+    if (!result.error) {
+      onSuccess(result);
+
+    } else {
+      if (response.status === 401) {
+        onUnauthorised();
+      } else {
+        onError(result.error);
+      }
+    }
+  } catch (error) {
+    onError(error as string);
   }
 };

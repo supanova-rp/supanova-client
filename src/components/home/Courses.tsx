@@ -19,21 +19,21 @@ const Courses: React.FC<Props> = ({ logoutError, courses, setCourses }) => {
   const currentSection = courses[currentCourseIndex].sections[currentSectionIndex];
   const currentSectionId = currentSection.id;
 
-    const onSelectVideo = (courseIndex: number, sectionIndex: number) => {
-      const sectionId = courses[courseIndex].sections[sectionIndex].id;
+  const onSelectVideo = (courseIndex: number, sectionIndex: number) => {
+    const sectionId = courses[courseIndex].sections[sectionIndex].id;
 
-      if (localStorage.getItem(`section-progress-${sectionId}`)) {
-        const localStorageCurrentVideoTimeValue = JSON.parse(localStorage.getItem(`section-progress-${sectionId}`) || "{}").currentTime;
+    if (localStorage.getItem(`section-progress-${sectionId}`)) {
+      const localStorageCurrentVideoTimeValue = JSON.parse(localStorage.getItem(`section-progress-${sectionId}`) || "{}").currentTime;
 
-        setInitialCurrentVideoTime(localStorageCurrentVideoTimeValue);
-      } else {
-        setInitialCurrentVideoTime(0);
-      }
+      setInitialCurrentVideoTime(localStorageCurrentVideoTimeValue);
+    } else {
+      setInitialCurrentVideoTime(0);
+    }
 
-      setIsVideoShowing(true);
-      setCurrentCourseIndex(courseIndex);
-      setCurrentSectionIndex(sectionIndex);
-    };
+    setIsVideoShowing(true);
+    setCurrentCourseIndex(courseIndex);
+    setCurrentSectionIndex(sectionIndex);
+  };
 
   if (isVideoShowing) {
     return (

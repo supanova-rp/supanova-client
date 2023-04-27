@@ -10,7 +10,7 @@ const ExistingCoursesContainer: React.FC<React.PropsWithChildren> = ({ children 
         {children}
       </Card.Body>
     </Card>
-   );
+  );
 };
 
 export default ExistingCoursesContainer;

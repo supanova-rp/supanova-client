@@ -24,7 +24,7 @@ const Home = () => {
     setIsLoading(true);
     setCoursesError(null);
 
-     getRequest({
+    getRequest({
       endpoint: "/courses",
       onSuccess,
       onError: (error) => onError("Loading courses failed", error),

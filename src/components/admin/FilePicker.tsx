@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/no-array-index-key */
 import React from "react";
 import axios, { AxiosProgressEvent } from "axios";
@@ -12,8 +13,7 @@ import {
 import { colors } from "../../constants/colorPalette";
 
 import { useWakeLock } from "../../hooks/useWakeLock";
-import { getRequest } from "src/utils/utils";
-import { useAuth } from "src/contexts/AuthContext";
+import useGetRequest from "src/hooks/useGetRequest";
 
 import ProgressBar from "./ProgressBar";
 
@@ -37,7 +37,7 @@ const FilePicker: React.FC<Props> = ({
   onClickCancelFileUpload,
 }) => {
   const { releaseWakeLock, requestWakeLock } = useWakeLock();
-  const { logout } = useAuth();
+  const requestUploadUrl = useGetRequest("/get-upload-url");
 
   const uploadFileToS3 = async (uploadUrl: string, file: File) => {
     requestWakeLock();
@@ -73,16 +73,10 @@ const FilePicker: React.FC<Props> = ({
     console.log(">>> error: ", error);
   };
 
-  const onUnauthorised = () => {
-    logout();
-  };
-
   const handleFileSelected = (e: InputChangeEvent) => {
-    getRequest({
-      endpoint: "/get-upload-url",
-      onSuccess: (result) => onSuccess(e, result),
-      onError,
-      onUnauthorised,
+    requestUploadUrl({
+      onSuccess: (result: any) => onSuccess(e, result),
+      onError
     });
   };
 

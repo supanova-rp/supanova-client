@@ -52,3 +52,9 @@ export type FirebaseUser = FirebaseUserLib & {accessToken?: string}
 export type UploadUrlResponse = {
   uploadUrl: string,
 }
+
+export type EditCoursesRequestBody = {
+  edited_course_id?: number,
+  course?: Course,
+  deleted_sections_ids?: number[] | [],
+}
