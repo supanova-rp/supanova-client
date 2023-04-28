@@ -114,9 +114,11 @@ export default class EditSection extends React.Component<Props> {
 
           <div>
             {this.props.canRemove
-              ? <RemoveInput
+              ? (
+                <RemoveInput
                   onClickFunction={this.onClickRemoveSection}
                   margin={marginStartRemoveSectionIcon} />
+              )
               : null
             }
           </div>

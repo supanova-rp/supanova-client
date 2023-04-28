@@ -22,9 +22,11 @@ const CourseErrorLoadingHandler = ({
   children
 }: Props) => {
   if (error) {
-    return <Error
-      errorMessage={error}
-      onClick={onClick} />;
+    return (
+      <Error
+        errorMessage={error}
+        onClick={onClick} />
+    );
   }
 
   if (isLoading) {

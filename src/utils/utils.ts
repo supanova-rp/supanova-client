@@ -38,15 +38,11 @@ export const getUpdatedSections = (sections: CourseSection[], sectionId: number,
   return updatedSections;
 };
 
-export const getUpdatedCourses = (courses: Course[], sectionId: number, key: string, value: string | number | null | undefined) => {
-  const updatedCourses = courses.map((course) => {
-    return {
-      ...course,
-      sections: getUpdatedSections(course.sections, sectionId, key, value),
-    };
-  });
-
-  return updatedCourses;
+export const getUpdatedCourse = (course: Course, sectionId: number, key: string, value: string | number | null | undefined) => {
+  return {
+    ...course,
+    sections: getUpdatedSections(course.sections, sectionId, key, value),
+  };
 };
 
 export const getInitialCourseState = () => {
@@ -76,21 +72,6 @@ export const areSomeVideosCurrentlyUploading = (editedCourse: Course) => {
   return editedCourse.sections.some((section) => {
     return typeof section.uploadProgress === "number" && section.uploadProgress < 1;
   });
-};
-
-export const getUpdatedCoursesWithEditFlagRemovedForEditedCourse = (editedCourseId: number, allCourses: Course[]) => {
-  const updatedCoursesWithEditFlagRemovedForEditedCourse = allCourses.map((course) => {
-    if (course.id === editedCourseId) {
-      return {
-        ...course,
-        isEditing: false,
-      };
-    }
-
-    return course;
-  });
-
-  return updatedCoursesWithEditFlagRemovedForEditedCourse;
 };
 
 interface GetRequestOptions {

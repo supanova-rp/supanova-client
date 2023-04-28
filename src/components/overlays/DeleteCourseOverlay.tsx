@@ -19,10 +19,14 @@ const DeleteCourseOverlay: React.FC<Props> = ({
       <div className="d-flex flex-column align-items-center justify-content-center">
         <h5>Are you sure you want to delete this Course?</h5>
         {deleteCourseErrorMessage
-          ? <Alert
+          ? (
+            <Alert
               variant="danger"
-              className="p-2 my-2">{deleteCourseErrorMessage}</Alert>
+              className="p-2 my-2">{deleteCourseErrorMessage}
+            </Alert>
+          )
           : null
+
         }
         <div className="mt-3">
           <Button

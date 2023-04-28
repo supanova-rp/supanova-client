@@ -15,7 +15,7 @@ const PageHeroScreen: React.FC<Props> = ({ title, text }) => {
       <h1>{title}</h1>
       <p>{text}</p>
     </div>
-   );
+  );
 };
 
 export default PageHeroScreen;

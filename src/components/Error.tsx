@@ -13,7 +13,7 @@ const Error: React.FC<Props> = ({ errorMessage, onClick}) => {
         className="main-button"
         onClick={onClick}>Try again</Button>
     </div>
-    );
+  );
 };
 
 export default Error;
