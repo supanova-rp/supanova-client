@@ -5,7 +5,7 @@ interface Props {
   onClick: () => void,
 }
 
-const Error: React.FC<Props> = ({ errorMessage, onClick}) => {
+const Error: React.FC<Props> = ({ errorMessage, onClick }) => {
   return (
     <div className="mt-4">
       <Alert variant="danger">{errorMessage}</Alert>

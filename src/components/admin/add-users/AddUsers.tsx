@@ -12,7 +12,7 @@ import { colors } from "../../../constants/colorPalette";
 import { updateUsers } from "../../../utils/utils";
 
 import XIcon from "../../XIcon";
-import FormInput from "../course-form/FormInput";
+import FormInput from "../../FormInput";
 import Navbar from "../nav-and-sidebars/Navbar";
 import RemoveInput from "../course-form/RemoveInput";
 import AddMoreInputs from "../course-form/AddMoreInputs";
@@ -122,14 +122,14 @@ const AddUsers = () => {
                     formId="name"
                     label="Name"
                     type="text"
-                    className="mb-2 me-4"
+                    formGroupClassname="mb-2 me-4"
                     disabled={user.registered}
                     value={user.name}
                     onChange={(e) => onChangeUser("name", user.id, e)} />
                   <FormInput
                     formId="email"
                     label="Email"
-                    className="mb-2"
+                    formGroupClassname="mb-2"
                     type="email"
                     disabled={user.registered}
                     value={user.email}

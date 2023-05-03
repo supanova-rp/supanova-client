@@ -97,14 +97,14 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
     };
 
     const getIsAdmin = async () => {
-        try {
-          const response = await currentUser?.getIdTokenResult();
-          const result = await response?.claims.admin;
+      try {
+        const response = await currentUser?.getIdTokenResult();
+        const result = await response?.claims.admin;
 
-          return result;
-        } catch(e) {
-          return false;
-        }
+        return result;
+      } catch (e) {
+        return false;
+      }
     };
 
     return {

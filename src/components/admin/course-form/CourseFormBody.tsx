@@ -6,7 +6,7 @@ import { Course } from "src/types";
 import AddMoreInputs from "./AddMoreInputs";
 import EditingCourseHeader from "../edit-courses/EditingCourseHeader";
 import EditSection from "./EditSection";
-import FormInput from "./FormInput";
+import FormInput from "../../FormInput";
 
 interface Props {
   course: Course,
@@ -56,14 +56,14 @@ const CourseFormBody: React.FC<Props> = ({
           label="Course Title"
           onChange={(e) => onChangeCourseField("title", e.target.value)}
           type="text"
-          className="mb-4" />
+          formGroupClassname="mb-4" />
         <FormInput
           formId="course-desription"
           value={course.description}
           label="Course Description"
           onChange={(e) => onChangeCourseField("description", e.target.value)}
           type="text"
-          className="mb-4" />
+          formGroupClassname="mb-4" />
 
         {!isEditing
           ? <h5 className="mt-5 mb-1">Add your Course Sections</h5>

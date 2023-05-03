@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { Alert, Button, Card, Form } from "react-bootstrap";
 
 import { useAuth } from "../../contexts/AuthContext";
 import { FormSubmitEvent } from "../../types/index";
-import { Link } from "react-router-dom";
+
+import AuthForm from "./AuthForm";
 
 const ForgotPassword = () => {
   const [emailInput, setEmailInput] = useState("");
@@ -42,52 +42,19 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="d-flex align-items-center justify-content-center login-container">
-      <div>
-        <Card className="pt-4 forgot-password-card">
-          <Card.Body>
-            <h2 className="text-center mb-3">Password Reset</h2>
-            {validationError
-              ? (
-                <Alert
-                  variant="danger"
-                  className="forgot-password-alert">{validationError}
-                </Alert>
-              )
-              : null
-            }
-            {resetPasswordSuccessMessage
-              ? (
-                <Alert
-                  variant="success"
-                  className="forgot-password-alert">{resetPasswordSuccessMessage}
-                </Alert>
-              )
-              : null
-            }
-            <Form onSubmit={onHandleResetPassword}>
-              <Form.Group
-                id="email"
-                className="mb-2">
-                <Form.Label>Email</Form.Label>
-                <Form.Control
-                  type="email"
-                  required
-                  value={emailInput}
-                  onChange={(e) => setEmailInput(e.target.value)} />
-              </Form.Group>
-              <Button
-                disabled={isLoading}
-                type="submit"
-                className="w-100 mt-4 main-button">
-                Reset Password
-              </Button>
-            </Form>
-            <footer className="w-100 text-center mt-4 footer-link clickable "><Link to="/login">Log in</Link></footer>
-          </Card.Body>
-        </Card>
-      </div>
-    </div>
+    <AuthForm
+      cardClassname="forgot-password-card"
+      isLoading={isLoading}
+      title="Password Reset"
+      validationError={validationError}
+      emailInput={emailInput}
+      successMessage={resetPasswordSuccessMessage}
+      alertClassname="forgot-password-alert"
+      buttonText="Reset Password"
+      footerText="Log in"
+      footerPath="/login"
+      onSubmit={onHandleResetPassword}
+      setEmailInput={setEmailInput}/>
   );
 };
 

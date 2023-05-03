@@ -5,7 +5,7 @@ import { AxiosProgressEvent } from "axios";
 import { CourseSection } from "../../../types/index";
 
 import FilePicker from "./FilePicker";
-import FormInput from "./FormInput";
+import FormInput from "../../FormInput";
 import RemoveInput from "./RemoveInput";
 
 interface Props {
@@ -80,7 +80,7 @@ export default class EditSection extends React.Component<Props> {
         <div>
           <FormInput
             formId={`course-section-${this.props.section.id}`}
-            className="my-4 section-input"
+            formGroupClassname="my-4 section-input"
             label="Section Title"
             type="text"
             value={this.props.section.title}

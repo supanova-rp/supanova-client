@@ -40,9 +40,12 @@ const CourseErrorLoadingHandler = ({
   }
 
   if (!courses.length) {
-    return <Alert
-      variant="warning"
-      className="mt-4">No courses to see yet...</Alert>;
+    return (
+      <Alert
+        variant="warning"
+        className="mt-4">No courses to see yet...
+      </Alert>
+    );
   }
 
   return <>{children}</>;
