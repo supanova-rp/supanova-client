@@ -37,7 +37,7 @@ const Home = () => {
       const result = await getIsAdmin();
 
       setIsAdmin(result);
-    } catch(e) {
+    } catch (e) {
       console.log(">>> isAdminError: ", e);
     }
   };
@@ -65,10 +65,12 @@ const Home = () => {
 
   const renderAdminContent = () => {
     if (activeTab === "Courses") {
-      return <Courses
-        logoutError={logoutError}
-        courses={courses}
-        setCourses={setCourses} />;
+      return (
+        <Courses
+          logoutError={logoutError}
+          courses={courses}
+          setCourses={setCourses} />
+      );
     }
 
     if (activeTab === "Instructor") {
@@ -95,7 +97,6 @@ const Home = () => {
             courses={courses}>
             {renderAdminContent()}
           </CourseErrorLoadingHandler>
-
         </div>
       </div>
     </div>

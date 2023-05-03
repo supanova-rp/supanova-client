@@ -1,7 +1,7 @@
 import React from "react";
 import { Form } from "react-bootstrap";
 
-import { InputChangeFunction } from "../../types/index";
+import { InputChangeFunction } from "../../../types/index";
 
 interface Props {
   formId: string,
@@ -13,7 +13,7 @@ interface Props {
   value: string,
   Component?: React.ReactNode,
 }
-const FormGroup: React.FC<Props> = ({
+const FormInput: React.FC<Props> = ({
   formId,
   value,
   label,
@@ -39,4 +39,4 @@ const FormGroup: React.FC<Props> = ({
   );
 };
 
-export default FormGroup;
+export default FormInput;

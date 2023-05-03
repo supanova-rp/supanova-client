@@ -7,7 +7,9 @@ body, html, #root {
   --primary-color: #132843;
   --secondary-color: #F18F0F;
   --link-color: #3E819A;
-  --hover-color: #e7e6e6;
+  --hover-color-grey: #e7e6e6;
+  --hover-color-blue: #18355a;
+  --hover-color-orange: #db810d;
 }
 
 .icon, .link {
@@ -19,8 +21,8 @@ body, html, #root {
   border: 1px solid var(--secondary-color);
 
   &:hover, &:active {
-    background-color: #db810d !important;
-    border: 1px solid #db810d !important;
+    background-color: var(--hover-color-orange) !important;
+    border: 1px solid var(--hover-color-orange) !important;
   }
 }
 
@@ -30,8 +32,8 @@ body, html, #root {
   border: 1px solid var(--primary-color);
 
   &:hover, &:active {
-    background-color: #18355a !important;
-    border: 1px solid #18355a !important;
+    background-color: var(--hover-color-blue) !important;
+    border: 1px solid var(--hover-color-blue) !important;
   }
 }
 

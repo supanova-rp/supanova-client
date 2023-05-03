@@ -46,11 +46,10 @@ export const getUpdatedCourse = (course: Course, sectionId: number, key: string,
 };
 
 export const getInitialCourseState = () => {
-  return {
+  return  {
     id: Date.now(),
     title: "",
     description: "",
-    isEditing: false,
     sections: [
       {
         id: Date.now(),
@@ -59,19 +58,47 @@ export const getInitialCourseState = () => {
         uploadProgress: null,
       },
     ],
-    loading: false,
-    error: {
-      message: null,
-      type: null,
-    },
-    successMessage: null,
   };
 };
 
-export const areSomeVideosCurrentlyUploading = (editedCourse: Course) => {
-  return editedCourse.sections.some((section) => {
+export const areSomeVideosCurrentlyUploading = (course: Course) => {
+  return course.sections.some((section) => {
     return typeof section.uploadProgress === "number" && section.uploadProgress < 1;
   });
+};
+
+export const doesEverySectionHaveAVideoUrl = (course: Course) => {
+  return course.sections.every((section) => section.videoUrl);
+};
+
+export const getDeletedSectionsIds = (course: Course, initialCourse: Course) => {
+  // Getting the ids of the deleted sections so the back end can delete them in the table
+  const sectionsThatDontExistInEditedCourse = initialCourse.sections.filter((section) => {
+    const sectionExistsInEditedCourse = course.sections.some((editedCourseSection) => {
+      return editedCourseSection.id === section.id;
+    });
+
+    if (sectionExistsInEditedCourse) {
+      return false;
+    }
+
+    return true;
+  });
+
+  const idsOfDeletedSections = sectionsThatDontExistInEditedCourse?.map((section) => section.id);
+
+  return idsOfDeletedSections;
+};
+
+export const getSectionsWithPositions = (course: Course) => {
+  const sectionsWithPositions = course.sections.map((section, index) => {
+    return {
+      ...section,
+      position: index,
+    };
+  });
+
+  return sectionsWithPositions;
 };
 
 interface GetRequestOptions {
@@ -112,7 +139,7 @@ interface RequestOptions {
   onUnauthorised: () => void,
 }
 
-export const request = async ({ endpoint, method, requestBody, onSuccess, onError, onUnauthorised} : RequestOptions) => {
+export const request = async ({ endpoint, method, requestBody, onSuccess, onError, onUnauthorised } : RequestOptions) => {
   try {
     const response = await fetch(`${API_DOMAIN}${endpoint}`, {
       method,

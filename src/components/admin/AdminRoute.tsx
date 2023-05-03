@@ -21,7 +21,7 @@ const AdminRoute = ({ children }: React.PropsWithChildren) => {
 
         setIsLoading(false);
         setIsAdmin(result);
-      } catch(e) {
+      } catch (e) {
         console.log(">>> isAdminError: ", e);
         setIsLoading(false);
         setIsAdmin(false);

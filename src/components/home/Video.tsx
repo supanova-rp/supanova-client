@@ -4,7 +4,7 @@ import { SyntheticEvent } from "react";
 import { Button } from "react-bootstrap";
 
 import { colors } from "../../constants/colorPalette";
-import { ReactComponent as ChevronLeft}  from "../../icons/chevronLeft.svg";
+import { ReactComponent as ChevronLeft }  from "../../icons/chevronLeft.svg";
 import { Course, LogoutErrorProps } from "../../types/index";
 
 import Header from "./Header";

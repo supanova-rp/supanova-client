@@ -1,22 +1,18 @@
 import { Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
 
-import { colors } from "src/constants/colorPalette";
-
-import { ReactComponent as DeleteIcon } from "../../../icons/deleteIcon.svg";
 import { ReactComponent as ChevronLeft } from "../../../icons/chevronLeft.svg";
 
 import { Course } from "src/types";
 
 interface Props {
-  editingCourse: Course,
-  onClickHandleEditingCourse: (parameter: null) => void,
+  course: Course,
+  onCourseFormCancelled: (editCourseId: null) => void,
   onClickHandleShowingDeleteOverlay: (courseId: number) => void,
 }
 
 const EditingCourseHeader: React.FC<Props> = ({
-  editingCourse,
-  onClickHandleEditingCourse,
+  course,
+  onCourseFormCancelled,
   onClickHandleShowingDeleteOverlay,
 }) => {
   return (
@@ -24,10 +20,10 @@ const EditingCourseHeader: React.FC<Props> = ({
       <ChevronLeft
         stroke="black"
         className="clickable me-2"
-        onClick={() => onClickHandleEditingCourse(null)} />
+        onClick={() => onCourseFormCancelled(null)} />
       <Button
         className="btn-danger"
-        onClick={() => onClickHandleShowingDeleteOverlay(editingCourse.id)} >
+        onClick={() => onClickHandleShowingDeleteOverlay(course.id)} >
         Delete
       </Button>
     </div>

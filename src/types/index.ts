@@ -1,4 +1,4 @@
-import { User as FirebaseUserLib} from "firebase/auth";
+import { User as FirebaseUserLib } from "firebase/auth";
 
 export type SetStringFunction = (parameter: string) => void;
 
@@ -25,7 +25,6 @@ export type Course = {
   id: number,
   title: string,
   description: string,
-  isEditing?: boolean,
   sections: CourseSection[],
   loading?: boolean,
   errorMessage?: string | null,
@@ -57,4 +56,23 @@ export type EditCoursesRequestBody = {
   edited_course_id?: number,
   course?: Course,
   deleted_sections_ids?: number[] | [],
+}
+
+export type ErrorOptions = {
+    message: null | string,
+    type: null | string,
+    error?: null | string,
+}
+
+export type RequestOptions = {
+  requestBody: {
+    title?: string,
+    description?: string,
+    sections?: CourseSection[],
+    edited_course_id?: number,
+    edited_course?: Course,
+    deleted_sections_ids?: number[] | [],
+  },
+  endpoint: string,
+  method: string,
 }

@@ -48,15 +48,21 @@ const ForgotPassword = () => {
           <Card.Body>
             <h2 className="text-center mb-3">Password Reset</h2>
             {validationError
-              ? <Alert
+              ? (
+                <Alert
                   variant="danger"
-                  className="forgot-password-alert">{validationError}</Alert>
+                  className="forgot-password-alert">{validationError}
+                </Alert>
+              )
               : null
             }
             {resetPasswordSuccessMessage
-              ? <Alert
+              ? (
+                <Alert
                   variant="success"
-                  className="forgot-password-alert">{resetPasswordSuccessMessage}</Alert>
+                  className="forgot-password-alert">{resetPasswordSuccessMessage}
+                </Alert>
+              )
               : null
             }
             <Form onSubmit={onHandleResetPassword}>

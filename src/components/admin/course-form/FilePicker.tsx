@@ -1,18 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable react/no-array-index-key */
 import React from "react";
 import axios, { AxiosProgressEvent } from "axios";
 
-import { ReactComponent as TickIcon } from "../../icons/tickIcon.svg";
+import { ReactComponent as TickIcon } from "../../../icons/tickIcon.svg";
 
 import {
   InputChangeEvent,
   UploadProgress,
   UploadUrlResponse
-} from "../../types/index";
-import { colors } from "../../constants/colorPalette";
+} from "../../../types/index";
+import { colors } from "../../../constants/colorPalette";
 
-import { useWakeLock } from "../../hooks/useWakeLock";
+import { useWakeLock } from "../../../hooks/useWakeLock";
 import useGetRequest from "src/hooks/useGetRequest";
 
 import ProgressBar from "./ProgressBar";
@@ -99,9 +98,11 @@ const FilePicker: React.FC<Props> = ({
       );
     }
 
-    return <TickIcon
-      stroke={colors.green}
-      className="ms-2" />;
+    return (
+      <TickIcon
+        stroke={colors.green}
+        className="ms-2" />
+    );
   };
 
   return (

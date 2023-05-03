@@ -12,10 +12,10 @@ import { colors } from "../../../constants/colorPalette";
 import { updateUsers } from "../../../utils/utils";
 
 import XIcon from "../../XIcon";
-import FormGroup from "../FormGroup";
+import FormInput from "../course-form/FormInput";
 import Navbar from "../nav-and-sidebars/Navbar";
-import RemoveInput from "../RemoveInput";
-import AddMoreInputs from "../AddMoreInputs";
+import RemoveInput from "../course-form/RemoveInput";
+import AddMoreInputs from "../course-form/AddMoreInputs";
 
 const AddUsers = () => {
   const usersDefaultState = [{
@@ -118,7 +118,7 @@ const AddUsers = () => {
               key={user.id}>
               <div className="d-flex align-items-center">
                 <div className="d-flex">
-                  <FormGroup
+                  <FormInput
                     formId="name"
                     label="Name"
                     type="text"
@@ -126,7 +126,7 @@ const AddUsers = () => {
                     disabled={user.registered}
                     value={user.name}
                     onChange={(e) => onChangeUser("name", user.id, e)} />
-                  <FormGroup
+                  <FormInput
                     formId="email"
                     label="Email"
                     className="mb-2"
@@ -156,16 +156,20 @@ const AddUsers = () => {
                   }
 
                   {user.registered && !user.hasPasswordResetError
-                    ? <TickIcon
+                    ? (
+                      <TickIcon
                         stroke={colors.green}
                         className="ms-3" />
+                    )
                     : null
                   }
 
                   {users?.length > 1 && !user.registered
-                    ? <RemoveInput
+                    ? (
+                      <RemoveInput
                         onClickFunction={() => onClickRemoveUser(user.id)}
                         margin="ms-2 mt-3" />
+                    )
                     : null
                   }
                 </div>

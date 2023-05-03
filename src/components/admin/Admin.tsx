@@ -1,22 +1,20 @@
 import { useState } from "react";
 
-import AddCourses from "./new-courses/NewCourses";
+import AddCourse from "./add-course/AddCourse";
 import AddUsers from "./add-users/AddUsers";
 import SidebarContainer from "./nav-and-sidebars/SidebarContainer";
-import EditCourses from "./edit-courses/ExistingCourses";
+import EditCourses from "./edit-courses/EditCourses";
 
 const Admin = () => {
   const [activeTab, setActiveTab] = useState("Add Course");
 
   const renderAdminContent = () => {
     if (activeTab === "Add Course") {
-      return <AddCourses />;
+      return <AddCourse />;
     }
 
     if (activeTab === "Edit Courses") {
-      return (
-        <EditCourses/>
-      );
+      return <EditCourses />;
     }
 
     if (activeTab === "Add Users") {

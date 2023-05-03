@@ -2,10 +2,10 @@
 import React, { createRef } from "react";
 import { AxiosProgressEvent } from "axios";
 
-import { CourseSection } from "../../types/index";
+import { CourseSection } from "../../../types/index";
 
 import FilePicker from "./FilePicker";
-import FormGroup from "./FormGroup";
+import FormInput from "./FormInput";
 import RemoveInput from "./RemoveInput";
 
 interface Props {
@@ -78,7 +78,7 @@ export default class EditSection extends React.Component<Props> {
         className="d-flex flex-row align-items-center"
         key={`chapter-${this.props.index}`}>
         <div>
-          <FormGroup
+          <FormInput
             formId={`course-section-${this.props.section.id}`}
             className="my-4 section-input"
             label="Section Title"

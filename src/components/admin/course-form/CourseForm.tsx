@@ -2,37 +2,56 @@ import { Component } from "react";
 import { Alert, Form } from "react-bootstrap";
 import { AxiosProgressEvent } from "axios";
 
-import { Course, FormSubmitEvent } from "src/types";
-import { areSomeVideosCurrentlyUploading, getUpdatedCourse, request } from "src/utils/utils";
+import {
+  Course,
+  ErrorOptions,
+  FormSubmitEvent,
+  RequestOptions
+} from "src/types";
+import {
+  areSomeVideosCurrentlyUploading,
+  doesEverySectionHaveAVideoUrl,
+  getUpdatedCourse,
+  request,
+} from "src/utils/utils";
 
-import EditingCourse from "./EditingCourse";
+import CourseFormBody from "./CourseFormBody";
 import DeleteCourseOverlay from "src/components/overlays/DeleteCourseOverlay";
+import { AuthContext, AuthContextType } from "src/contexts/AuthContext";
 
-type EditCourseState = {
+type CourseFormState = {
   course: Course,
-  courseErrorMessage: null | string,
+  error: ErrorOptions,
   areActionsDisabled: boolean,
   courseIdToDelete: null | number,
   deleteCourseErrorMessage: null | string,
 }
 
-interface EditCourseProps {
+interface CourseFormProps {
   initialCourse: Course,
-  editingCourseId: number | null,
-  onUnauthorised: () => void,
-  onClickHandleEditingCourse: (editingCourseId: number | null) => void;
-  handleSuccessMessageAfterSavingEditedCourse: () => void,
-  onEditCourseFinished: () => void,
+  isEditing?: boolean,
+  getRequestOptions: (course: Course, initialCourse: Course) => RequestOptions,
+  onCourseSavedSuccess: (editedCourse: Course) => void,
+  onCourseFormCancelled: (editingCourseId: number | null) => void,
+  onCourseDeletedSuccess?: (courseIdToDelete: number) => void,
 }
 
-export default class EditingCourseContainer extends Component <EditCourseProps> {
-  state: EditCourseState = {
-    courseErrorMessage: null,
+export default class CourseForm extends Component <CourseFormProps> {
+  context: AuthContextType;
+
+  state: CourseFormState = {
+    error: {
+      message: null,
+      type: null,
+      error: null,
+    },
     areActionsDisabled: false,
     courseIdToDelete: null,
     deleteCourseErrorMessage: null,
     course: this.props.initialCourse,
   };
+
+  static contextType = AuthContext;
 
   onUpdateStateAfterCancellingFileUpload = (sectionId: number) => {
     const { course } = this.state;
@@ -69,7 +88,7 @@ export default class EditingCourseContainer extends Component <EditCourseProps> 
           id: Date.now(),
           title: "",
           videoUrl: "",
-          isNewSection: true,
+          isNewSection: this.props.isEditing,
         },
       ],
     };
@@ -91,7 +110,7 @@ export default class EditingCourseContainer extends Component <EditCourseProps> 
   onChangeSectionTitle = (sectionId: number, newInputValue: string) => {
     const { course } = this.state;
 
-    const updatedCourse = course.sections.map((section) => {
+    const sectionsWithUpdatedSectionTitle = course.sections.map((section) => {
       if (section.id === sectionId) {
         return {
           ...section,
@@ -101,6 +120,11 @@ export default class EditingCourseContainer extends Component <EditCourseProps> 
 
       return section;
     });
+
+    const updatedCourse = {
+      ...course,
+      sections: sectionsWithUpdatedSectionTitle,
+    };
 
     this.setState({ course: updatedCourse });
   };
@@ -122,9 +146,11 @@ export default class EditingCourseContainer extends Component <EditCourseProps> 
     this.setState({ courseIdToDelete: value, deleteCourseErrorMessage: null });
   };
 
-  onClickDeleteCourse = async () => {
-    const { onUnauthorised } = this.props;
+  onUnauthorised = () => {
+    this.context.logout();
+  };
 
+  onClickDeleteCourse = async () => {
     this.setState({
       areActionsDisabled: true,
       deleteCourseErrorMessage: null,
@@ -139,143 +165,115 @@ export default class EditingCourseContainer extends Component <EditCourseProps> 
       method: "DELETE",
       requestBody,
       onSuccess: this.onSuccessfullyDeletedCourse,
-      onError: (deleteCourseError: string) => this.onError("Deleting course failed. Try again.", deleteCourseError),
-      onUnauthorised,
+      onError: (deleteCourseError: string) => this.onError({
+        message: "Deleting course failed. Try again.",
+        type: "danger",
+        error: deleteCourseError
+      }),
+      onUnauthorised: this.onUnauthorised,
     });
   };
 
   onSuccessfullyDeletedCourse = () => {
-    const { onEditCourseFinished } = this.props;
+    const { courseIdToDelete } = this.state;
+    const { onCourseFormCancelled, onCourseDeletedSuccess } = this.props;
+
+    onCourseFormCancelled(null);
+
+    if (courseIdToDelete && onCourseDeletedSuccess) {
+      onCourseDeletedSuccess(courseIdToDelete);
+    }
 
     this.setState({
       areActionsDisabled: false,
       courseIdToDelete: null,
     });
-
-    onEditCourseFinished();
   };
 
-  getDeletedSectionsIds = () => {
-    const { course } = this.state;
-    const { initialCourse } = this.props;
-
-    // Getting the ids of the deleted sections so the back end can delete them in the table
-    const sectionsThatDontExistInEditedCourse = initialCourse.sections.filter((section) => {
-      const sectionExistsInEditedCourse = course.sections.some((editedCourseSection) => {
-        return editedCourseSection.id === section.id;
-      });
-
-      if (sectionExistsInEditedCourse) {
-        return false;
-      }
-
-      return true;
-    });
-
-    const idsOfDeletedSections = sectionsThatDontExistInEditedCourse?.map((section) => section.id);
-
-    return idsOfDeletedSections;
-  };
-
-  getEditedCourseWithSectionPositions = () => {
-    const { course } = this.state;
-
-    const sectionsWithPositions = course.sections.map((section, index) => {
-      return {
-        ...section,
-        position: index,
-      };
-    });
-
-    const editedCourseWithSectionPositions = {
-      ...course,
-      sections: sectionsWithPositions,
-    };
-
-    return editedCourseWithSectionPositions;
-  };
-
-  onSuccessfullySavedEditedCourse = () => {
-    const { handleSuccessMessageAfterSavingEditedCourse } = this.props;
-
+  onSuccessfullySavedCourse = () => {
     this.setState({
       areActionsDisabled: false,
     });
 
-    handleSuccessMessageAfterSavingEditedCourse();
-  };
-
-  onClickCancelEditingCourse = () => {
-    const { onEditCourseFinished } = this.props;
-
-    onEditCourseFinished();
+    this.props.onCourseSavedSuccess(this.state.course);
   };
 
   onClickSaveEditedCourse = async (event: FormSubmitEvent) => {
     event.preventDefault();
 
     const { course } = this.state;
-    const { onUnauthorised, editingCourseId } = this.props;
+    const { initialCourse, getRequestOptions } = this.props;
 
-    if (!areSomeVideosCurrentlyUploading(course)) {
+    if (!areSomeVideosCurrentlyUploading(course) && doesEverySectionHaveAVideoUrl(course)) {
       this.setState({
         areActionsDisabled: true,
-        courseErrorMessage: null,
+        error: {
+          message: null,
+          type: null,
+          error: null,
+        },
       });
 
-      const requestBody = {
-        edited_course_id: editingCourseId,
-        edited_course: this.getEditedCourseWithSectionPositions(),
-        deleted_sections_ids: this.getDeletedSectionsIds(),
-      };
+      const requestOptions = getRequestOptions(course, initialCourse);
 
       request({
-        endpoint: "/edit-course",
-        method: "PUT",
-        requestBody,
-        onSuccess: () => this.onSuccessfullySavedEditedCourse(),
-        onError: (saveEditedCourseError: string) => this.onError("Failed to save edited course. Try again.", saveEditedCourseError),
-        onUnauthorised,
+        endpoint: `${requestOptions.endpoint}`,
+        method: `${requestOptions.method}`,
+        requestBody: requestOptions.requestBody,
+        onSuccess: () => this.onSuccessfullySavedCourse(),
+        onError: (saveCourseError: string) => this.onError({
+          message: "Failed to save course. Try again.",
+          type: "danger",
+          error: saveCourseError,
+        }),
+        onUnauthorised: this.onUnauthorised,
       });
     } else {
-      this.onError("Please make sure videos are uploaded for every section.");
+      this.onError({
+        message: "Please make sure videos are uploaded for every section.",
+        type: "warning"
+      });
     }
   };
 
-  onError = (courseErrorMessage: string, error = "") => {
-    console.log(">>> error: ", error || courseErrorMessage);
+  onError = (errorOptions: ErrorOptions) => {
+    console.log(">>> error: ", errorOptions.error || errorOptions.message);
 
     this.setState({
       areActionsDisabled: false,
-      courseErrorMessage,
+      error: {
+        ...this.state.error,
+        ...errorOptions,
+      }
     });
   };
 
   render() {
     const {
       course,
-      courseErrorMessage,
+      error,
       areActionsDisabled,
       courseIdToDelete,
       deleteCourseErrorMessage
     } = this.state;
 
-    const { onClickHandleEditingCourse } = this.props;
+    const { onCourseFormCancelled, isEditing } = this.props;
 
-    const alertVariant = courseErrorMessage?.includes("Please") ? "warning" : "danger";
+    const alertVariant = error.type === "warning" ? "warning" : "danger";
 
     if (course) {
       return (
         <>
           <Form onSubmit={(e) => this.onClickSaveEditedCourse(e)}>
-            {courseErrorMessage
-              ? <Alert variant={alertVariant}>{courseErrorMessage}</Alert>
+            {error.message
+              ? <Alert variant={alertVariant}>{error.message}</Alert>
               : null
             }
 
             <div className="my-4">
-              <EditingCourse
-                editingCourse={course}
+              <CourseFormBody
+                course={course}
+                isEditing={isEditing || false}
                 areActionsDisabled={areActionsDisabled}
                 onChangeCourseField={this.onChangeCourseField}
                 onChangeSectionTitle={this.onChangeSectionTitle}
@@ -285,8 +283,7 @@ export default class EditingCourseContainer extends Component <EditCourseProps> 
                 handleRemoveSection={this.handleRemoveSection}
                 onClickAddNewSection={this.onClickAddNewSection}
                 onClickHandleShowingDeleteOverlay={this.onClickHandleShowingDeleteOverlay}
-                onClickCancelEditingCourse={this.onClickCancelEditingCourse}
-                onClickHandleEditingCourse={onClickHandleEditingCourse} />
+                onCourseFormCancelled={onCourseFormCancelled} />
             </div>
           </Form>
 
@@ -305,6 +302,5 @@ export default class EditingCourseContainer extends Component <EditCourseProps> 
     }
 
     return null;
-
   }
 };

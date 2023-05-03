@@ -1,15 +1,19 @@
 import { Component } from "react";
 
-import {Course} from "../../../types/index";
-import {getRequest} from "../../../utils/utils";
+import { Course } from "../../../types/index";
+import {
+  getDeletedSectionsIds,
+  getRequest,
+  getSectionsWithPositions
+} from "../../../utils/utils";
 import { AuthContext, AuthContextType } from "src/contexts/AuthContext";
 
-import ExistingCoursesContainer from "./ExistingCoursesContainer";
+import EditCoursesContainer from "./EditCoursesContainer";
 import CourseErrorLoadingHandler from "src/components/CourseErrorLoadingHandler";
-import EditingCourseContainer from "./EditingCourseContainer";
-import CoursesListContainer from "./CourseListContainer";
+import CourseForm from "../course-form/CourseForm";
+import CoursesList from "./CoursesList";
 
-type ExistingCoursesState = {
+type EditCoursesState = {
   isLoading: boolean,
   successMessage: null | string,
   getCoursesErrorMessage: null | string,
@@ -18,7 +22,7 @@ type ExistingCoursesState = {
 }
 
 export default class EditCourses extends Component {
-  state: ExistingCoursesState = {
+  state: EditCoursesState = {
     isLoading: true,
     editingCourseId: null,
     successMessage: null,
@@ -44,23 +48,60 @@ export default class EditCourses extends Component {
     this.getCourses();
   };
 
+  onUnauthorised = () => {
+    this.context.logout();
+  };
+
   onClickHandleEditingCourse = (courseId: number | null) => {
     this.setState({ editingCourseId: courseId });
   };
 
-  onEditCourseFinished = () => {
-    this.setState({ editingCourseId: null });
-  };
+  onCourseEditedSuccess = (editedCourse: Course,) => {
+    const { allCourses, editingCourseId } = this.state;
+    const updatedCoursesWithEditedCourse = allCourses.map((course) => {
+      if (course.id === editingCourseId) {
+        return editedCourse;
+      }
 
-  handleSuccessMessageAfterSavingEditedCourse = () => {
+      return course;
+    });
+
     this.setState({
       successMessage: "Successfully saved edited course!",
       editingCourseId: null,
+      allCourses: updatedCoursesWithEditedCourse,
     });
 
     setTimeout(() => {
       this.setState({ successMessage: null });
     }, 3000);
+  };
+
+  onCourseDeletedSuccess = (courseIdToDelete: number) => {
+    const coursesWithoutDeletedCourse = this.state.allCourses.filter((course) => course.id !== courseIdToDelete);
+
+    this.setState({
+      allCourses: coursesWithoutDeletedCourse,
+    });
+  };
+
+  getRequestOptions = (course: Course, initialCourse: Course,) => {
+    const sectionsWithPositions = getSectionsWithPositions(course);
+
+    const editedCourseWithSectionsPositions = {
+      ...course,
+      sections: sectionsWithPositions,
+    };
+
+    return {
+      requestBody: {
+        edited_course_id: course.id,
+        edited_course: editedCourseWithSectionsPositions,
+        deleted_sections_ids: getDeletedSectionsIds(course, initialCourse),
+      },
+      method: "PUT",
+      endpoint: "/edit-course"
+    };
   };
 
   onSuccess = (result: Course[]) => {
@@ -79,12 +120,6 @@ export default class EditCourses extends Component {
     });
   };
 
-  onUnauthorised = () => {
-    const { logout } = this.context;
-
-    logout();
-  };
-
   render() {
     const {
       isLoading,
@@ -97,7 +132,7 @@ export default class EditCourses extends Component {
     const editingCourse = allCourses.find((course) => course.id === editingCourseId);
 
     return (
-      <ExistingCoursesContainer>
+      <EditCoursesContainer>
         <CourseErrorLoadingHandler
           isLoading={isLoading}
           error={getCoursesErrorMessage}
@@ -106,23 +141,24 @@ export default class EditCourses extends Component {
 
           {editingCourse
             ? (
-              <EditingCourseContainer
+              <CourseForm
                 initialCourse={editingCourse}
-                editingCourseId={editingCourseId}
-                onUnauthorised={this.onUnauthorised}
-                handleSuccessMessageAfterSavingEditedCourse={this.handleSuccessMessageAfterSavingEditedCourse}
-                onClickHandleEditingCourse={this.onClickHandleEditingCourse}
-                onEditCourseFinished={this.onEditCourseFinished} />
+                isEditing={true}
+                getRequestOptions={this.getRequestOptions}
+                onCourseSavedSuccess={this.onCourseEditedSuccess}
+                onCourseFormCancelled={this.onClickHandleEditingCourse}
+                onCourseDeletedSuccess={this.onCourseDeletedSuccess} />
             )
             : (
-              <CoursesListContainer
+              <CoursesList
                 courses={allCourses}
                 successMessage={successMessage}
                 onClickHandleEditingCourse={this.onClickHandleEditingCourse}/>
             )
           }
         </CourseErrorLoadingHandler>
-      </ExistingCoursesContainer>
+
+      </EditCoursesContainer>
     );
   }
 }

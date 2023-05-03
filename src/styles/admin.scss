@@ -112,11 +112,38 @@ input {
   }
 }
 
-.row-course-title {
-  color: var(--secondary-color)
+.courses-list-container {
+  padding: 10px 16px;
+  cursor: pointer;
+
+  &:hover {
+    h5 {
+      transition: all ease-in 0.2s;
+      color: var(--hover-color-blue);
+    }
+
+    .courses-list-vertical-line {
+      transition: all ease-in 0.2s;
+      border-left: 5px solid var(--hover-color-blue);
+    }
+  }
+
+  &:last-child {
+    .courses-list-horizontal-line {
+      display: none;
+    }
+  }
+
+  .courses-list-section-title {
+    text-align: left;
+    margin-bottom: 15px;
+  }
+  
+  .courses-list-vertical-line {
+    border-left: 5px solid var(--secondary-color);
+    height: 20px;
+    margin-right: 10px;
+    margin-top: 2px;
+  }
 }
 
-.row-section-title {
-  text-align: left;
-  margin-bottom: 15px;
-}
