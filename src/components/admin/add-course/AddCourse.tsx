@@ -63,7 +63,12 @@ export default class AddCourse extends Component {
           <Navbar title="Add a New Course" />
 
           {successMessage
-            ? <Alert variant="success">{successMessage}</Alert>
+            ? (
+              <Alert
+                variant="success"
+                className="add-course-success">{successMessage}
+              </Alert>
+            )
             : null
           }
 
@@ -73,7 +78,6 @@ export default class AddCourse extends Component {
             getRequestOptions={this.getRequestOptions}
             onCourseSavedSuccess={this.onSuccessfullyAddedNewCourse}
             onCourseFormCancelled={this.onCancelAddingNewCourse} />
-
         </Card.Body>
       </Card>
     );

@@ -9,7 +9,6 @@ interface Props {
   type: string,
   formGroupClassname: string,
   inputContainerClassname?: string,
-  inputClassname?: string,
   disabled?: boolean,
   onChange: InputChangeFunction,
   value: string,
@@ -23,7 +22,6 @@ const FormInput: React.FC<Props> = ({
   type,
   formGroupClassname,
   inputContainerClassname,
-  inputClassname,
   disabled,
   minLength,
   Component,
@@ -41,7 +39,6 @@ const FormInput: React.FC<Props> = ({
           minLength={minLength}
           required
           value={value}
-          className={inputClassname}
           onChange={onChange} />
         {Component}
       </div>

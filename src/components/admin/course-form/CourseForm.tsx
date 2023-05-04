@@ -266,7 +266,13 @@ export default class CourseForm extends Component <CourseFormProps> {
         <>
           <Form onSubmit={(e) => this.onClickSaveEditedCourse(e)}>
             {error.message
-              ? <Alert variant={alertVariant}>{error.message}</Alert>
+              ? (
+                <Alert
+                  variant={alertVariant}
+                  className="course-form-error-alert">
+                  {error.message}
+                </Alert>
+              )
               : null
             }
 

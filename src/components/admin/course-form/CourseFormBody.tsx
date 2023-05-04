@@ -56,14 +56,14 @@ const CourseFormBody: React.FC<Props> = ({
           label="Course Title"
           onChange={(e) => onChangeCourseField("title", e.target.value)}
           type="text"
-          formGroupClassname="mb-4" />
+          formGroupClassname="mb-4 course-title" />
         <FormInput
           formId="course-desription"
           value={course.description}
           label="Course Description"
           onChange={(e) => onChangeCourseField("description", e.target.value)}
           type="text"
-          formGroupClassname="mb-4" />
+          formGroupClassname="mb-4 course-description" />
 
         {!isEditing
           ? <h5 className="mt-5 mb-1">Add your Course Sections</h5>

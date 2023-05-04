@@ -13,7 +13,7 @@
   width: 360px;
 }
 
-.form-control.login-email-input {
+.email-input input, .password-input input {
   width: 358px;
 }
 
@@ -26,8 +26,6 @@
     padding: 9px;
   }
 }
-
-
 
 .footer-link {
   a {

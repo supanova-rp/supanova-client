@@ -76,7 +76,7 @@ const AuthFormBody: React.FC<Props> = ({
               <FormInput
                 formId="email"
                 formGroupClassname="mb-2 pe-4"
-                inputClassname="login-email-input"
+                inputContainerClassname="email-input"
                 label="Email"
                 type="email"
                 value={emailInput}

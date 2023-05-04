@@ -67,8 +67,7 @@ const Login = () => {
         <FormInput
           formId="password"
           formGroupClassname="mb-2"
-          inputClassname="login-password-input"
-          inputContainerClassname="d-flex align-items-center"
+          inputContainerClassname="d-flex align-items-center password-input"
           label="Password"
           type={isPasswordShowing ? "text" : "password"}
           value={passwordInput}

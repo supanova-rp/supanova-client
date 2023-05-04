@@ -1,23 +1,27 @@
 import { useState } from "react";
 
+import { ADMINS_TABS } from "src/constants/constants";
+
 import AddCourse from "./add-course/AddCourse";
 import AddUsers from "./add-users/AddUsers";
 import SidebarContainer from "./nav-and-sidebars/SidebarContainer";
 import EditCourses from "./edit-courses/EditCourses";
 
+const { ADD_COURSE, ADD_USERS, EDIT_COURSES } = ADMINS_TABS;
+
 const Admin = () => {
-  const [activeTab, setActiveTab] = useState("Add Course");
+  const [activeTab, setActiveTab] = useState(ADD_COURSE);
 
   const renderAdminContent = () => {
-    if (activeTab === "Add Course") {
+    if (activeTab === ADD_COURSE) {
       return <AddCourse />;
     }
 
-    if (activeTab === "Edit Courses") {
+    if (activeTab === EDIT_COURSES) {
       return <EditCourses />;
     }
 
-    if (activeTab === "Add Users") {
+    if (activeTab === ADD_USERS) {
       return <AddUsers />;
     }
 

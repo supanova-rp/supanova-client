@@ -37,7 +37,7 @@ const NavbarHome: React.FC<Props> = ({ setLogoutError, isAdmin }) => {
             ? (
               <Link
                 to="/admin"
-                className="link-light nav-link">
+                className="link-light nav-link admin">
                 Admin
               </Link>
             )
@@ -51,7 +51,7 @@ const NavbarHome: React.FC<Props> = ({ setLogoutError, isAdmin }) => {
           </Link>
           <Button
             variant="link"
-            className="link-light nav-link"
+            className="link-light nav-link logout"
             onClick={onClickHandleLogOut}>
             Log out
           </Button>
