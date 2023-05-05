@@ -1,4 +1,4 @@
-import { Alert, Button } from "react-bootstrap";
+import { Alert } from "react-bootstrap";
 
 import { Course } from "src/types";
 
@@ -7,10 +7,10 @@ import Navbar from "../nav-and-sidebars/Navbar";
 interface Props {
   courses: Course[],
   successMessage: string | null,
-  onClickHandleEditingCourse: (courseId: number | null) => void,
+  onClickEditCourse: (courseId: number) => void,
 
 }
-const CoursesList: React.FC<Props> = ({ courses, successMessage, onClickHandleEditingCourse }) => {
+const CoursesList: React.FC<Props> = ({ courses, successMessage, onClickEditCourse }) => {
   return (
     <>
       <Navbar title="Existing Courses" />
@@ -25,7 +25,7 @@ const CoursesList: React.FC<Props> = ({ courses, successMessage, onClickHandleEd
           <div
             key={course.id}
             className="d-flex w-100 courses-list-container"
-            onClick={() => onClickHandleEditingCourse(course.id)}>
+            onClick={() => onClickEditCourse(course.id)}>
             <div className="d-flex flex-column w-100">
               <div className="d-flex align-items-center">
                 <div className="courses-list-vertical-line"/>

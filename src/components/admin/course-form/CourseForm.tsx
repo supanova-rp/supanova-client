@@ -32,7 +32,7 @@ interface CourseFormProps {
   isEditing?: boolean,
   getRequestOptions: (course: Course, initialCourse: Course) => RequestOptions,
   onCourseSavedSuccess: (editedCourse: Course) => void,
-  onCourseFormCancelled: (editingCourseId: number | null) => void,
+  onCourseFormCancelled: () => void,
   onCourseDeletedSuccess?: (courseIdToDelete: number) => void,
 }
 
@@ -54,27 +54,21 @@ export default class CourseForm extends Component <CourseFormProps> {
   static contextType = AuthContext;
 
   onUpdateStateAfterCancellingFileUpload = (sectionId: number) => {
-    const { course } = this.state;
-
-    const courseWithResetVideoUploadProgress = getUpdatedCourse(course, sectionId, "uploadProgress", null);
-
-    this.setState({ course: courseWithResetVideoUploadProgress });
+    this.setState({
+      course: getUpdatedCourse(this.state.course, sectionId, "uploadProgress", null)
+    });
   };
 
   onFileUploaded = (sectionId: number, videoUrl: string) => {
-    const { course } = this.state;
-
-    const courseWithUpdatedVideoUrl = getUpdatedCourse(course, sectionId, "videoUrl", videoUrl);
-
-    this.setState({ course: courseWithUpdatedVideoUrl });
+    this.setState({
+      course: getUpdatedCourse(this.state.course, sectionId, "videoUrl", videoUrl)
+    });
   };
 
   onFileUploadProgress = (data: AxiosProgressEvent, sectionId: number) => {
-    const { course } = this.state;
-
-    const courseWithUpdatedVideoUploadProgress = getUpdatedCourse(course, sectionId, "uploadProgress", data.progress);
-
-    this.setState({ course: courseWithUpdatedVideoUploadProgress });
+    this.setState({
+      course: getUpdatedCourse(this.state.course, sectionId, "uploadProgress", data.progress)
+    });
   };
 
   onClickAddNewSection = () => {
@@ -97,14 +91,12 @@ export default class CourseForm extends Component <CourseFormProps> {
   };
 
   onChangeCourseField = (key: string, newInputValue: string) => {
-    const { course } = this.state;
-
-    const updatedCourse = {
-      ...course,
-      [key]: newInputValue,
-    };
-
-    this.setState({ course: updatedCourse });
+    this.setState({
+      course: {
+        ...this.state.course,
+        [key]: newInputValue,
+      }
+    });
   };
 
   onChangeSectionTitle = (sectionId: number, newInputValue: string) => {
@@ -121,12 +113,12 @@ export default class CourseForm extends Component <CourseFormProps> {
       return section;
     });
 
-    const updatedCourse = {
-      ...course,
-      sections: sectionsWithUpdatedSectionTitle,
-    };
-
-    this.setState({ course: updatedCourse });
+    this.setState({
+      course: {
+        ...course,
+        sections: sectionsWithUpdatedSectionTitle,
+      }
+    });
   };
 
   handleRemoveSection = (sectionId: number) => {
@@ -134,12 +126,12 @@ export default class CourseForm extends Component <CourseFormProps> {
 
     const updatedSectionsMinusRemovedSection = course.sections.filter((section) => sectionId !== section.id);
 
-    const updatedCourse = {
-      ...course,
-      sections: updatedSectionsMinusRemovedSection,
-    };
-
-    this.setState({ course: updatedCourse });
+    this.setState({
+      course: {
+        ...course,
+        sections: updatedSectionsMinusRemovedSection,
+      }
+    });
   };
 
   onClickHandleShowingDeleteOverlay = (value: number | null) => {
@@ -160,6 +152,8 @@ export default class CourseForm extends Component <CourseFormProps> {
       course_id: this.state.courseIdToDelete,
     };
 
+    console.log(">>> requestBody: ", requestBody);
+
     request({
       endpoint: "/delete-course",
       method: "DELETE",
@@ -178,7 +172,7 @@ export default class CourseForm extends Component <CourseFormProps> {
     const { courseIdToDelete } = this.state;
     const { onCourseFormCancelled, onCourseDeletedSuccess } = this.props;
 
-    onCourseFormCancelled(null);
+    onCourseFormCancelled();
 
     if (courseIdToDelete && onCourseDeletedSuccess) {
       onCourseDeletedSuccess(courseIdToDelete);

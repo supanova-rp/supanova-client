@@ -19,7 +19,7 @@ interface Props {
   onUpdateStateAfterCancellingFileUpload: (sectionId: number) => void,
   handleRemoveSection: (sectionId: number) => void,
   onClickAddNewSection: () => void,
-  onCourseFormCancelled: (editCourseId: null) => void,
+  onCourseFormCancelled: () => void,
   onClickHandleShowingDeleteOverlay: (courseIdToDelete: number | null) => void,
 }
 
@@ -99,7 +99,7 @@ const CourseFormBody: React.FC<Props> = ({
         <Button
           className="btn-danger"
           type="button"
-          onClick={() => onCourseFormCancelled(null)}>
+          onClick={onCourseFormCancelled}>
           Cancel
         </Button>
       </div>

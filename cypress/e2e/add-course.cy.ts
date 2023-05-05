@@ -3,7 +3,10 @@ import { adminLinkClassname } from "../support/test-constants";
 import {
   checkCourseFormIsEmpty,
   cancelAddingNewCourse,
-  fillInCourseFormNew
+  fillInCourseFormNew,
+  checkCourseExistsinEditCourses,
+  deleteCourse,
+  checkCourseIsDeleted
 } from "../support/course-form-utils";
 import { login, logout } from "../support/auth-utils";
 
@@ -29,8 +32,7 @@ describe("create a new course", () => {
     checkCourseFormIsEmpty();
   });
 
-  // TODO: remove only
-  it.only ("saves a new course", () => {
+  it("saves a new course", () => {
     fillInCourseFormNew("Course A", "Description A", [
       {
         title: "Section A",
@@ -41,13 +43,13 @@ describe("create a new course", () => {
     cy.contains("button", "Save").click();
     cy.get(".add-course-success").should("exist");
     checkCourseFormIsEmpty();
-    // Go to edit tab and check if the first course is your newly added course
-    // delete the newly added course after completion of the test
+    checkCourseExistsinEditCourses();
+    deleteCourse();
+    checkCourseIsDeleted("h5", "Course A");
   });
 
   afterEach(() => {
     logout();
-
   });
 });
 

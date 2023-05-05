@@ -3,7 +3,7 @@ import { Card } from "react-bootstrap";
 import { SetStringFunction } from "../../types/index";
 import { getClassNameSidebarTab } from "../../utils/utils";
 
-import Sidebar from "../admin/nav-and-sidebars/Sidebar";
+import Sidebar from "../nav/Sidebar";
 
 import HomeImage from "../../images/Home-image.png";
 

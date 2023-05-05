@@ -42,6 +42,11 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
   const [currentUser, setCurrentUser] = useState<FirebaseUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  // TODO: scenario:
+  // delete indexedDB firebaselocalstorage
+  // go to root path, it should redirect you to login screen
+  // but it doesnt (401 unauthorised error, loading spinner is on)
+
   const navigate = useNavigate();
 
   useUpdateEffect(() => {

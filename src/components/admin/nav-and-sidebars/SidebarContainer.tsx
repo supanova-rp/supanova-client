@@ -4,7 +4,7 @@ import { SetStringFunction } from "../../../types/index";
 import { getClassNameSidebarTab } from "../../../utils/utils";
 import { ADMINS_TABS } from "src/constants/constants";
 
-import Sidebar from "./Sidebar";
+import Sidebar from "../../nav/Sidebar";
 
 interface Props {
   activeTab: string,

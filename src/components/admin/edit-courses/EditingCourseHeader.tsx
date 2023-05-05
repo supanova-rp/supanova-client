@@ -6,7 +6,7 @@ import { Course } from "src/types";
 
 interface Props {
   course: Course,
-  onCourseFormCancelled: (editCourseId: null) => void,
+  onCourseFormCancelled: () => void,
   onClickHandleShowingDeleteOverlay: (courseId: number) => void,
 }
 
@@ -20,7 +20,7 @@ const EditingCourseHeader: React.FC<Props> = ({
       <ChevronLeft
         stroke="black"
         className="clickable me-2"
-        onClick={() => onCourseFormCancelled(null)} />
+        onClick={onCourseFormCancelled} />
       <Button
         className="btn-danger"
         onClick={() => onClickHandleShowingDeleteOverlay(course.id)} >

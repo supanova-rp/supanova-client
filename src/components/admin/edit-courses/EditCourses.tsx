@@ -52,8 +52,12 @@ export default class EditCourses extends Component {
     this.context.logout();
   };
 
-  onClickHandleEditingCourse = (courseId: number | null) => {
+  onClickEditCourse = (courseId: number) => {
     this.setState({ editingCourseId: courseId });
+  };
+
+  onEditCourseCancelled = () => {
+    this.setState({ editingCourseId: null });
   };
 
   onCourseEditedSuccess = (editedCourse: Course,) => {
@@ -143,17 +147,17 @@ export default class EditCourses extends Component {
             ? (
               <CourseForm
                 initialCourse={editingCourse}
-                isEditing={true}
+                isEditing
                 getRequestOptions={this.getRequestOptions}
                 onCourseSavedSuccess={this.onCourseEditedSuccess}
-                onCourseFormCancelled={this.onClickHandleEditingCourse}
+                onCourseFormCancelled={this.onEditCourseCancelled}
                 onCourseDeletedSuccess={this.onCourseDeletedSuccess} />
             )
             : (
               <CoursesList
                 courses={allCourses}
                 successMessage={successMessage}
-                onClickHandleEditingCourse={this.onClickHandleEditingCourse}/>
+                onClickEditCourse={this.onClickEditCourse}/>
             )
           }
         </CourseErrorLoadingHandler>

@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "react-bootstrap";
 
-import { SetStringFunction } from "../../../types/index";
+import { SetStringFunction } from "../../types/index";
 
 interface Props {
   classNameTab1: string,
@@ -33,7 +33,7 @@ const Sidebar: React.FC<Props> = ({
         onClick={() => setActiveTab(tabTitle1)}>{tabTitle1}
       </Button>
       <Button
-        className={`rounded-0 ${classNameTab2} text-start ps-3`}
+        className={`rounded-0 ${classNameTab2} text-start ps-3 tab-2`}
         onClick={() => setActiveTab(tabTitle2)}>{tabTitle2}
       </Button>
       {tabTitle3

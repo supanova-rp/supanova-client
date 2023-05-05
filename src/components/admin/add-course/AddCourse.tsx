@@ -20,7 +20,7 @@ export default class AddCourse extends Component {
     successMessage: null,
   };
 
-  onSuccessfullyAddedNewCourse = () => {
+  onCourseAddedSuccess = () => {
     this.initialCourse = getInitialCourseState();
 
     this.setState({
@@ -33,7 +33,7 @@ export default class AddCourse extends Component {
     }, 3000);
   };
 
-  onCancelAddingNewCourse = () => {
+  onAddCourseCancelled = () => {
     this.initialCourse = getInitialCourseState();
 
     this.setState({
@@ -76,8 +76,8 @@ export default class AddCourse extends Component {
             key={courseKey}
             initialCourse={this.initialCourse}
             getRequestOptions={this.getRequestOptions}
-            onCourseSavedSuccess={this.onSuccessfullyAddedNewCourse}
-            onCourseFormCancelled={this.onCancelAddingNewCourse} />
+            onCourseSavedSuccess={this.onCourseAddedSuccess}
+            onCourseFormCancelled={this.onAddCourseCancelled} />
         </Card.Body>
       </Card>
     );

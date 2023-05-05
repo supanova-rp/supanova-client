@@ -5,8 +5,8 @@ import {
 } from "./test-constants";
 
 export const login = () => {
-  // TODO: figure out how to clear cookies
-  cy.clearCookies();
+  indexedDB.deleteDatabase("firebaseLocalStorageDb");
+
   cy.visit("/login");
   cy.get(loginEmailInputClassname).type("jamiegarner123@gmail.com");
   cy.get(loginPasswordInputClassname).type("12345678");
