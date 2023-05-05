@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { SetStringFunction } from "../../types/index";
 
-import SupanovaLogo from "../../images/Supanova-logo.png";
+import SupanovaLogo from "../../images/Supanova-logo-nav.png";
 
 interface Props {
   setLogoutError: SetStringFunction,

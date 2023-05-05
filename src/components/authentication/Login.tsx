@@ -30,6 +30,7 @@ const Login = () => {
 
   const onHandleLogin = async (event: FormSubmitEvent) => {
     event.preventDefault();
+
     try {
       setValidationError("");
       setIsLoading(true);
