@@ -20,7 +20,7 @@ interface Props {
   handleRemoveSection: (sectionId: number) => void,
   onClickAddNewSection: () => void,
   onCourseFormCancelled: () => void,
-  onClickHandleShowingDeleteOverlay: (courseIdToDelete: number | null) => void,
+  onShowDeleteModal: () => void,
 }
 
 const CourseFormBody: React.FC<Props> = ({
@@ -34,16 +34,15 @@ const CourseFormBody: React.FC<Props> = ({
   onUpdateStateAfterCancellingFileUpload,
   handleRemoveSection,
   onClickAddNewSection,
-  onClickHandleShowingDeleteOverlay,
   onCourseFormCancelled,
+  onShowDeleteModal,
 }) => {
   return (
     <>
       {isEditing
         ? (
           <EditingCourseHeader
-            course={course}
-            onClickHandleShowingDeleteOverlay={onClickHandleShowingDeleteOverlay}
+            onShowDeleteModal={onShowDeleteModal}
             onCourseFormCancelled={onCourseFormCancelled} />
         )
         : null

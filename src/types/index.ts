@@ -13,6 +13,13 @@ export type InputChangeFunction = (e: InputChangeEvent) => void;
 
 export type UploadProgress = number | null | undefined;
 
+export type Course = {
+  id: number,
+  title: string,
+  description: string,
+  sections: CourseSection[],
+};
+
 export type CourseSection = {
   id: number,
   title: string,
@@ -21,15 +28,11 @@ export type CourseSection = {
   completed?: boolean,
 };
 
-export type Course = {
-  id: number,
-  title: string,
-  description: string,
-  sections: CourseSection[],
-  loading?: boolean,
-  errorMessage?: string | null,
-  successMessage?: string | null,
-};
+export type ErrorOptions = {
+  message: null | string,
+  type: null | string,
+  error?: null | string,
+}
 
 export type User = {
   id: string
@@ -56,12 +59,6 @@ export type EditCoursesRequestBody = {
   edited_course_id?: number,
   course?: Course,
   deleted_sections_ids?: number[] | [],
-}
-
-export type ErrorOptions = {
-    message: null | string,
-    type: null | string,
-    error?: null | string,
 }
 
 export type RequestOptions = {

@@ -1,5 +1,5 @@
 import { colors } from "../../constants/colorPalette";
-import { ReactComponent as XMarkIcon} from "../../icons/xMarkIcon.svg";
+import { ReactComponent as XMarkIcon } from "../../icons/xMarkIcon.svg";
 
 interface Props extends React.PropsWithChildren {
   onClick: (parameter: number | null) => void,

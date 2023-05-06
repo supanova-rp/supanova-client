@@ -23,8 +23,7 @@ type CourseFormState = {
   course: Course,
   error: ErrorOptions,
   areActionsDisabled: boolean,
-  courseIdToDelete: null | number,
-  deleteCourseErrorMessage: null | string,
+  isDeleteModalVisible: boolean,
 }
 
 interface CourseFormProps {
@@ -33,7 +32,7 @@ interface CourseFormProps {
   getRequestOptions: (course: Course, initialCourse: Course) => RequestOptions,
   onCourseSavedSuccess: (editedCourse: Course) => void,
   onCourseFormCancelled: () => void,
-  onCourseDeletedSuccess?: (courseIdToDelete: number) => void,
+  onCourseDeletedSuccess?: (courseId: number) => void,
 }
 
 export default class CourseForm extends Component <CourseFormProps> {
@@ -41,13 +40,11 @@ export default class CourseForm extends Component <CourseFormProps> {
 
   state: CourseFormState = {
     error: {
-      message: null,
       type: null,
-      error: null,
+      message: null,
     },
     areActionsDisabled: false,
-    courseIdToDelete: null,
-    deleteCourseErrorMessage: null,
+    isDeleteModalVisible: false,
     course: this.props.initialCourse,
   };
 
@@ -68,6 +65,12 @@ export default class CourseForm extends Component <CourseFormProps> {
   onFileUploadProgress = (data: AxiosProgressEvent, sectionId: number) => {
     this.setState({
       course: getUpdatedCourse(this.state.course, sectionId, "uploadProgress", data.progress)
+    });
+  };
+
+  onChangeSectionTitle = (sectionId: number, value: string) => {
+    this.setState({
+      course: getUpdatedCourse(this.state.course, sectionId, "title", value)
     });
   };
 
@@ -99,28 +102,6 @@ export default class CourseForm extends Component <CourseFormProps> {
     });
   };
 
-  onChangeSectionTitle = (sectionId: number, newInputValue: string) => {
-    const { course } = this.state;
-
-    const sectionsWithUpdatedSectionTitle = course.sections.map((section) => {
-      if (section.id === sectionId) {
-        return {
-          ...section,
-          title: newInputValue,
-        };
-      }
-
-      return section;
-    });
-
-    this.setState({
-      course: {
-        ...course,
-        sections: sectionsWithUpdatedSectionTitle,
-      }
-    });
-  };
-
   handleRemoveSection = (sectionId: number) => {
     const { course } = this.state;
 
@@ -134,8 +115,12 @@ export default class CourseForm extends Component <CourseFormProps> {
     });
   };
 
-  onClickHandleShowingDeleteOverlay = (value: number | null) => {
-    this.setState({ courseIdToDelete: value, deleteCourseErrorMessage: null });
+  onShowDeleteModal = () => {
+    this.setState({ isDeleteModalVisible: true });
+  };
+
+  onHideDeleteModal = () => {
+    this.setState({ isDeleteModalVisible: false });
   };
 
   onUnauthorised = () => {
@@ -145,43 +130,33 @@ export default class CourseForm extends Component <CourseFormProps> {
   onClickDeleteCourse = async () => {
     this.setState({
       areActionsDisabled: true,
-      deleteCourseErrorMessage: null,
+      error: {
+        type: null,
+        message: null,
+      },
     });
 
     const requestBody = {
-      course_id: this.state.courseIdToDelete,
+      course_id: this.state.course.id,
     };
-
-    console.log(">>> requestBody: ", requestBody);
 
     request({
       endpoint: "/delete-course",
       method: "DELETE",
       requestBody,
       onSuccess: this.onSuccessfullyDeletedCourse,
-      onError: (deleteCourseError: string) => this.onError({
-        message: "Deleting course failed. Try again.",
-        type: "danger",
-        error: deleteCourseError
-      }),
+      onError: this.onDeleteCourseError,
       onUnauthorised: this.onUnauthorised,
     });
   };
 
   onSuccessfullyDeletedCourse = () => {
-    const { courseIdToDelete } = this.state;
-    const { onCourseFormCancelled, onCourseDeletedSuccess } = this.props;
+    const { course } = this.state;
+    const { onCourseDeletedSuccess } = this.props;
 
-    onCourseFormCancelled();
-
-    if (courseIdToDelete && onCourseDeletedSuccess) {
-      onCourseDeletedSuccess(courseIdToDelete);
+    if (onCourseDeletedSuccess) {
+      onCourseDeletedSuccess(course.id);
     }
-
-    this.setState({
-      areActionsDisabled: false,
-      courseIdToDelete: null,
-    });
   };
 
   onSuccessfullySavedCourse = () => {
@@ -202,9 +177,8 @@ export default class CourseForm extends Component <CourseFormProps> {
       this.setState({
         areActionsDisabled: true,
         error: {
-          message: null,
           type: null,
-          error: null,
+          message: null,
         },
       });
 
@@ -216,16 +190,16 @@ export default class CourseForm extends Component <CourseFormProps> {
         requestBody: requestOptions.requestBody,
         onSuccess: () => this.onSuccessfullySavedCourse(),
         onError: (saveCourseError: string) => this.onError({
-          message: "Failed to save course. Try again.",
           type: "danger",
+          message: "Failed to save course. Try again.",
           error: saveCourseError,
         }),
         onUnauthorised: this.onUnauthorised,
       });
     } else {
       this.onError({
+        type: "warning",
         message: "Please make sure videos are uploaded for every section.",
-        type: "warning"
       });
     }
   };
@@ -235,10 +209,19 @@ export default class CourseForm extends Component <CourseFormProps> {
 
     this.setState({
       areActionsDisabled: false,
-      error: {
-        ...this.state.error,
-        ...errorOptions,
-      }
+      error: errorOptions,
+    });
+  };
+
+  onDeleteCourseError = (error: string) => {
+    this.setState({
+      isDeleteModalVisible: false,
+    });
+
+    this.onError({
+      type: "danger",
+      message: "Failed to delete course. Try again.",
+      error,
     });
   };
 
@@ -247,13 +230,10 @@ export default class CourseForm extends Component <CourseFormProps> {
       course,
       error,
       areActionsDisabled,
-      courseIdToDelete,
-      deleteCourseErrorMessage
+      isDeleteModalVisible,
     } = this.state;
 
     const { onCourseFormCancelled, isEditing } = this.props;
-
-    const alertVariant = error.type === "warning" ? "warning" : "danger";
 
     if (course) {
       return (
@@ -262,7 +242,7 @@ export default class CourseForm extends Component <CourseFormProps> {
             {error.message
               ? (
                 <Alert
-                  variant={alertVariant}
+                  variant={error.type || "danger"}
                   className="course-form-error-alert">
                   {error.message}
                 </Alert>
@@ -282,17 +262,16 @@ export default class CourseForm extends Component <CourseFormProps> {
                 onUpdateStateAfterCancellingFileUpload={this.onUpdateStateAfterCancellingFileUpload}
                 handleRemoveSection={this.handleRemoveSection}
                 onClickAddNewSection={this.onClickAddNewSection}
-                onClickHandleShowingDeleteOverlay={this.onClickHandleShowingDeleteOverlay}
+                onShowDeleteModal={this.onShowDeleteModal}
                 onCourseFormCancelled={onCourseFormCancelled} />
             </div>
           </Form>
 
-          {courseIdToDelete
+          {isDeleteModalVisible
             ? (
               <DeleteCourseOverlay
                 areActionsDisabled={areActionsDisabled}
-                deleteCourseErrorMessage={deleteCourseErrorMessage}
-                onClickHandleShowingDeleteOverlay={this.onClickHandleShowingDeleteOverlay}
+                onHideDeleteModal={this.onHideDeleteModal}
                 onClickDeleteCourse={this.onClickDeleteCourse} />
             )
             : null

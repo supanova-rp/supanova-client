@@ -2,18 +2,14 @@ import { Button } from "react-bootstrap";
 
 import { ReactComponent as ChevronLeft } from "../../../icons/chevronLeft.svg";
 
-import { Course } from "src/types";
-
 interface Props {
-  course: Course,
   onCourseFormCancelled: () => void,
-  onClickHandleShowingDeleteOverlay: (courseId: number) => void,
+  onShowDeleteModal: () => void,
 }
 
 const EditingCourseHeader: React.FC<Props> = ({
-  course,
   onCourseFormCancelled,
-  onClickHandleShowingDeleteOverlay,
+  onShowDeleteModal,
 }) => {
   return (
     <div className="d-flex justify-content-md-between mb-4 align-items-center">
@@ -23,7 +19,7 @@ const EditingCourseHeader: React.FC<Props> = ({
         onClick={onCourseFormCancelled} />
       <Button
         className="btn-danger"
-        onClick={() => onClickHandleShowingDeleteOverlay(course.id)} >
+        onClick={onShowDeleteModal} >
         Delete
       </Button>
     </div>

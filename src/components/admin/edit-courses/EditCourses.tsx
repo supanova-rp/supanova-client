@@ -60,6 +60,12 @@ export default class EditCourses extends Component {
     this.setState({ editingCourseId: null });
   };
 
+  handleSuccessMessageTimeout = () => {
+    setTimeout(() => {
+      this.setState({ successMessage: null });
+    }, 3000);
+  };
+
   onCourseEditedSuccess = (editedCourse: Course,) => {
     const { allCourses, editingCourseId } = this.state;
     const updatedCoursesWithEditedCourse = allCourses.map((course) => {
@@ -76,17 +82,19 @@ export default class EditCourses extends Component {
       allCourses: updatedCoursesWithEditedCourse,
     });
 
-    setTimeout(() => {
-      this.setState({ successMessage: null });
-    }, 3000);
+    this.handleSuccessMessageTimeout();
   };
 
-  onCourseDeletedSuccess = (courseIdToDelete: number) => {
-    const coursesWithoutDeletedCourse = this.state.allCourses.filter((course) => course.id !== courseIdToDelete);
+  onCourseDeletedSuccess = (courseId: number) => {
+    const coursesWithoutDeletedCourse = this.state.allCourses.filter((course) => course.id !== courseId);
 
     this.setState({
       allCourses: coursesWithoutDeletedCourse,
+      editingCourseId: null,
+      successMessage: "Successfully deleted course!"
     });
+
+    this.handleSuccessMessageTimeout();
   };
 
   getRequestOptions = (course: Course, initialCourse: Course,) => {
