@@ -15,7 +15,7 @@ interface Props {
   onChangeSectionTitle: (parameter1: number, parameter2: string) => void,
   onFileUploaded: (parameter1: number, parameter2: string) => void,
   onFileUploadProgress: (parameter1: AxiosProgressEvent, parameter2: number) => void,
-  onUpdateStateAfterCancellingFileUpload: (paramater: number) => void,
+  onFileUploadCancelled: (paramater: number) => void,
   handleRemoveSection: (parameter: number) => void,
 }
 
@@ -57,10 +57,10 @@ export default class EditSection extends React.Component<Props> {
   };
 
   onClickCancelFileUpload = () => {
-    const { onUpdateStateAfterCancellingFileUpload, section } = this.props;
+    const { onFileUploadCancelled, section } = this.props;
 
     this.cancelUploadRequest();
-    onUpdateStateAfterCancellingFileUpload(section.id);
+    onFileUploadCancelled(section.id);
   };
 
   onClickRemoveSection = () => {

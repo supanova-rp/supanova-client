@@ -1,24 +1,25 @@
 import { Button } from "react-bootstrap";
-import Overlay from "./Overlay";
+import Modal from "./Modal";
 
 interface Props {
   areActionsDisabled: boolean,
   onHideDeleteModal: () => void,
-  onClickDeleteCourse: React.MouseEventHandler<HTMLButtonElement>,
+  onClickDelete: React.MouseEventHandler<HTMLButtonElement>,
 }
 
-const DeleteCourseOverlay: React.FC<Props> = ({
+const DeleteCourseModal: React.FC<Props> = ({
   areActionsDisabled,
   onHideDeleteModal,
-  onClickDeleteCourse,
+  onClickDelete,
 }) => {
   return (
-    <Overlay onClick={onHideDeleteModal}>
+    <Modal onClick={onHideDeleteModal}>
       <div className="d-flex flex-column align-items-center justify-content-center">
         <h5>Are you sure you want to delete this Course?</h5>
         <div className="mt-3">
           <Button
             type="button"
+            disabled={areActionsDisabled}
             onClick={onHideDeleteModal}
             className="me-2 secondary-button">
             Cancel
@@ -26,14 +27,14 @@ const DeleteCourseOverlay: React.FC<Props> = ({
           <Button
             type="button"
             disabled={areActionsDisabled}
-            onClick={onClickDeleteCourse}
+            onClick={onClickDelete}
             className="ms-2 btn-danger">
             Confirm
           </Button>
         </div>
       </div>
-    </Overlay>
+    </Modal>
   );
 };
 
-export default DeleteCourseOverlay;
+export default DeleteCourseModal;

@@ -2,7 +2,7 @@ import { Alert } from "react-bootstrap";
 
 import { Course } from "src/types";
 
-import Navbar from "../nav-and-sidebars/Navbar";
+import AdminHeader from "../AdminHeader";
 
 interface Props {
   courses: Course[],
@@ -13,7 +13,7 @@ interface Props {
 const CoursesList: React.FC<Props> = ({ courses, successMessage, onClickEditCourse }) => {
   return (
     <>
-      <Navbar title="Existing Courses" />
+      <AdminHeader title="Existing Courses" />
 
       {successMessage
         ? <Alert variant="success">{successMessage}</Alert>

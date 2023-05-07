@@ -5,7 +5,7 @@ import { getRequest } from "src/utils/utils";
 import { useAuth } from "src/contexts/AuthContext";
 
 import SidebarContainer from "./SidebarContainer";
-import NavbarHome from "./Navbar";
+import Navbar from "../nav/Navbar";
 import Instructor from "./Instructor";
 import Courses from "./Courses";
 import CourseErrorLoadingHandler from "../CourseErrorLoadingHandler";
@@ -82,7 +82,7 @@ const Home = () => {
 
   return (
     <div className="home-container">
-      <NavbarHome
+      <Navbar
         setLogoutError={setLogoutError}
         isAdmin={isAdmin} />
       <div className="d-flex h-100 w-100">

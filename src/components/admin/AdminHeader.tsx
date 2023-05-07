@@ -6,7 +6,7 @@ interface Props {
   title: string,
 }
 
-const Navbar: React.FC<Props> = ({ title }) => {
+const AdminHeader: React.FC<Props> = ({ title }) => {
   return (
     <div className="d-flex justify-content-md-between mb-4 align-items-center">
       <h2 className="mb-0">{title}</h2>
@@ -21,4 +21,4 @@ const Navbar: React.FC<Props> = ({ title }) => {
   );
 };
 
-export default Navbar;
+export default AdminHeader;

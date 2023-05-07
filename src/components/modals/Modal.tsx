@@ -5,18 +5,18 @@ interface Props extends React.PropsWithChildren {
   onClick: (parameter: number | null) => void,
 }
 
-const Overlay: React.FC<Props> = ({ onClick, children }) => {
+const Modal: React.FC<Props> = ({ onClick, children }) => {
   return (
-    <div className="full-screen-overlay-container min-vh-100">
-      <div className="overlay min-vh-100" />
-      <div className="overlay-content">
-        <div className="x-mark-overlay-container">
+    <div className="full-screen-modal-container min-vh-100">
+      <div className="modal min-vh-100" />
+      <div className="modal-content">
+        <div className="x-mark-modal-container">
           <XMarkIcon
             onClick={() => onClick(null)}
             stroke={colors.darkgray}
             className="clickable" />
         </div>
-        <div className="d-flex justify-content-center overlay-text-container">
+        <div className="d-flex justify-content-center modal-text-container">
           {children}
         </div>
       </div>
@@ -24,4 +24,4 @@ const Overlay: React.FC<Props> = ({ onClick, children }) => {
   );
 };
 
-export default Overlay;
+export default Modal;

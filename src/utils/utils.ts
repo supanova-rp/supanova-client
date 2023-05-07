@@ -61,13 +61,13 @@ export const getInitialCourseState = () => {
   };
 };
 
-export const areSomeVideosCurrentlyUploading = (course: Course) => {
+export const isVideoUploadInProgress = (course: Course) => {
   return course.sections.some((section) => {
     return typeof section.uploadProgress === "number" && section.uploadProgress < 1;
   });
 };
 
-export const doesEverySectionHaveAVideoUrl = (course: Course) => {
+export const everySectionHasVideo = (course: Course) => {
   return course.sections.every((section) => section.videoUrl);
 };
 

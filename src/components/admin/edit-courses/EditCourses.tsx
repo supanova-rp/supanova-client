@@ -8,7 +8,6 @@ import {
 } from "../../../utils/utils";
 import { AuthContext, AuthContextType } from "src/contexts/AuthContext";
 
-import EditCoursesContainer from "./EditCoursesContainer";
 import CourseErrorLoadingHandler from "src/components/CourseErrorLoadingHandler";
 import CourseForm from "../course-form/CourseForm";
 import CoursesList from "./CoursesList";
@@ -98,17 +97,13 @@ export default class EditCourses extends Component {
   };
 
   getRequestOptions = (course: Course, initialCourse: Course,) => {
-    const sectionsWithPositions = getSectionsWithPositions(course);
-
-    const editedCourseWithSectionsPositions = {
-      ...course,
-      sections: sectionsWithPositions,
-    };
-
     return {
       requestBody: {
         edited_course_id: course.id,
-        edited_course: editedCourseWithSectionsPositions,
+        edited_course: {
+          ...course,
+          sections: getSectionsWithPositions(course)
+        },
         deleted_sections_ids: getDeletedSectionsIds(course, initialCourse),
       },
       method: "PUT",
@@ -144,33 +139,30 @@ export default class EditCourses extends Component {
     const editingCourse = allCourses.find((course) => course.id === editingCourseId);
 
     return (
-      <EditCoursesContainer>
-        <CourseErrorLoadingHandler
-          isLoading={isLoading}
-          error={getCoursesErrorMessage}
-          courses={allCourses}
-          onClick={this.getCourses}>
+      <CourseErrorLoadingHandler
+        isLoading={isLoading}
+        error={getCoursesErrorMessage}
+        courses={allCourses}
+        onClick={this.getCourses}>
 
-          {editingCourse
-            ? (
-              <CourseForm
-                initialCourse={editingCourse}
-                isEditing
-                getRequestOptions={this.getRequestOptions}
-                onCourseSavedSuccess={this.onCourseEditedSuccess}
-                onCourseFormCancelled={this.onEditCourseCancelled}
-                onCourseDeletedSuccess={this.onCourseDeletedSuccess} />
-            )
-            : (
-              <CoursesList
-                courses={allCourses}
-                successMessage={successMessage}
-                onClickEditCourse={this.onClickEditCourse}/>
-            )
-          }
-        </CourseErrorLoadingHandler>
-
-      </EditCoursesContainer>
+        {editingCourse
+          ? (
+            <CourseForm
+              initialCourse={editingCourse}
+              isEditing
+              getRequestOptions={this.getRequestOptions}
+              onCourseSavedSuccess={this.onCourseEditedSuccess}
+              onCourseFormCancelled={this.onEditCourseCancelled}
+              onCourseDeletedSuccess={this.onCourseDeletedSuccess} />
+          )
+          : (
+            <CoursesList
+              courses={allCourses}
+              successMessage={successMessage}
+              onClickEditCourse={this.onClickEditCourse}/>
+          )
+        }
+      </CourseErrorLoadingHandler>
     );
   }
 }

@@ -17,12 +17,12 @@ body, html, #root {
 }
 
 .main-button.btn-primary {
-  background-color: var(--secondary-color);
-  border: 1px solid var(--secondary-color);
+  background-color: var(--primary-color);
+  border: 1px solid var(--primary-color);
 
   &:hover, &:active {
-    background-color: var(--hover-color-orange) !important;
-    border: 1px solid var(--hover-color-orange) !important;
+    background-color: var(--hover-color-blue) !important;
+    border: 1px solid var(--hover-color-blue) !important;
   }
 }
 

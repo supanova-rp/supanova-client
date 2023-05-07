@@ -1,4 +1,4 @@
-import { Button, Navbar } from "react-bootstrap";
+import { Button, Navbar as BootstrapNavbar } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 import { useAuth } from "../../contexts/AuthContext";
@@ -11,7 +11,7 @@ interface Props {
   isAdmin: boolean,
 }
 
-const NavbarHome: React.FC<Props> = ({ setLogoutError, isAdmin }) => {
+const Navbar: React.FC<Props> = ({ setLogoutError, isAdmin }) => {
   const { logout } = useAuth();
 
   const onClickHandleLogOut = async () => {
@@ -26,7 +26,7 @@ const NavbarHome: React.FC<Props> = ({ setLogoutError, isAdmin }) => {
   };
 
   return (
-    <Navbar>
+    <BootstrapNavbar>
       <nav className="navbar w-100 nav px-4 py-0">
         <img
           className="navbar-brand"
@@ -57,8 +57,8 @@ const NavbarHome: React.FC<Props> = ({ setLogoutError, isAdmin }) => {
           </Button>
         </div>
       </nav>
-    </Navbar>
+    </BootstrapNavbar>
   );
 };
 
-export default NavbarHome;
+export default Navbar;

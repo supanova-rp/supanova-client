@@ -1,10 +1,11 @@
 import { useState } from "react";
+import { Card } from "react-bootstrap";
 
 import { ADMINS_TABS } from "src/constants/constants";
 
 import AddCourse from "./add-course/AddCourse";
 import AddUsers from "./add-users/AddUsers";
-import SidebarContainer from "./nav-and-sidebars/SidebarContainer";
+import SidebarContainer from "./sidebar/SidebarContainer";
 import EditCourses from "./edit-courses/EditCourses";
 
 const { ADD_COURSE, ADD_USERS, EDIT_COURSES } = ADMINS_TABS;
@@ -33,7 +34,11 @@ const Admin = () => {
       <SidebarContainer
         activeTab={activeTab}
         setActiveTab={setActiveTab} />
-      {renderAdminContent()}
+      <Card className="w-100 p-3 d-flex mh-100 rounded-0">
+        <Card.Body>
+          {renderAdminContent()}
+        </Card.Body>
+      </Card>
     </div>
   );
 };

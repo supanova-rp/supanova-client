@@ -16,7 +16,7 @@ interface Props {
   onChangeSectionTitle: (sectionId: number, newInputValue: string) => void,
   onFileUploaded: (sectionId: number, videoUrl: string) => void,
   onFileUploadProgress: (data: AxiosProgressEvent, sectionId: number) => void,
-  onUpdateStateAfterCancellingFileUpload: (sectionId: number) => void,
+  onFileUploadCancelled: (sectionId: number) => void,
   handleRemoveSection: (sectionId: number) => void,
   onClickAddNewSection: () => void,
   onCourseFormCancelled: () => void,
@@ -31,14 +31,14 @@ const CourseFormBody: React.FC<Props> = ({
   onChangeSectionTitle,
   onFileUploaded,
   onFileUploadProgress,
-  onUpdateStateAfterCancellingFileUpload,
+  onFileUploadCancelled,
   handleRemoveSection,
   onClickAddNewSection,
   onCourseFormCancelled,
   onShowDeleteModal,
 }) => {
   return (
-    <>
+    <div className="my-4">
       {isEditing
         ? (
           <EditingCourseHeader
@@ -79,7 +79,7 @@ const CourseFormBody: React.FC<Props> = ({
               onChangeSectionTitle={onChangeSectionTitle}
               onFileUploaded={onFileUploaded}
               onFileUploadProgress={onFileUploadProgress}
-              onUpdateStateAfterCancellingFileUpload={onUpdateStateAfterCancellingFileUpload}
+              onFileUploadCancelled={onFileUploadCancelled}
               handleRemoveSection={handleRemoveSection} />
           );
         })}
@@ -102,7 +102,7 @@ const CourseFormBody: React.FC<Props> = ({
           Cancel
         </Button>
       </div>
-    </>
+    </div>
   );
 };
 

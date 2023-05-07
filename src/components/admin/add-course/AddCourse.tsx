@@ -1,6 +1,6 @@
 /* eslint-disable react/no-array-index-key */
 import { Component } from "react";
-import { Card, Alert } from "react-bootstrap";
+import { Alert } from "react-bootstrap";
 
 import {
   getInitialCourseState,
@@ -8,7 +8,7 @@ import {
 } from "../../../utils/utils";
 import { Course } from "src/types";
 
-import Navbar from "../nav-and-sidebars/Navbar";
+import AdminHeader from "../AdminHeader";
 import CourseForm from "../course-form/CourseForm";
 
 export default class AddCourse extends Component {
@@ -16,7 +16,7 @@ export default class AddCourse extends Component {
   initialCourse = getInitialCourseState();
 
   state = {
-    courseKey: Date.now(),
+    courseFormKey: Date.now(),
     successMessage: null,
   };
 
@@ -24,7 +24,7 @@ export default class AddCourse extends Component {
     this.initialCourse = getInitialCourseState();
 
     this.setState({
-      courseKey: Date.now(),
+      courseFormKey: Date.now(),
       successMessage: "Successfully created new course!"
     });
 
@@ -37,7 +37,7 @@ export default class AddCourse extends Component {
     this.initialCourse = getInitialCourseState();
 
     this.setState({
-      courseKey: Date.now(),
+      courseFormKey: Date.now(),
       successMessage: null,
     });
   };
@@ -55,31 +55,29 @@ export default class AddCourse extends Component {
   };
 
   render() {
-    const { successMessage, courseKey } = this.state;
+    const { successMessage, courseFormKey } = this.state;
 
     return (
-      <Card className="w-100 p-3 d-flex rounded-0">
-        <Card.Body>
-          <Navbar title="Add a New Course" />
+      <>
+        <AdminHeader title="Add a New Course" />
 
-          {successMessage
-            ? (
-              <Alert
-                variant="success"
-                className="add-course-success">{successMessage}
-              </Alert>
-            )
-            : null
-          }
+        {successMessage
+          ? (
+            <Alert
+              variant="success"
+              className="add-course-success">{successMessage}
+            </Alert>
+          )
+          : null
+        }
 
-          <CourseForm
-            key={courseKey}
-            initialCourse={this.initialCourse}
-            getRequestOptions={this.getRequestOptions}
-            onCourseSavedSuccess={this.onCourseAddedSuccess}
-            onCourseFormCancelled={this.onAddCourseCancelled} />
-        </Card.Body>
-      </Card>
+        <CourseForm
+          key={courseFormKey}
+          initialCourse={this.initialCourse}
+          getRequestOptions={this.getRequestOptions}
+          onCourseSavedSuccess={this.onCourseAddedSuccess}
+          onCourseFormCancelled={this.onAddCourseCancelled} />
+      </>
     );
   }
 }

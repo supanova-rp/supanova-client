@@ -56,7 +56,7 @@ input {
   margin-right: 20px;
 }
 
-.full-screen-overlay-container {
+.full-screen-modal-container {
   position: fixed;
   display: flex;
   justify-content: center;
@@ -70,7 +70,7 @@ input {
   bottom: 0;
 }
 
-.overlay {
+.modal {
   position: fixed;
   top: 0;
   left: 0;
@@ -81,7 +81,7 @@ input {
   background-color: rgba(0, 0, 0, 0.5);
 }
 
-.overlay-content {
+.modal-content {
   display: flex;
   flex-direction: column;
   min-height: 200px;
@@ -91,13 +91,13 @@ input {
   box-shadow: 0 2px 4px rgba(0, 0, 0, .25);
 }
 
-.x-mark-overlay-container {
+.x-mark-modal-container {
   display: flex;
   align-self: flex-end;
   margin: 15px 20px 0 0;
 }
 
-.overlay-text-container {
+.modal-text-container {
   flex: 1;
   padding-bottom: 20px;
 }
