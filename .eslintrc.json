@@ -121,7 +121,8 @@
         "react/jsx-one-expression-per-line": 0,
         "react/function-component-definition": 0,
         "react/react-in-jsx-scope": 0,
-        "react/no-access-state-in-setstate": 0
+        "react/no-access-state-in-setstate": 0,
+        "@typescript-eslint/no-empty-function": 0
       }
     },
     {

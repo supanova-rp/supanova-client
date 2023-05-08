@@ -8,7 +8,7 @@ interface Props extends React.PropsWithChildren {
 const Modal: React.FC<Props> = ({ onClick, children }) => {
   return (
     <div className="full-screen-modal-container min-vh-100">
-      <div className="modal min-vh-100" />
+      <div className="custom-modal min-vh-100" />
       <div className="modal-content">
         <div className="x-mark-modal-container">
           <XMarkIcon

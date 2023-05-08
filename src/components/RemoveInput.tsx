@@ -1,4 +1,4 @@
-import { ReactComponent as MinusIcon } from "../../../icons/minusIcon.svg";
+import { ReactComponent as MinusIcon } from "../icons/minusIcon.svg";
 import { colors } from "../constants/colorPalette";
 
 interface Props {

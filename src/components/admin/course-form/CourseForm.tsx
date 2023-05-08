@@ -14,10 +14,10 @@ import {
   getUpdatedCourse,
   request,
 } from "src/utils/utils";
+import { AuthContext, AuthContextType } from "src/contexts/AuthContext";
 
 import CourseFormBody from "./CourseFormBody";
 import DeleteCourseModal from "src/components/modals/DeleteCourseModal";
-import { AuthContext, AuthContextType } from "src/contexts/AuthContext";
 
 type CourseFormState = {
   course: Course,
@@ -28,15 +28,20 @@ type CourseFormState = {
 
 interface CourseFormProps {
   initialCourse: Course,
-  isEditing?: boolean,
+  isEditing: boolean,
   getRequestOptions: (course: Course, initialCourse: Course) => RequestOptions,
   onCourseSavedSuccess: (editedCourse: Course) => void,
   onCourseFormCancelled: () => void,
-  onCourseDeletedSuccess?: (courseId: number) => void,
+  onCourseDeletedSuccess: (courseId: number) => void,
 }
 
 export default class CourseForm extends Component <CourseFormProps> {
   context: AuthContextType;
+
+  static defaultProps = {
+    isEditing: false,
+    onCourseDeletedSuccess: () => {}
+  };
 
   state: CourseFormState = {
     error: {
@@ -124,6 +129,8 @@ export default class CourseForm extends Component <CourseFormProps> {
   };
 
   onClickDelete = async () => {
+    const { course: { id: courseId } } = this.state;
+
     this.setState({
       areActionsDisabled: true,
       error: {
@@ -136,21 +143,12 @@ export default class CourseForm extends Component <CourseFormProps> {
       endpoint: "/delete-course",
       method: "DELETE",
       requestBody: {
-        course_id: this.state.course.id,
+        course_id: courseId,
       },
-      onSuccess: this.onSuccessfullyDeletedCourse,
+      onSuccess: () => this.props.onCourseDeletedSuccess(courseId),
       onError: this.onDeleteCourseError,
       onUnauthorised: this.onUnauthorised,
     });
-  };
-
-  onSuccessfullyDeletedCourse = () => {
-    const { course } = this.state;
-    const { onCourseDeletedSuccess } = this.props;
-
-    if (onCourseDeletedSuccess) {
-      onCourseDeletedSuccess(course.id);
-    }
   };
 
   onDeleteCourseError = (error: string) => {
@@ -250,7 +248,7 @@ export default class CourseForm extends Component <CourseFormProps> {
 
             <CourseFormBody
               course={course}
-              isEditing={isEditing || false}
+              isEditing={isEditing}
               areActionsDisabled={areActionsDisabled}
               onChangeCourseField={this.onChangeCourseField}
               onChangeSectionTitle={this.onChangeSectionTitle}

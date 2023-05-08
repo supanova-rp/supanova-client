@@ -20,7 +20,6 @@ import {
 import { FirebaseUser } from "src/types";
 import { API_DOMAIN } from "src/constants/constants";
 import { auth } from "../firebase/firebase";
-import useUpdateEffect from "src/hooks/useUpdateEffect";
 
 export type AuthContextType = {
   currentUser: FirebaseUser | null,
@@ -45,7 +44,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 
   const navigate = useNavigate();
 
-  useUpdateEffect(() => {
+  useEffect(() => {
     if (signedInStatus === "signed_out") {
       navigate("/login", { replace: true });
     }

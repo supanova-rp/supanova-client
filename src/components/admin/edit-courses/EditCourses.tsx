@@ -67,6 +67,7 @@ export default class EditCourses extends Component {
 
   onCourseEditedSuccess = (editedCourse: Course,) => {
     const { allCourses, editingCourseId } = this.state;
+
     const updatedCoursesWithEditedCourse = allCourses.map((course) => {
       if (course.id === editingCourseId) {
         return editedCourse;
