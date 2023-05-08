@@ -105,12 +105,12 @@ export default class CourseForm extends Component <CourseFormProps> {
   handleRemoveSection = (sectionId: number) => {
     const { course } = this.state;
 
-    const updatedSectionsMinusRemovedSection = course.sections.filter((section) => sectionId !== section.id);
+    const updatedSections = course.sections.filter((section) => sectionId !== section.id);
 
     this.setState({
       course: {
         ...course,
-        sections: updatedSectionsMinusRemovedSection,
+        sections: updatedSections,
       }
     });
   };
@@ -132,14 +132,12 @@ export default class CourseForm extends Component <CourseFormProps> {
       },
     });
 
-    const requestBody = {
-      course_id: this.state.course.id,
-    };
-
     request({
       endpoint: "/delete-course",
       method: "DELETE",
-      requestBody,
+      requestBody: {
+        course_id: this.state.course.id,
+      },
       onSuccess: this.onSuccessfullyDeletedCourse,
       onError: this.onDeleteCourseError,
       onUnauthorised: this.onUnauthorised,
@@ -182,13 +180,13 @@ export default class CourseForm extends Component <CourseFormProps> {
         },
       });
 
-      const requestOptions = getRequestOptions(course, initialCourse);
+      const { endpoint, method, requestBody } = getRequestOptions(course, initialCourse);
 
       request({
-        endpoint: `${requestOptions.endpoint}`,
-        method: `${requestOptions.method}`,
-        requestBody: requestOptions.requestBody,
-        onSuccess: () => this.onSuccessfullySavedCourse(),
+        endpoint,
+        method,
+        requestBody,
+        onSuccess: this.onSuccessfullySavedCourse,
         onError: (error: string) => this.onError({
           type: "danger",
           message: "Failed to save course. Try again.",

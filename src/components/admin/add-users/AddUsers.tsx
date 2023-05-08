@@ -14,8 +14,8 @@ import { updateUsers } from "../../../utils/utils";
 import XIcon from "../../XIcon";
 import FormInput from "../../FormInput";
 import AdminHeader from "../AdminHeader";
-import RemoveInput from "../course-form/RemoveInput";
-import AddMoreInputs from "../course-form/AddMoreInputs";
+import RemoveInput from "../../RemoveInput";
+import AddMoreInputs from "../../AddMoreInputs";
 
 const AddUsers = () => {
   const usersDefaultState = [{

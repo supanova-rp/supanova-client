@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { API_DOMAIN } from "src/constants/constants";
 import { useAuth } from "src/contexts/AuthContext";
+import { getRequest } from "src/utils/utils";
 
 interface RequestOptions {
   onSuccess: (result: any) => void,
@@ -10,29 +10,14 @@ interface RequestOptions {
 const useGetRequest = (endpoint: string) => {
   const { logout } = useAuth();
 
-  const getRequest = async ({ onSuccess, onError } : RequestOptions) => {
-    try {
-      const response = await fetch(`${API_DOMAIN}${endpoint}`, {
-        credentials: "include",
-      });
-
-      const result = await response.json();
-
-      if (!result.error) {
-        onSuccess(result);
-      } else {
-        if (response.status === 401) {
-          logout();
-        } else {
-          onError(result.error);
-        }
-      }
-    } catch (error) {
-      onError(error as string);
-    }
+  return ({ onSuccess, onError }: RequestOptions) => {
+    getRequest({
+      endpoint,
+      onSuccess,
+      onError,
+      onUnauthorised: logout
+    });
   };
-
-  return getRequest;
 };
 
 export default useGetRequest;

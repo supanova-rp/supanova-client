@@ -1,7 +1,7 @@
 import React from "react";
 
 import { ReactComponent as PlusIcon } from "../../../icons/plusIcon.svg";
-import { colors } from "../../../constants/colorPalette";
+import { colors } from "../constants/colorPalette";
 
 interface Props {
   onClick: () => void,

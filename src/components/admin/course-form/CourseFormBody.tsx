@@ -3,9 +3,9 @@ import { Button } from "react-bootstrap";
 
 import { Course } from "src/types";
 
-import AddMoreInputs from "./AddMoreInputs";
+import AddMoreInputs from "../../AddMoreInputs";
 import EditingCourseHeader from "../edit-courses/EditingCourseHeader";
-import EditSection from "./EditSection";
+import CourseFormSection from "./CourseFormSection";
 import FormInput from "../../FormInput";
 
 interface Props {
@@ -71,7 +71,7 @@ const CourseFormBody: React.FC<Props> = ({
 
         {course.sections.map((section, sectionIndex) => {
           return (
-            <EditSection
+            <CourseFormSection
               key={section.id}
               index={sectionIndex}
               section={section}

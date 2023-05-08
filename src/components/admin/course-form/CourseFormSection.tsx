@@ -6,7 +6,7 @@ import { CourseSection } from "../../../types/index";
 
 import FilePicker from "./FilePicker";
 import FormInput from "../../FormInput";
-import RemoveInput from "./RemoveInput";
+import RemoveInput from "../../RemoveInput";
 
 interface Props {
   index: number,
@@ -19,7 +19,7 @@ interface Props {
   handleRemoveSection: (parameter: number) => void,
 }
 
-export default class EditSection extends React.Component<Props> {
+export default class CourseFormSection extends React.Component<Props> {
   abortController: AbortController;
 
   fileInputRef: React.RefObject<HTMLInputElement>;
