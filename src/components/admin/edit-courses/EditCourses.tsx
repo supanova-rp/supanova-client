@@ -3,14 +3,13 @@ import { Component } from "react";
 import { Course } from "../../../types/index";
 import {
   getDeletedSectionsIds,
-  getRequest,
   getSectionsWithPositions
 } from "../../../utils/utils";
-import { AuthContext, AuthContextType } from "src/contexts/AuthContext";
 
 import CourseErrorLoadingHandler from "src/components/CourseErrorLoadingHandler";
 import CourseForm from "../course-form/CourseForm";
 import CoursesList from "./CoursesList";
+import RequestWrapper from "src/components/RequestWrapper";
 
 type EditCoursesState = {
   isLoading: boolean,
@@ -28,27 +27,9 @@ export default class EditCourses extends Component {
     getCoursesErrorMessage: null,
     allCourses: [],
   };
-  context: AuthContextType;
 
-  static contextType = AuthContext;
-
-  getCourses = () => {
+  onBeginRequestCourses = () => {
     this.setState({ isLoading: true, getCoursesErrorMessage: null });
-
-    getRequest({
-      endpoint: "/courses",
-      onSuccess: this.onSuccess,
-      onError: (error: string) => this.onError("Loading courses failed", error),
-      onUnauthorised: this.onUnauthorised,
-    });
-  };
-
-  componentDidMount () {
-    this.getCourses();
-  };
-
-  onUnauthorised = () => {
-    this.context.logout();
   };
 
   onClickEditCourse = (courseId: number) => {
@@ -97,18 +78,14 @@ export default class EditCourses extends Component {
     this.handleSuccessMessageTimeout();
   };
 
-  getRequestOptions = (course: Course, initialCourse: Course,) => {
+  getRequestBody = (course: Course, initialCourse: Course,) => {
     return {
-      requestBody: {
-        edited_course_id: course.id,
-        edited_course: {
-          ...course,
-          sections: getSectionsWithPositions(course)
-        },
-        deleted_sections_ids: getDeletedSectionsIds(course, initialCourse),
+      edited_course_id: course.id,
+      edited_course: {
+        ...course,
+        sections: getSectionsWithPositions(course)
       },
-      method: "PUT",
-      endpoint: "/edit-course"
+      deleted_sections_ids: getDeletedSectionsIds(course, initialCourse),
     };
   };
 
@@ -140,30 +117,41 @@ export default class EditCourses extends Component {
     const editingCourse = allCourses.find((course) => course.id === editingCourseId);
 
     return (
-      <CourseErrorLoadingHandler
-        isLoading={isLoading}
-        error={getCoursesErrorMessage}
-        courses={allCourses}
-        onClick={this.getCourses}>
-
-        {editingCourse
-          ? (
-            <CourseForm
-              initialCourse={editingCourse}
-              isEditing
-              getRequestOptions={this.getRequestOptions}
-              onCourseSavedSuccess={this.onCourseEditedSuccess}
-              onCourseFormCancelled={this.onEditCourseCancelled}
-              onCourseDeletedSuccess={this.onCourseDeletedSuccess} />
-          )
-          : (
-            <CoursesList
+      <RequestWrapper
+        endpoint="/courses"
+        requestOnMount
+        onRequestBegin={this.onBeginRequestCourses}
+        onError={(error: string) => this.onError("Loading courses failed", error)}
+        onSuccess={this.onSuccess}
+        render={(requestCourses) => {
+          return (
+            <CourseErrorLoadingHandler
+              isLoading={isLoading}
+              error={getCoursesErrorMessage}
               courses={allCourses}
-              successMessage={successMessage}
-              onClickEditCourse={this.onClickEditCourse}/>
-          )
-        }
-      </CourseErrorLoadingHandler>
+              onClick={requestCourses}>
+
+              {editingCourse
+                ? (
+                  <CourseForm
+                    initialCourse={editingCourse}
+                    isEditing
+                    saveFormEndpoint="/edit-course"
+                    getRequestBody={this.getRequestBody}
+                    onCourseSavedSuccess={this.onCourseEditedSuccess}
+                    onCourseFormCancelled={this.onEditCourseCancelled}
+                    onCourseDeletedSuccess={this.onCourseDeletedSuccess} />
+                )
+                : (
+                  <CoursesList
+                    courses={allCourses}
+                    successMessage={successMessage}
+                    onClickEditCourse={this.onClickEditCourse}/>
+                )
+              }
+            </CourseErrorLoadingHandler>
+          );
+        }}/>
     );
   }
 }

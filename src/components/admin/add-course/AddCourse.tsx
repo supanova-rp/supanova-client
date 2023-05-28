@@ -42,15 +42,11 @@ export default class AddCourse extends Component {
     });
   };
 
-  getRequestOptions = (course: Course) => {
+  getRequestBody = (course: Course) => {
     return {
-      requestBody: {
-        title: course.title,
-        description: course.description,
-        sections: getSectionsWithPositions(course),
-      },
-      endpoint: "/add-course",
-      method: "POST",
+      title: course.title,
+      description: course.description,
+      sections: getSectionsWithPositions(course),
     };
   };
 
@@ -74,7 +70,8 @@ export default class AddCourse extends Component {
         <CourseForm
           key={courseFormKey}
           initialCourse={this.initialCourse}
-          getRequestOptions={this.getRequestOptions}
+          saveFormEndpoint="/add-course"
+          getRequestBody={this.getRequestBody}
           onCourseSavedSuccess={this.onCourseAddedSuccess}
           onCourseFormCancelled={this.onAddCourseCancelled} />
       </>

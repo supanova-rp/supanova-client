@@ -61,15 +61,17 @@ export type EditCoursesRequestBody = {
   deleted_sections_ids?: number[] | [],
 }
 
+export type RequestBody = {
+  title?: string,
+  description?: string,
+  sections?: CourseSection[],
+  edited_course_id?: number,
+  edited_course?: Course,
+  deleted_sections_ids?: number[] | [],
+}
+
 export type RequestOptions = {
-  requestBody: {
-    title?: string,
-    description?: string,
-    sections?: CourseSection[],
-    edited_course_id?: number,
-    edited_course?: Course,
-    deleted_sections_ids?: number[] | [],
-  },
+  requestBody: RequestBody,
   endpoint: string,
   method: string,
 }

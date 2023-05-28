@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 
 import { Course } from "src/types";
-import { getRequest } from "src/utils/utils";
 import { useAuth } from "src/contexts/AuthContext";
 
 import SidebarContainer from "./SidebarContainer";
@@ -9,6 +8,7 @@ import Navbar from "../nav/Navbar";
 import Instructor from "./Instructor";
 import Courses from "./Courses";
 import CourseErrorLoadingHandler from "../CourseErrorLoadingHandler";
+import useRequest from "src/hooks/useRequest";
 
 const Home = () => {
   const [courses, setCourses] = useState<[] | Course[]>([]);
@@ -18,17 +18,17 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
-  const { getIsAdmin, logout } = useAuth();
+  const { getIsAdmin } = useAuth();
+
+  const requestCourses = useRequest("/courses");
 
   const getCourses = () => {
     setIsLoading(true);
     setCoursesError(null);
 
-    getRequest({
-      endpoint: "/courses",
+    requestCourses({
       onSuccess,
       onError: (error) => onError("Loading courses failed", error),
-      onUnauthorised,
     });
   };
 
@@ -57,10 +57,6 @@ const Home = () => {
 
     setIsLoading(false);
     setCoursesError(courseErrorMessage);
-  };
-
-  const onUnauthorised = () => {
-    logout();
   };
 
   const renderAdminContent = () => {

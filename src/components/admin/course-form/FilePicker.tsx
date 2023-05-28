@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import axios, { AxiosProgressEvent } from "axios";
 
@@ -12,7 +11,7 @@ import {
 import { colors } from "../../../constants/colorPalette";
 
 import { useWakeLock } from "../../../hooks/useWakeLock";
-import useGetRequest from "src/hooks/useGetRequest";
+import useRequest from "src/hooks/useRequest";
 
 import ProgressBar from "./ProgressBar";
 
@@ -36,7 +35,7 @@ const FilePicker: React.FC<Props> = ({
   onClickCancelFileUpload,
 }) => {
   const { releaseWakeLock, requestWakeLock } = useWakeLock();
-  const requestUploadUrl = useGetRequest("/get-upload-url");
+  const requestUploadUrl = useRequest("/get-upload-url");
 
   const uploadFileToS3 = async (uploadUrl: string, file: File) => {
     requestWakeLock();

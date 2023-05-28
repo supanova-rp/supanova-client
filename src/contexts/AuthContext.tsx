@@ -18,7 +18,6 @@ import {
 } from "firebase/auth";
 
 import { FirebaseUser } from "src/types";
-import { API_DOMAIN } from "src/constants/constants";
 import { auth } from "../firebase/firebase";
 
 export type AuthContextType = {
@@ -52,21 +51,6 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged( async (user: FirebaseUser | null) => {
-      if (user) {
-        try {
-          await fetch(`${API_DOMAIN}/login`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-            body: JSON.stringify({
-              access_token: user.accessToken,
-            }),
-          });
-        } catch (e) {
-          console.log(e);
-        }
-      }
-
       setCurrentUser(user);
       setIsLoading(false);
       setSignedInStatus(user ? "signed_in" : "signed_out");

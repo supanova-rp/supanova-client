@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export const useWakeLock = () => {
   let wakeLock = null as any;
 
