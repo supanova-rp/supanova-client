@@ -44,7 +44,7 @@ const Navbar: React.FC<Props> = ({ setLogoutError, isAdmin }) => {
             : null
           }
           <Link
-            to="https://supanovadev.setmore.com/jamiegarner"
+            to="https://supanova-rp.setmore.com"
             target="_blank"
             className="link-light nav-link">
             Book
