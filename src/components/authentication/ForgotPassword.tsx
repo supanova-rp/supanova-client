@@ -3,11 +3,12 @@ import { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { FormSubmitEvent } from "../../types/index";
 
-import AuthForm from "./AuthForm";
+import AuthCard from "./AuthCard";
+import FormInput from "../FormInput";
 
 const ForgotPassword = () => {
   const [emailInput, setEmailInput] = useState("");
-  const [validationError, setValidationError] = useState("");
+  const [error, setError] = useState("");
   const [resetPasswordSuccessMessage, setResetPasswordSuccessMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -25,7 +26,7 @@ const ForgotPassword = () => {
     event.preventDefault();
 
     try {
-      setValidationError("");
+      setError("");
       setIsLoading(true);
 
       await resetPassword(emailInput);
@@ -35,27 +36,37 @@ const ForgotPassword = () => {
     } catch (error) {
       console.log(error);
       setResetPasswordSuccessMessage("");
-      setValidationError("Failed to reset password.");
+      setError("Failed to reset password.");
     }
 
     setIsLoading(false);
   };
 
   return (
-    <AuthForm
+    <AuthCard
       cardClassname="forgot-password-card"
+      title="Forgot password?"
+      subTitle="Reset your password below"
       isLoading={isLoading}
-      title="Password Reset"
-      validationError={validationError}
-      emailInput={emailInput}
+      error={error}
       successMessage={resetPasswordSuccessMessage}
       alertClassname="forgot-password-alert"
-      buttonText="Reset Password"
-      footerText="Log in"
-      footerPath="/login"
+      buttonText="Reset password"
       onSubmit={onHandleResetPassword}
-      setEmailInput={setEmailInput}/>
+      footerText="Have an account?"
+      footerLinkText="Login"
+      footerLinkPath="/login">
+      <FormInput
+        formId="email"
+        formGroupClassname="mb-2 pe-4"
+        inputContainerClassname="text-input"
+        label="Email"
+        type="email"
+        value={emailInput}
+        onChange={(e) => setEmailInput(e.target.value)}/>
+    </AuthCard>
   );
+
 };
 
 export default ForgotPassword;

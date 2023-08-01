@@ -50,7 +50,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
   }, [signedInStatus]);
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged( async (user: FirebaseUser | null) => {
+    const unsubscribe = auth.onAuthStateChanged(async (user: FirebaseUser | null) => {
       setCurrentUser(user);
       setIsLoading(false);
       setSignedInStatus(user ? "signed_in" : "signed_out");

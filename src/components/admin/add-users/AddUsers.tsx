@@ -1,4 +1,3 @@
-/* eslint-disable react/no-array-index-key */
 import { useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import uuid from "react-uuid";
@@ -29,6 +28,9 @@ const AddUsers = () => {
 
   const [users, setUsers] = useState(usersDefaultState);
   const [isLoading, setIsLoading] = useState(false);
+
+  // TODO: work with email js to send an e-mail instead of signing the user up
+  // Registration endpoint to save users to database with id (firebase uid), email and name
 
   const { signup, resetPassword, updateUser } = useAuth();
 
@@ -178,7 +180,7 @@ const AddUsers = () => {
       })}
 
       <AddMoreInputs
-        title="Add another user"
+        title="Add another User"
         onClick={onClickAddNewUser}
         marginTop="mt-3" />
       <Button

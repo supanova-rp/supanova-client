@@ -88,7 +88,9 @@ const Video: React.FC<Props> = ({
     <div className="mb-4">
       <div>
         <div className="d-flex align-items-center">
-          <div className="p-1 clickable me-1">
+          <div
+            className="p-1 me-1"
+            role="button">
             <ChevronLeft
               stroke={colors.orange}
               className="mt-4 me-1"

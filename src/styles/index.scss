@@ -1,3 +1,7 @@
+$primary: #132843;
+
+@import "bootstrap/scss/bootstrap";
+
 body, html, #root {
   height: 100%;
   overflow-x: hidden;
@@ -6,34 +10,17 @@ body, html, #root {
 :root {
   --primary-color: #132843;
   --secondary-color: #F18F0F;
+  --darkgray: #6c757d;
   --link-color: #3E819A;
   --hover-color-grey: #e7e6e6;
-  --hover-color-blue: #18355a;
+  --hover-color-blue: #1b3a64;
   --hover-color-orange: #db810d;
 }
 
-.icon, .link {
-  cursor: pointer;
-}
-
-.main-button.btn-primary {
-  background-color: var(--primary-color);
-  border: 1px solid var(--primary-color);
-
+.main-button {
   &:hover, &:active {
-    background-color: var(--hover-color-blue) !important;
-    border: 1px solid var(--hover-color-blue) !important;
-  }
-}
-
-
-.secondary-button.btn-primary {
-  background-color: var(--primary-color);
-  border: 1px solid var(--primary-color);
-
-  &:hover, &:active {
-    background-color: var(--hover-color-blue) !important;
-    border: 1px solid var(--hover-color-blue) !important;
+    background-color: var(--hover-color-blue);
+    border: 1px solid var(--hover-color-blue);
   }
 }
 
@@ -61,7 +48,7 @@ body, html, #root {
   }
 }
 
-@import "./login";
+@import "./authentication";
 @import "./admin";
 @import "./sidebar";
 @import "./navbar";

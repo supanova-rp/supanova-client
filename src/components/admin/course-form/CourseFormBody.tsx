@@ -86,7 +86,7 @@ const CourseFormBody: React.FC<Props> = ({
       </div>
 
       <AddMoreInputs
-        title="Add another section"
+        title="Add another Section"
         onClick={onClickAddNewSection} />
       <div className="mb-5">
         <Button

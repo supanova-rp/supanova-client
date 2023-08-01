@@ -1,19 +1,17 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { PulseLoader } from "react-spinners";
+import { Link, useNavigate } from "react-router-dom";
 
-import { colors } from "src/constants/colorPalette";
 import { useAuth } from "../../contexts/AuthContext";
 import { FormSubmitEvent } from "../../types/index";
 
 import FormInput from "../FormInput";
 import PasswordVisibilityIcon from "./PasswordVisibilityIcon";
-import AuthForm from "./AuthForm";
+import AuthCard from "./AuthCard";
 
 const Login = () => {
   const [emailInput, setEmailInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
-  const [validationError, setValidationError] = useState("");
+  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isPasswordShowing, setIsPasswordShowing] = useState(false);
 
@@ -32,56 +30,62 @@ const Login = () => {
     event.preventDefault();
 
     try {
-      setValidationError("");
+      setError("");
       setIsLoading(true);
 
       await login(emailInput, passwordInput);
     } catch (error) {
       console.log(error);
-      setValidationError("Wrong email and/or password");
+      setError("Wrong email and/or password");
     }
 
     setIsLoading(false);
   };
 
-  if (isLoading) {
-    return (
-      <div className="d-flex flex-column align-items-center justify-content-center h-100 login-container">
-        <PulseLoader color={colors.orange} />
-      </div>
-    );
-  }
-
   return (
-    <AuthForm
-      title="Log in"
-      emailInput={emailInput}
+    <AuthCard
       cardClassname="login-card"
+      title="Hi again!"
+      subTitle="Log in to your Supanova account"
       buttonText="Log in"
-      footerText="Forgot password?"
-      footerPath="/forgot-password"
+      footerText="Don't have an account?"
+      footerLinkText="Register"
+      footerLinkPath="/register"
+      error={error}
       isLoading={isLoading}
-      validationError={validationError}
-      onSubmit={onHandleLogin}
-      setEmailInput={setEmailInput}
-      AdditionalInputFields={(
-        <FormInput
-          formId="password"
-          formGroupClassname="mb-2"
-          inputContainerClassname="d-flex align-items-center password-input"
-          label="Password"
-          type={isPasswordShowing ? "text" : "password"}
-          value={passwordInput}
-          onChange={(e) => setPasswordInput(e.target.value)}
-          minLength={6}
-          Component={(
-            <PasswordVisibilityIcon
-              isPasswordShowing={isPasswordShowing}
-              setIsPasswordShowing={setIsPasswordShowing} />
-          )}/>
-      )} />
-  );
+      onSubmit={onHandleLogin}>
+      <FormInput
+        formId="email"
+        formGroupClassname="mb-2 pe-4"
+        inputContainerClassname="text-input"
+        label="Email"
+        type="email"
+        value={emailInput}
+        onChange={(e) => setEmailInput(e.target.value)}/>
+      <FormInput
+        formId="password"
+        formGroupClassname="mb-2"
+        inputContainerClassname="d-flex align-items-center password-input"
+        label="Password"
+        type={isPasswordShowing ? "text" : "password"}
+        value={passwordInput}
+        onChange={(e) => setPasswordInput(e.target.value)}
+        minLength={6}
+        Component={(
+          <PasswordVisibilityIcon
+            isPasswordShowing={isPasswordShowing}
+            onHandlePasswordShowing={(value) => (setIsPasswordShowing(value))} />
+        )}/>
 
+      <div className="auth-link-container">
+        <Link
+          to="/forgot-password"
+          className="auth-link">
+          Forgot password?
+        </Link>
+      </div>
+    </AuthCard>
+  );
 };
 
 export default Login;

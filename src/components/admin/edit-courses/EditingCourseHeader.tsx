@@ -15,7 +15,8 @@ const EditingCourseHeader: React.FC<Props> = ({
     <div className="d-flex justify-content-md-between mb-4 align-items-center">
       <ChevronLeft
         stroke="black"
-        className="clickable me-2"
+        role="button"
+        className="me-2"
         onClick={onCourseFormCancelled} />
       <Button
         className="btn-danger"

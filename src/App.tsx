@@ -12,6 +12,7 @@ import Admin from "./components/admin/Admin";
 import AdminRoute from "./components/admin/AdminRoute";
 import ForgotPassword from "./components/authentication/ForgotPassword";
 import Login from "./components/authentication/Login";
+import Register from "./components/authentication/Register";
 
 const App = () => {
   return (
@@ -34,6 +35,9 @@ const App = () => {
           <Route
             path="/login"
             element={<Login />} />
+          <Route
+            path="/register"
+            element={<Register />} />
           <Route
             path="*"
             element={(

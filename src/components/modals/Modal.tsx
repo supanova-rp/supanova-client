@@ -14,7 +14,7 @@ const Modal: React.FC<Props> = ({ onClick, children }) => {
           <XMarkIcon
             onClick={() => onClick(null)}
             stroke={colors.darkgray}
-            className="clickable" />
+            role="button" />
         </div>
         <div className="d-flex justify-content-center modal-text-container">
           {children}

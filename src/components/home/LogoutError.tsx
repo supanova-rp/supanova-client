@@ -5,9 +5,11 @@ import { Alert } from "react-bootstrap";
 
 const LogoutError: React.FC<LogoutErrorProps> = ({ logoutError }) => {
   if (logoutError) {
-    return <Alert
-      variant="danger"
-      className="logout-error">{logoutError}</Alert>;
+    return (
+      <Alert
+        variant="danger"
+        className="logout-error">{logoutError}</Alert>
+    );
   }
 
   return null;
