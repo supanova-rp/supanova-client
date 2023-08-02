@@ -5,3 +5,7 @@ export const ADMINS_TABS = {
   EDIT_COURSES: "Edit Courses",
   ADD_USERS: "Add Users",
 };
+
+export const EMAIL_JS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+export const EMAIL_JS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+export const EMAIL_JS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;

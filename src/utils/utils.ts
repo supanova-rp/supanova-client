@@ -1,4 +1,4 @@
-import { API_DOMAIN } from "src/constants/constants";
+import { API_DOMAIN, EMAIL_JS_PUBLIC_KEY, EMAIL_JS_SERVICE_ID, EMAIL_JS_TEMPLATE_ID } from "src/constants/constants";
 import { Course, CourseSection, UserInfoToUpdate, User } from "../types/index";
 
 export const updateUsers = (users: User[], userId: string, userInfoToUpdate: UserInfoToUpdate) => {
@@ -145,4 +145,16 @@ export const request = async ({
   } catch (error) {
     onError(error as string);
   }
+};
+
+export const getEmailJsParams = (username: string, email: string) => {
+  return  {
+    service_id: EMAIL_JS_SERVICE_ID,
+    template_id: EMAIL_JS_TEMPLATE_ID,
+    user_id: EMAIL_JS_PUBLIC_KEY,
+    template_params: {
+      "user_name": username,
+      "user_email": email
+    }
+  };
 };

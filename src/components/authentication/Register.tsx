@@ -52,44 +52,6 @@ const Register = () => {
     setIsLoading(false);
   };
 
-  // const onHandleRegisterUser = async (event: FormSubmitEvent, email: string, name: string, userId: string) => {
-  //   event.preventDefault();
-
-  //   try {
-  //     setIsLoading(true);
-
-  //     const newUser = await signup(email, uuid());
-
-  //     await updateUser(newUser, name);
-
-  //     await updateProfile(newUser.user, { displayName: name });
-
-  //     const usersAfterReg = updateUsers(users, userId, { registered: true, regError: false });
-
-  //     try {
-  //       await resetPassword(email);
-
-  //       const usersAfterPasswordReset = updateUsers(usersAfterReg, userId, { hasPasswordResetError: false });
-
-  //       setUsers(usersAfterPasswordReset);
-  //     } catch (error) {
-  //       console.log(">>> Error sending reset password email: ", error);
-
-  //       const usersAfterFailedPasswordReset = updateUsers(users, userId, { hasPasswordResetError: true });
-
-  //       setUsers(usersAfterFailedPasswordReset);
-  //     }
-  //   } catch (error) {
-  //     console.log(">>> Error registering user: ", error);
-
-  //     const usersAfterFailedReg = updateUsers(users, userId, { regError: true });
-
-  //     setUsers(usersAfterFailedReg);
-  //   }
-
-  //   setIsLoading(false);
-  // };
-
   const onHandlePasswordShowing = (key: string, value: boolean) => {
     const updatedPasswordShowingState = {
       ...isPasswordShowing,

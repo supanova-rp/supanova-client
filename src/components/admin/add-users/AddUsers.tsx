@@ -1,14 +1,12 @@
 import { useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import uuid from "react-uuid";
-import { updateProfile } from "firebase/auth";
 
 import { ReactComponent as TickIcon } from "../../../icons/tickIcon.svg";
 
 import { InputChangeEvent, FormSubmitEvent } from "../../../types/index";
-import { useAuth } from "../../../contexts/AuthContext";
 import { colors } from "../../../constants/colorPalette";
-import { updateUsers } from "../../../utils/utils";
+import { getEmailJsParams, updateUsers } from "../../../utils/utils";
 
 import XIcon from "../../XIcon";
 import FormInput from "../../FormInput";
@@ -21,18 +19,12 @@ const AddUsers = () => {
     id: uuid(),
     name: "",
     email: "",
-    registered: false,
-    regError: false,
-    hasPasswordResetError: false,
+    added: false,
+    addUserError: false,
   }];
 
   const [users, setUsers] = useState(usersDefaultState);
   const [isLoading, setIsLoading] = useState(false);
-
-  // TODO: work with email js to send an e-mail instead of signing the user up
-  // Registration endpoint to save users to database with id (firebase uid), email and name
-
-  const { signup, resetPassword, updateUser } = useAuth();
 
   const onChangeUser = (key: string, userId: string, event: InputChangeEvent) => {
     const updatedUsers = users.map((user) => {
@@ -56,9 +48,8 @@ const AddUsers = () => {
         id: uuid(),
         name: "",
         email: "",
-        registered: false,
-        regError: false,
-        hasPasswordResetError: false,
+        added: false,
+        addUserError: false,
       },
     ];
 
@@ -71,39 +62,34 @@ const AddUsers = () => {
     setUsers(updatedUsers);
   };
 
-  const onHandleRegisterUser = async (event: FormSubmitEvent, email: string, name: string, userId: string) => {
+  const onErrorAddingUser = (userId: string) => {
+    const usersAfterReg = updateUsers(users, userId, { added: true, addUserError: false });
+
+    setUsers(usersAfterReg);
+  };
+
+  const onHandleAddUser = async (event: FormSubmitEvent, email: string, name: string, userId: string) => {
     event.preventDefault();
+    setIsLoading(true);
 
     try {
-      setIsLoading(true);
+      const response = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(getEmailJsParams(name, email))
+      });
 
-      const newUser = await signup(email, uuid());
+      const result = await response.json();
 
-      await updateUser(newUser, name);
+      if (!result.error) {
+        const usersAfterReg = updateUsers(users, userId, { added: true, addUserError: false });
 
-      await updateProfile(newUser.user, { displayName: name });
-
-      const usersAfterReg = updateUsers(users, userId, { registered: true, regError: false });
-
-      try {
-        await resetPassword(email);
-
-        const usersAfterPasswordReset = updateUsers(usersAfterReg, userId, { hasPasswordResetError: false });
-
-        setUsers(usersAfterPasswordReset);
-      } catch (error) {
-        console.log(">>> Error sending reset password email: ", error);
-
-        const usersAfterFailedPasswordReset = updateUsers(users, userId, { hasPasswordResetError: true });
-
-        setUsers(usersAfterFailedPasswordReset);
+        setUsers(usersAfterReg);
+      } else {
+        onErrorAddingUser(userId);
       }
-    } catch (error) {
-      console.log(">>> Error registering user: ", error);
-
-      const usersAfterFailedReg = updateUsers(users, userId, { regError: true });
-
-      setUsers(usersAfterFailedReg);
+    } catch (e) {
+      onErrorAddingUser(userId);
     }
 
     setIsLoading(false);
@@ -115,7 +101,7 @@ const AddUsers = () => {
       {users.map((user) => {
         return (
           <Form
-            onSubmit={(e) => onHandleRegisterUser(e, user.email, user.name, user.id)}
+            onSubmit={(e) => onHandleAddUser(e, user.email, user.name, user.id)}
             key={user.id}>
             <div className="d-flex align-items-center">
               <div className="d-flex">
@@ -124,7 +110,7 @@ const AddUsers = () => {
                   label="Name"
                   type="text"
                   formGroupClassname="mb-2 me-4"
-                  disabled={user.registered}
+                  disabled={user.added}
                   value={user.name}
                   onChange={(e) => onChangeUser("name", user.id, e)} />
                 <FormInput
@@ -132,7 +118,7 @@ const AddUsers = () => {
                   label="Email"
                   formGroupClassname="mb-2"
                   type="email"
-                  disabled={user.registered}
+                  disabled={user.added}
                   value={user.email}
                   onChange={(e) => onChangeUser("email", user.id, e)} />
               </div>
@@ -142,21 +128,16 @@ const AddUsers = () => {
                   type="submit"
                   className="btn-secondary w-30 ms-4"
                   size="sm"
-                  disabled={isLoading || user.registered}>
+                  disabled={isLoading || user.added}>
                   Submit
                 </Button>
 
-                {user.regError
+                {user.addUserError
                   ? <XIcon text="Error adding user" />
                   : null
                 }
 
-                {user.hasPasswordResetError
-                  ? <XIcon text="Error sending password reset email to user" />
-                  : null
-                }
-
-                {user.registered && !user.hasPasswordResetError
+                {user.added
                   ? (
                     <TickIcon
                       stroke={colors.green}
@@ -165,7 +146,7 @@ const AddUsers = () => {
                   : null
                 }
 
-                {users?.length > 1 && !user.registered
+                {users?.length > 1 && !user.added
                   ? (
                     <RemoveInput
                       onClickFunction={() => onClickRemoveUser(user.id)}
@@ -180,7 +161,7 @@ const AddUsers = () => {
       })}
 
       <AddMoreInputs
-        title="Add another User"
+        title="Add another user"
         onClick={onClickAddNewUser}
         marginTop="mt-3" />
       <Button

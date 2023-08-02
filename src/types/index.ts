@@ -38,15 +38,13 @@ export type User = {
   id: string
   name: string,
   email: string,
-  registered: boolean,
-  regError: boolean,
-  hasPasswordResetError: boolean,
+  added: boolean,
+  addUserError: boolean,
 };
 
 export type UserInfoToUpdate = {
-  registered?: boolean,
-  regError?: boolean,
-  hasPasswordResetError?: boolean,
+  added?: boolean,
+  addUserError?: boolean,
 };
 
 export type FirebaseUser = FirebaseUserLib & {accessToken?: string}

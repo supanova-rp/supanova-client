@@ -43,6 +43,8 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 
   const navigate = useNavigate();
 
+  // TODO: change the logic so you can go to register as well when you're signed out
+
   useEffect(() => {
     if (signedInStatus === "signed_out") {
       navigate("/login", { replace: true });
