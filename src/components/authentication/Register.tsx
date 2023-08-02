@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { useAuth } from "src/contexts/AuthContext";
 import { FormSubmitEvent } from "src/types";
+import useRequest from "src/hooks/useRequest";
 
 import FormInput from "../FormInput";
 import AuthCard from "./AuthCard";
@@ -17,18 +18,29 @@ const Register = () => {
   const [isPasswordShowing, setIsPasswordShowing] = useState({ password: false, repeatPassword: false });
   const [error, setError] = useState("");
 
-  const { signup, currentUser, updateUser } = useAuth();
+  const { signup, updateUser, currentUser } = useAuth();
 
   const navigate = useNavigate();
 
+  const addUserToDB = useRequest("/register");
+
   const formGroupClassname = "mb-2 pe-4";
 
-  useEffect(() => {
-    // Make sure we only navigate to login when we have a currentUser
-    if (currentUser) {
-      navigate("/");
-    }
-  }, [currentUser]);
+  // TODO: this will be handled in UnauthenticatedRoute component instead
+  // This logic currently handles redirecting the user to home page if they are logged in
+  // Maybe what we could do instead is handle the redirection before even rendering this component
+  // useEffect(() => {
+  //   // Make sure we only navigate to register when we have a currentUser
+  //   if (currentUser) {
+  //     navigate("/");
+  //   }
+  // }, [currentUser]);
+
+  const onError = (errorName: string, error: string) => {
+    console.log(`${errorName}: ${error}`);
+
+    setError("Failed to create an account. Try again.");
+  };
 
   const onHandleRegisterUser = async (event: FormSubmitEvent) => {
     event.preventDefault();
@@ -43,9 +55,22 @@ const Register = () => {
         const newUser = await signup(emailInput, passwordInput);
 
         await updateUser(newUser, nameInput);
-      } catch (error) {
-        console.log(error);
-        setError("Failed to create an account. Try again");
+
+        try {
+          addUserToDB({
+            requestBody: {
+              name: nameInput,
+              email: emailInput,
+              id: currentUser?.uid,
+            },
+            onSuccess: () => navigate("/"),
+            onError: (error) => onError("addUserToDBError", error)
+          });
+        } catch (addNewUserToDBError) {
+          console.log(addNewUserToDBError);
+        }
+      } catch (createAccountError) {
+        onError("createAccountError", createAccountError as string);
       }
     }
 
@@ -71,6 +96,7 @@ const Register = () => {
       footerText="Have an account?"
       footerLinkText="Login"
       footerLinkPath="/login"
+      alertClassname="auth-alert"
       error={error}
       onSubmit={onHandleRegisterUser}>
       <FormInput

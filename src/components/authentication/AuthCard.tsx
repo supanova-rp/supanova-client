@@ -16,7 +16,7 @@ type AuthCardProps = React.PropsWithChildren & {
   isLoading: boolean,
   onSubmit: (event: FormSubmitEvent) => Promise<void>
   successMessage?: string,
-  alertClassname?: string,
+  alertClassname: string,
 }
 
 const AuthCard: React.FC<AuthCardProps>=

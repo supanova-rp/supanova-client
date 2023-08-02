@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../../contexts/AuthContext";
@@ -17,14 +17,7 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const { login, currentUser } = useAuth();
-
-  useEffect(() => {
-    // Make sure we only navigate to login when we have a currentUser
-    if (currentUser) {
-      navigate("/");
-    }
-  }, [currentUser]);
+  const { login } = useAuth();
 
   const onHandleLogin = async (event: FormSubmitEvent) => {
     event.preventDefault();
@@ -34,6 +27,7 @@ const Login = () => {
       setIsLoading(true);
 
       await login(emailInput, passwordInput);
+      navigate("/");
     } catch (error) {
       console.log(error);
       setError("Wrong email and/or password");
@@ -52,6 +46,7 @@ const Login = () => {
       footerLinkText="Register"
       footerLinkPath="/register"
       error={error}
+      alertClassname="auth-alert"
       isLoading={isLoading}
       onSubmit={onHandleLogin}>
       <FormInput
