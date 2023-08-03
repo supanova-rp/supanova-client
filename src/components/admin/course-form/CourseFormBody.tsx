@@ -90,7 +90,7 @@ const CourseFormBody: React.FC<Props> = ({
         onClick={onClickAddNewSection} />
       <div className="mb-5">
         <Button
-          className="edit-course-save-btn secondary-button"
+          className="edit-course-save-btn main-button small-main-button"
           type="submit"
           disabled={areActionsDisabled}>
           Save

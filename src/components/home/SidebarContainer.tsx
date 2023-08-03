@@ -2,10 +2,10 @@ import { Card } from "react-bootstrap";
 
 import { SetStringFunction } from "../../types/index";
 import { getClassNameSidebarTab } from "../../utils/utils";
+import { HOME_TABS } from "src/constants/constants";
+import HomeImage from "../../images/Home-image.png";
 
 import Sidebar from "../nav/Sidebar";
-
-import HomeImage from "../../images/Home-image.png";
 
 interface Props {
   activeTab: string,
@@ -13,6 +13,8 @@ interface Props {
 }
 
 const SidebarContainer: React.FC<Props> = ({ activeTab, setActiveTab }) => {
+  const homeTabs = Object.values(HOME_TABS);
+
   return (
     <Card className="rounded-0 sidebar-content-container-home">
       <Card.Body className="mt-5 d-flex flex-column align-items-center p-0">
@@ -25,10 +27,8 @@ const SidebarContainer: React.FC<Props> = ({ activeTab, setActiveTab }) => {
           <div className="col-20 p-0">
             <Sidebar
               setActiveTab={setActiveTab}
-              classNameTab1={getClassNameSidebarTab(activeTab, "Courses")}
-              classNameTab2={getClassNameSidebarTab(activeTab, "Instructor")}
-              tabTitle1="Courses"
-              tabTitle2="Instructor" />
+              activeTab={activeTab}
+              tabs={homeTabs} />
           </div>
         </div>
       </Card.Body>

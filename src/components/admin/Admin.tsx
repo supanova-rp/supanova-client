@@ -7,8 +7,9 @@ import AddCourse from "./add-course/AddCourse";
 import AddUsers from "./add-users/AddUsers";
 import SidebarContainer from "./sidebar/SidebarContainer";
 import EditCourses from "./edit-courses/EditCourses";
+import AssignUsers from "./assign-users/AssignUsers";
 
-const { ADD_COURSE, ADD_USERS, EDIT_COURSES } = ADMINS_TABS;
+const { ADD_COURSE, ADD_USERS, ASSIGN_USERS, EDIT_COURSES } = ADMINS_TABS;
 
 const Admin = () => {
   const [activeTab, setActiveTab] = useState(ADD_COURSE);
@@ -20,6 +21,10 @@ const Admin = () => {
 
     if (activeTab === EDIT_COURSES) {
       return <EditCourses />;
+    }
+
+    if (activeTab === ASSIGN_USERS) {
+      return <AssignUsers />;
     }
 
     if (activeTab === ADD_USERS) {

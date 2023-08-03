@@ -113,6 +113,7 @@ const FilePicker: React.FC<Props> = ({
         <input
           ref={fileInputRef}
           name="file-picker"
+          className="file-picker"
           id={`inputTag-${sectionId}`}
           type="file"
           accept="video/mp4, video/quicktime"

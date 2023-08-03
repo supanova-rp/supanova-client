@@ -2,24 +2,17 @@ import React from "react";
 import { Button } from "react-bootstrap";
 
 import { SetStringFunction } from "../../types/index";
+import { getClassNameSidebarTab } from "src/utils/utils";
 
 interface Props {
-  classNameTab1: string,
-  classNameTab2: string,
-  classNameTab3?: string,
+  activeTab: string,
+  tabs: string[],
   setActiveTab: SetStringFunction,
-  tabTitle1: string,
-  tabTitle2: string,
-  tabTitle3?: string,
 }
 
 const Sidebar: React.FC<Props> = ({
-  tabTitle1,
-  tabTitle2,
-  tabTitle3,
-  classNameTab1,
-  classNameTab2,
-  classNameTab3,
+  tabs,
+  activeTab,
   setActiveTab,
 }) => {
   return (
@@ -28,23 +21,16 @@ const Sidebar: React.FC<Props> = ({
       id="v-pills-tab"
       role="tablist"
       aria-orientation="vertical">
-      <Button
-        className={`rounded-0 ${classNameTab1} text-start ps-3`}
-        onClick={() => setActiveTab(tabTitle1)}>{tabTitle1}
-      </Button>
-      <Button
-        className={`rounded-0 ${classNameTab2} text-start ps-3 tab-2`}
-        onClick={() => setActiveTab(tabTitle2)}>{tabTitle2}
-      </Button>
-      {tabTitle3
-        ? (
+      {tabs.map((tab, index) => {
+        return (
           <Button
-            className={`rounded-0 ${classNameTab3} text-start ps-3`}
-            onClick={() => setActiveTab(tabTitle3)}>{tabTitle3}
+            key={tab}
+            className={`rounded-0 ${getClassNameSidebarTab(activeTab, tab)} text-start ps-3 tab-${index + 1}`}
+            onClick={() => setActiveTab(tab)}>
+            {tab}
           </Button>
-        )
-        : null
-      }
+        );
+      })}
     </div>
   );
 };

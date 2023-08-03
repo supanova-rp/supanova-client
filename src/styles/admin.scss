@@ -2,7 +2,7 @@
   width: 400px;
 }
 
-input {
+.file-picker {
   display: none;
 }
 
@@ -143,3 +143,33 @@ input {
   }
 }
 
+.admin-accordion .accordion-button {
+  padding-left: 0;
+}
+
+.admin-accordion .accordion-button:not(.collapsed) {
+  background-color: white;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.admin-accordion-button .accordion-button:focus {
+  box-shadow: none;
+}
+
+.form-check.form-switch.toggle-button {
+  padding: 12px 40px;
+}
+
+.toggle-button .form-check-input:checked {
+  background-color: var(--secondary-color);
+  border-color: var(--secondary-color);
+}
+
+.toggle-button .form-check-input:focus {
+  box-shadow: none;
+}
+
+.assign-users-button {
+  width: 10%;
+  margin-top: 15px;
+}

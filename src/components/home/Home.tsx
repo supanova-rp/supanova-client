@@ -9,6 +9,7 @@ import Instructor from "./Instructor";
 import Courses from "./Courses";
 import CourseErrorLoadingHandler from "../CourseErrorLoadingHandler";
 import useRequest from "src/hooks/useRequest";
+import { HOME_TABS } from "src/constants/constants";
 
 const Home = () => {
   const [courses, setCourses] = useState<[] | Course[]>([]);
@@ -17,6 +18,8 @@ const Home = () => {
   const [coursesError, setCoursesError] = useState<null | string>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
+
+  const { COURSES, INSTRUCTOR } = HOME_TABS;
 
   const { getIsAdmin } = useAuth();
 
@@ -59,17 +62,23 @@ const Home = () => {
     setCoursesError(courseErrorMessage);
   };
 
-  const renderAdminContent = () => {
-    if (activeTab === "Courses") {
+  const renderTabContent = () => {
+    if (activeTab === COURSES) {
       return (
-        <Courses
-          logoutError={logoutError}
-          courses={courses}
-          setCourses={setCourses} />
+        <CourseErrorLoadingHandler
+          error={coursesError}
+          onClick={getCourses}
+          isLoading={isLoading}
+          courses={courses}>
+          <Courses
+            logoutError={logoutError}
+            courses={courses}
+            setCourses={setCourses} />
+        </CourseErrorLoadingHandler>
       );
     }
 
-    if (activeTab === "Instructor") {
+    if (activeTab === INSTRUCTOR) {
       return <Instructor logoutError={logoutError} />;
     }
 
@@ -86,13 +95,7 @@ const Home = () => {
           activeTab={activeTab}
           setActiveTab={setActiveTab} />
         <div className="px-5 w-100 min-vh-100">
-          <CourseErrorLoadingHandler
-            error={coursesError}
-            onClick={getCourses}
-            isLoading={isLoading}
-            courses={courses}>
-            {renderAdminContent()}
-          </CourseErrorLoadingHandler>
+          {renderTabContent()}
         </div>
       </div>
     </div>
