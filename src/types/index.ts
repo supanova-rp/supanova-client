@@ -20,6 +20,11 @@ export type Course = {
   sections: CourseSection[],
 };
 
+export type CourseTitle = {
+  id: number,
+  title: string,
+}
+
 export type CourseSection = {
   id: number,
   title: string,
@@ -42,6 +47,13 @@ export type User = {
   addUserError: boolean,
   alreadyRegistered: boolean,
 };
+
+export type UserToCourses = {
+  id: number,
+  name: string,
+  email: string,
+  course_id: number,
+}
 
 export type UserInfoToUpdate = {
   added?: boolean,

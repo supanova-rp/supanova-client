@@ -3,8 +3,6 @@ import { Form } from "react-bootstrap";
 const ToggleButton = ({ course, tickedCoursesIds, onChangeUpdateTickedCourseIds  }) => {
   const isChecked = tickedCoursesIds?.includes(course.id);
 
-  console.log(">>> isChecked: ", isChecked);
-
   return (
     <Form.Check
       className="toggle-button"

@@ -5,13 +5,13 @@ import { PulseLoader } from "react-spinners";
 import { colors } from "src/constants/colorPalette";
 
 import Error from "./Error";
-import { Course } from "src/types";
+import { Course, CourseTitle } from "src/types";
 
 interface Props extends React.PropsWithChildren {
   error: string | null,
   onClick: () => void,
   isLoading: boolean,
-  courses: Course[],
+  courses: Course[] | CourseTitle[],
 }
 
 const CourseErrorLoadingHandler = ({

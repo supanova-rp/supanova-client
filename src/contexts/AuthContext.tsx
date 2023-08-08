@@ -12,7 +12,6 @@ import {
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  UserCredential as FirebaseUserCredential,
   updateProfile,
   UserCredential,
 } from "firebase/auth";
@@ -22,8 +21,8 @@ import { auth } from "../firebase/firebase";
 
 export type AuthContextType = {
   currentUser: FirebaseUser | null,
-  signup: (email: string, password: string) => Promise<FirebaseUserCredential>,
-  login: (email: string, password: string) => Promise<FirebaseUserCredential>,
+  signup: (email: string, password: string) => Promise<UserCredential>,
+  login: (email: string, password: string) => Promise<UserCredential>,
   logout: () => Promise<void>,
   resetPassword: (email: string) => Promise<void>,
   updateUser: (newUser: UserCredential, name: string) => Promise<void>,

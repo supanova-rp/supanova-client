@@ -1,9 +1,62 @@
-import Accordion from "src/components/admin/AdminAccordion";
+import { useEffect, useState } from "react";
+
+import useRequest from "../../../hooks/useRequest";
+
+import Accordion from "../../admin/AdminAccordion";
 import AdminHeader from "../AdminHeader";
-import { useState } from "react";
+import { CourseTitle, UserToCourses } from "src/types";
+import CourseErrorLoadingHandler from "src/components/CourseErrorLoadingHandler";
 
 const AssignUsers = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingCourses, setisLoadingCourses] = useState<boolean>(true);
+  const [isLoadingUserCourses, setIsLoadingUserCourses] = useState(false);
+  const [error, setError] = useState<null | string>(null);
+  const [courses, setCourses] = useState<CourseTitle[]>([]);
+  const [usersToCourses, setUsersToCourses] = useState<UserToCourses[]>([]);
+
+  const requestCourseTitles = useRequest("/course-titles");
+  const requestUsersToCourses = useRequest("/users-to-courses");
+
+  const onError = (error: string, errorMessage: string) => {
+    console.log(error);
+
+    setisLoadingCourses(false);
+    setError(errorMessage);
+  };
+
+  const onSuccessUserCourses = (results: UserToCourses[]) => {
+    setIsLoadingUserCourses(false);
+    setUsersToCourses(results);
+  };
+
+  const onSuccessCourses = (result: CourseTitle[]) => {
+    setCourses(result);
+    setisLoadingCourses(false);
+    if (result.length) {
+      getUsersWithAssignedCourses();
+    }
+  };
+
+  const getCoursesAndUsers = () => {
+    requestCourseTitles({
+      onSuccess: onSuccessCourses,
+      onError: (error) => onError(error, "Failed to get courses")
+    });
+
+  };
+
+  const getUsersWithAssignedCourses = () => {
+    setIsLoadingUserCourses(true);
+
+    requestUsersToCourses({
+      onSuccess: onSuccessUserCourses,
+      onError: (error) => onError(error, "Failed to get users")
+    });
+  };
+
+  useEffect(() => {
+    getCoursesAndUsers();
+  }, []);
 
   const users = [
     {
@@ -36,36 +89,18 @@ const AssignUsers = () => {
     }
   ];
 
-  const courses = [
-    {
-      id: 1,
-      title: "Radiation Protection"
-    },
-    {
-      id: 2,
-      title: "Radiation Basics",
-    },
-    {
-      id: 3,
-      title: "Radiation for large companies"
-    },
-    {
-      id: 4,
-      title: "Radiation for bosses"
-    },
-    {
-      id: 5,
-      title: "THE END!",
-    }
-
-  ];
-
   return (
     <>
       <AdminHeader title="Assign Users to Courses" />
-      <Accordion
-        users={users}
-        courses={courses}/>
+      <CourseErrorLoadingHandler
+        error={error}
+        onClick={getCoursesAndUsers}
+        isLoading={isLoadingCourses || isLoadingUserCourses}
+        courses={courses}>
+        <Accordion
+          users={users}
+          courses={courses}/>
+      </CourseErrorLoadingHandler>
     </>
   );
 };

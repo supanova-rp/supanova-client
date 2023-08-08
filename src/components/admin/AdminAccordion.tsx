@@ -2,28 +2,30 @@ import { useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import Accordion from "react-bootstrap/Accordion";
 
+import { CourseTitle, UserToCourses } from "src/types";
+
 import ToggleButton from "../ToggleButton";
 
 interface AccordionProps {
-  users: any,
-  courses: any,
+  users: UserToCourses[],
+  courses: CourseTitle[],
 }
 
 const AdminAccordion: React.FC<AccordionProps> = ({ users, courses }) => {
-  const [tickedCoursesIds, setTickedCoursesIds] = useState([]);
+  const [tickedCourseIds, setTickedCourseIds] = useState<number[]>([]);
 
   const onChangeUpdateTickedCourseIds = (courseId: number) => {
-    if (tickedCoursesIds.includes(courseId)) {
-      const newTickedCoursesIds = tickedCoursesIds.filter((id) => courseId !== id);
+    if (tickedCourseIds.includes(courseId)) {
+      const newTickedCoursesIds = tickedCourseIds.filter((id) => courseId !== id);
 
-      setTickedCoursesIds(newTickedCoursesIds);
+      setTickedCourseIds(newTickedCoursesIds);
     } else {
       const newTickedCoursesIds = [
-        ...tickedCoursesIds,
+        ...tickedCourseIds,
         courseId,
       ];
 
-      setTickedCoursesIds(newTickedCoursesIds);
+      setTickedCourseIds(newTickedCoursesIds);
     }
 
   };
@@ -32,27 +34,32 @@ const AdminAccordion: React.FC<AccordionProps> = ({ users, courses }) => {
     <Accordion
       flush
       className="admin-accordion">
-      {users.map((user, index: number) => {
+      {users.map((user: UserToCourses, index: number) => {
         return (
           <Accordion.Item
             eventKey={index.toString()}
             key={`${user.name}-${user.email}`}>
-            <Accordion.Header className="admin-accordion-button">{`${user.name} (${user.email})`}</Accordion.Header>
-            <Accordion.Body className="p-0 my-4">
+            <Accordion.Header
+              className="admin-accordion-button">
+              {`${user.name} (${user.email})`}
+            </Accordion.Header>
+            <Accordion.Body className="p-0 my-3">
               <Form>
-                {courses.map((course) => {
+                {courses.map((course: CourseTitle) => {
                   return (
                     <ToggleButton
                       key={course.id}
                       course={course}
-                      tickedCoursesIds={tickedCoursesIds}
+                      tickedCoursesIds={tickedCourseIds}
                       onChangeUpdateTickedCourseIds={onChangeUpdateTickedCourseIds} />
                   );
                 })}
               </Form>
               <Button
                 type="button"
-                className="btn btn-primary btn-sm main-button assign-users-button">Save</Button>
+                className="btn btn-primary btn-sm main-button assign-users-button">
+                Save
+              </Button>
             </Accordion.Body>
           </Accordion.Item>
         );
