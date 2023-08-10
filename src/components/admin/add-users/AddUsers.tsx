@@ -5,6 +5,7 @@ import uuid from "react-uuid";
 import { ReactComponent as TickIcon } from "../../../icons/tickIcon.svg";
 
 import { InputChangeEvent, FormSubmitEvent } from "../../../types/index";
+import useRequest from "src/hooks/useRequest";
 import { colors } from "../../../constants/colorPalette";
 import { getEmailJsParams, updateUsers } from "../../../utils/utils";
 
@@ -21,10 +22,13 @@ const AddUsers = () => {
     email: "",
     added: false,
     addUserError: false,
+    alreadyRegistered: false,
   }];
 
   const [users, setUsers] = useState(usersDefaultState);
   const [isLoading, setIsLoading] = useState(false);
+
+  const checkUserExists = useRequest("/user-exists");
 
   const onChangeUser = (key: string, userId: string, event: InputChangeEvent) => {
     const updatedUsers = users.map((user) => {
@@ -50,6 +54,7 @@ const AddUsers = () => {
         email: "",
         added: false,
         addUserError: false,
+        alreadyRegistered: false,
       },
     ];
 
@@ -62,37 +67,63 @@ const AddUsers = () => {
     setUsers(updatedUsers);
   };
 
-  const onErrorAddingUser = (userId: string) => {
-    const usersAfterReg = updateUsers(users, userId, { added: true, addUserError: false });
+  const onErrorAddingUser = (userId: string, alreadyRegistered = false) => {
+    const userAlreadyRegisteredErrorOptions = { added: false, alreadyRegistered: true, addUserError: false };
+    const errorOptions = { added: false, addUserError: true, alreadyRegistered: false };
+    const usersAfterReg = updateUsers(users, userId, { ...(alreadyRegistered ? userAlreadyRegisteredErrorOptions : errorOptions) });
 
     setUsers(usersAfterReg);
+    setIsLoading(false);
+  };
+
+  const onSuccessCheckUserExists = (userId: string, email: string, name: string) => {
+    setIsLoading(false);
+    sendRegEmail(userId, email, name);
+  };
+
+  const sendRegEmail = async (userId: string, email: string, name: string) => {
+    try {
+      const emailJsParams = getEmailJsParams(name, email);
+
+      const response = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(emailJsParams)
+      });
+
+      const result = await response.json();
+
+      if (!result.error) {
+        const usersAfterReg = updateUsers(
+          users,
+          userId,
+          {
+            added: true,
+            addUserError: false,
+            alreadyRegistered: false
+          }
+        );
+
+        setUsers(usersAfterReg);
+      } else {
+        onErrorAddingUser(userId);
+      }
+    } catch (error) {
+      console.log(error);
+      onErrorAddingUser(userId);
+    }
   };
 
   const onHandleAddUser = async (event: FormSubmitEvent, email: string, name: string, userId: string) => {
     event.preventDefault();
     setIsLoading(true);
 
-    try {
-      const response = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(getEmailJsParams(name, email))
-      });
-
-      const result = await response.json();
-
-      if (!result.error) {
-        const usersAfterReg = updateUsers(users, userId, { added: true, addUserError: false });
-
-        setUsers(usersAfterReg);
-      } else {
-        onErrorAddingUser(userId);
-      }
-    } catch (e) {
-      onErrorAddingUser(userId);
-    }
-
-    setIsLoading(false);
+    checkUserExists({
+      requestBody: { email },
+      onSuccess: () => onSuccessCheckUserExists(userId, email, name),
+      onError: onErrorAddingUser,
+      onUserAlreadyRegisteredError: () => onErrorAddingUser(userId, true),
+    });
   };
 
   return (
@@ -131,6 +162,11 @@ const AddUsers = () => {
                   disabled={isLoading || user.added}>
                   Submit
                 </Button>
+
+                {user.alreadyRegistered
+                  ? <XIcon text="User already exists" />
+                  : null
+                }
 
                 {user.addUserError
                   ? <XIcon text="Error adding user" />

@@ -23,10 +23,14 @@ const Register = () => {
 
   const formGroupClassname = "mb-2 pe-4";
 
-  const onError = (errorName: string, error: string) => {
+  const onError = (errorName: string, error: any) => {
     console.log(`${errorName}: ${error}`);
+    if (error.code === "auth/email-already-in-use") {
+      setError("Account already exists. Log in instead.");
+    } else {
+      setError("Failed to create an account. Try again.");
+    }
 
-    setError("Failed to create an account. Try again.");
   };
 
   const onHandleRegisterUser = async (event: FormSubmitEvent) => {
@@ -43,24 +47,22 @@ const Register = () => {
 
         await updateUser(newUser, nameInput);
 
+        // Avoids Typescript error
+        // AccessToken doesn't exist on userCredential so need to use getIdToken instead
         const accessToken = await newUser.user.getIdToken();
 
-        try {
-          addUserToDB({
-            requestBody: {
-              name: nameInput,
-              email: emailInput,
-              id: newUser?.user?.uid,
-              access_token: accessToken,
-            },
-            onSuccess: () => {},
-            onError: (error) => onError("addUserToDBError", error)
-          });
-        } catch (addNewUserToDBError) {
-          console.log(addNewUserToDBError);
-        }
+        addUserToDB({
+          requestBody: {
+            name: nameInput,
+            email: emailInput,
+            id: newUser?.user?.uid,
+            access_token: accessToken,
+          },
+          onSuccess: () => {},
+          onError: (error) => onError("addUserToDBError", error)
+        });
       } catch (createAccountError) {
-        onError("createAccountError", createAccountError as string);
+        onError("createAccountError", createAccountError);
       }
     }
 

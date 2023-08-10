@@ -6,12 +6,13 @@ interface RequestOptions {
   onRequestBegin?: () => void,
   onSuccess: (result: any) => void,
   onError: (error: string) => void,
+ onUserAlreadyRegisteredError?: () => void,
 }
 
 const useRequest = (endpoint: string) => {
   const { currentUser, logout } = useAuth();
 
-  return ({ requestBody, onRequestBegin, onSuccess, onError }: RequestOptions) => {
+  return ({ requestBody, onRequestBegin, onSuccess, onError,onUserAlreadyRegisteredError }: RequestOptions) => {
     request({
       method: "POST",
       endpoint,
@@ -22,7 +23,8 @@ const useRequest = (endpoint: string) => {
       onRequestBegin,
       onSuccess,
       onError,
-      onUnauthorised: logout
+      onUnauthorised: logout,
+      onUserAlreadyRegisteredError,
     });
   };
 };

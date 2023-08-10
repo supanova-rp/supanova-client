@@ -40,11 +40,13 @@ export type User = {
   email: string,
   added: boolean,
   addUserError: boolean,
+  alreadyRegistered: boolean,
 };
 
 export type UserInfoToUpdate = {
   added?: boolean,
   addUserError?: boolean,
+  alreadyRegistered?: boolean,
 };
 
 export type FirebaseUser = FirebaseUserLib & {accessToken?: string}
