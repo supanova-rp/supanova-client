@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import useRequest from "../../../hooks/useRequest";
 
-import Accordion from "../../admin/AdminAccordion";
+import AdminAccordion from "../../admin/AdminAccordion";
 import AdminHeader from "../AdminHeader";
 import { CourseTitle, UserToCourses } from "src/types";
 import CourseErrorLoadingHandler from "src/components/CourseErrorLoadingHandler";
@@ -32,6 +32,7 @@ const AssignUsers = () => {
   const onSuccessCourses = (result: CourseTitle[]) => {
     setCourses(result);
     setisLoadingCourses(false);
+
     if (result.length) {
       getUsersWithAssignedCourses();
     }
@@ -58,37 +59,6 @@ const AssignUsers = () => {
     getCoursesAndUsers();
   }, []);
 
-  const users = [
-    {
-      name: "Marie",
-      email: "marie20767@gmail.com",
-      assignedCourses: [
-        {
-          id: 1,
-          title: "Radiation Protection",
-        },
-        {
-          id: 2,
-          title: "Radiation Basics",
-        },
-      ]
-    },
-    {
-      name: "Jamie",
-      email: "jamiegarner123@gmail.com",
-      assignedCourses: [
-        {
-          id: 1,
-          title: "Radiation Protection"
-        },
-        {
-          id: 3,
-          title: "Radiation for large companies"
-        }
-      ]
-    }
-  ];
-
   return (
     <>
       <AdminHeader title="Assign Users to Courses" />
@@ -97,9 +67,10 @@ const AssignUsers = () => {
         onClick={getCoursesAndUsers}
         isLoading={isLoadingCourses || isLoadingUserCourses}
         courses={courses}>
-        <Accordion
-          users={users}
-          courses={courses}/>
+        <AdminAccordion
+          usersToCourses={usersToCourses}
+          courses={courses}
+          setUsersToCourses={setUsersToCourses}/>
       </CourseErrorLoadingHandler>
     </>
   );

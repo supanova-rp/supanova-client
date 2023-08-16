@@ -49,10 +49,10 @@ export type User = {
 };
 
 export type UserToCourses = {
-  id: number,
+  id: string,
   name: string,
   email: string,
-  course_id: number,
+  courseIds: number[],
 }
 
 export type UserInfoToUpdate = {

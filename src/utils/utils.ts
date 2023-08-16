@@ -147,7 +147,6 @@ export const request = async ({
       }
 
       else {
-        console.log("error");
         onError(result.error);
       }
     }

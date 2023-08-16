@@ -157,7 +157,7 @@
 }
 
 .form-check.form-switch.toggle-button {
-  padding: 10px 40px;
+  padding: 10px 10px 10px 40px;
 }
 
 .toggle-button .form-check-input:checked {
@@ -165,11 +165,10 @@
   border-color: var(--secondary-color);
 }
 
-.toggle-button .form-check-input:focus {
-  box-shadow: none;
+.toggle-button .form-check-input {
+  cursor: pointer;
 }
 
-.assign-users-button {
-  width: 10%;
-  margin-top: 15px;
+.toggle-button .form-check-input:focus {
+  box-shadow: none;
 }
