@@ -3,13 +3,13 @@ import { Alert } from "react-bootstrap";
 import { PulseLoader } from "react-spinners";
 
 import { colors } from "src/constants/colorPalette";
+import { Course, CourseTitle } from "src/types";
 
 import Error from "./Error";
-import { Course, CourseTitle } from "src/types";
 
 interface Props extends React.PropsWithChildren {
   error: string | null,
-  onClick: () => void,
+  onClick: (isAdmin: boolean) => void,
   isLoading: boolean,
   courses: Course[] | CourseTitle[],
 }

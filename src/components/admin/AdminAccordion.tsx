@@ -23,7 +23,16 @@ const AdminAccordion: React.FC<AccordionProps> = ({ usersToCourses, courses, set
     setLoadingUserToCourseId(null);
 
     if (isAssigned) {
-      const newUsersToCoursesMinusUnassignedCourse = usersToCourses.filter((userToCourse) => userId !== userToCourse.id);
+      const newUsersToCoursesMinusUnassignedCourse = usersToCourses.map((userToCourse) => {
+        if (userToCourse.id === userId) {
+          return {
+            ...userToCourse,
+            courseIds: userToCourse.courseIds.filter((id) => id !== courseId)
+          };
+        }
+
+        return userToCourse;
+      });
 
       setUsersToCourses(newUsersToCoursesMinusUnassignedCourse);
     } else {
@@ -90,7 +99,7 @@ const AdminAccordion: React.FC<AccordionProps> = ({ usersToCourses, courses, set
                   : null
                 }
                 {courses.map((course: CourseTitle) => {
-                  const isAssigned = user.courseIds.includes(course.id);
+                  const isAssigned = user.courseIds?.includes(course.id);
 
                   return (
                     <ToggleButton

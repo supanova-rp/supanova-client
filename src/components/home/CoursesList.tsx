@@ -13,7 +13,7 @@ const CoursesList: React.FC<Props> = ({ logoutError, courses, onSelectVideo }) =
     <div className="p-4">
       <div>
         <Header
-          title="All Courses"
+          title="Your Courses"
           logoutError={logoutError}
           margin="mb-3" />
       </div>

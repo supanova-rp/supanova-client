@@ -15,24 +15,35 @@ const Home = () => {
   const [courses, setCourses] = useState<[] | Course[]>([]);
   const [logoutError, setLogoutError] = useState<null | string>(null);
   const [activeTab, setActiveTab] = useState<string>("Courses");
-  const [coursesError, setCoursesError] = useState<null | string>(null);
+  const [error, setError] = useState<null | string>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
   const { COURSES, INSTRUCTOR } = HOME_TABS;
 
-  const { getIsAdmin } = useAuth();
+  const { getIsAdmin, currentUser } = useAuth();
 
-  const requestCourses = useRequest("/courses");
+  const requestAllCourses = useRequest("/courses");
+  const requestAssignedCourses = useRequest("/assigned-courses");
 
-  const getCourses = () => {
+  const getCourses = (isAnAdmin: boolean) => {
     setIsLoading(true);
-    setCoursesError(null);
+    setError(null);
 
-    requestCourses({
-      onSuccess,
-      onError: (error) => onError("Loading courses failed", error),
-    });
+    if (isAnAdmin) {
+      requestAllCourses({
+        onSuccess,
+        onError: (error) => onError(error, "Loading courses failed"),
+      });
+    } else {
+      requestAssignedCourses({
+        requestBody: {
+          user_id: currentUser?.uid
+        },
+        onSuccess,
+        onError: (error) => onError(error, "Loading courses failed")
+      });
+    }
   };
 
   const verifyIsAdmin = async () => {
@@ -40,14 +51,14 @@ const Home = () => {
       const result = await getIsAdmin();
 
       setIsAdmin(result);
-    } catch (e) {
-      console.log(">>> isAdminError: ", e);
+      getCourses(result);
+    } catch (error) {
+      onError("Loading courses failed", error as string);
     }
   };
 
   useEffect(() => {
     verifyIsAdmin();
-    getCourses();
   }, []);
 
   const onSuccess = (result: Course[]) => {
@@ -55,19 +66,19 @@ const Home = () => {
     setCourses(result);
   };
 
-  const onError = (courseErrorMessage: string, error = "") => {
+  const onError = (error = "", courseErrorMessage: string ) => {
     console.log(">>> error: ", error || courseErrorMessage);
 
     setIsLoading(false);
-    setCoursesError(courseErrorMessage);
+    setError(courseErrorMessage);
   };
 
   const renderTabContent = () => {
     if (activeTab === COURSES) {
       return (
         <CourseErrorLoadingHandler
-          error={coursesError}
-          onClick={getCourses}
+          error={error}
+          onClick={() => getCourses(isAdmin)}
           isLoading={isLoading}
           courses={courses}>
           <Courses
