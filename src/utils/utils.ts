@@ -1,5 +1,5 @@
 import { API_DOMAIN, EMAIL_JS_PUBLIC_KEY, EMAIL_JS_SERVICE_ID, EMAIL_JS_TEMPLATE_ID } from "src/constants/constants";
-import { Course, CourseSection, UserInfoToUpdate, User } from "../types/index";
+import { Course, CourseSection, UserInfoToUpdate, User, FirebaseUser } from "../types/index";
 
 export const updateUsers = (users: User[], userId: string, userInfoToUpdate: UserInfoToUpdate) => {
   return users.map((user) => {
@@ -104,6 +104,7 @@ interface RequestOptions {
   endpoint: string,
   method: string,
   requestBody: any,
+  currentUser: FirebaseUser | null,
   onRequestBegin?: () => void,
   onSuccess: (result: any) => void,
   onError: (error: string) => void,
@@ -120,16 +121,19 @@ export const request = async ({
   onError,
   onUnauthorised,
   onUserAlreadyRegisteredError,
+  currentUser
 } : RequestOptions) => {
   if (onRequestBegin) {
     onRequestBegin();
   }
 
+  const accessToken = await currentUser?.getIdTokenResult();
+
   try {
     const response = await fetch(`${API_DOMAIN}${endpoint}`, {
       method,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(requestBody),
+      body: JSON.stringify({ access_token: accessToken?.token, ...requestBody }),
     });
 
     const result = await response.json();

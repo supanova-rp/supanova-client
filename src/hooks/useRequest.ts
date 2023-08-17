@@ -12,14 +12,12 @@ interface RequestOptions {
 const useRequest = (endpoint: string) => {
   const { currentUser, logout } = useAuth();
 
-  return ({ requestBody, onRequestBegin, onSuccess, onError,onUserAlreadyRegisteredError }: RequestOptions) => {
+  return ({ requestBody, onRequestBegin, onSuccess, onError, onUserAlreadyRegisteredError }: RequestOptions) => {
     request({
       method: "POST",
       endpoint,
-      requestBody: {
-        access_token: currentUser?.accessToken,
-        ...requestBody,
-      },
+      requestBody,
+      currentUser,
       onRequestBegin,
       onSuccess,
       onError,

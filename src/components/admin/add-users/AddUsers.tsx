@@ -16,12 +16,6 @@ import RemoveInput from "../../RemoveInput";
 import AddMoreInputs from "../../AddMoreInputs";
 
 // TODO: fix emailjs error
-// TODO: fix expired token bug
-// - before each request, get firebase
-// token (like user.getToken() or
-// something) and send that
-// - somehow ensure the token on
-// currentUser is up to date
 
 const AddUsers = () => {
   const usersDefaultState = [{
