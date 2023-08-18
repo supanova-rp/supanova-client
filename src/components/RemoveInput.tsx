@@ -6,13 +6,15 @@ interface Props {
   margin?: string,
 }
 
-const RemoveInput: React.FC<Props> = ({ onClickFunction, margin }) => {
+const  RemoveInput: React.FC<Props> = ({ onClickFunction, margin }) => {
   return (
     <div
       role="button"
       className={`${margin} mb-3 p-2`}
       onClick={onClickFunction}>
-      <MinusIcon stroke={colors.red} />
+      <MinusIcon
+        stroke={colors.red}
+        className="remove-icon" />
     </div>
   );
 };

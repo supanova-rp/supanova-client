@@ -119,7 +119,7 @@ export default class EditCourses extends Component {
 
     return (
       <>
-        <AdminHeader title="Edit Courses" />
+        <AdminHeader title="Existing Courses" />
         <RequestWrapper
           endpoint="/courses"
           requestOnMount

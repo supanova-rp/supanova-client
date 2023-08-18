@@ -2,8 +2,6 @@ import { Alert } from "react-bootstrap";
 
 import { Course } from "src/types";
 
-import AdminHeader from "../AdminHeader";
-
 interface Props {
   courses: Course[],
   successMessage: string | null,
@@ -13,8 +11,6 @@ interface Props {
 const CoursesList: React.FC<Props> = ({ courses, successMessage, onClickEditCourse }) => {
   return (
     <>
-      <AdminHeader title="Existing Courses" />
-
       {successMessage
         ? <Alert variant="success">{successMessage}</Alert>
         : null

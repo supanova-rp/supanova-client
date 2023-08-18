@@ -100,7 +100,7 @@ const FilePicker: React.FC<Props> = ({
     return (
       <TickIcon
         stroke={colors.green}
-        className="ms-2" />
+        className="tick-upload-icon ms-2" />
     );
   };
 

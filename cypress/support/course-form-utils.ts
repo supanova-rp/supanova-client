@@ -20,23 +20,47 @@ export const checkCourseFormIsEmpty = () => {
   cy.get(".video-js-edit").should("not.exist");
 };
 
-export const fillInCourseFormNew = (title: string, description: string, sections: sections) => {
+const fillInCourseTitleAndDescription = (title: string, description: string) => {
   cy.get(courseTitle).type(title);
   cy.get(courseDescription).type(description);
+};
+
+export const fillInCourseForm = (title: string, description: string, sections: sections) => {
+  fillInCourseTitleAndDescription(title, description);
 
   sections.forEach(({ title, video }, index) => {
-    if (index > 0) {
-      cy.get(".plus-icon").click();
-    }
+    cy.get(".plus-icon").click();
+    cy.get(".remove-icon").eq(index).should("exist");
 
     cy.get(courseSection).eq(index).type(title);
 
     if (video) {
+      cy.intercept("GET", "**/supanova-dev.s3**").as("getUploadUrl");
       cy.get("input[type=file]").eq(index).selectFile(video, { force: true });
-      cy.wait(5000);
-      cy.get(".video-js-edit").should("exist");
+      cy.get(".tick-upload-icon").should("exist");
+      cy.get(".video-js-edit").eq(index).should("exist");
+    }});
+};
+
+export const fillInCourseFormSaveBeforeVideoUploadCompleted = (title: string, description: string, sections: sections) => {
+  fillInCourseTitleAndDescription(title, description);
+
+  sections.forEach(({ title }, index) => {
+    if (index === 0) {
+      cy.get(".plus-icon").click();
     }
+
+    cy.get(".remove-icon").eq(index).should("exist");
+    cy.get(courseSection).eq(index).type(title);
   });
+
+  cy.contains("button", "Save").click();
+  cy.findByText("Please make sure videos are uploaded for every section.").should("exist");
+
+  cy.get("input[type=file]").eq(0).selectFile(sections[0].video, { force: true });
+  cy.get(".tick-upload-icon").should("exist");
+  cy.get(".video-js-edit").eq(0).should("exist");
+
 };
 
 export const checkCourseExistsinEditCourses = () => {

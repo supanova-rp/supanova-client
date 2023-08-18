@@ -1,26 +1,28 @@
-import { adminLinkClassname } from "../support/test-constants";
-
+import { adminCourseFormInputClassnames, adminLinkClassname } from "../support/test-constants";
 import {
   checkCourseFormIsEmpty,
   cancelAddingNewCourse,
-  fillInCourseFormNew,
   checkCourseExistsinEditCourses,
   deleteCourse,
-  checkCourseIsDeleted
+  checkCourseIsDeleted,
+  fillInCourseForm,
+  fillInCourseFormSaveBeforeVideoUploadCompleted,
 } from "../support/course-form-utils";
 import { login, logout } from "../support/auth-utils";
 
 describe("create a new course", () => {
+  const { courseSection } = adminCourseFormInputClassnames;
+
   beforeEach(() => {
     login();
     cy.get(adminLinkClassname).click();
   });
 
   it("cancels adding a new course", () => {
-    fillInCourseFormNew("Course A", "Description A",[
+    fillInCourseForm("Course A", "Description A",[
       {
         title: "Section A",
-        video: "cypress/test-video.mp4"
+        video: "cypress/short-test-video.mp4"
       },
       {
         title: "Section B",
@@ -33,15 +35,28 @@ describe("create a new course", () => {
   });
 
   it("saves a new course", () => {
-    fillInCourseFormNew("Course A", "Description A", [
+    const sectionsAdded = [
       {
         title: "Section A",
-        video: "cypress/test-video.mp4"
-      }
-    ]);
+        video: "cypress/short-test-video.mp4"
+      },
+      {
+        title: "Section B",
+      },
+    ];
+
+    const lastSection = sectionsAdded.length - 1;
+
+    fillInCourseFormSaveBeforeVideoUploadCompleted("Course A", "Description A", [...sectionsAdded]);
+
+    cy.get(".remove-icon").eq(lastSection).click();
+    cy.get(".remove-icon").should("not.exist");
+    cy.get(courseSection).eq(lastSection).should("not.exist");
 
     cy.contains("button", "Save").click();
+    cy.findByText("Please make sure videos are uploaded for every section.").should("not.exist");
     cy.get(".add-course-success").should("exist");
+
     checkCourseFormIsEmpty();
     checkCourseExistsinEditCourses();
     deleteCourse();
