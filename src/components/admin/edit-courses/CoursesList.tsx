@@ -25,7 +25,7 @@ const CoursesList: React.FC<Props> = ({ courses, successMessage, onClickEditCour
             <div className="d-flex flex-column w-100">
               <div className="d-flex align-items-center">
                 <div className="courses-list-vertical-line"/>
-                <h5 className="my-3 align-self-start">{`${course.title}`}</h5>
+                <h5 className="my-3 align-self-start courses-list-course-title">{`${course.title}`}</h5>
               </div>
               {course.sections.map((section, index) => {
                 return (

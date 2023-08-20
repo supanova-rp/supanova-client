@@ -69,18 +69,32 @@ const AddUsers = () => {
     setUsers(updatedUsers);
   };
 
-  const onErrorAddingUser = (userId: string, alreadyRegistered = false) => {
-    const userAlreadyRegisteredErrorOptions = { added: false, alreadyRegistered: true, addUserError: false };
-    const errorOptions = { added: false, addUserError: true, alreadyRegistered: false };
-    const usersAfterReg = updateUsers(users, userId, { ...(alreadyRegistered ? userAlreadyRegisteredErrorOptions : errorOptions) });
+  const onErrorAddingUser = (userId: string) => {
+    const usersAfterReg = updateUsers(users, userId, {
+      added: false,
+      addUserError: true,
+      alreadyRegistered: false
+    });
 
     setUsers(usersAfterReg);
     setIsLoading(false);
   };
 
-  const onSuccessCheckUserExists = (userId: string, email: string, name: string) => {
-    setIsLoading(false);
-    sendRegEmail(userId, email, name);
+  const onSuccessCheckUserExists = (result: { isRegistered: boolean }, userId: string, email: string, name: string) => {
+
+    if (result.isRegistered) {
+      setIsLoading(false);
+
+      const usersAfterReg = updateUsers(users, userId, {
+        added: false,
+        alreadyRegistered: result.isRegistered,
+        addUserError: false
+      });
+
+      setUsers(usersAfterReg);
+    } else {
+      sendRegEmail(userId, email, name);
+    }
   };
 
   const sendRegEmail = async (userId: string, email: string, name: string) => {
@@ -93,9 +107,9 @@ const AddUsers = () => {
         body: JSON.stringify(emailJsParams)
       });
 
-      const result = await response.json();
+      setIsLoading(false);
 
-      if (!result.error) {
+      if (response.ok) {
         const usersAfterReg = updateUsers(
           users,
           userId,
@@ -122,9 +136,8 @@ const AddUsers = () => {
 
     checkUserExists({
       requestBody: { email },
-      onSuccess: () => onSuccessCheckUserExists(userId, email, name),
-      onError: onErrorAddingUser,
-      onUserAlreadyRegisteredError: () => onErrorAddingUser(userId, true),
+      onSuccess: (result) => onSuccessCheckUserExists(result, userId, email, name),
+      onError: () => onErrorAddingUser(userId),
     });
   };
 

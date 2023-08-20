@@ -109,7 +109,6 @@ interface RequestOptions {
   onSuccess: (result: any) => void,
   onError: (error: string) => void,
   onUnauthorised: () => void,
-  onUserAlreadyRegisteredError?: () => void
 }
 
 export const request = async ({
@@ -120,7 +119,6 @@ export const request = async ({
   onSuccess,
   onError,
   onUnauthorised,
-  onUserAlreadyRegisteredError,
   currentUser
 } : RequestOptions) => {
   if (onRequestBegin) {
@@ -144,10 +142,6 @@ export const request = async ({
     } else {
       if (response.status === 401) {
         onUnauthorised();
-      }
-
-      if (response.status === 404 && onUserAlreadyRegisteredError) {
-        onUserAlreadyRegisteredError();
       }
 
       else {

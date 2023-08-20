@@ -82,3 +82,88 @@ export const checkCourseIsDeleted = (element: string, title: string) => {
   cy.wait(1000);
   cy.contains(element, title).should("not.exist");
 };
+
+const getInitialCourseTitleAndSectionTitle = () => {
+  const firstInitialCourse = cy.get(".courses-list-course-title").eq(0);
+  const firstInitialCourseTitle = firstInitialCourse.invoke("text");
+  const firstInitialSection = cy.get(".courses-list-section-title").eq(0);
+  const firstInitialSectionTitle = firstInitialSection.invoke("text");
+
+  cy.get(".courses-list-section-title").eq(0).then((theElement) => {
+    const text = theElement.text();
+
+    console.log(">>> text: ", text);
+    cy.log(text);
+  });
+
+  // const text = await new Cypress.Promise<string>((resolve) => {
+  //   cy.get('[data-testid="target"')
+  //     .invoke('text')
+  //     .then((txt) => resolve(txt.toString()))
+  // })
+
+  const initialCourseAndSectionTitles = {
+    firstInitialCourse,
+    firstInitialCourseTitle,
+    firstInitialSection,
+    firstInitialSectionTitle,
+  };
+
+  return initialCourseAndSectionTitles;
+};
+
+export const editFirstCourse = () => {
+  const initialCourseAndSectionTitles = getInitialCourseTitleAndSectionTitle();
+
+  cy.get(".courses-list-container").eq(0).click();
+
+  cy.get(courseTitle).clear().type("Course A");
+  cy.get(courseSection).eq(0).clear().type("Section A");
+
+  console.log(">>> edited course!");
+
+  return initialCourseAndSectionTitles;
+};
+
+const compareCourseTitleAndSectionCancellation = (
+  firstInitialCourse: JQuery<HTMLElement>,
+  firstInitialCourseTitle: JQuery<HTMLElement>,
+  firstInitialSection: JQuery<HTMLElement>,
+  firstInitialSectionTitle: JQuery<HTMLElement>
+) => {
+  expect(firstInitialCourse).to.equal(firstInitialCourseTitle);
+  expect (firstInitialSection).to.equal(firstInitialSectionTitle);
+};
+
+const compareCourseTitleAndSectionSaving = (
+  firstInitialCourse:JQuery<HTMLElement>,
+  firstInitialCourseTitle: JQuery<HTMLElement>,
+  firstInitialSection: JQuery<HTMLElement>,
+  firstInitialSectionTitle: JQuery<HTMLElement>
+) => {
+  expect(firstInitialCourse === firstInitialCourseTitle).to.equal(false);
+  expect(firstInitialSection === firstInitialSectionTitle).to.equal(false);
+};
+
+export const compareCourseTitlesAndSections = (courseAndSectionTitles: any, type: string) => {
+  const {
+    firstInitialCourse,
+    firstInitialCourseTitle,
+    firstInitialSection,
+    firstInitialSectionTitle,
+  } = courseAndSectionTitles;
+
+  if (type === "cancellation") {
+    compareCourseTitleAndSectionCancellation(
+      firstInitialCourse,
+      firstInitialCourseTitle,
+      firstInitialSection,
+      firstInitialSectionTitle);
+  } else {
+    compareCourseTitleAndSectionSaving(
+      firstInitialCourse,
+      firstInitialCourseTitle,
+      firstInitialSection,
+      firstInitialSectionTitle);
+  }
+};
