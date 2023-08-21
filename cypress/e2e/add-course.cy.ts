@@ -11,7 +11,7 @@ import {
 import { login, logout } from "../support/auth-utils";
 
 describe("create a new course", () => {
-  const { courseSection } = adminCourseFormInputClassnames;
+  const { courseSectionElement } = adminCourseFormInputClassnames;
 
   beforeEach(() => {
     login();
@@ -51,7 +51,7 @@ describe("create a new course", () => {
 
     cy.get(".remove-icon").eq(lastSection).click();
     cy.get(".remove-icon").should("not.exist");
-    cy.get(courseSection).eq(lastSection).should("not.exist");
+    cy.get(courseSectionElement).eq(lastSection).should("not.exist");
 
     cy.contains("button", "Save").click();
     cy.findByText("Please make sure videos are uploaded for every section.").should("not.exist");

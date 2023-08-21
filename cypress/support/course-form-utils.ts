@@ -1,4 +1,8 @@
-import { adminCourseFormInputClassnames } from "./test-constants";
+import {
+  adminCourseFormInputClassnames,
+  adminCoursesListClassnames,
+  initialDefaultCourse }
+  from "./test-constants";
 
 type section = {
   title: string,
@@ -7,13 +11,17 @@ type section = {
 
 type sections = section[];
 
-const { courseTitle, courseDescription, courseSection } = adminCourseFormInputClassnames;
+const {
+  courseTitleElement,
+  courseDescriptionElement,
+  courseSectionElement
+} = adminCourseFormInputClassnames;
 
 export const checkCourseFormIsEmpty = () => {
-  cy.get(courseTitle).should("have.value", "");
-  cy.get(courseDescription).should("have.value", "");
+  cy.get(courseTitleElement).should("have.value", "");
+  cy.get(courseDescriptionElement).should("have.value", "");
 
-  cy.get(courseSection).each(($el) => {
+  cy.get(courseSectionElement).each(($el) => {
     cy.wrap($el).should("have.value", "");
   });
 
@@ -21,8 +29,8 @@ export const checkCourseFormIsEmpty = () => {
 };
 
 const fillInCourseTitleAndDescription = (title: string, description: string) => {
-  cy.get(courseTitle).type(title);
-  cy.get(courseDescription).type(description);
+  cy.get(courseTitleElement).type(title);
+  cy.get(courseDescriptionElement).type(description);
 };
 
 export const fillInCourseForm = (title: string, description: string, sections: sections) => {
@@ -32,7 +40,7 @@ export const fillInCourseForm = (title: string, description: string, sections: s
     cy.get(".plus-icon").click();
     cy.get(".remove-icon").eq(index).should("exist");
 
-    cy.get(courseSection).eq(index).type(title);
+    cy.get(courseSectionElement).eq(index).type(title);
 
     if (video) {
       cy.intercept("GET", "**/supanova-dev.s3**").as("getUploadUrl");
@@ -51,7 +59,7 @@ export const fillInCourseFormSaveBeforeVideoUploadCompleted = (title: string, de
     }
 
     cy.get(".remove-icon").eq(index).should("exist");
-    cy.get(courseSection).eq(index).type(title);
+    cy.get(courseSectionElement).eq(index).type(title);
   });
 
   cy.contains("button", "Save").click();
@@ -83,87 +91,48 @@ export const checkCourseIsDeleted = (element: string, title: string) => {
   cy.contains(element, title).should("not.exist");
 };
 
-const getInitialCourseTitleAndSectionTitle = () => {
-  const firstInitialCourse = cy.get(".courses-list-course-title").eq(0);
-  const firstInitialCourseTitle = firstInitialCourse.invoke("text");
-  const firstInitialSection = cy.get(".courses-list-section-title").eq(0);
-  const firstInitialSectionTitle = firstInitialSection.invoke("text");
-
-  cy.get(".courses-list-section-title").eq(0).then((theElement) => {
-    const text = theElement.text();
-
-    console.log(">>> text: ", text);
-    cy.log(text);
-  });
-
-  // const text = await new Cypress.Promise<string>((resolve) => {
-  //   cy.get('[data-testid="target"')
-  //     .invoke('text')
-  //     .then((txt) => resolve(txt.toString()))
-  // })
-
-  const initialCourseAndSectionTitles = {
-    firstInitialCourse,
-    firstInitialCourseTitle,
-    firstInitialSection,
-    firstInitialSectionTitle,
-  };
-
-  return initialCourseAndSectionTitles;
-};
-
-export const editFirstCourse = () => {
-  const initialCourseAndSectionTitles = getInitialCourseTitleAndSectionTitle();
-
+export const editFirstCourse = (courseTitle: string, sectionTitle: string, reset = false) => {
   cy.get(".courses-list-container").eq(0).click();
 
-  cy.get(courseTitle).clear().type("Course A");
-  cy.get(courseSection).eq(0).clear().type("Section A");
+  cy.get(courseTitleElement).clear().type(courseTitle);
+  cy.get(courseSectionElement).eq(0).clear().type(sectionTitle);
 
-  console.log(">>> edited course!");
-
-  return initialCourseAndSectionTitles;
-};
-
-const compareCourseTitleAndSectionCancellation = (
-  firstInitialCourse: JQuery<HTMLElement>,
-  firstInitialCourseTitle: JQuery<HTMLElement>,
-  firstInitialSection: JQuery<HTMLElement>,
-  firstInitialSectionTitle: JQuery<HTMLElement>
-) => {
-  expect(firstInitialCourse).to.equal(firstInitialCourseTitle);
-  expect (firstInitialSection).to.equal(firstInitialSectionTitle);
-};
-
-const compareCourseTitleAndSectionSaving = (
-  firstInitialCourse:JQuery<HTMLElement>,
-  firstInitialCourseTitle: JQuery<HTMLElement>,
-  firstInitialSection: JQuery<HTMLElement>,
-  firstInitialSectionTitle: JQuery<HTMLElement>
-) => {
-  expect(firstInitialCourse === firstInitialCourseTitle).to.equal(false);
-  expect(firstInitialSection === firstInitialSectionTitle).to.equal(false);
-};
-
-export const compareCourseTitlesAndSections = (courseAndSectionTitles: any, type: string) => {
-  const {
-    firstInitialCourse,
-    firstInitialCourseTitle,
-    firstInitialSection,
-    firstInitialSectionTitle,
-  } = courseAndSectionTitles;
-
-  if (type === "cancellation") {
-    compareCourseTitleAndSectionCancellation(
-      firstInitialCourse,
-      firstInitialCourseTitle,
-      firstInitialSection,
-      firstInitialSectionTitle);
-  } else {
-    compareCourseTitleAndSectionSaving(
-      firstInitialCourse,
-      firstInitialCourseTitle,
-      firstInitialSection,
-      firstInitialSectionTitle);
+  if (!reset) {
+    cy.get(".remove-icon").eq(1).click();
   }
+};
+
+export const resetFirstCourse = () => {
+  const { title, sections } = initialDefaultCourse;
+
+  editFirstCourse(title, sections[0].title, true);
+  cy.get(".plus-icon").click();
+  cy.get(courseSectionElement).eq(1).clear().type(sections[1].title);
+  cy.get("input[type=file]").eq(1).selectFile("cypress/short-test-video.mp4", { force: true });
+  cy.wait(5000);
+  cy.contains("button", "Save").click();
+};
+
+export const checkCourseSectionTitlesCancellation = () => {
+  const { sections } = initialDefaultCourse;
+  const { courseListSectionElement } = adminCoursesListClassnames;
+
+  sections.forEach((section, index) => {
+    cy.get(courseListSectionElement).eq(index).invoke("text").should("eq", section.title);
+  });
+};
+
+export const checkCourseSectionTitles = (sectionTitle: string) => {
+  const { sections } = initialDefaultCourse;
+  const { courseListSectionElement } = adminCoursesListClassnames;
+
+  sections.forEach((_, index) => {
+    if (index === 0) {
+      cy.get(courseListSectionElement).eq(0).invoke("text").should("eq", sectionTitle);
+    } else {
+      const secondDefaultSectionTitle = sections[1].title;
+
+      cy.get(courseListSectionElement).eq(1).invoke("text").should("not.eq", secondDefaultSectionTitle);
+    }
+  });
 };

@@ -12,7 +12,13 @@ const CoursesList: React.FC<Props> = ({ courses, successMessage, onClickEditCour
   return (
     <>
       {successMessage
-        ? <Alert variant="success">{successMessage}</Alert>
+        ? (
+          <Alert
+            variant="success"
+            className="edit-success-message">
+            {successMessage}
+          </Alert>
+        )
         : null
       }
 

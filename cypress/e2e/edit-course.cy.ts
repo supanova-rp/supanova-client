@@ -1,6 +1,17 @@
 import { login } from "../support/auth-utils";
-import { compareCourseTitlesAndSections, editFirstCourse } from "../support/course-form-utils";
-import { adminLinkClassname } from "../support/test-constants";
+import { checkCourseSectionTitles,
+  checkCourseSectionTitlesCancellation,
+  editFirstCourse,
+  resetFirstCourse
+} from "../support/course-form-utils";
+import { adminLinkClassname,
+  initialDefaultCourse,
+  adminCoursesListClassnames
+} from "../support/test-constants";
+
+const { title } = initialDefaultCourse;
+
+const { courseListTitleElement } = adminCoursesListClassnames;
 
 describe("Edit a course", () => {
   beforeEach(() => {
@@ -10,33 +21,22 @@ describe("Edit a course", () => {
   });
 
   it("cancels editing a course", () => {
-    // Make it so your initial title is always Radiation Basics
-    // With 2 sections intro and outro
-    // Delete 1 section
-    // Check if both sections are still there
-    const initialCourseAndSectionTitles = editFirstCourse();
-
+    editFirstCourse("Course A", "Section A");
     cy.contains("button", "Cancel").click();
 
-    compareCourseTitlesAndSections(initialCourseAndSectionTitles, "cancellation");
+    cy.get(courseListTitleElement).eq(0).invoke("text").should("eq", title);
+
+    checkCourseSectionTitlesCancellation();
   });
 
-  it.only("edits a course", () => {
-    // Make it so your initial title is always Radiation Basics
-    // And intro as your section
-    // Remove the last section
-    // Now you should only have 1
-    const initialCourseAndSectionTitles = editFirstCourse();
-
-    console.log(">>> initialCourseAndSectionTitles: ", initialCourseAndSectionTitles);
-
+  it("edits a course", () => {
+    editFirstCourse("Course A", "Section A");
     cy.contains("button", "Save").click();
 
-    compareCourseTitlesAndSections(initialCourseAndSectionTitles, "saving");
+    cy.get(".edit-success-message").should("exist");
+    cy.get(courseListTitleElement).eq(0).invoke("text").should("eq", "Course A");
+    checkCourseSectionTitles("Section A");
 
-    // go back into the course
-    // Put it back to radiation basics and
-    // Have 2 sections again: intro and outro
-    // Save
+    resetFirstCourse();
   });
 });
