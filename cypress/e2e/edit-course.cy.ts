@@ -1,4 +1,4 @@
-import { login } from "../support/auth-utils";
+import { loginAdmin, logoutAdmin } from "../support/auth-utils";
 import { checkCourseSectionTitles,
   checkCourseSectionTitlesCancellation,
   editFirstCourse,
@@ -15,7 +15,7 @@ const { courseListTitleElement } = adminCoursesListClassnames;
 
 describe("Edit a course", () => {
   beforeEach(() => {
-    login();
+    loginAdmin();
     cy.get(adminLinkClassname).click();
     cy.contains("button", "Edit Courses").click();
   });
@@ -38,5 +38,9 @@ describe("Edit a course", () => {
     checkCourseSectionTitles("Section A");
 
     resetFirstCourse();
+  });
+
+  afterEach(() => {
+    logoutAdmin();
   });
 });

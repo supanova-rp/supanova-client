@@ -8,13 +8,13 @@ import {
   fillInCourseForm,
   fillInCourseFormSaveBeforeVideoUploadCompleted,
 } from "../support/course-form-utils";
-import { login, logout } from "../support/auth-utils";
+import { loginAdmin, logoutAdmin } from "../support/auth-utils";
 
 describe("create a new course", () => {
   const { courseSectionElement } = adminCourseFormInputClassnames;
 
   beforeEach(() => {
-    login();
+    loginAdmin();
     cy.get(adminLinkClassname).click();
   });
 
@@ -64,7 +64,7 @@ describe("create a new course", () => {
   });
 
   afterEach(() => {
-    logout();
+    logoutAdmin();
   });
 });
 

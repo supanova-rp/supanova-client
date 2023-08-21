@@ -12,7 +12,7 @@ const PasswordVisibilityIcon: React.FC<Props> = ({ isPasswordShowing, onTogglePa
     return (
       <div
         role="button"
-        className="password-icon"
+        className="password-icon show-password"
         onClick={() => onTogglePasswordVisibility(true)}>
         <ShowPasswordIcon color={colors.darkgray}/>
       </div>
@@ -22,7 +22,7 @@ const PasswordVisibilityIcon: React.FC<Props> = ({ isPasswordShowing, onTogglePa
   return (
     <div
       role="button"
-      className="password-icon"
+      className="password-icon hide-password"
       onClick={() => onTogglePasswordVisibility(false)}>
       <HidePasswordIcon color={colors.darkgray} />
     </div>

@@ -33,10 +33,15 @@ const ForgotPassword = () => {
       setResetPasswordSuccessMessage("Check your inbox for further instructions.");
 
       handleSuccessMessageAfterResettingPassword();
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
       setResetPasswordSuccessMessage("");
-      setError("Failed to reset password.");
+
+      if (error.code === "auth/user-not-found") {
+        setError("Account doesn't exist. Please register first");
+      } else {
+        setError("Failed to reset password.");
+      }
     }
 
     setIsLoading(false);
