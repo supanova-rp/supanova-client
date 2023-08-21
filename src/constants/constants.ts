@@ -15,3 +15,5 @@ export const HOME_TABS = {
 export const EMAIL_JS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
 export const EMAIL_JS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
 export const EMAIL_JS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+export const unauthedRoutes = ["/register", "/forgot-password"];

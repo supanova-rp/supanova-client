@@ -38,3 +38,8 @@ export const checkPasswordToggle = () => {
   cy.get(".hide-password").click();
   cy.get(".password-input input[type=password]").should("exist");
 };
+
+export const resetPassword = (email: string) => {
+  cy.get(".forgot-password-input").type(email);
+  cy.contains("button", "Reset password").click();
+};

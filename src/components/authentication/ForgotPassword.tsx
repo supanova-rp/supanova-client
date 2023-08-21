@@ -38,7 +38,7 @@ const ForgotPassword = () => {
       setResetPasswordSuccessMessage("");
 
       if (error.code === "auth/user-not-found") {
-        setError("Account doesn't exist. Please register first");
+        setError("Account doesn't exist. Please register first.");
       } else {
         setError("Failed to reset password.");
       }
@@ -64,7 +64,7 @@ const ForgotPassword = () => {
       <FormInput
         formId="email"
         formGroupClassname="mb-2 pe-4"
-        inputContainerClassname="text-input"
+        inputContainerClassname="text-input forgot-password-input"
         label="Email"
         type="email"
         value={emailInput}

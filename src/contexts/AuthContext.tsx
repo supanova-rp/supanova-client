@@ -5,7 +5,7 @@ import {
   createContext,
   useMemo,
 } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import {
   signOut,
@@ -18,6 +18,7 @@ import {
 
 import { FirebaseUser } from "src/types";
 import { auth } from "../firebase/firebase";
+import { unauthedRoutes } from "src/constants/constants";
 
 export type AuthContextType = {
   currentUser: FirebaseUser | null,
@@ -41,11 +42,10 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
   const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
-
-  // TODO: change the logic so you can go to register as well when you're signed out
+  const location = useLocation().pathname;
 
   useEffect(() => {
-    if (signedInStatus === "signed_out") {
+    if (signedInStatus === "signed_out" && !unauthedRoutes.includes(location) ) {
       navigate("/login", { replace: true });
     }
   }, [signedInStatus]);
