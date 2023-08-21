@@ -3,7 +3,6 @@ import ReactDOM from "react-dom/client";
 import "react-circular-progressbar/dist/styles.css";
 import "video.js/dist/video-js.css";
 import "./styles/index.scss";
-// import "bootstrap/dist/css/bootstrap.min.css";
 
 import App from "./App";
 

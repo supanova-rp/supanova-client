@@ -69,7 +69,7 @@ const Login = () => {
         Component={(
           <PasswordVisibilityIcon
             isPasswordShowing={isPasswordShowing}
-            onHandlePasswordShowing={(value) => (setIsPasswordShowing(value))} />
+            onTogglePasswordVisibility={(value) => (setIsPasswordShowing(value))} />
         )}/>
 
       <div className="auth-link-container">

@@ -69,7 +69,7 @@ const Register = () => {
     setIsLoading(false);
   };
 
-  const onHandlePasswordShowing = (key: string, value: boolean) => {
+  const onTogglePasswordVisibility = (key: string, value: boolean) => {
     const updatedPasswordShowingState = {
       ...isPasswordShowing,
       [key]: value,
@@ -119,7 +119,7 @@ const Register = () => {
         Component={(
           <PasswordVisibilityIcon
             isPasswordShowing={isPasswordShowing.password}
-            onHandlePasswordShowing={(value) => onHandlePasswordShowing("password", value)} />
+            onTogglePasswordVisibility={(value) => onTogglePasswordVisibility("password", value)} />
         )}/>
       <FormInput
         formId="repeat-password"
@@ -133,7 +133,7 @@ const Register = () => {
         Component={(
           <PasswordVisibilityIcon
             isPasswordShowing={isPasswordShowing.repeatPassword}
-            onHandlePasswordShowing={(value) => onHandlePasswordShowing("repeatPassword", value)} />
+            onTogglePasswordVisibility={(value) => onTogglePasswordVisibility("repeatPassword", value)} />
         )}/>
     </AuthCard>
   );

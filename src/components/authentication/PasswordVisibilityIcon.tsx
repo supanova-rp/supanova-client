@@ -4,16 +4,16 @@ import { ReactComponent as ShowPasswordIcon } from "../../icons/showPasswordIcon
 
 interface Props {
   isPasswordShowing: boolean,
-  onHandlePasswordShowing: (parameter: boolean) => void,
+  onTogglePasswordVisibility: (parameter: boolean) => void,
 }
 
-const PasswordVisibilityIcon: React.FC<Props> = ({ isPasswordShowing, onHandlePasswordShowing }) => {
+const PasswordVisibilityIcon: React.FC<Props> = ({ isPasswordShowing, onTogglePasswordVisibility }) => {
   if (!isPasswordShowing) {
     return (
       <div
         role="button"
         className="password-icon"
-        onClick={() => onHandlePasswordShowing(true)}>
+        onClick={() => onTogglePasswordVisibility(true)}>
         <ShowPasswordIcon color={colors.darkgray}/>
       </div>
     );
@@ -23,7 +23,7 @@ const PasswordVisibilityIcon: React.FC<Props> = ({ isPasswordShowing, onHandlePa
     <div
       role="button"
       className="password-icon"
-      onClick={() => onHandlePasswordShowing(false)}>
+      onClick={() => onTogglePasswordVisibility(false)}>
       <HidePasswordIcon color={colors.darkgray} />
     </div>
   );
