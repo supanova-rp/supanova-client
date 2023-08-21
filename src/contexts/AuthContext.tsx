@@ -57,8 +57,6 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
       setSignedInStatus(user ? "signed_in" : "signed_out");
     });
 
-    // auth.onIdTokenChanged
-
     return unsubscribe;
   }, []);
 
