@@ -1,7 +1,6 @@
 import { Card } from "react-bootstrap";
 
 import { SetStringFunction } from "../../types/index";
-import { getClassNameSidebarTab } from "../../utils/utils";
 import { HOME_TABS } from "src/constants/constants";
 import HomeImage from "../../images/Home-image.png";
 

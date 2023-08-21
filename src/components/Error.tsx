@@ -2,7 +2,7 @@ import { Alert, Button } from "react-bootstrap";
 
 interface Props {
   errorMessage: string,
-  onClick: (isAdmin: boolean) => void,
+  onClick: () => void,
 }
 
 const Error: React.FC<Props> = ({ errorMessage, onClick }) => {
