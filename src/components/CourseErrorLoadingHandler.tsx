@@ -9,7 +9,7 @@ import Error from "./Error";
 
 interface Props extends React.PropsWithChildren {
   error: string | null,
-  onClick: (isAdmin: boolean) => void,
+  onClick: () => void,
   isLoading: boolean,
   courses: Course[] | CourseTitle[],
 }

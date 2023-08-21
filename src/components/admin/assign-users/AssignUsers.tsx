@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 
 import useRequest from "../../../hooks/useRequest";
 
-import AdminAccordion from "../../admin/AdminAccordion";
 import AdminHeader from "../AdminHeader";
 import { CourseTitle, UserToCourses } from "src/types";
 import CourseErrorLoadingHandler from "src/components/CourseErrorLoadingHandler";
+import AssignUsersAccordion from "./AssignUsersAccordion";
 
 const AssignUsers = () => {
-  const [isLoadingCourses, setisLoadingCourses] = useState<boolean>(true);
+  const [isLoadingCourses, setIsLoadingCourses] = useState<boolean>(true);
   const [isLoadingUserCourses, setIsLoadingUserCourses] = useState(false);
   const [error, setError] = useState<null | string>(null);
   const [courses, setCourses] = useState<CourseTitle[]>([]);
@@ -20,7 +20,7 @@ const AssignUsers = () => {
   const onError = (error: string, errorMessage: string) => {
     console.log(error);
 
-    setisLoadingCourses(false);
+    setIsLoadingCourses(false);
     setError(errorMessage);
   };
 
@@ -31,7 +31,7 @@ const AssignUsers = () => {
 
   const onSuccessCourses = (result: CourseTitle[]) => {
     setCourses(result);
-    setisLoadingCourses(false);
+    setIsLoadingCourses(false);
 
     if (result.length) {
       getUsersWithAssignedCourses();
@@ -67,7 +67,7 @@ const AssignUsers = () => {
         onClick={getCoursesAndUsers}
         isLoading={isLoadingCourses || isLoadingUserCourses}
         courses={courses}>
-        <AdminAccordion
+        <AssignUsersAccordion
           usersToCourses={usersToCourses}
           courses={courses}
           setUsersToCourses={setUsersToCourses}/>

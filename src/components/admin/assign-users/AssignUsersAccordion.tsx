@@ -5,7 +5,7 @@ import Accordion from "react-bootstrap/Accordion";
 import { CourseTitle, UserToCourses } from "src/types";
 import useRequest from "src/hooks/useRequest";
 
-import ToggleButton from "../ToggleButton";
+import ToggleButton from "../../ToggleButton";
 
 interface AccordionProps {
   usersToCourses: UserToCourses[],
@@ -13,7 +13,7 @@ interface AccordionProps {
   setUsersToCourses: (parameter: UserToCourses[]) => void
 }
 
-const AdminAccordion: React.FC<AccordionProps> = ({ usersToCourses, courses, setUsersToCourses }) => {
+const AssignUsersAccordion: React.FC<AccordionProps> = ({ usersToCourses, courses, setUsersToCourses }) => {
   const [loadingUserToCourseId, setLoadingUserToCourseId] = useState<{ courseId: number, userId: string} | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -22,36 +22,28 @@ const AdminAccordion: React.FC<AccordionProps> = ({ usersToCourses, courses, set
   const onSuccess = (isAssigned: boolean, userId: string, courseId: number) => {
     setLoadingUserToCourseId(null);
 
-    if (isAssigned) {
-      const newUsersToCoursesMinusUnassignedCourse = usersToCourses.map((userToCourse) => {
-        if (userToCourse.id === userId) {
-          return {
-            ...userToCourse,
-            courseIds: userToCourse.courseIds.filter((id) => id !== courseId)
-          };
-        }
+    const newUsersToCoursesWithUpdatedCourseIds = usersToCourses.map((userToCourse) => {
+      if (userToCourse.id === userId && isAssigned) {
+        return {
+          ...userToCourse,
+          courseIds: userToCourse.courseIds.filter((id) => id !== courseId)
+        };
+      }
 
-        return userToCourse;
-      });
+      if (userToCourse.id === userId) {
+        return {
+          ...userToCourse,
+          courseIds: [
+            ...userToCourse.courseIds,
+            courseId
+          ]
+        };
+      }
 
-      setUsersToCourses(newUsersToCoursesMinusUnassignedCourse);
-    } else {
-      const newUsersToCoursesWithNewlyAssignedCourse = usersToCourses.map((userToCourse) => {
-        if (userToCourse.id === userId) {
-          return {
-            ...userToCourse,
-            courseIds: [
-              ...userToCourse.courseIds,
-              courseId
-            ]
-          };
-        }
+      return userToCourse;
+    });
 
-        return userToCourse;
-      });
-
-      setUsersToCourses(newUsersToCoursesWithNewlyAssignedCourse);
-    }
+    setUsersToCourses(newUsersToCoursesWithUpdatedCourseIds);
   };
 
   const onError = () => {
@@ -104,10 +96,10 @@ const AdminAccordion: React.FC<AccordionProps> = ({ usersToCourses, courses, set
                   return (
                     <ToggleButton
                       key={course.id}
-                      course={course}
-                      isAssigned={isAssigned}
+                      label={course.title}
+                      isChecked={isAssigned}
                       isLoading={course.id === loadingUserToCourseId?.courseId && user.id === loadingUserToCourseId?.userId}
-                      onChangeUpdateTickedCourseIds={() => onChangeUpdateTickedCourseIds(user.id, course.id, isAssigned)} />
+                      onChange={() => onChangeUpdateTickedCourseIds(user.id, course.id, isAssigned)} />
                   );
                 })}
               </Form>
@@ -119,4 +111,4 @@ const AdminAccordion: React.FC<AccordionProps> = ({ usersToCourses, courses, set
   );
 };
 
-export default AdminAccordion;
+export default AssignUsersAccordion;

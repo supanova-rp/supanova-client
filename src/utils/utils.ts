@@ -1,3 +1,5 @@
+import uuid from "react-uuid";
+
 import { API_DOMAIN, EMAIL_JS_PUBLIC_KEY, EMAIL_JS_SERVICE_ID, EMAIL_JS_TEMPLATE_ID } from "src/constants/constants";
 import { Course, CourseSection, UserInfoToUpdate, User, FirebaseUser } from "../types/index";
 
@@ -163,4 +165,17 @@ export const getEmailJsParams = (username: string, email: string) => {
       "user_email": email
     }
   };
+};
+
+export const getAddUsersDefaultState = () => {
+  return [
+    {
+      id: uuid(),
+      name: "",
+      email: "",
+      added: false,
+      addUserError: false,
+      alreadyRegistered: false,
+    }
+  ];
 };

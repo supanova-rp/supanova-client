@@ -7,7 +7,7 @@ import { ReactComponent as TickIcon } from "../../../icons/tickIcon.svg";
 import { InputChangeEvent, FormSubmitEvent } from "../../../types/index";
 import useRequest from "src/hooks/useRequest";
 import { colors } from "../../../constants/colorPalette";
-import { getEmailJsParams, updateUsers } from "../../../utils/utils";
+import { getAddUsersDefaultState, getEmailJsParams, updateUsers } from "../../../utils/utils";
 
 import XIcon from "../../XIcon";
 import FormInput from "../../FormInput";
@@ -15,19 +15,8 @@ import AdminHeader from "../AdminHeader";
 import RemoveInput from "../../RemoveInput";
 import AddMoreInputs from "../../AddMoreInputs";
 
-// TODO: fix emailjs error
-
 const AddUsers = () => {
-  const usersDefaultState = [{
-    id: uuid(),
-    name: "",
-    email: "",
-    added: false,
-    addUserError: false,
-    alreadyRegistered: false,
-  }];
-
-  const [users, setUsers] = useState(usersDefaultState);
+  const [users, setUsers] = useState(getAddUsersDefaultState());
   const [isLoading, setIsLoading] = useState(false);
 
   const checkUserExists = useRequest("/user-exists");
@@ -217,7 +206,7 @@ const AddUsers = () => {
         marginTop="mt-3" />
       <Button
         type="button"
-        onClick={() => setUsers(usersDefaultState)}
+        onClick={() => setUsers(getAddUsersDefaultState())}
         className="btn-danger">Clear all users</Button>
     </>
   );

@@ -1,19 +1,17 @@
 import { Form, Spinner } from "react-bootstrap";
 
-import { CourseTitle } from "src/types";
-
 interface ToggleButtonProps {
-  course: CourseTitle,
-  isAssigned: boolean,
+  label: string,
+  isChecked: boolean,
   isLoading: boolean,
-  onChangeUpdateTickedCourseIds: () => void,
+  onChange: () => void,
 }
 
 const ToggleButton: React.FC<ToggleButtonProps> = ({
-  course,
-  isAssigned,
+  label,
+  isChecked,
   isLoading,
-  onChangeUpdateTickedCourseIds
+  onChange
 }) => {
   return (
     <div className="d-flex align-items-center">
@@ -21,9 +19,9 @@ const ToggleButton: React.FC<ToggleButtonProps> = ({
         className="toggle-button"
         type="switch"
         id="toggle-switch"
-        label={course.title}
-        checked={isAssigned}
-        onChange={onChangeUpdateTickedCourseIds}/>
+        label={label}
+        checked={isChecked}
+        onChange={onChange}/>
       {isLoading
         ? (
           <Spinner
