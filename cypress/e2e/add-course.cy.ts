@@ -10,7 +10,7 @@ import {
 } from "../support/course-form-utils";
 import { loginAdmin, logoutAdmin } from "../support/auth-utils";
 
-describe("create a new course", () => {
+describe("Create a new course", () => {
   const { courseSectionElement } = adminCourseFormInputClassnames;
 
   beforeEach(() => {
