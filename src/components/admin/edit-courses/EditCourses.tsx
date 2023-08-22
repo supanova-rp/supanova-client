@@ -117,8 +117,6 @@ export default class EditCourses extends Component {
 
     const editingCourse = allCourses.find((course) => course.id === editingCourseId);
 
-    console.log(">>> allCourses: ", allCourses);
-
     return (
       <>
         <AdminHeader title="Edit Courses" />
