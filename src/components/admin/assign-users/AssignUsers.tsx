@@ -66,7 +66,7 @@ const AssignUsers = () => {
         error={error}
         onClick={getCoursesAndUsers}
         isLoading={isLoadingCourses || isLoadingUserCourses}
-        courses={courses}>
+        usersToCourses={usersToCourses}>
         <AssignUsersAccordion
           usersToCourses={usersToCourses}
           courses={courses}

@@ -3,7 +3,7 @@ import { Alert } from "react-bootstrap";
 import { PulseLoader } from "react-spinners";
 
 import { colors } from "src/constants/colorPalette";
-import { Course, CourseTitle } from "src/types";
+import { Course, CourseTitle, UserToCourses } from "src/types";
 
 import Error from "./Error";
 
@@ -11,7 +11,8 @@ interface Props extends React.PropsWithChildren {
   error: string | null,
   onClick: () => void,
   isLoading: boolean,
-  courses: Course[] | CourseTitle[],
+  courses?: Course[] | CourseTitle[],
+  usersToCourses?: UserToCourses[],
 }
 
 const CourseErrorLoadingHandler = ({
@@ -19,6 +20,7 @@ const CourseErrorLoadingHandler = ({
   onClick,
   isLoading,
   courses,
+  usersToCourses,
   children
 }: Props) => {
   if (error) {
@@ -39,11 +41,21 @@ const CourseErrorLoadingHandler = ({
     );
   }
 
-  if (!courses.length) {
+  if (!usersToCourses?.length) {
     return (
       <Alert
         variant="warning"
-        className="mt-4">No courses to see yet...
+        className="mt-4">
+        You don't have any users yet...
+      </Alert>
+    );
+  }
+
+  if (!courses?.length) {
+    return (
+      <Alert
+        variant="warning"
+        className="mt-4">You don't have any courses yet...
       </Alert>
     );
   }
