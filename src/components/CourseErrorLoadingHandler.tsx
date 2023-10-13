@@ -41,7 +41,7 @@ const CourseErrorLoadingHandler = ({
     );
   }
 
-  if (!usersToCourses?.length) {
+  if (usersToCourses && !usersToCourses?.length) {
     return (
       <Alert
         variant="warning"
@@ -51,7 +51,7 @@ const CourseErrorLoadingHandler = ({
     );
   }
 
-  if (!courses?.length) {
+  if (courses && !courses?.length) {
     return (
       <Alert
         variant="warning"
