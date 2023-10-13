@@ -41,8 +41,6 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
   const [currentUser, setCurrentUser] = useState<FirebaseUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  console.log(">>> currentUser: ", currentUser);
-
   const navigate = useNavigate();
   const location = useLocation().pathname;
 
