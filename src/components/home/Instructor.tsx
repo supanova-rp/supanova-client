@@ -7,11 +7,11 @@ import JoelProfilePicture from "../../images/Joel-Profile.png";
 
 const Instructor: React.FC<LogoutErrorProps> = ({ logoutError }) => {
   return (
-    <div className="p-4 instructor-container">
+    <div className="instructor-container">
       <Header
         title="Meet Your Instructor"
         logoutError={logoutError} />
-      <div className="d-flex align-items-center">
+      <div className="d-flex align-items-center p-4">
         <img
           src={JoelProfilePicture}
           alt="Instructor"

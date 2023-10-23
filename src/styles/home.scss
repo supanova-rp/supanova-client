@@ -2,9 +2,15 @@
   min-height: 100%;
 }
 
+.card.card-body {
+  border: none !important;
+}
+
 .card.sidebar-content-container-home {
-  border: none;
-  border-right: 1px solid var(--hover-color-grey);
+  border-right: 1px solid rgba(0, 0, 0, 0.175);
+  border-left: none;
+  border-top: none;
+  border-bottom: none;
   width: 30%;
 }
 

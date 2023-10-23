@@ -15,7 +15,8 @@ const SidebarContainer: React.FC<Props> = ({ activeTab, setActiveTab }) => {
   const homeTabs = Object.values(HOME_TABS);
 
   return (
-    <Card className="rounded-0 sidebar-content-container-home">
+    <Card
+      className="rounded-0 sidebar-content-container-home">
       <Card.Body className="mt-5 d-flex flex-column align-items-center p-0">
         <img
           src={HomeImage}

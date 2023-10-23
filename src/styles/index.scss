@@ -10,11 +10,15 @@ body, html, #root {
 :root {
   --primary-color: #132843;
   --secondary-color: #F18F0F;
-  --darkgray: #6c757d;
+  --darkgrey: #6c757d;
+  --border-color-grey: #adaaaa;
+  --light-grey-color: #a8a8a8;
   --link-color: #3E819A;
   --hover-color-grey: #e7e6e6;
   --hover-color-blue: #1b3a64;
   --hover-color-orange: #db810d;
+  --error-color: #dc3545;
+  --hover-color-error: #e44c5b;
 }
 
 .main-button {
@@ -22,6 +26,10 @@ body, html, #root {
     background-color: var(--hover-color-blue);
     border: 1px solid var(--hover-color-blue);
   }
+}
+
+.card {
+  box-shadow: inset 1px 0px 5px 0px hsl(228deg 66% 45% / 15%);
 }
 
 .page-not-found-container {
@@ -53,3 +61,4 @@ body, html, #root {
 @import "./sidebar";
 @import "./navbar";
 @import "./home";
+@import "./error.scss";

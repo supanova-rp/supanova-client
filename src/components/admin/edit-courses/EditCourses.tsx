@@ -124,7 +124,7 @@ export default class EditCourses extends Component {
           endpoint="/courses"
           requestOnMount
           onRequestBegin={this.onBeginRequestCourses}
-          onError={(error: string) => this.onError("Loading courses failed", error)}
+          onError={(error: string) => this.onError("Failed to load courses.", error)}
           onSuccess={this.onSuccess}
           render={(requestCourses) => {
             return (

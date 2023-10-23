@@ -8,10 +8,10 @@ interface Props extends LogoutErrorProps {
 
 const Header: React.FC<Props> = ({ title, logoutError, margin = "mt-4" }) => {
   return (
-    <div className={margin}>
+    <div className={`${margin} p-4`}>
       <header className="d-flex flex-column">
         <LogoutError logoutError={logoutError} />
-        <h3 className="my-4">{title}</h3>
+        <h3 className="my-1">{title}</h3>
       </header>
     </div>
   );

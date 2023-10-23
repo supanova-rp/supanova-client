@@ -41,7 +41,7 @@ const AssignUsers = () => {
   const getCoursesAndUsers = () => {
     requestCourseTitles({
       onSuccess: onSuccessCourses,
-      onError: (error) => onError(error, "Failed to get courses")
+      onError: (error) => onError(error, "Failed to load courses.")
     });
 
   };
@@ -51,7 +51,7 @@ const AssignUsers = () => {
 
     requestUsersToCourses({
       onSuccess: onSuccessUserCourses,
-      onError: (error) => onError(error, "Failed to get users")
+      onError: (error) => onError(error, "Failed to load users.")
     });
   };
 

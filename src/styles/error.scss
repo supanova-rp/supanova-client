@@ -1,0 +1,43 @@
+.error-card-container {
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+}
+
+.error-card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 2px solid var(--hover-color-grey);
+  padding: 55px 0;
+  width: 38%;
+  box-shadow: 0 3px 7px hsl(228deg 66% 45% / 15%);
+  border-radius: 8px;
+}
+
+.error-icon {
+  margin-bottom: 20px;
+}
+
+.error-title {
+  margin-bottom: 20px;
+  color: var(--error-color);
+}
+
+.error-description {
+  color: var(--light-grey-color);
+  padding: 0px;
+  margin: 2px;
+}
+
+.error-button {
+  margin: 22px 0 22px 0;
+  background-color: var(--error-color);
+  border-color: var(--error-color);
+  padding: 6px 30px;
+
+  &:hover, &:active {
+    background-color: var(--hover-color-error) !important;
+    border-color: var(--hover-color-error) !important;
+  }
+}

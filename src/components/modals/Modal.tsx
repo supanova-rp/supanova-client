@@ -13,7 +13,7 @@ const Modal: React.FC<Props> = ({ onClick, children }) => {
         <div className="x-mark-modal-container">
           <XMarkIcon
             onClick={() => onClick(null)}
-            stroke={colors.darkgray}
+            stroke={colors.darkgrey}
             role="button" />
         </div>
         <div className="d-flex justify-content-center modal-text-container">

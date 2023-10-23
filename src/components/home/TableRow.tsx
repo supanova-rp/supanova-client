@@ -30,7 +30,7 @@ const TableRow: React.FC<Props> = ({ title, sectionId, completed, onClickSetCurr
           {renderSectionProgressCircle()}
           <div className="d-flex align-items-center">
             <VideoIcon
-              stroke={colors.darkgray}
+              stroke={colors.darkgrey}
               className="mx-3" />
             <p className="mb-0 text-secondary me-1">{title}</p>
           </div>

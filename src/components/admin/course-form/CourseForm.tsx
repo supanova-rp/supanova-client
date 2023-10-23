@@ -153,7 +153,7 @@ export default class CourseForm extends Component <CourseFormProps> {
 
     this.onError({
       type: "danger",
-      message: "Failed to delete course. Try again.",
+      message: "Failed to delete course.",
       error,
     });
   };
@@ -171,7 +171,7 @@ export default class CourseForm extends Component <CourseFormProps> {
     } else {
       this.onError({
         type: "warning",
-        message: "Please make sure videos are uploaded for every section.",
+        message: "WARNING! Please make sure videos are uploaded for every section.",
       });
     }
   };
@@ -187,7 +187,7 @@ export default class CourseForm extends Component <CourseFormProps> {
   onSaveCourseError = (error: string) => {
     this.onError({
       type: "danger",
-      message: "Failed to save course. Try again.",
+      message: "Failed to load courses.",
       error,
     });
   };

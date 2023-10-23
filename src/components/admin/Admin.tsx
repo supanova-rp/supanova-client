@@ -39,7 +39,8 @@ const Admin = () => {
       <SidebarContainer
         activeTab={activeTab}
         setActiveTab={setActiveTab} />
-      <Card className="w-100 p-3 d-flex mh-100 rounded-0">
+      <Card
+        className="w-100 p-3 d-flex mh-100 rounded-0 admin-card">
         <Card.Body>
           {renderAdminContent()}
         </Card.Body>

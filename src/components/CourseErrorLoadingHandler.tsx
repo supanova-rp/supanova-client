@@ -5,7 +5,7 @@ import { PulseLoader } from "react-spinners";
 import { colors } from "src/constants/colorPalette";
 import { Course, CourseTitle, UserToCourses } from "src/types";
 
-import Error from "./Error";
+import ErrorCard from "./ErrorCard";
 
 interface Props extends React.PropsWithChildren {
   error: string | null,
@@ -25,9 +25,9 @@ const CourseErrorLoadingHandler = ({
 }: Props) => {
   if (error) {
     return (
-      <Error
+      <ErrorCard
         errorMessage={error}
-        onClick={onClick} />
+        clickHandlerFunction={onClick} />
     );
   }
 
