@@ -2,26 +2,24 @@ import { Button, Navbar as BootstrapNavbar } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 import { useAuth } from "../../contexts/AuthContext";
-import { SetStringFunction } from "../../types/index";
 
 import SupanovaLogo from "../../images/Supanova-logo-nav.png";
+import toast from "react-hot-toast";
 
-interface Props {
-  setLogoutError: SetStringFunction,
+interface NavbarProps {
   isAdmin: boolean,
 }
 
-const Navbar: React.FC<Props> = ({ setLogoutError, isAdmin }) => {
+const Navbar: React.FC<NavbarProps> = ({ isAdmin }) => {
   const { logout } = useAuth();
 
-  const onClickHandleLogOut = async () => {
+  const onClickHandleLogout = async () => {
     try {
       await logout();
-      setLogoutError("");
 
     } catch (e) {
       console.log(e);
-      setLogoutError("Error logging out. Please try again.");
+      toast.error("Error logging out. Please try again.");
     }
   };
 
@@ -52,7 +50,7 @@ const Navbar: React.FC<Props> = ({ setLogoutError, isAdmin }) => {
           <Button
             variant="link"
             className="link-light nav-link logout"
-            onClick={onClickHandleLogOut}>
+            onClick={onClickHandleLogout}>
             Log out
           </Button>
         </div>

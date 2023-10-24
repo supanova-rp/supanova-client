@@ -1,14 +1,13 @@
-import { LogoutErrorProps, Course } from "../../types/index";
+import { Course } from "../../types/index";
 
-import Header from "./Header";
 import TableRow from "./TableRow";
 
-interface Props extends LogoutErrorProps {
+interface CoursesListProps {
   courses: Course[],
   onSelectVideo: (parameter1: number, parameter2: number) => void,
 }
 
-const CoursesList: React.FC<Props> = ({ logoutError, courses, onSelectVideo }) => {
+const CoursesList: React.FC<CoursesListProps> = ({ courses, onSelectVideo }) => {
   return (
     <div className="px-4 pt-2">
       {courses.map((course, courseIndex) => {

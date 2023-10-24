@@ -1,9 +1,9 @@
 import { Dispatch, SetStateAction, SyntheticEvent } from "react";
 
-import { Course, LogoutErrorProps } from "../../types/index";
+import { Course } from "../../types/index";
 import Video from "./Video";
 
-interface Props extends LogoutErrorProps {
+interface CourseProps {
   currentCourseIndex: number,
   currentSectionIndex: number,
   currentSectionId: number,
@@ -16,13 +16,12 @@ interface Props extends LogoutErrorProps {
   setInitialCurrentVideoTime: Dispatch<SetStateAction<number>>,
 }
 
-const CourseVideoContainer: React.FC<Props> = ({
+const CourseVideoContainer: React.FC<CourseProps> = ({
   currentCourseIndex,
   currentSectionIndex,
   currentSectionId,
   initialCurrentVideoTime,
   courses,
-  logoutError,
   setCurrentCourseIndex,
   setCurrentSectionIndex,
   setIsVideoShowing,
@@ -108,7 +107,6 @@ const CourseVideoContainer: React.FC<Props> = ({
   return (
     <div className="ms-4">
       <Video
-        logoutError={logoutError}
         courses={courses}
         initialCurrentVideoTime={initialCurrentVideoTime}
         hasNext={hasNext}

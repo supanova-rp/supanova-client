@@ -1,16 +1,14 @@
 /* eslint-disable max-len */
-import { LogoutErrorProps } from "../../types/index";
 
 import Header from "./Header";
 
 import JoelProfilePicture from "../../images/Joel-Profile.png";
 
-const Instructor: React.FC<LogoutErrorProps> = ({ logoutError }) => {
+const Instructor = () => {
   return (
     <div className="instructor-container">
       <Header
-        title="Meet Your Instructor"
-        logoutError={logoutError} />
+        title="Meet Your Instructor" />
       <div className="d-flex align-items-center p-4">
         <img
           src={JoelProfilePicture}

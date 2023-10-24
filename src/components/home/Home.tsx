@@ -14,7 +14,6 @@ import Header from "./Header";
 
 const Home = () => {
   const [courses, setCourses] = useState<[] | Course[]>([]);
-  const [logoutError, setLogoutError] = useState<null | string>(null);
   const [activeTab, setActiveTab] = useState<string>("Courses");
   const [error, setError] = useState<null | string>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -78,9 +77,7 @@ const Home = () => {
     if (activeTab === COURSES) {
       return (
         <div>
-          <Header
-            title="Course Curriculum"
-            logoutError={logoutError} />
+          <Header title="Course Curriculum" />
 
           <CourseErrorLoadingHandler
             error={error}
@@ -88,7 +85,6 @@ const Home = () => {
             isLoading={isLoading}
             courses={courses}>
             <Courses
-              logoutError={logoutError}
               courses={courses}
               setCourses={setCourses} />
           </CourseErrorLoadingHandler>
@@ -97,7 +93,7 @@ const Home = () => {
     }
 
     if (activeTab === INSTRUCTOR) {
-      return <Instructor logoutError={logoutError} />;
+      return <Instructor />;
     }
 
     return null;
@@ -106,7 +102,6 @@ const Home = () => {
   return (
     <div className="home-container">
       <Navbar
-        setLogoutError={setLogoutError}
         isAdmin={isAdmin} />
       <div className="d-flex h-100 w-100">
         <SidebarContainer

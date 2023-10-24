@@ -1,16 +1,16 @@
 import { Dispatch, SetStateAction, useState } from "react";
 
-import { Course, LogoutErrorProps } from "../../types/index";
+import { Course } from "../../types/index";
 
 import CoursesList from "./CoursesList";
 import CourseVideoContainer from "./CourseVideoContainer";
 
-interface Props extends LogoutErrorProps {
+interface CoursesProps {
   courses: Course[],
   setCourses: Dispatch<SetStateAction<Course[]>>,
 }
 
-const Courses: React.FC<Props> = ({ logoutError, courses, setCourses }) => {
+const Courses: React.FC<CoursesProps> = ({ courses, setCourses }) => {
   const [isVideoShowing, setIsVideoShowing] = useState<boolean>(false);
   const [currentCourseIndex, setCurrentCourseIndex] = useState<number>(0);
   const [currentSectionIndex, setCurrentSectionIndex] = useState<number>(0);
@@ -43,7 +43,6 @@ const Courses: React.FC<Props> = ({ logoutError, courses, setCourses }) => {
         currentSectionId={currentSectionId}
         initialCurrentVideoTime={initialCurrentVideoTime}
         courses={courses}
-        logoutError={logoutError}
         setCurrentCourseIndex={setCurrentCourseIndex}
         setCurrentSectionIndex={setCurrentSectionIndex}
         setIsVideoShowing={setIsVideoShowing}
@@ -55,7 +54,6 @@ const Courses: React.FC<Props> = ({ logoutError, courses, setCourses }) => {
   return (
     <div className="w-100">
       <CoursesList
-        logoutError={logoutError}
         courses={courses}
         onSelectVideo={onSelectVideo} />
     </div>

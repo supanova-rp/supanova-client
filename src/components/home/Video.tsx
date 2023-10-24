@@ -5,11 +5,11 @@ import { Button } from "react-bootstrap";
 
 import { colors } from "../../constants/colorPalette";
 import { ReactComponent as ChevronLeft }  from "../../icons/chevronLeft.svg";
-import { Course, LogoutErrorProps } from "../../types/index";
+import { Course } from "../../types/index";
 
 import Header from "./Header";
 
-interface Props extends LogoutErrorProps {
+interface VideoProps {
   currentCourseIndex: number,
   currentSectionIndex: number,
   initialCurrentVideoTime: number,
@@ -22,8 +22,7 @@ interface Props extends LogoutErrorProps {
   onTimeUpdateSaveToLocalStorage: (e: SyntheticEvent<HTMLVideoElement>) => void,
 }
 
-const Video: React.FC<Props> = ({
-  logoutError,
+const Video: React.FC<VideoProps> = ({
   courses,
   hasNext,
   hasPrevAndNext,
@@ -96,9 +95,7 @@ const Video: React.FC<Props> = ({
               className="mt-4 me-1"
               onClick={onExitVideo} />
           </div>
-          <Header
-            title={courses[currentCourseIndex].title}
-            logoutError={logoutError} />
+          <Header title={courses[currentCourseIndex].title}/>
         </div>
         <h5 className="mt-2 mb-4">{`${currentSectionIndex + 1}. ${currentSection.title}`}</h5>
         {currentSection.videoUrl
