@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 import { useAuth } from "../../contexts/AuthContext";
 import { FormSubmitEvent } from "../../types/index";
@@ -8,39 +9,28 @@ import FormInput from "../FormInput";
 
 const ForgotPassword = () => {
   const [emailInput, setEmailInput] = useState("");
-  const [error, setError] = useState("");
-  const [resetPasswordSuccessMessage, setResetPasswordSuccessMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const { resetPassword } = useAuth();
 
   // TODO: change the sender e-mail for reset password
 
-  const handleSuccessMessageAfterResettingPassword = () => {
-    setTimeout(() => {
-      setResetPasswordSuccessMessage("");
-    }, 3000);
-  };
-
   const onHandleResetPassword = async (event: FormSubmitEvent) => {
     event.preventDefault();
 
     try {
-      setError("");
       setIsLoading(true);
 
       await resetPassword(emailInput);
-      setResetPasswordSuccessMessage("Check your inbox for further instructions.");
+      toast.success("Password reset. Check your inbox.");
 
-      handleSuccessMessageAfterResettingPassword();
     } catch (error: any) {
       console.log(error);
-      setResetPasswordSuccessMessage("");
 
       if (error.code === "auth/user-not-found") {
-        setError("Account doesn't exist. Please register first.");
+        toast.error("Account doesn't exist. Please register first.");
       } else {
-        setError("Failed to reset password.");
+        toast.error("Failed to reset password.");
       }
     }
 
@@ -53,9 +43,6 @@ const ForgotPassword = () => {
       title="Forgot password?"
       subTitle="Reset your password below"
       isLoading={isLoading}
-      error={error}
-      successMessage={resetPasswordSuccessMessage}
-      alertClassname="forgot-password-alert"
       buttonText="Reset password"
       onSubmit={onHandleResetPassword}
       footerText="Have an account?"

@@ -7,11 +7,11 @@ import { FormSubmitEvent } from "../../types/index";
 import FormInput from "../FormInput";
 import PasswordVisibilityIcon from "./PasswordVisibilityIcon";
 import AuthCard from "./AuthCard";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const [emailInput, setEmailInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
-  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isPasswordShowing, setIsPasswordShowing] = useState(false);
 
@@ -23,14 +23,18 @@ const Login = () => {
     event.preventDefault();
 
     try {
-      setError("");
       setIsLoading(true);
 
       await login(emailInput, passwordInput);
       navigate("/");
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
-      setError("Wrong email and/or password");
+
+      if (error.code === "auth/wrong-password.") {
+        toast.error("Wrong email and/or password");
+      } else {
+        toast.error("Can't log in. Try again.");
+      }
     }
 
     setIsLoading(false);
@@ -45,8 +49,6 @@ const Login = () => {
       footerText="Don't have an account?"
       footerLinkText="Register"
       footerLinkPath="/register"
-      error={error}
-      alertClassname="auth-alert"
       isLoading={isLoading}
       onSubmit={onHandleLogin}>
       <FormInput

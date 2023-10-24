@@ -63,8 +63,8 @@ const Home = () => {
   }, []);
 
   const onSuccess = (result: Course[]) => {
-    setIsLoading(false);
     setCourses(result);
+    setIsLoading(false);
   };
 
   const onError = (error = "", courseErrorMessage: string ) => {

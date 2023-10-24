@@ -1,6 +1,7 @@
 import { Component } from "react";
-import { Alert, Form } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 import { AxiosProgressEvent } from "axios";
+import toast from "react-hot-toast";
 
 import {
   Course,
@@ -13,6 +14,7 @@ import {
   everySectionHasVideo,
   getUpdatedCourse,
 } from "src/utils/utils";
+import { ReactComponent as WarningIcon } from "../../../icons/warningIcon.svg";
 
 import DeleteCourseModal from "src/components/modals/DeleteCourseModal";
 import RequestWrapper from "src/components/RequestWrapper";
@@ -20,7 +22,6 @@ import CourseFormBody from "./CourseFormBody";
 
 type CourseFormState = {
   course: Course,
-  error: ErrorOptions,
   areActionsDisabled: boolean,
   isDeleteModalVisible: boolean,
 }
@@ -42,10 +43,6 @@ export default class CourseForm extends Component <CourseFormProps> {
   };
 
   state: CourseFormState = {
-    error: {
-      type: null,
-      message: null,
-    },
     areActionsDisabled: false,
     isDeleteModalVisible: false,
     course: this.props.initialCourse,
@@ -127,10 +124,6 @@ export default class CourseForm extends Component <CourseFormProps> {
   onRequestBegin = () => {
     this.setState({
       areActionsDisabled: true,
-      error: {
-        type: null,
-        message: null,
-      },
     });
   };
 
@@ -153,7 +146,7 @@ export default class CourseForm extends Component <CourseFormProps> {
 
     this.onError({
       type: "danger",
-      message: "Failed to delete course.",
+      message: "Failed to delete course. Try again.",
       error,
     });
   };
@@ -171,7 +164,7 @@ export default class CourseForm extends Component <CourseFormProps> {
     } else {
       this.onError({
         type: "warning",
-        message: "WARNING! Please make sure videos are uploaded for every section.",
+        message: "Every section needs a video.",
       });
     }
   };
@@ -187,24 +180,33 @@ export default class CourseForm extends Component <CourseFormProps> {
   onSaveCourseError = (error: string) => {
     this.onError({
       type: "danger",
-      message: "Failed to load courses.",
+      message: "Failed to save course. Try again.",
       error,
     });
   };
 
   onError = (errorOptions: ErrorOptions) => {
-    console.log(">>> error: ", errorOptions.error || errorOptions.message);
+    const { message, error, type } = errorOptions;
+
+    console.log(">>> error: ", error || message);
 
     this.setState({
       areActionsDisabled: false,
-      error: errorOptions,
     });
+
+    if (type === "danger") {
+      toast.error(message);
+    } else {
+      toast(message, {
+        icon: <WarningIcon
+          height="22px"
+          width="22px" /> });
+    }
   };
 
   render() {
     const {
       course,
-      error,
       areActionsDisabled,
       isDeleteModalVisible,
     } = this.state;
@@ -229,17 +231,6 @@ export default class CourseForm extends Component <CourseFormProps> {
                   return (
                     <>
                       <Form onSubmit={(e) => this.onClickSave(e, requestSaveCourse)}>
-                        {error.message
-                          ? (
-                            <Alert
-                              variant={error.type || "danger"}
-                              className="course-form-error-alert">
-                              {error.message}
-                            </Alert>
-                          )
-                          : null
-                        }
-
                         <CourseFormBody
                           course={course}
                           isEditing={isEditing}

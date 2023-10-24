@@ -3,6 +3,7 @@ import {
   Route,
   Routes,
 } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 
 import { AuthProvider } from "./contexts/AuthContext";
 
@@ -56,6 +57,7 @@ const App = () => {
             )}/>
         </Routes>
       </AuthProvider>
+      <Toaster position="top-right"/>
     </BrowserRouter>
   );
 };

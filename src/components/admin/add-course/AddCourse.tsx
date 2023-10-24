@@ -1,6 +1,6 @@
 /* eslint-disable react/no-array-index-key */
 import { Component } from "react";
-import { Alert } from "react-bootstrap";
+import toast from "react-hot-toast";
 
 import {
   getInitialCourseState,
@@ -17,7 +17,6 @@ export default class AddCourse extends Component {
 
   state = {
     courseFormKey: Date.now(),
-    successMessage: null,
   };
 
   onCourseAddedSuccess = () => {
@@ -25,12 +24,9 @@ export default class AddCourse extends Component {
 
     this.setState({
       courseFormKey: Date.now(),
-      successMessage: "Successfully created new course!"
     });
 
-    setTimeout(() => {
-      this.setState({ successMessage: null });
-    }, 3000);
+    toast.success("You successfully created a new course!");
   };
 
   onAddCourseCancelled = () => {
@@ -38,7 +34,6 @@ export default class AddCourse extends Component {
 
     this.setState({
       courseFormKey: Date.now(),
-      successMessage: null,
     });
   };
 
@@ -51,22 +46,11 @@ export default class AddCourse extends Component {
   };
 
   render() {
-    const { successMessage, courseFormKey } = this.state;
+    const { courseFormKey } = this.state;
 
     return (
       <>
         <AdminHeader title="Add a New Course" />
-
-        {successMessage
-          ? (
-            <Alert
-              variant="success"
-              className="add-course-success">{successMessage}
-            </Alert>
-          )
-          : null
-        }
-
         <CourseForm
           key={courseFormKey}
           initialCourse={this.initialCourse}

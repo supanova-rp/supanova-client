@@ -12,11 +12,8 @@ type AuthCardProps = React.PropsWithChildren & {
   footerText: string,
   footerLinkText: string,
   footerLinkPath: string,
-  error: string,
   isLoading: boolean,
   onSubmit: (event: FormSubmitEvent) => Promise<void>
-  successMessage?: string,
-  alertClassname: string,
 }
 
 const AuthCard: React.FC<AuthCardProps>=
@@ -29,11 +26,8 @@ const AuthCard: React.FC<AuthCardProps>=
   footerText,
   footerLinkText,
   footerLinkPath,
-  error,
   isLoading,
   onSubmit,
-  successMessage = "",
-  alertClassname = "",
 }) => {
   return (
     <div className="auth-container">
@@ -48,28 +42,6 @@ const AuthCard: React.FC<AuthCardProps>=
             <h2 className="text-center mb-2 ">{title}</h2>
             <p className="auth-paragraph">{subTitle}</p>
           </div>
-          {error
-            ? (
-              <Alert
-                variant="danger"
-                className={alertClassname}>
-                {error}
-              </Alert>
-            )
-            : null
-          }
-
-          {successMessage
-            ? (
-              <Alert
-                variant="success"
-                className="forgot-password-alert">
-                {successMessage}
-              </Alert>
-            )
-            : null
-          }
-
           <Form
             onSubmit={onSubmit}
             className="has-success">

@@ -10,6 +10,8 @@ import {
 } from "../support/course-form-utils";
 import { loginAdmin, logoutAdmin } from "../support/auth-utils";
 
+// TODO: rewrite tests with custom toast
+
 describe("Create a new course", () => {
   const { courseSectionElement } = adminCourseFormInputClassnames;
 

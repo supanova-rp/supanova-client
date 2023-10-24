@@ -1,4 +1,4 @@
-import { Alert } from "react-bootstrap";
+import toast from "react-hot-toast";
 
 import { Course } from "src/types";
 
@@ -9,19 +9,12 @@ interface Props {
 
 }
 const CoursesList: React.FC<Props> = ({ courses, successMessage, onClickEditCourse }) => {
+  if (successMessage) {
+    toast.success(successMessage);
+  }
+
   return (
     <>
-      {successMessage
-        ? (
-          <Alert
-            variant="success"
-            className="edit-success-message">
-            {successMessage}
-          </Alert>
-        )
-        : null
-      }
-
       {courses.map((course) => {
         return (
           <div

@@ -6,6 +6,7 @@ import { colors } from "src/constants/colorPalette";
 import { Course, CourseTitle, UserToCourses } from "src/types";
 
 import ErrorCard from "./ErrorCard";
+import WarningCard from "./WarningCard";
 
 interface Props extends React.PropsWithChildren {
   error: string | null,
@@ -23,6 +24,7 @@ const CourseErrorLoadingHandler = ({
   usersToCourses,
   children
 }: Props) => {
+
   if (error) {
     return (
       <ErrorCard
@@ -41,23 +43,12 @@ const CourseErrorLoadingHandler = ({
     );
   }
 
-  if (usersToCourses && !usersToCourses?.length) {
-    return (
-      <Alert
-        variant="warning"
-        className="mt-4">
-        You don't have any users yet...
-      </Alert>
-    );
+  if (courses && !courses?.length) {
+    return <WarningCard warningMessage="You don't have any courses yet..." />;
   }
 
-  if (courses && !courses?.length) {
-    return (
-      <Alert
-        variant="warning"
-        className="mt-4">You don't have any courses yet...
-      </Alert>
-    );
+  if (usersToCourses && !usersToCourses?.length) {
+    return <WarningCard warningMessage="You don't have any users yet..." />;
   }
 
   return <>{children}</>;

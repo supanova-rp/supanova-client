@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Alert, Form } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 import Accordion from "react-bootstrap/Accordion";
 
 import { CourseTitle, UserToCourses } from "src/types";
 import useRequest from "src/hooks/useRequest";
 
 import ToggleButton from "../../ToggleButton";
+import toast from "react-hot-toast";
 
 interface AccordionProps {
   usersToCourses: UserToCourses[],
@@ -15,7 +16,6 @@ interface AccordionProps {
 
 const AssignUsersAccordion: React.FC<AccordionProps> = ({ usersToCourses, courses, setUsersToCourses }) => {
   const [loadingUserToCourseId, setLoadingUserToCourseId] = useState<{ courseId: number, userId: string} | null>(null);
-  const [error, setError] = useState<string | null>(null);
 
   const updateUsersToCourses = useRequest("/update-users-to-courses");
 
@@ -48,7 +48,7 @@ const AssignUsersAccordion: React.FC<AccordionProps> = ({ usersToCourses, course
 
   const onError = () => {
     setLoadingUserToCourseId(null);
-    setError("Error saving changes. Try again.");
+    toast.error("Error saving changes. Try again.");
   };
 
   const onChangeUpdateTickedCourseIds = (userId: string, courseId: number, isAssigned: boolean) => {
@@ -80,16 +80,6 @@ const AssignUsersAccordion: React.FC<AccordionProps> = ({ usersToCourses, course
             </Accordion.Header>
             <Accordion.Body className="p-0 my-3">
               <Form>
-                {error
-                  ? (
-                    <Alert
-                      variant="warning"
-                      className="mt-4">
-                      {error}
-                    </Alert>
-                  )
-                  : null
-                }
                 {courses.map((course: CourseTitle) => {
                   const isAssigned = user.courseIds?.includes(course.id);
 

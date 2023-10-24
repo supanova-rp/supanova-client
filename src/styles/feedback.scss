@@ -1,10 +1,10 @@
-.error-card-container {
+.feedback-card-container {
   margin-top: 50px;
   display: flex;
   justify-content: center;
 }
 
-.error-card-content {
+.feedback-card-content {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -15,7 +15,7 @@
   border-radius: 8px;
 }
 
-.error-icon {
+.feedback-icon {
   margin-bottom: 20px;
 }
 
@@ -24,7 +24,12 @@
   color: var(--error-color);
 }
 
-.error-description {
+.warning-title {
+  margin-bottom: 20px;
+  color: var(--warning-color);
+}
+
+.feedback-description {
   color: var(--light-grey-color);
   padding: 0px;
   margin: 2px;

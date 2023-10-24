@@ -64,7 +64,6 @@ export default class EditCourses extends Component {
       allCourses: updatedCoursesWithEditedCourse,
     });
 
-    this.handleSuccessMessageTimeout();
   };
 
   onCourseDeletedSuccess = (courseId: number) => {
@@ -76,7 +75,6 @@ export default class EditCourses extends Component {
       successMessage: "Successfully deleted course!"
     });
 
-    this.handleSuccessMessageTimeout();
   };
 
   getRequestBody = (course: Course, initialCourse: Course,) => {

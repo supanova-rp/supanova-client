@@ -1,8 +1,10 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 import { useAuth } from "src/contexts/AuthContext";
 import { FormSubmitEvent } from "src/types";
 import useRequest from "src/hooks/useRequest";
+import { ReactComponent as WarningIcon } from "../../icons/warningIcon.svg";
 
 import FormInput from "../FormInput";
 import AuthCard from "./AuthCard";
@@ -15,7 +17,6 @@ const Register = () => {
   const [repeatPasswordInput, setRepeatPasswordInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isPasswordShowing, setIsPasswordShowing] = useState({ password: false, repeatPassword: false });
-  const [error, setError] = useState("");
 
   const { signup, updateUser } = useAuth();
 
@@ -26,22 +27,27 @@ const Register = () => {
   const onError = (errorName: string, error: any) => {
     console.log(`${errorName}: ${error}`);
     if (error.code === "auth/email-already-in-use") {
-      setError("Account already exists. Log in instead.");
+      toast.error("Account already exists. Log in instead.");
     } else {
-      setError("Failed to create an account. Try again.");
+      toast.error("Failed to create an account. Try again.");
     }
 
   };
 
   const onHandleRegisterUser = async (event: FormSubmitEvent) => {
     event.preventDefault();
-    setError("");
 
     if (repeatPasswordInput !== passwordInput) {
-      setError("Please make sure your passwords match.");
+      toast.error("Passwords don't match.", {
+        icon: <WarningIcon
+          height="22px"
+          width="22px" />
+      });
     } else {
       try {
         setIsLoading(true);
+
+        // TODO: wait til the database has added the user
 
         const newUser = await signup(emailInput, passwordInput);
 
@@ -88,8 +94,6 @@ const Register = () => {
       footerText="Have an account?"
       footerLinkText="Login"
       footerLinkPath="/login"
-      alertClassname="auth-alert"
-      error={error}
       onSubmit={onHandleRegisterUser}>
       <FormInput
         formId="username"

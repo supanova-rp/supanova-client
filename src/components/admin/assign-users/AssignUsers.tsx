@@ -64,6 +64,7 @@ const AssignUsers = () => {
       <AdminHeader title="Assign Users to Courses" />
       <CourseErrorLoadingHandler
         error={error}
+        courses={courses}
         onClick={getCoursesAndUsers}
         isLoading={isLoadingCourses || isLoadingUserCourses}
         usersToCourses={usersToCourses}>

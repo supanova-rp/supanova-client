@@ -18,6 +18,8 @@ body, html, #root {
   --hover-color-blue: #1b3a64;
   --hover-color-orange: #db810d;
   --error-color: #dc3545;
+  --success-color: #198754;
+  --warning-color: #ffc007;
   --hover-color-error: #e44c5b;
 }
 
@@ -61,4 +63,4 @@ body, html, #root {
 @import "./sidebar";
 @import "./navbar";
 @import "./home";
-@import "./error.scss";
+@import "./feedback";
