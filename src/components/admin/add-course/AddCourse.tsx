@@ -7,6 +7,7 @@ import {
   getSectionsWithPositions
 } from "../../../utils/utils";
 import { Course } from "src/types";
+import { feedbackMessages } from "src/constants/constants";
 
 import AdminHeader from "../AdminHeader";
 import CourseForm from "../course-form/CourseForm";
@@ -26,7 +27,7 @@ export default class AddCourse extends Component {
       courseFormKey: Date.now(),
     });
 
-    toast.success("You successfully created a new course!");
+    toast.success(feedbackMessages.addCourseSuccess);
   };
 
   onAddCourseCancelled = () => {

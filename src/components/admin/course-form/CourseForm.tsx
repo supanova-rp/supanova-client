@@ -14,6 +14,7 @@ import {
   everySectionHasVideo,
   getUpdatedCourse,
 } from "src/utils/utils";
+import { feedbackMessages } from "src/constants/constants";
 import { ReactComponent as WarningIcon } from "../../../icons/warningIcon.svg";
 
 import DeleteCourseModal from "src/components/modals/DeleteCourseModal";
@@ -146,7 +147,7 @@ export default class CourseForm extends Component <CourseFormProps> {
 
     this.onError({
       type: "danger",
-      message: "Failed to delete course. Try again.",
+      message: feedbackMessages.deleteCourseError,
       error,
     });
   };
@@ -164,7 +165,7 @@ export default class CourseForm extends Component <CourseFormProps> {
     } else {
       this.onError({
         type: "warning",
-        message: "Every section needs a video.",
+        message: feedbackMessages.videoMissing,
       });
     }
   };
@@ -180,7 +181,7 @@ export default class CourseForm extends Component <CourseFormProps> {
   onSaveCourseError = (error: string) => {
     this.onError({
       type: "danger",
-      message: "Failed to save course. Try again.",
+      message: feedbackMessages.saveCourseError,
       error,
     });
   };

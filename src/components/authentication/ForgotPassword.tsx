@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 
 import { useAuth } from "../../contexts/AuthContext";
 import { FormSubmitEvent } from "../../types/index";
+import { feedbackMessages } from "src/constants/constants";
 
 import AuthCard from "./AuthCard";
 import FormInput from "../FormInput";
@@ -20,15 +21,15 @@ const ForgotPassword = () => {
       setIsLoading(true);
 
       await resetPassword(emailInput);
-      toast.success("Password reset. Check your inbox.");
+      toast.success(feedbackMessages.passwordResetSuccess);
 
     } catch (error: any) {
       console.log(error);
 
       if (error.code === "auth/user-not-found") {
-        toast.error("Account doesn't exist. Please register first.");
+        toast.error(feedbackMessages.accountInvalid);
       } else {
-        toast.error("Failed to reset password.");
+        toast.error(feedbackMessages.passwordResetError);
       }
     }
 

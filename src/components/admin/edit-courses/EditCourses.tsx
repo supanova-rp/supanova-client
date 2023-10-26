@@ -5,6 +5,7 @@ import {
   getDeletedSectionsIds,
   getSectionsWithPositions
 } from "../../../utils/utils";
+import { feedbackMessages } from "src/constants/constants";
 
 import CourseErrorLoadingHandler from "../../CourseErrorLoadingHandler";
 import CourseForm from "../course-form/CourseForm";
@@ -59,7 +60,7 @@ export default class EditCourses extends Component {
     });
 
     this.setState({
-      successMessage: "Successfully saved edited course!",
+      successMessage: feedbackMessages.saveCourseSuccess,
       editingCourseId: null,
       allCourses: updatedCoursesWithEditedCourse,
     });
@@ -72,7 +73,7 @@ export default class EditCourses extends Component {
     this.setState({
       allCourses: coursesWithoutDeletedCourse,
       editingCourseId: null,
-      successMessage: "Successfully deleted course!"
+      successMessage: feedbackMessages.deleteCourseSuccess
     });
 
   };

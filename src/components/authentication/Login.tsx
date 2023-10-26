@@ -8,6 +8,7 @@ import FormInput from "../FormInput";
 import PasswordVisibilityIcon from "./PasswordVisibilityIcon";
 import AuthCard from "./AuthCard";
 import toast from "react-hot-toast";
+import { feedbackMessages } from "src/constants/constants";
 
 const Login = () => {
   const [emailInput, setEmailInput] = useState("");
@@ -31,9 +32,9 @@ const Login = () => {
       console.log(error);
 
       if (error.code === "auth/wrong-password.") {
-        toast.error("Wrong email and/or password");
+        toast.error(feedbackMessages.loginValidationError);
       } else {
-        toast.error("Login failed. Try again.");
+        toast.error(feedbackMessages.loginError);
       }
     }
 

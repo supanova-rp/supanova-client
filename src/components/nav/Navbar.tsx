@@ -5,6 +5,7 @@ import { useAuth } from "../../contexts/AuthContext";
 
 import SupanovaLogo from "../../images/Supanova-logo-nav.png";
 import toast from "react-hot-toast";
+import { feedbackMessages } from "src/constants/constants";
 
 interface NavbarProps {
   isAdmin: boolean,
@@ -19,7 +20,7 @@ const Navbar: React.FC<NavbarProps> = ({ isAdmin }) => {
 
     } catch (e) {
       console.log(e);
-      toast.error("Error logging out. Please try again.");
+      toast.error(feedbackMessages.logoutError);
     }
   };
 

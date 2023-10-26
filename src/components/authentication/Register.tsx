@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { useAuth } from "src/contexts/AuthContext";
 import { FormSubmitEvent } from "src/types";
 import useRequest from "src/hooks/useRequest";
+import { feedbackMessages } from "src/constants/constants";
 import { ReactComponent as WarningIcon } from "../../icons/warningIcon.svg";
 
 import FormInput from "../FormInput";
@@ -27,9 +28,9 @@ const Register = () => {
   const onError = (errorName: string, error: any) => {
     console.log(`${errorName}: ${error}`);
     if (error.code === "auth/email-already-in-use") {
-      toast.error("Account already exists. Log in instead.");
+      toast.error(feedbackMessages.accountAlreadyExists);
     } else {
-      toast.error("Failed to create an account. Try again.");
+      toast.error(feedbackMessages.registrationError);
     }
 
   };
@@ -38,7 +39,7 @@ const Register = () => {
     event.preventDefault();
 
     if (repeatPasswordInput !== passwordInput) {
-      toast.error("Passwords don't match.", {
+      toast.error(feedbackMessages.passwordMismatch, {
         icon: <WarningIcon
           height="22px"
           width="22px" />

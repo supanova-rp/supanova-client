@@ -1,12 +1,13 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { Form } from "react-bootstrap";
 import Accordion from "react-bootstrap/Accordion";
 
 import { CourseTitle, UserToCourses } from "src/types";
 import useRequest from "src/hooks/useRequest";
+import { feedbackMessages } from "src/constants/constants";
 
 import ToggleButton from "../../ToggleButton";
-import toast from "react-hot-toast";
 
 interface AccordionProps {
   usersToCourses: UserToCourses[],
@@ -48,7 +49,7 @@ const AssignUsersAccordion: React.FC<AccordionProps> = ({ usersToCourses, course
 
   const onError = () => {
     setLoadingUserToCourseId(null);
-    toast.error("Error saving changes. Try again.");
+    toast.error(feedbackMessages.saveChangesError);
   };
 
   const onChangeUpdateTickedCourseIds = (userId: string, courseId: number, isAssigned: boolean) => {
