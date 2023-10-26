@@ -27,7 +27,7 @@ export default class AddCourse extends Component {
       courseFormKey: Date.now(),
     });
 
-    toast.success(feedbackMessages.addCourseSuccess);
+    // toast.success(feedbackMessages.addCourseSuccess);
   };
 
   onAddCourseCancelled = () => {

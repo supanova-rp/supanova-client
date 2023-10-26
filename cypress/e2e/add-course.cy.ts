@@ -9,8 +9,7 @@ import {
   fillInCourseFormSaveBeforeVideoUploadCompleted,
 } from "../support/course-form-utils";
 import { loginAdmin, logoutAdmin } from "../support/auth-utils";
-
-// TODO: rewrite tests with custom toast
+import { feedbackMessages } from "../support/test-constants";
 
 describe("Create a new course", () => {
   const { courseSectionElement } = adminCourseFormInputClassnames;
@@ -21,7 +20,7 @@ describe("Create a new course", () => {
   });
 
   it("cancels adding a new course", () => {
-    fillInCourseForm("Course A", "Description A",[
+    fillInCourseForm("Course XYZ", "Description A",[
       {
         title: "Section A",
         video: "cypress/short-test-video.mp4"
@@ -49,20 +48,21 @@ describe("Create a new course", () => {
 
     const lastSection = sectionsAdded.length - 1;
 
-    fillInCourseFormSaveBeforeVideoUploadCompleted("Course A", "Description A", [...sectionsAdded]);
+    fillInCourseFormSaveBeforeVideoUploadCompleted("Course XYZ", "Description A", [...sectionsAdded]);
 
     cy.get(".remove-icon").eq(lastSection).click();
     cy.get(".remove-icon").should("not.exist");
     cy.get(courseSectionElement).eq(lastSection).should("not.exist");
 
+    cy.wait(2000);
     cy.contains("button", "Save").click();
-    cy.findByText("Please make sure videos are uploaded for every section.").should("not.exist");
-    cy.get(".add-course-success").should("exist");
+    cy.findByText(feedbackMessages.addCourseSuccess).should("exist");
+    cy.findByText(feedbackMessages.videoMissing).should("not.exist");
 
     checkCourseFormIsEmpty();
     checkCourseExistsinEditCourses();
     deleteCourse();
-    checkCourseIsDeleted("h5", "Course A");
+    checkCourseIsDeleted("h5", "Course XYZ");
   });
 
   afterEach(() => {

@@ -8,21 +8,33 @@ export const loginAdmin = () => {
   indexedDB.deleteDatabase("firebaseLocalStorageDb");
 
   cy.visit("/login");
-  cy.get(loginEmailInputClassname).type("jamiegarner123@gmail.com");
-  cy.get(loginPasswordInputClassname).type("12345678");
+
+  const adminEmail = Cypress.env("admin_email");
+  const adminPassword = Cypress.env("admin_password");
+
+  cy.get(loginEmailInputClassname).type(adminEmail);
+  cy.get(loginPasswordInputClassname).type(adminPassword);
   cy.contains("button", "Log in").click();
 };
 
 export const logoutAdmin = () => {
-  cy.findByText("Back Home").click();
+  cy.get("[data-testid=back-home]").click();
+
+  // cy.findByText("Back Home").click();
+  // cy.wait(3000);
+  // cy.findByText("Back Home").click();
   cy.get(logoutLinkClassname).click();
 };
 
 export const goToLoginAndFillInForm = (correctCredentials = false) => {
   cy.visit("/login");
-  cy.get(loginEmailInputClassname).type("jamiegarner123@gmail.com");
 
-  const password = correctCredentials ? "12345678" : "555555555";
+  const adminEmail = Cypress.env("admin_email");
+  const adminPassword = Cypress.env("admin_password");
+
+  cy.get(loginEmailInputClassname).type(adminEmail);
+
+  const password = correctCredentials ? adminPassword : "555555555";
 
   cy.get(loginPasswordInputClassname).type(password);
 };

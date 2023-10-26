@@ -1,6 +1,7 @@
 import {
   adminCourseFormInputClassnames,
   adminCoursesListClassnames,
+  feedbackMessages,
   initialDefaultCourse }
   from "./test-constants";
 
@@ -63,7 +64,7 @@ export const fillInCourseFormSaveBeforeVideoUploadCompleted = (title: string, de
   });
 
   cy.contains("button", "Save").click();
-  cy.findByText("Please make sure videos are uploaded for every section.").should("exist");
+  cy.findByText(feedbackMessages.videoMissing).should("exist");
 
   cy.get("input[type=file]").eq(0).selectFile(sections[0].video, { force: true });
   cy.get(".tick-upload-icon").should("exist");
@@ -73,7 +74,7 @@ export const fillInCourseFormSaveBeforeVideoUploadCompleted = (title: string, de
 
 export const checkCourseExistsinEditCourses = () => {
   cy.get(".tab-2").click();
-  cy.get("h5").eq(0).should("have.text", "Course A");
+  cy.get("h5").eq(0).should("have.text", "Course XYZ");
 };
 
 export const cancelAddingNewCourse = () => {
@@ -97,7 +98,7 @@ export const editFirstCourse = (courseTitle: string, sectionTitle: string, reset
   cy.get(courseTitleElement).clear().type(courseTitle);
   cy.get(courseSectionElement).eq(0).clear().type(sectionTitle);
 
-  if (!reset) {
+  if (reset) {
     cy.get(".remove-icon").eq(1).click();
   }
 };

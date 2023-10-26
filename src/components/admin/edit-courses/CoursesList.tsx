@@ -10,7 +10,7 @@ interface Props {
 }
 const CoursesList: React.FC<Props> = ({ courses, successMessage, onClickEditCourse }) => {
   if (successMessage) {
-    toast.success(successMessage);
+    // toast.success(successMessage);
   }
 
   return (

@@ -21,7 +21,7 @@ const ForgotPassword = () => {
       setIsLoading(true);
 
       await resetPassword(emailInput);
-      toast.success(feedbackMessages.passwordResetSuccess);
+      // toast.success(feedbackMessages.passwordResetSuccess);
 
     } catch (error: any) {
       console.log(error);
