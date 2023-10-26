@@ -33,7 +33,7 @@ const Login = () => {
       if (error.code === "auth/wrong-password.") {
         toast.error("Wrong email and/or password");
       } else {
-        toast.error("Can't log in. Try again.");
+        toast.error("Login failed. Try again.");
       }
     }
 

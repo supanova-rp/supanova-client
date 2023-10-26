@@ -13,8 +13,6 @@ const ForgotPassword = () => {
 
   const { resetPassword } = useAuth();
 
-  // TODO: change the sender e-mail for reset password
-
   const onHandleResetPassword = async (event: FormSubmitEvent) => {
     event.preventDefault();
 
