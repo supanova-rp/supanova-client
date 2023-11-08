@@ -39,6 +39,6 @@ testem.log
 Thumbs.db
 
 #testing
-.cypress.env.json
+cypress.env.json
 
 .env

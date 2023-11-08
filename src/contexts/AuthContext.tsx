@@ -11,8 +11,6 @@ import {
   signOut,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  updateProfile,
   UserCredential,
 } from "firebase/auth";
 
@@ -22,11 +20,9 @@ import { unauthedRoutes } from "src/constants/constants";
 
 export type AuthContextType = {
   currentUser: FirebaseUser | null,
-  signup: (email: string, password: string) => Promise<UserCredential>,
   login: (email: string, password: string) => Promise<UserCredential>,
   logout: () => Promise<void>,
   resetPassword: (email: string) => Promise<void>,
-  updateUser: (newUser: UserCredential, name: string) => Promise<void>,
   getIsAdmin: () => Promise<boolean>
 };
 
@@ -60,12 +56,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
     return unsubscribe;
   }, []);
 
-  // To make sure we have the most updated currentUser
   const value = useMemo(() => {
-    const signup = (email: string, password: string) => {
-      return createUserWithEmailAndPassword(auth, email, password);
-    };
-
     const login = (email: string, password: string) => {
       return signInWithEmailAndPassword(auth, email, password);
     };
@@ -76,10 +67,6 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 
     const resetPassword = (email: string) => {
       return sendPasswordResetEmail(auth, email);
-    };
-
-    const updateUser = (newUser: UserCredential, name: string) => {
-      return updateProfile(newUser.user, { displayName: name });
     };
 
     const getIsAdmin = async () => {
@@ -95,11 +82,9 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
 
     return {
       currentUser,
-      signup,
       login,
       logout,
       resetPassword,
-      updateUser,
       getIsAdmin,
     };
   }, [currentUser]);

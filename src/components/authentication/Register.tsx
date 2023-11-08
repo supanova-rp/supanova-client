@@ -1,8 +1,8 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 
-import { useAuth } from "src/contexts/AuthContext";
 import { FormSubmitEvent } from "src/types";
+import { useAuth } from "src/contexts/AuthContext";
 import useRequest from "src/hooks/useRequest";
 import { feedbackMessages } from "src/constants/constants";
 import { ReactComponent as WarningIcon } from "../../icons/warningIcon.svg";
@@ -19,9 +19,8 @@ const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isPasswordShowing, setIsPasswordShowing] = useState({ password: false, repeatPassword: false });
 
-  const { signup, updateUser } = useAuth();
-
-  const addUserToDB = useRequest("/register");
+  const registerUser = useRequest("/register");
+  const { login } = useAuth();
 
   const formGroupClassname = "mb-2 pe-4";
 
@@ -48,28 +47,17 @@ const Register = () => {
       try {
         setIsLoading(true);
 
-        // TODO: wait til the database has added the user
-
-        const newUser = await signup(emailInput, passwordInput);
-
-        await updateUser(newUser, nameInput);
-
-        // Avoids Typescript error
-        // AccessToken doesn't exist on userCredential so need to use getIdToken instead
-        const accessToken = await newUser.user.getIdToken();
-
-        addUserToDB({
+        registerUser({
           requestBody: {
             name: nameInput,
             email: emailInput,
-            id: newUser?.user?.uid,
-            access_token: accessToken,
+            password: passwordInput,
           },
-          onSuccess: () => {},
-          onError: (error) => onError("addUserToDBError", error)
+          onSuccess: () => login(emailInput, passwordInput),
+          onError: (error) => onError("Create new user error", error)
         });
-      } catch (createAccountError) {
-        onError("createAccountError", createAccountError);
+      } catch (createNewUserError) {
+        onError("Create new user error", createNewUserError);
       }
     }
 
