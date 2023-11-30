@@ -29,7 +29,7 @@ export const initialDefaultCourse = {
 
 export const feedbackMessages = {
   videoMissing: "Every section needs a video.",
-  addCourseSuccess: "You successfully created a new course!",
+  addCourseSuccess: "Successfully created a new course!",
   saveCourseError: "Failed to save course. Try again.",
   saveCourseSuccess: "Successfully saved course!",
   deleteCourseError: "Failed to delete course. Try again.",

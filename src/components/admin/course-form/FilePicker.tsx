@@ -109,7 +109,7 @@ const FilePicker: React.FC<Props> = ({
       <label
         htmlFor={`inputTag-${sectionId}`}
         className="secondary-btn">
-        Select File
+        Select Video
         <input
           ref={fileInputRef}
           name="file-picker"

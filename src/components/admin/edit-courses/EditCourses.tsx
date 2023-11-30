@@ -8,10 +8,10 @@ import {
 import { feedbackMessages } from "src/constants/constants";
 
 import CourseErrorLoadingHandler from "../../CourseErrorLoadingHandler";
-import CourseForm from "../course-form/CourseForm";
 import RequestWrapper from "../../RequestWrapper";
 import AdminHeader from "../AdminHeader";
 import CoursesList from "./CoursesList";
+import CourseFormContainer from "../course-form/CourseFormContainer";
 
 type EditCoursesState = {
   isLoading: boolean,
@@ -40,12 +40,6 @@ export default class EditCourses extends Component {
 
   onEditCourseCancelled = () => {
     this.setState({ editingCourseId: null });
-  };
-
-  handleSuccessMessageTimeout = () => {
-    setTimeout(() => {
-      this.setState({ successMessage: null });
-    }, 3000);
   };
 
   onCourseEditedSuccess = (editedCourse: Course,) => {
@@ -135,7 +129,7 @@ export default class EditCourses extends Component {
 
                 {editingCourse
                   ? (
-                    <CourseForm
+                    <CourseFormContainer
                       initialCourse={editingCourse}
                       isEditing
                       saveFormEndpoint="/edit-course"

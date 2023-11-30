@@ -190,7 +190,7 @@ const AddUsers = () => {
                   ? (
                     <RemoveInput
                       onClickFunction={() => onClickRemoveUser(user.id)}
-                      margin="ms-2 mt-3" />
+                      margin="ms-2 mt-3 mb-3" />
                   )
                   : null
                 }

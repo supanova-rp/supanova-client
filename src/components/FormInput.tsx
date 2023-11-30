@@ -5,7 +5,7 @@ import { InputChangeFunction } from "../types/index";
 
 interface Props {
   formId: string,
-  label: string,
+  label?: string,
   type: string,
   formGroupClassname: string,
   inputContainerClassname?: string,
@@ -31,7 +31,10 @@ const FormInput: React.FC<Props> = ({
     <Form.Group
       id={formId}
       className={formGroupClassname}>
-      <Form.Label>{label}</Form.Label>
+      {label
+        ? <Form.Label>{label}</Form.Label>
+        : null
+      }
       <div className={inputContainerClassname || ""}>
         <Form.Control
           type={type}

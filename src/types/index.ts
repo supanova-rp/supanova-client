@@ -21,13 +21,39 @@ export type CourseTitle = {
   title: string,
 }
 
-export type CourseSection = {
+export type CourseSection = CourseVideoSection | CourseQuizSection
+
+export type CourseVideoSection = {
   id: number,
   title: string,
   videoUrl: string | null,
+  isNewSection?: boolean,
   uploadProgress?: UploadProgress,
   completed?: boolean,
+  questions?: never,
 };
+
+export type CourseQuizSection = {
+  id: number,
+  questions: CourseQuizQuestion[],
+  isNewSection: boolean,
+  title?: never,
+  uploadProgress?: never,
+  completed?: never,
+  videoUrl?: never,
+}
+
+export type CourseQuizQuestion = {
+  id: string,
+  question: string,
+  answers: CourseQuizAnswer[],
+}
+
+export type CourseQuizAnswer = {
+  id: string,
+  answer: string,
+  isCorrectAnswer: boolean,
+}
 
 export type ErrorOptions = {
   message: null | string,

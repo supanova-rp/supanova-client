@@ -1,4 +1,3 @@
-/* eslint-disable react/no-array-index-key */
 import { Component } from "react";
 import toast from "react-hot-toast";
 
@@ -10,7 +9,7 @@ import { Course } from "src/types";
 import { feedbackMessages } from "src/constants/constants";
 
 import AdminHeader from "../AdminHeader";
-import CourseForm from "../course-form/CourseForm";
+import CourseFormContainer from "../course-form/CourseFormContainer";
 
 export default class AddCourse extends Component {
 
@@ -27,7 +26,7 @@ export default class AddCourse extends Component {
       courseFormKey: Date.now(),
     });
 
-    // toast.success(feedbackMessages.addCourseSuccess);
+    toast.success(feedbackMessages.addCourseSuccess);
   };
 
   onAddCourseCancelled = () => {
@@ -52,7 +51,7 @@ export default class AddCourse extends Component {
     return (
       <>
         <AdminHeader title="Add a New Course" />
-        <CourseForm
+        <CourseFormContainer
           key={courseFormKey}
           initialCourse={this.initialCourse}
           saveFormEndpoint="/add-course"

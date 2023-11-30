@@ -1,18 +1,21 @@
-/* eslint-disable jsx-a11y/media-has-caption */
 import React, { createRef } from "react";
 import { AxiosProgressEvent } from "axios";
 
-import { CourseSection } from "../../../types/index";
+import { CourseQuizQuestion, CourseSection } from "../../../types/index";
 
-import FilePicker from "./FilePicker";
-import FormInput from "../../FormInput";
-import RemoveInput from "../../RemoveInput";
+import VideoSection from "./VideoSection";
+import QuizSection from "./QuizSection";
+import AddMoreInputs from "src/components/AddMoreInputs";
 
 interface Props {
-  index: number,
   section: CourseSection,
-  canRemove?: boolean,
+  isLastSection: boolean,
+  canRemoveVideoSection: boolean,
   onChangeSectionTitle: (parameter1: number, parameter2: string) => void,
+  onHandleUpdateQuiz: (quizId: number, quizQuestionsAndAnswers: CourseQuizQuestion[]) => void,
+  onClickAddNewQuizQuestion: (quizId: number) => void,
+  onHandleAddNewQuizAnswer: (quizId: number, updatedQuizQuestions: CourseQuizQuestion[]) => void,
+  onClickRemoveQuizQuestion: (quizId: number, questionId: string) => void,
   onFileUploaded: (parameter1: number, parameter2: string) => void,
   onFileUploadProgress: (parameter1: AxiosProgressEvent, parameter2: number) => void,
   onFileUploadCancelled: (paramater: number) => void,
@@ -71,59 +74,52 @@ export default class CourseFormSection extends React.Component<Props> {
   };
 
   render() {
-    const marginStartRemoveSectionIcon = this.props.section.videoUrl ? "ms-4" : "ms-2";
+    const {
+      section,
+      isLastSection,
+      canRemoveVideoSection,
+      onChangeSectionTitle,
+      onHandleUpdateQuiz,
+      handleRemoveSection,
+      onFileUploadProgress,
+      onClickAddNewQuizQuestion,
+      onHandleAddNewQuizAnswer,
+      onClickRemoveQuizQuestion,
+    } = this.props;
 
-    return (
-      <div
-        className="d-flex flex-row align-items-center"
-        key={`chapter-${this.props.index}`}>
-        <div>
-          <FormInput
-            formId={`course-section-${this.props.section.id}`}
-            formGroupClassname="my-4 section-input"
-            label="Section Title"
-            type="text"
-            value={this.props.section.title}
-            onChange={(e) => this.props.onChangeSectionTitle(this.props.section.id, e.target.value)}
-            Component={(
-              <FilePicker
-                sectionId={this.props.section.id}
-                abortController={this.abortController}
-                fileInputRef={this.fileInputRef}
-                onFileUploaded={this.handleFileUploaded}
-                onFileUploadProgress={this.props.onFileUploadProgress}
-                uploadProgress={this.props.section.uploadProgress}
-                onClickCancelFileUpload={this.onClickCancelFileUpload} />
-            )} />
-        </div>
-
-        <div className="d-flex align-items-center">
-          {this.props.section.videoUrl
-            ? (
-              <div className="ms-5">
-                <video
-                  id="my-player"
-                  className="video-js-edit mb-4"
-                  controls
-                  preload="auto"
-                  src={this.props.section.videoUrl} />
-              </div>
-            )
+    if (section.videoUrl === undefined) {
+      return (
+        <>
+          <QuizSection
+            section={section}
+            onHandleUpdateQuiz={onHandleUpdateQuiz}
+            onHandleAddNewQuizAnswer={onHandleAddNewQuizAnswer}
+            handleRemoveSection={handleRemoveSection}
+            onClickRemoveQuizQuestion={onClickRemoveQuizQuestion} />
+          <AddMoreInputs
+            title="Add quiz question"
+            onClick={() => onClickAddNewQuizQuestion(section.id)}
+            marginBottom="mb-5" />
+          {!isLastSection
+            ? <hr />
             : null
           }
+        </>
+      );
+    }
 
-          <div>
-            {this.props.canRemove
-              ? (
-                <RemoveInput
-                  onClickFunction={this.onClickRemoveSection}
-                  margin={marginStartRemoveSectionIcon} />
-              )
-              : null
-            }
-          </div>
-        </div>
-      </div>
+    return (
+      <VideoSection
+        section={section}
+        isLastSection={isLastSection}
+        canRemoveVideoSection={canRemoveVideoSection}
+        abortController={this.abortController}
+        fileInputRef={this.fileInputRef}
+        onChangeSectionTitle={onChangeSectionTitle}
+        handleFileUploaded={this.handleFileUploaded}
+        onFileUploadProgress={onFileUploadProgress}
+        onClickCancelFileUpload={this.onClickCancelFileUpload}
+        onClickRemoveSection={this.onClickRemoveSection} />
     );
   }
 }

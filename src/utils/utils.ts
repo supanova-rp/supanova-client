@@ -1,7 +1,11 @@
-import uuid from "react-uuid";
-
 import { API_DOMAIN, EMAIL_JS_PUBLIC_KEY, EMAIL_JS_SERVICE_ID, EMAIL_JS_TEMPLATE_ID } from "src/constants/constants";
-import { Course, CourseSection, UserInfoToUpdate, User, FirebaseUser } from "../types/index";
+import {
+  Course,
+  UserInfoToUpdate,
+  User,
+  FirebaseUser,
+} from "../types/index";
+import uuid from "react-uuid";
 
 export const updateUsers = (users: User[], userId: string, userInfoToUpdate: UserInfoToUpdate) => {
   return users.map((user) => {
@@ -24,28 +28,6 @@ export const getClassNameSidebarTab = (activeTab: string, tabName: string) => {
   return "btn-light sidebar";
 };
 
-export const getUpdatedSections = (sections: CourseSection[], sectionId: number, key: string, value: string | number | null | undefined) => {
-  const updatedSections = sections.map((section) => {
-    if (sectionId === section.id) {
-      return {
-        ...section,
-        [key]: value,
-      };
-    }
-
-    return section;
-  });
-
-  return updatedSections;
-};
-
-export const getUpdatedCourse = (course: Course, sectionId: number, key: string, value: string | number | null | undefined) => {
-  return {
-    ...course,
-    sections: getUpdatedSections(course.sections, sectionId, key, value),
-  };
-};
-
 export const getInitialCourseState = () => {
   return  {
     id: Date.now(),
@@ -60,16 +42,6 @@ export const getInitialCourseState = () => {
       },
     ],
   };
-};
-
-export const isVideoUploadInProgress = (course: Course) => {
-  return course.sections.some((section) => {
-    return typeof section.uploadProgress === "number" && section.uploadProgress < 1;
-  });
-};
-
-export const everySectionHasVideo = (course: Course) => {
-  return course.sections.every((section) => section.videoUrl);
 };
 
 export const getDeletedSectionsIds = (course: Course, initialCourse: Course) => {

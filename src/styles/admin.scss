@@ -1,5 +1,5 @@
 .section-input {
-  width: 400px;
+  width: 74%;
 }
 
 .file-picker {
@@ -171,4 +171,26 @@
 
 .toggle-button .form-check-input:focus {
   box-shadow: none;
+}
+
+.quiz-checkbox {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.quiz-plus-icon {
+  margin-top: -10px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  width: 74%;
+  margin-left: 24px;
+}
+
+.add-more-inputs-container {
+  display: flex;
+  align-items: center; 
+  justify-content: space-between;
+  width: 17%; 
 }
