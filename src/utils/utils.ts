@@ -64,10 +64,25 @@ export const getDeletedSectionsIds = (course: Course, initialCourse: Course) => 
 };
 
 export const getSectionsWithPositions = (course: Course) => {
-  const sectionsWithPositions = course.sections.map((section, index) => {
+  const sectionsWithPositions = course.sections.map((section, sectionIndex) => {
+    if (section?.questions) {
+      const quizQuestionsWithPositions = section.questions.map((quizQuestion, quizQuestionIndex) => {
+        return {
+          ...quizQuestion,
+          position: quizQuestionIndex,
+        };
+      });
+
+      return {
+        ...section,
+        position: sectionIndex,
+        questions: quizQuestionsWithPositions
+      };
+    }
+
     return {
       ...section,
-      position: index,
+      position: sectionIndex,
     };
   });
 

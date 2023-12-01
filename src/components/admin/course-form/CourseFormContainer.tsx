@@ -8,7 +8,13 @@ import {
   FormSubmitEvent,
   RequestBody
 } from "src/types";
-import { everySectionHasVideo, isVideoUploadInProgress } from "./utils";
+import {
+  everyQuizQuestionHasCorrectAnswer,
+  everyVideoSectionHasVideo,
+  isQuizSection,
+  isVideoSection,
+  isVideoUploadInProgress
+} from "./utils";
 import { feedbackMessages } from "src/constants/constants";
 import { ReactComponent as WarningIcon } from "../../../icons/warningIcon.svg";
 
@@ -42,6 +48,14 @@ export default class CourseFormContainer extends Component <CourseFormContainerP
     areActionsDisabled: false,
     isDeleteModalVisible: false,
     course: this.props.initialCourse,
+  };
+
+  getVideoSections = () => {
+    return this.state.course.sections.filter(isVideoSection);
+  };
+
+  getQuizSections = () => {
+    return this.state.course.sections.filter(isQuizSection);
   };
 
   onUpdateCourse = (course: Course) => {
@@ -92,14 +106,19 @@ export default class CourseFormContainer extends Component <CourseFormContainerP
     const { course } = this.state;
     const { initialCourse, getRequestBody } = this.props;
 
-    if (!isVideoUploadInProgress(course) && everySectionHasVideo(course)) {
+    if (!isVideoUploadInProgress(course) && everyVideoSectionHasVideo(this.getVideoSections()) && everyQuizQuestionHasCorrectAnswer(this.getQuizSections())) {
       const requestBody = getRequestBody(course, initialCourse);
 
       requestSaveCourse(requestBody);
-    } else {
+    } else if (isVideoUploadInProgress(course) || !everyVideoSectionHasVideo(this.getVideoSections())) {
       this.onError({
         type: "warning",
         message: feedbackMessages.videoMissing,
+      });
+    } else {
+      this.onError({
+        type: "warning",
+        message: feedbackMessages.correctAnswerMissing
       });
     }
   };
@@ -168,6 +187,7 @@ export default class CourseFormContainer extends Component <CourseFormContainerP
                       <Form onSubmit={(e) => this.onClickSave(e, requestSaveCourse)}>
                         <CourseForm
                           course={course}
+                          videoSections={this.getVideoSections()}
                           isEditing={isEditing}
                           areActionsDisabled={areActionsDisabled}
                           onUpdateCourse={this.onUpdateCourse}

@@ -1,8 +1,7 @@
 import { AxiosProgressEvent } from "axios";
 import { Button } from "react-bootstrap";
 
-import { Course, CourseQuizQuestion } from "src/types";
-import { isVideoSection } from "./utils";
+import { Course, CourseQuizQuestion, CourseSection } from "src/types";
 
 import AddMoreInputs from "../../AddMoreInputs";
 import EditingCourseHeader from "../edit-courses/EditingCourseHeader";
@@ -12,6 +11,7 @@ import FormInput from "../../FormInput";
 interface Props {
   course: Course,
   isEditing: boolean,
+  videoSections: CourseSection[],
   areActionsDisabled: boolean,
   onChangeCourseField: (key: string, newInputValue: string) => void,
   onChangeSectionTitle: (sectionId: number, newInputValue: string) => void,
@@ -32,6 +32,7 @@ interface Props {
 const CourseFormBody: React.FC<Props> = ({
   course,
   isEditing = false,
+  videoSections,
   areActionsDisabled,
   onChangeCourseField,
   onChangeSectionTitle,
@@ -48,8 +49,6 @@ const CourseFormBody: React.FC<Props> = ({
   onCourseFormCancelled,
   onShowDeleteModal,
 }) => {
-  const videoSections = course.sections.filter(isVideoSection);
-
   return (
     <div className="my-4">
       {isEditing

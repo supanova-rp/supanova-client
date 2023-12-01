@@ -4,6 +4,7 @@ import { AxiosProgressEvent } from "axios";
 import {
   Course,
   CourseQuizQuestion,
+  CourseSection,
 } from "src/types";
 import {
   getCourseWithNewSection,
@@ -17,6 +18,7 @@ import CourseFormBody from "./CourseFormBody";
 interface CourseFormProps {
   course: Course,
   isEditing: boolean,
+  videoSections: CourseSection[],
   areActionsDisabled: boolean,
   onUpdateCourse: (course: Course) => void,
   onShowDeleteModal: () => void,
@@ -145,6 +147,7 @@ export default class CourseForm extends Component <CourseFormProps> {
   render() {
     const {
       course,
+      videoSections,
       onCourseFormCancelled,
       isEditing,
       areActionsDisabled,
@@ -154,6 +157,7 @@ export default class CourseForm extends Component <CourseFormProps> {
     return (
       <CourseFormBody
         course={course}
+        videoSections={videoSections}
         isEditing={isEditing}
         areActionsDisabled={areActionsDisabled}
         onChangeCourseField={this.onChangeCourseField}

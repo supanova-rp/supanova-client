@@ -20,6 +20,7 @@ export const unauthedRoutes = ["/register", "/forgot-password"];
 
 export const feedbackMessages = {
   videoMissing: "Every section needs a video.",
+  correctAnswerMissing: "Every quiz question needs a correct answer.",
   addCourseSuccess: "Successfully created a new course!",
   saveCourseError: "Failed to save course. Try again.",
   saveCourseSuccess: "Successfully saved course!",

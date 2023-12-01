@@ -10,7 +10,7 @@ export const isVideoSection = (section: CourseSection): section is CourseVideoSe
   return section.videoUrl !== undefined;
 };
 
-const isQuizSection = (section: CourseSection): section is CourseQuizSection => {
+export const isQuizSection = (section: CourseSection): section is CourseQuizSection => {
   return section.questions !== undefined;
 };
 
@@ -20,8 +20,27 @@ export const isVideoUploadInProgress = (course: Course) => {
   });
 };
 
-export const everySectionHasVideo = (course: Course) => {
-  return course.sections.every((section) => section.videoUrl);
+export const everyVideoSectionHasVideo = (videoSections: CourseVideoSection[]) => {
+  return videoSections.every((videoSection) => videoSection.videoUrl);
+};
+
+export const everyQuizQuestionHasCorrectAnswer = (quizSections: CourseQuizSection[]) => {
+  let everyQuizQuestionHasAtLeast1CorrectAnswer = true;
+
+  for (let i = 0; i < quizSections.length; i++) {
+    const currentQuizSection = quizSections[i];
+
+    for (let j = 0; j < currentQuizSection.questions.length; j++) {
+      const currentQuizQuestion = currentQuizSection.questions[j];
+
+      if (!currentQuizQuestion.answers.some((quizAnswer) => quizAnswer.isCorrectAnswer)) {
+        everyQuizQuestionHasAtLeast1CorrectAnswer = false;
+        break;
+      }
+    }
+  }
+
+  return everyQuizQuestionHasAtLeast1CorrectAnswer;
 };
 
 export const getUpdatedSections = (sections: CourseSection[], sectionId: number, key: string, value: any) => {
