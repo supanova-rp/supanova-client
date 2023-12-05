@@ -38,8 +38,9 @@ const QuizAnswers: React.FC<QuizAnswersProps> = ({
               <FormCheck
                 className="me-3"
                 type="checkbox"
+                checked={isCorrectAnswer}
                 id={`quiz-checkbox-${answerId}`}
-                onClick={() => onClickToggleCorrectQuizAnswer(answerId, isCorrectAnswer)}/>
+                onChange={() => onClickToggleCorrectQuizAnswer(answerId, isCorrectAnswer)}/>
               <FormInput
                 formId={`quiz-answer-${answerId}`}
                 type="text"

@@ -31,10 +31,12 @@ export type CourseVideoSection = {
   uploadProgress?: UploadProgress,
   completed?: boolean,
   questions?: never,
+  type?: never,
 };
 
 export type CourseQuizSection = {
   id: number,
+  type?: string,
   questions: CourseQuizQuestion[],
   isNewSection: boolean,
   title?: never,
@@ -47,6 +49,14 @@ export type CourseQuizQuestion = {
   id: string,
   question: string,
   answers: CourseQuizAnswer[],
+}
+
+export type CourseQuizQuestionServer = {
+  id: number,
+  question: string,
+  position: number,
+  quizSectionId: number,
+  answers: CourseQuizAnswer[]
 }
 
 export type CourseQuizAnswer = {

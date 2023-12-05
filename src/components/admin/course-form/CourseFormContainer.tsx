@@ -1,9 +1,11 @@
 import { Component } from "react";
 import { Form } from "react-bootstrap";
 import toast from "react-hot-toast";
+import { PulseLoader } from "react-spinners";
 
 import {
   Course,
+  CourseQuizQuestionServer,
   ErrorOptions,
   FormSubmitEvent,
   RequestBody
@@ -17,6 +19,7 @@ import {
 } from "./utils";
 import { feedbackMessages } from "src/constants/constants";
 import { ReactComponent as WarningIcon } from "../../../icons/warningIcon.svg";
+import { colors } from "src/constants/colorPalette";
 
 import CourseForm from "./CourseForm";
 import DeleteCourseModal from "src/components/modals/DeleteCourseModal";
@@ -24,6 +27,7 @@ import RequestWrapper from "src/components/RequestWrapper";
 
 type CourseFormContainerState = {
   course: Course,
+  isLoading: boolean,
   areActionsDisabled: boolean,
   isDeleteModalVisible: boolean,
 }
@@ -46,6 +50,8 @@ export default class CourseFormContainer extends Component <CourseFormContainerP
 
   state: CourseFormContainerState = {
     areActionsDisabled: false,
+    // when we are editing a course, we need to fetch the quiz questions first
+    isLoading: this.props.isEditing,
     isDeleteModalVisible: false,
     course: this.props.initialCourse,
   };
@@ -68,6 +74,13 @@ export default class CourseFormContainer extends Component <CourseFormContainerP
 
   onHideDeleteModal = () => {
     this.setState({ isDeleteModalVisible: false });
+  };
+
+  onRequestQuizQuestionsBegin = () => {
+    this.setState({
+      areActionsDisabled: true,
+      isLoading: true,
+    });
   };
 
   onRequestBegin = () => {
@@ -123,6 +136,37 @@ export default class CourseFormContainer extends Component <CourseFormContainerP
     }
   };
 
+  onGetQuizQuestionsSuccess = (quizQuestions: CourseQuizQuestionServer[]) => {
+    const updatedSectionsWithQuizQuestions = this.state.course.sections.map((section) => {
+      if (section.videoUrl) {
+        return section;
+      }
+
+      return {
+        ...section,
+        questions: quizQuestions.filter(question => question.quizSectionId === section.id)
+      };
+    });
+
+    const updatedCourse = {
+      ...this.state.course,
+      sections: updatedSectionsWithQuizQuestions
+    };
+
+    this.setState({
+      areActionsDisabled: false,
+      isLoading: false,
+      course: updatedCourse,
+    });
+  };
+
+  onGetQuizQuestionsError = () => {
+    this.onError({
+      type: "danger",
+      message: feedbackMessages.getEditCourseError,
+    });
+  };
+
   onSaveCourseSuccess = () => {
     this.setState({
       areActionsDisabled: false,
@@ -146,6 +190,7 @@ export default class CourseFormContainer extends Component <CourseFormContainerP
 
     this.setState({
       areActionsDisabled: false,
+      isLoading: false,
     });
 
     if (type === "danger") {
@@ -162,54 +207,79 @@ export default class CourseFormContainer extends Component <CourseFormContainerP
     const {
       course,
       areActionsDisabled,
+      isLoading,
       isDeleteModalVisible,
     } = this.state;
 
+    console.log(">>> course: ", course);
+
     const { onCourseFormCancelled, isEditing, saveFormEndpoint } = this.props;
+    const quizSections = this.getQuizSections();
 
     if (course) {
       return (
         <RequestWrapper
-          endpoint={saveFormEndpoint}
-          onRequestBegin={this.onRequestBegin}
-          onError={this.onSaveCourseError}
-          onSuccess={this.onSaveCourseSuccess}
-          render={(requestSaveCourse) => {
+          requestOnMount
+          skip={!isEditing && !quizSections.length}
+          endpoint="/quiz-questions"
+          onError={this.onGetQuizQuestionsError}
+          onRequestBegin={this.onRequestQuizQuestionsBegin}
+          onSuccess={this.onGetQuizQuestionsSuccess}
+          requestBody={{ quizIds: quizSections?.map((quizSection) => quizSection.id) }}
+          render={() => {
             return (
               <RequestWrapper
-                endpoint="/delete-course"
+                endpoint={saveFormEndpoint}
                 onRequestBegin={this.onRequestBegin}
-                onError={this.onDeleteCourseError}
-                onSuccess={this.onDeleteCourseSuccess}
-                render={(requestDeleteCourse) => {
+                onError={this.onSaveCourseError}
+                onSuccess={this.onSaveCourseSuccess}
+                render={(requestSaveCourse) => {
                   return (
-                    <>
-                      <Form onSubmit={(e) => this.onClickSave(e, requestSaveCourse)}>
-                        <CourseForm
-                          course={course}
-                          videoSections={this.getVideoSections()}
-                          isEditing={isEditing}
-                          areActionsDisabled={areActionsDisabled}
-                          onUpdateCourse={this.onUpdateCourse}
-                          onShowDeleteModal={this.onShowDeleteModal}
-                          onCourseFormCancelled={onCourseFormCancelled} />
-                      </Form>
+                    <RequestWrapper
+                      endpoint="/delete-course"
+                      onRequestBegin={this.onRequestBegin}
+                      onError={this.onDeleteCourseError}
+                      onSuccess={this.onDeleteCourseSuccess}
+                      render={(requestDeleteCourse) => {
+                        if (isLoading) {
+                          return (
+                            <div className="w-100 h-100 d-flex justify-content-center align-items-center pb-5">
+                              <PulseLoader
+                                color={colors.orange}
+                                className="m-5" />
+                            </div>
+                          );
+                        }
 
-                      {isDeleteModalVisible
-                        ? (
-                          <DeleteCourseModal
-                            areActionsDisabled={areActionsDisabled}
-                            onHideDeleteModal={this.onHideDeleteModal}
-                            onClickDelete={() => this.onClickDelete(requestDeleteCourse)} />
-                        )
-                        : null
-                      }
-                    </>
+                        return (
+                          <>
+                            <Form onSubmit={(e) => this.onClickSave(e, requestSaveCourse)}>
+                              <CourseForm
+                                course={course}
+                                videoSections={this.getVideoSections()}
+                                isEditing={isEditing}
+                                areActionsDisabled={areActionsDisabled}
+                                onUpdateCourse={this.onUpdateCourse}
+                                onShowDeleteModal={this.onShowDeleteModal}
+                                onCourseFormCancelled={onCourseFormCancelled} />
+                            </Form>
+
+                            {isDeleteModalVisible
+                              ? (
+                                <DeleteCourseModal
+                                  areActionsDisabled={areActionsDisabled}
+                                  onHideDeleteModal={this.onHideDeleteModal}
+                                  onClickDelete={() => this.onClickDelete(requestDeleteCourse)} />
+                              )
+                              : null
+                            }
+                          </>
+                        );
+                      }} />
                   );
-                }} />
+                }}/>
             );
           }}/>
-
       );
     }
 

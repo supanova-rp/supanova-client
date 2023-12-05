@@ -4,7 +4,9 @@ import useRequest from "../hooks/useRequest";
 type Props = {
   render: (r: any) => ReactElement<any, any> | null,
   endpoint: string,
+  skip?: boolean,
   requestOnMount?: boolean,
+  requestBody?: any,
   onSuccess: (d: any) => void,
   onRequestBegin: () => void,
   onError: (e: string) => void,
@@ -13,7 +15,9 @@ type Props = {
 const RequestWrapper: React.FC<Props> = ({
   render,
   endpoint,
+  skip,
   requestOnMount = false,
+  requestBody,
   onRequestBegin,
   onSuccess,
   onError,
@@ -21,8 +25,8 @@ const RequestWrapper: React.FC<Props> = ({
   const request = useRequest(endpoint);
 
   useEffect(() => {
-    if (requestOnMount) {
-      request({ onRequestBegin, onError, onSuccess });
+    if (requestOnMount && !skip) {
+      request({ requestBody, onRequestBegin, onError, onSuccess });
     }
   }, []);
 

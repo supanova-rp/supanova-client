@@ -30,7 +30,8 @@ const CoursesList: React.FC<Props> = ({ courses, successMessage, onClickEditCour
                 return (
                   <p
                     key={`${index}-${section.title}`}
-                    className="text-secondary courses-list-section-title">{section.title}
+                    className="text-secondary courses-list-section-title">
+                    {section?.type === "quiz" ? "Quiz" : section.title}
                   </p>
                 );
               })}

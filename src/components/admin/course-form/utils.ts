@@ -11,7 +11,7 @@ export const isVideoSection = (section: CourseSection): section is CourseVideoSe
 };
 
 export const isQuizSection = (section: CourseSection): section is CourseQuizSection => {
-  return section.questions !== undefined;
+  return section.videoUrl === undefined;
 };
 
 export const isVideoUploadInProgress = (course: Course) => {
