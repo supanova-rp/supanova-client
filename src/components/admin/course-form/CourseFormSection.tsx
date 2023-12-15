@@ -10,6 +10,7 @@ import AddMoreInputs from "src/components/AddMoreInputs";
 interface Props {
   section: CourseSection,
   isLastSection: boolean,
+  isEditing: boolean,
   canRemoveVideoSection: boolean,
   onChangeSectionTitle: (parameter1: number, parameter2: string) => void,
   onHandleUpdateQuiz: (quizId: number, quizQuestionsAndAnswers: CourseQuizQuestion[]) => void,
@@ -76,6 +77,7 @@ export default class CourseFormSection extends React.Component<Props> {
   render() {
     const {
       section,
+      isEditing,
       isLastSection,
       canRemoveVideoSection,
       onChangeSectionTitle,
@@ -92,6 +94,7 @@ export default class CourseFormSection extends React.Component<Props> {
         <>
           <QuizSection
             section={section}
+            isEditing={isEditing}
             onHandleUpdateQuiz={onHandleUpdateQuiz}
             onHandleAddNewQuizAnswer={onHandleAddNewQuizAnswer}
             handleRemoveSection={handleRemoveSection}

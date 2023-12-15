@@ -86,6 +86,7 @@ const CourseFormBody: React.FC<Props> = ({
             <CourseFormSection
               key={section.id}
               section={section}
+              isEditing={isEditing}
               isLastSection={index === course.sections.length - 1}
               canRemoveVideoSection={videoSections.length > 1}
               onHandleAddNewQuizAnswer={onHandleAddNewQuizAnswer}

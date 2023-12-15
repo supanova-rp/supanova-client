@@ -81,11 +81,12 @@ export default class CourseForm extends Component <CourseFormProps> {
   };
 
   onClickAddNewQuizSection = () => {
-    const { course, onUpdateCourse } = this.props;
+    const { course, onUpdateCourse, isEditing } = this.props;
 
     const newQuizSection = {
       id: Date.now(),
-      questions: [getInitialEmptyQuizQuestionAndAnswers()],
+      type: "quiz",
+      questions: [getInitialEmptyQuizQuestionAndAnswers(isEditing)],
       isNewSection: this.props.isEditing,
     };
 
@@ -95,9 +96,9 @@ export default class CourseForm extends Component <CourseFormProps> {
   };
 
   onClickAddNewQuizQuestion = (quizId: number) => {
-    const { course, onUpdateCourse } = this.props;
+    const { course, onUpdateCourse, isEditing } = this.props;
 
-    const courseWithUpdatedQuiz = getQuizWithNewQuizQuestion(course, quizId);
+    const courseWithUpdatedQuiz = getQuizWithNewQuizQuestion(course, quizId, isEditing);
 
     onUpdateCourse(courseWithUpdatedQuiz);
   };

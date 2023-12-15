@@ -7,10 +7,11 @@ import { ADMINS_TABS } from "src/constants/constants";
 
 interface Props {
   activeTab: string,
+  isAdminDashboard?: boolean,
   setActiveTab: SetStringFunction;
 }
 
-const SidebarContainer: React.FC<Props> = ({ activeTab, setActiveTab }) => {
+const SidebarContainer: React.FC<Props> = ({ activeTab, isAdminDashboard, setActiveTab }) => {
   const adminTabs = (Object.values(ADMINS_TABS));
 
   return (
@@ -18,6 +19,7 @@ const SidebarContainer: React.FC<Props> = ({ activeTab, setActiveTab }) => {
       <div className="col-20">
         <Sidebar
           setActiveTab={setActiveTab}
+          isAdminDashboard={isAdminDashboard}
           tabs={adminTabs}
           activeTab={activeTab} />
       </div>

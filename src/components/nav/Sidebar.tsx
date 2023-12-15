@@ -6,18 +6,22 @@ import { getClassNameSidebarTab } from "src/utils/utils";
 
 interface Props {
   activeTab: string,
+  isAdminDashboard?: boolean,
   tabs: string[],
   setActiveTab: SetStringFunction,
 }
 
 const Sidebar: React.FC<Props> = ({
   tabs,
+  isAdminDashboard = false,
   activeTab,
   setActiveTab,
 }) => {
+  const positionFixedClassname = isAdminDashboard ? "position-fixed w-100" : "";
+
   return (
     <div
-      className="nav flex-column nav-pills"
+      className={`nav flex-column nav-pills ${positionFixedClassname}`}
       id="v-pills-tab"
       role="tablist"
       aria-orientation="vertical">

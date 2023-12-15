@@ -13,8 +13,8 @@ import {
 import {
   everyQuizQuestionHasCorrectAnswer,
   everyVideoSectionHasVideo,
-  isQuizSection,
-  isVideoSection,
+  getQuizSections,
+  getVideoSections,
   isVideoUploadInProgress
 } from "./utils";
 import { feedbackMessages } from "src/constants/constants";
@@ -27,6 +27,7 @@ import RequestWrapper from "src/components/RequestWrapper";
 
 type CourseFormContainerState = {
   course: Course,
+  initialCourse: Course,
   isLoading: boolean,
   areActionsDisabled: boolean,
   isDeleteModalVisible: boolean,
@@ -50,18 +51,10 @@ export default class CourseFormContainer extends Component <CourseFormContainerP
 
   state: CourseFormContainerState = {
     areActionsDisabled: false,
-    // when we are editing a course, we need to fetch the quiz questions first
     isLoading: this.props.isEditing,
     isDeleteModalVisible: false,
+    initialCourse: this.props.initialCourse,
     course: this.props.initialCourse,
-  };
-
-  getVideoSections = () => {
-    return this.state.course.sections.filter(isVideoSection);
-  };
-
-  getQuizSections = () => {
-    return this.state.course.sections.filter(isQuizSection);
   };
 
   onUpdateCourse = (course: Course) => {
@@ -116,14 +109,14 @@ export default class CourseFormContainer extends Component <CourseFormContainerP
   onClickSave = async (event: FormSubmitEvent, requestSaveCourse: any) => {
     event.preventDefault();
 
-    const { course } = this.state;
-    const { initialCourse, getRequestBody } = this.props;
+    const { course, initialCourse } = this.state;
+    const { getRequestBody } = this.props;
 
-    if (!isVideoUploadInProgress(course) && everyVideoSectionHasVideo(this.getVideoSections()) && everyQuizQuestionHasCorrectAnswer(this.getQuizSections())) {
+    if (!isVideoUploadInProgress(course) && everyVideoSectionHasVideo(getVideoSections(course)) && everyQuizQuestionHasCorrectAnswer(getQuizSections(course))) {
       const requestBody = getRequestBody(course, initialCourse);
 
       requestSaveCourse(requestBody);
-    } else if (isVideoUploadInProgress(course) || !everyVideoSectionHasVideo(this.getVideoSections())) {
+    } else if (isVideoUploadInProgress(course) || !everyVideoSectionHasVideo(getVideoSections(course))) {
       this.onError({
         type: "warning",
         message: feedbackMessages.videoMissing,
@@ -157,6 +150,7 @@ export default class CourseFormContainer extends Component <CourseFormContainerP
       areActionsDisabled: false,
       isLoading: false,
       course: updatedCourse,
+      initialCourse: updatedCourse,
     });
   };
 
@@ -211,10 +205,9 @@ export default class CourseFormContainer extends Component <CourseFormContainerP
       isDeleteModalVisible,
     } = this.state;
 
-    console.log(">>> course: ", course);
-
     const { onCourseFormCancelled, isEditing, saveFormEndpoint } = this.props;
-    const quizSections = this.getQuizSections();
+    const quizSections = getQuizSections(course);
+    const videoSections = getVideoSections(course);
 
     if (course) {
       return (
@@ -225,7 +218,7 @@ export default class CourseFormContainer extends Component <CourseFormContainerP
           onError={this.onGetQuizQuestionsError}
           onRequestBegin={this.onRequestQuizQuestionsBegin}
           onSuccess={this.onGetQuizQuestionsSuccess}
-          requestBody={{ quizIds: quizSections?.map((quizSection) => quizSection.id) }}
+          requestBody={{ quizSectionIds: quizSections?.map((quizSection) => quizSection.id) }}
           render={() => {
             return (
               <RequestWrapper
@@ -256,7 +249,7 @@ export default class CourseFormContainer extends Component <CourseFormContainerP
                             <Form onSubmit={(e) => this.onClickSave(e, requestSaveCourse)}>
                               <CourseForm
                                 course={course}
-                                videoSections={this.getVideoSections()}
+                                videoSections={videoSections}
                                 isEditing={isEditing}
                                 areActionsDisabled={areActionsDisabled}
                                 onUpdateCourse={this.onUpdateCourse}

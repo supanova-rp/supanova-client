@@ -1,9 +1,10 @@
-.home-container {
-  min-height: 100%;
-}
-
 .card.card-body {
   border: none !important;
+}
+
+.home-container {
+  display: flex;
+  margin-top: 80px;
 }
 
 .card.sidebar-content-container-home {

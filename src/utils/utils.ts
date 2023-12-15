@@ -1,6 +1,5 @@
 import { API_DOMAIN, EMAIL_JS_PUBLIC_KEY, EMAIL_JS_SERVICE_ID, EMAIL_JS_TEMPLATE_ID } from "src/constants/constants";
 import {
-  Course,
   UserInfoToUpdate,
   User,
   FirebaseUser,
@@ -26,67 +25,6 @@ export const getClassNameSidebarTab = (activeTab: string, tabName: string) => {
   }
 
   return "btn-light sidebar";
-};
-
-export const getInitialCourseState = () => {
-  return  {
-    id: Date.now(),
-    title: "",
-    description: "",
-    sections: [
-      {
-        id: Date.now(),
-        title: "",
-        videoUrl: null,
-        uploadProgress: null,
-      },
-    ],
-  };
-};
-
-export const getDeletedSectionsIds = (course: Course, initialCourse: Course) => {
-  // Getting the ids of the deleted sections so the back end can delete them in the table
-  const sectionsThatDontExistInEditedCourse = initialCourse.sections.filter((section) => {
-    const sectionExistsInEditedCourse = course.sections.some((editedCourseSection) => {
-      return editedCourseSection.id === section.id;
-    });
-
-    if (sectionExistsInEditedCourse) {
-      return false;
-    }
-
-    return true;
-  });
-
-  const idsOfDeletedSections = sectionsThatDontExistInEditedCourse?.map((section) => section.id);
-
-  return idsOfDeletedSections;
-};
-
-export const getSectionsWithPositions = (course: Course) => {
-  const sectionsWithPositions = course.sections.map((section, sectionIndex) => {
-    if (section?.questions) {
-      const quizQuestionsWithPositions = section.questions.map((quizQuestion, quizQuestionIndex) => {
-        return {
-          ...quizQuestion,
-          position: quizQuestionIndex,
-        };
-      });
-
-      return {
-        ...section,
-        position: sectionIndex,
-        questions: quizQuestionsWithPositions
-      };
-    }
-
-    return {
-      ...section,
-      position: sectionIndex,
-    };
-  });
-
-  return sectionsWithPositions;
 };
 
 interface RequestOptions {

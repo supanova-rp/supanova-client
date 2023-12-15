@@ -36,7 +36,7 @@ export type CourseVideoSection = {
 
 export type CourseQuizSection = {
   id: number,
-  type?: string,
+  type: string,
   questions: CourseQuizQuestion[],
   isNewSection: boolean,
   title?: never,
@@ -48,6 +48,7 @@ export type CourseQuizSection = {
 export type CourseQuizQuestion = {
   id: string,
   question: string,
+  isNewQuestion: boolean,
   answers: CourseQuizAnswer[],
 }
 
@@ -62,6 +63,7 @@ export type CourseQuizQuestionServer = {
 export type CourseQuizAnswer = {
   id: string,
   answer: string,
+  isNewAnswer: boolean,
   isCorrectAnswer: boolean,
 }
 
@@ -102,7 +104,14 @@ export type UploadUrlResponse = {
 export type EditCoursesRequestBody = {
   edited_course_id?: number,
   course?: Course,
-  deleted_sections_ids?: number[] | [],
+  deleted_section_ids_map?: DeletedSectionIdsMap,
+}
+
+type DeletedSectionIdsMap = {
+  videoSectionIds: number[] | [],
+  quizSectionIds: number[] | [],
+  questionIds: number[] | [],
+  answerIds: number[] | [],
 }
 
 export type RequestBody = {
@@ -111,7 +120,7 @@ export type RequestBody = {
   sections?: CourseSection[],
   edited_course_id?: number,
   edited_course?: Course,
-  deleted_sections_ids?: number[] | [],
+  deleted_sections_ids?: DeletedSectionIdsMap,
 }
 
 export type RequestOptions = {

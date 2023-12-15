@@ -12,6 +12,7 @@ import RemoveInput from "src/components/RemoveInput";
 
 interface QuizSectionProps {
   section: CourseQuizSection,
+  isEditing: boolean,
   onHandleUpdateQuiz: (quizId: number, quizQuestionsAndAnswers: CourseQuizQuestion[]) => void,
   onHandleAddNewQuizAnswer: (quizId: number, updatedQuizQuestions: CourseQuizQuestion[]) => void,
   onClickRemoveQuizQuestion: (quizId: number, questionId: string) => void,
@@ -20,6 +21,7 @@ interface QuizSectionProps {
 
 const QuizSection: React.FC<QuizSectionProps> = ({
   section,
+  isEditing,
   onHandleAddNewQuizAnswer,
   handleRemoveSection,
   onClickRemoveQuizQuestion,
@@ -27,7 +29,7 @@ const QuizSection: React.FC<QuizSectionProps> = ({
 }) => {
   const { id: quizId, questions } = section;
 
-  const canRemoveQuizAnswer = section.questions.length > 1;
+  const canRemoveQuizQuestion = section.questions.length > 1;
 
   const onChangeQuizQuestion = (questionId: string, inputValue: string) => {
     const updatedQuizQuestions = questions.map((question) => {
@@ -80,6 +82,7 @@ const QuizSection: React.FC<QuizSectionProps> = ({
             {
               id: uuid(),
               answer: "",
+              isNewAnswer: isEditing,
               isCorrectAnswer: false,
             }
           ]
@@ -163,7 +166,7 @@ const QuizSection: React.FC<QuizSectionProps> = ({
                 value={question}
                 onChange={(e) => onChangeQuizQuestion(questionId, e.target.value)} />
 
-              {canRemoveQuizAnswer
+              {canRemoveQuizQuestion
                 ? (
                   <RemoveInput
                     onClickFunction={() => onClickRemoveQuizQuestion(quizId, questionId)}

@@ -3,8 +3,8 @@ import { Component } from "react";
 import { Course } from "../../../types/index";
 import {
   getDeletedSectionsIds,
-  getSectionsWithPositions
-} from "../../../utils/utils";
+  getSectionsWithPositions,
+} from "../course-form/utils";
 import { feedbackMessages } from "src/constants/constants";
 
 import CourseErrorLoadingHandler from "../../CourseErrorLoadingHandler";
@@ -42,6 +42,14 @@ export default class EditCourses extends Component {
     this.setState({ editingCourseId: null });
   };
 
+  resetFeedbackMessage = (key: string) => {
+    setTimeout(() => {
+      this.setState({
+        [key]: null,
+      });
+    }, 1000);
+  };
+
   onCourseEditedSuccess = (editedCourse: Course,) => {
     const { allCourses, editingCourseId } = this.state;
 
@@ -59,6 +67,7 @@ export default class EditCourses extends Component {
       allCourses: updatedCoursesWithEditedCourse,
     });
 
+    this.resetFeedbackMessage("successMessage");
   };
 
   onCourseDeletedSuccess = (courseId: number) => {
@@ -70,6 +79,7 @@ export default class EditCourses extends Component {
       successMessage: feedbackMessages.deleteCourseSuccess
     });
 
+    this.resetFeedbackMessage("successMessage");
   };
 
   getRequestBody = (course: Course, initialCourse: Course,) => {
@@ -79,7 +89,7 @@ export default class EditCourses extends Component {
         ...course,
         sections: getSectionsWithPositions(course)
       },
-      deleted_sections_ids: getDeletedSectionsIds(course, initialCourse),
+      deleted_section_ids_map: getDeletedSectionsIds(course, initialCourse),
     };
   };
 

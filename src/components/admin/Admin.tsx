@@ -37,6 +37,7 @@ const Admin = () => {
   return (
     <div className="d-flex admin-container">
       <SidebarContainer
+        isAdminDashboard
         activeTab={activeTab}
         setActiveTab={setActiveTab} />
       <Card

@@ -26,7 +26,7 @@ const Navbar: React.FC<NavbarProps> = ({ isAdmin }) => {
 
   return (
     <BootstrapNavbar>
-      <nav className="navbar w-100 nav px-4 py-0">
+      <nav className="navbar nav px-4 py-0">
         <img
           className="navbar-brand"
           src={SupanovaLogo}

@@ -100,10 +100,10 @@ const Home = () => {
   };
 
   return (
-    <div className="home-container">
+    <>
       <Navbar
         isAdmin={isAdmin} />
-      <div className="d-flex h-100 w-100">
+      <div className="home-container">
         <SidebarContainer
           activeTab={activeTab}
           setActiveTab={setActiveTab} />
@@ -113,7 +113,7 @@ const Home = () => {
           {renderTabContent()}
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -1,12 +1,12 @@
 import { Component } from "react";
 import toast from "react-hot-toast";
 
+import { Course } from "src/types";
+import { feedbackMessages } from "src/constants/constants";
 import {
   getInitialCourseState,
   getSectionsWithPositions
-} from "../../../utils/utils";
-import { Course } from "src/types";
-import { feedbackMessages } from "src/constants/constants";
+} from "../course-form/utils";
 
 import AdminHeader from "../AdminHeader";
 import CourseFormContainer from "../course-form/CourseFormContainer";
