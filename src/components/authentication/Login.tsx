@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 import { useAuth } from "../../contexts/AuthContext";
 import { FormSubmitEvent } from "../../types/index";
+import { REACT_TOAST_DURATION, feedbackMessages } from "src/constants/constants";
 
 import FormInput from "../FormInput";
 import PasswordVisibilityIcon from "./PasswordVisibilityIcon";
 import AuthCard from "./AuthCard";
-import toast from "react-hot-toast";
-import { feedbackMessages } from "src/constants/constants";
 
 const Login = () => {
   const [emailInput, setEmailInput] = useState("");
@@ -32,9 +32,9 @@ const Login = () => {
       console.log(error);
 
       if (error.code === "auth/wrong-password.") {
-        toast.error(feedbackMessages.loginValidationError);
+        toast.error(feedbackMessages.loginValidationError, REACT_TOAST_DURATION);
       } else {
-        toast.error(feedbackMessages.loginError);
+        toast.error(feedbackMessages.loginError, REACT_TOAST_DURATION);
       }
     }
 

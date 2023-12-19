@@ -17,7 +17,7 @@ import {
   getVideoSections,
   isVideoUploadInProgress
 } from "./utils";
-import { feedbackMessages } from "src/constants/constants";
+import { feedbackMessages, REACT_TOAST_DURATION } from "src/constants/constants";
 import { ReactComponent as WarningIcon } from "../../../icons/warningIcon.svg";
 import { colors } from "src/constants/colorPalette";
 
@@ -188,12 +188,14 @@ export default class CourseFormContainer extends Component <CourseFormContainerP
     });
 
     if (type === "danger") {
-      toast.error(message);
+      toast.error(message, REACT_TOAST_DURATION);
     } else {
       toast(message, {
         icon: <WarningIcon
           height="22px"
-          width="22px" /> });
+          width="22px" />,
+        ...REACT_TOAST_DURATION
+      });
     }
   };
 

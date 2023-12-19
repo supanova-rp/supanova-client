@@ -1,6 +1,7 @@
 import toast from "react-hot-toast";
 
 import { Course } from "src/types";
+import { REACT_TOAST_DURATION } from "src/constants/constants";
 
 interface Props {
   courses: Course[],
@@ -10,7 +11,7 @@ interface Props {
 }
 const CoursesList: React.FC<Props> = ({ courses, successMessage, onClickEditCourse }) => {
   if (successMessage) {
-    toast.success(successMessage);
+    toast.success(successMessage, REACT_TOAST_DURATION);
   }
 
   return (

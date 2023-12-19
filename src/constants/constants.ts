@@ -74,3 +74,5 @@ export const bottomMobileNavbarIcons = [
     tabName: null,
   },
 ];
+
+export const REACT_TOAST_DURATION = { duration: 2000 };

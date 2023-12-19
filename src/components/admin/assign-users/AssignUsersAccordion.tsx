@@ -5,7 +5,7 @@ import Accordion from "react-bootstrap/Accordion";
 
 import { CourseTitle, UserToCourses } from "src/types";
 import useRequest from "src/hooks/useRequest";
-import { feedbackMessages } from "src/constants/constants";
+import { REACT_TOAST_DURATION, feedbackMessages } from "src/constants/constants";
 
 import ToggleButton from "../../ToggleButton";
 
@@ -49,7 +49,7 @@ const AssignUsersAccordion: React.FC<AccordionProps> = ({ usersToCourses, course
 
   const onError = () => {
     setLoadingUserToCourseId(null);
-    toast.error(feedbackMessages.saveChangesError);
+    toast.error(feedbackMessages.saveChangesError, REACT_TOAST_DURATION);
   };
 
   const onChangeUpdateTickedCourseIds = (userId: string, courseId: number, isAssigned: boolean) => {

@@ -4,9 +4,8 @@ import { Link } from "react-router-dom";
 
 import { useAuth } from "../../contexts/AuthContext";
 import { useIsMobile } from "src/hooks/useIsMobile";
-
+import { REACT_TOAST_DURATION, feedbackMessages } from "src/constants/constants";
 import SupanovaLogo from "../../images/Supanova-logo-nav.png";
-import { feedbackMessages } from "src/constants/constants";
 
 interface NavbarProps {
   isAdmin: boolean,
@@ -24,7 +23,7 @@ const Navbar: React.FC<NavbarProps> = ({ isAdmin }) => {
 
     } catch (e) {
       console.log(e);
-      toast.error(feedbackMessages.logoutError);
+      toast.error(feedbackMessages.logoutError, REACT_TOAST_DURATION);
     }
   };
 

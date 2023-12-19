@@ -2,7 +2,7 @@ import { Component } from "react";
 import toast from "react-hot-toast";
 
 import { Course } from "src/types";
-import { feedbackMessages } from "src/constants/constants";
+import { REACT_TOAST_DURATION, feedbackMessages } from "src/constants/constants";
 import {
   getInitialCourseState,
   getSectionsWithPositions
@@ -26,7 +26,7 @@ export default class AddCourse extends Component {
       courseFormKey: Date.now(),
     });
 
-    toast.success(feedbackMessages.addCourseSuccess);
+    toast.success(feedbackMessages.addCourseSuccess, REACT_TOAST_DURATION);
   };
 
   onAddCourseCancelled = () => {
