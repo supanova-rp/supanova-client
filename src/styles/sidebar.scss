@@ -1,5 +1,10 @@
 .sidebar-content-container-admin {
-  width: 30%;
+  display: none;
+
+  @media screen and (min-width: 768px) {
+    width: 30%; 
+    display: flex;
+  }
 }
 
 .btn-light.sidebar {

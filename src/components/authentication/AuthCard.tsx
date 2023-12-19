@@ -1,4 +1,4 @@
-import { Alert, Button, Card, Form } from "react-bootstrap";
+import { Button, Card, Form } from "react-bootstrap";
 
 import SupanovaLogo from "../../images/Supanova-logo.png";
 import { FormSubmitEvent } from "src/types";
@@ -6,6 +6,8 @@ import AuthFooter from "./AuthFooter";
 
 type AuthCardProps = React.PropsWithChildren & {
   cardClassname: string,
+  logoClassname?: string,
+  buttonClassName?: string,
   title: string,
   subTitle: string,
   buttonText: string,
@@ -20,6 +22,8 @@ const AuthCard: React.FC<AuthCardProps>=
 ({
   children,
   cardClassname,
+  buttonClassName,
+  logoClassname,
   title,
   subTitle,
   buttonText,
@@ -29,17 +33,19 @@ const AuthCard: React.FC<AuthCardProps>=
   isLoading,
   onSubmit,
 }) => {
+  const forgotPasswordButtonClassname = buttonClassName ? buttonClassName : "auth-button";
+
   return (
     <div className="auth-container">
       <img
         src={SupanovaLogo}
         alt="Supanova Logo"
-        className="auth-logo" />
+        className={`auth-logo ${logoClassname}`} />
 
       <Card className={`auth-card ${cardClassname}`}>
         <Card.Body className="auth-card-body">
           <div className="d-flex flex-column align-items-center">
-            <h2 className="text-center mb-2 ">{title}</h2>
+            <h2 className="text-center mb-2">{title}</h2>
             <p className="auth-paragraph">{subTitle}</p>
           </div>
           <Form
@@ -49,7 +55,7 @@ const AuthCard: React.FC<AuthCardProps>=
             <Button
               disabled={isLoading}
               type="submit"
-              className="main-button auth-button">
+              className={`main-button ${forgotPasswordButtonClassname}`}>
               {isLoading
                 ? (
                   <>

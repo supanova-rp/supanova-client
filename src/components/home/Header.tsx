@@ -1,13 +1,14 @@
 interface HeaderProps {
   title: string,
   margin?: string,
+  padding?: string,
 }
 
-const Header: React.FC<HeaderProps> = ({ title, margin = "mt-4" }) => {
+const Header: React.FC<HeaderProps> = ({ title, margin = "mt-4", padding = "p-4" }) => {
   return (
-    <div className={`${margin} p-4`}>
+    <div className={`${margin} ${padding}`}>
       <header className="d-flex flex-column">
-        <h3 className="my-1">{title}</h3>
+        <h3 className="main-header">{title}</h3>
       </header>
     </div>
   );

@@ -1,3 +1,9 @@
+import { ReactComponent as HomeIcon } from "../icons/homeIcon.svg";
+import { ReactComponent as AddUserIcon } from "../icons/addUserIcon.svg";
+import { ReactComponent as EditCourseIcon } from "../icons/editCourseIcon.svg";
+import { ReactComponent as AddCourseIcon } from "../icons/addCourseIcon.svg";
+import { ReactComponent as AssignUserIcon } from "../icons/assignUserIcon.svg";
+
 export const API_DOMAIN = import.meta.env.VITE_API_DOMAIN;
 
 export const ADMINS_TABS = {
@@ -38,3 +44,33 @@ export const feedbackMessages = {
   loginValidationError: "Wrong email and/or password.",
   logoutError: "Failed to log out. Please try again."
 };
+
+const { ADD_COURSE, ADD_USERS, ASSIGN_USERS, EDIT_COURSES } = ADMINS_TABS;
+
+export const bottomMobileNavbarIcons = [
+  {
+    id: 1,
+    icon: AddCourseIcon,
+    tabName: ADD_COURSE,
+  },
+  {
+    id: 2,
+    icon: EditCourseIcon,
+    tabName: EDIT_COURSES,
+  },
+  {
+    id: 3,
+    icon: AssignUserIcon,
+    tabName: ASSIGN_USERS,
+  },
+  {
+    id: 4,
+    icon: AddUserIcon,
+    tabName: ADD_USERS,
+  },
+  {
+    id: 5,
+    icon: HomeIcon,
+    tabName: null,
+  },
+];

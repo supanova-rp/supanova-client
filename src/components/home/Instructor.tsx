@@ -9,7 +9,7 @@ const Instructor = () => {
     <div className="instructor-container">
       <Header
         title="Meet Your Instructor" />
-      <div className="d-flex align-items-center p-4">
+      <div className="instructor-content-container">
         <img
           src={JoelProfilePicture}
           alt="Instructor"

@@ -6,6 +6,7 @@ import { ReactComponent as TickIcon } from "../../../icons/tickIcon.svg";
 
 import { InputChangeEvent, FormSubmitEvent } from "../../../types/index";
 import useRequest from "src/hooks/useRequest";
+import { useIsMobile } from "src/hooks/useIsMobile";
 import { colors } from "../../../constants/colorPalette";
 import { getAddUsersDefaultState, getEmailJsParams, updateUsers } from "../../../utils/utils";
 
@@ -18,6 +19,11 @@ import AddMoreInputs from "../../AddMoreInputs";
 const AddUsers = () => {
   const [users, setUsers] = useState(getAddUsersDefaultState());
   const [isLoading, setIsLoading] = useState(false);
+
+  const isMobile = useIsMobile();
+
+  const nameInputClassname = isMobile ? "mb-2" : "mb-2 me-4";
+  const submitButtonClassname = isMobile ? "btn-secondary w-30 mb-3" : "btn-secondary w-30 ms-4";
 
   const checkUserExists = useRequest("/user-exists");
 
@@ -133,18 +139,22 @@ const AddUsers = () => {
   return (
     <>
       <AdminHeader title="Add Users" />
+      <Button
+        type="button"
+        onClick={() => setUsers(getAddUsersDefaultState())}
+        className="btn-danger mb-4">Clear all users</Button>
       {users.map((user) => {
         return (
           <Form
             onSubmit={(e) => onHandleAddUser(e, user.email, user.name, user.id)}
             key={user.id}>
-            <div className="d-flex align-items-center">
-              <div className="d-flex">
+            <div className="add-users-form-container">
+              <div className="add-users-input-container">
                 <FormInput
                   formId="name"
                   label="Name"
                   type="text"
-                  formGroupClassname="mb-2 me-4"
+                  formGroupClassname={nameInputClassname}
                   disabled={user.added}
                   value={user.name}
                   onChange={(e) => onChangeUser("name", user.id, e)} />
@@ -161,7 +171,7 @@ const AddUsers = () => {
               <div className="d-flex flex-row align-items-center mt-4">
                 <Button
                   type="submit"
-                  className="btn-secondary w-30 ms-4"
+                  className={submitButtonClassname}
                   size="sm"
                   disabled={isLoading || user.added}>
                   Submit
@@ -204,10 +214,6 @@ const AddUsers = () => {
         title="Add another user"
         onClick={onClickAddNewUser}
         marginTop="mt-3" />
-      <Button
-        type="button"
-        onClick={() => setUsers(getAddUsersDefaultState())}
-        className="btn-danger">Clear all users</Button>
     </>
   );
 };

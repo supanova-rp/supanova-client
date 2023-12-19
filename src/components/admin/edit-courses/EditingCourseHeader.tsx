@@ -12,11 +12,11 @@ const EditingCourseHeader: React.FC<Props> = ({
   onShowDeleteModal,
 }) => {
   return (
-    <div className="d-flex justify-content-md-between mb-4 align-items-center">
+    <div className="edit-course-header-container">
       <ChevronLeft
         stroke="black"
         role="button"
-        className="me-2"
+        className="edit-course-header-chevron-left"
         onClick={onCourseFormCancelled} />
       <Button
         className="btn-danger"

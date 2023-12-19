@@ -8,11 +8,15 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
   border: 2px solid var(--hover-color-grey);
   padding: 55px 0;
-  width: 38%;
   box-shadow: 0 3px 7px hsl(228deg 66% 45% / 15%);
   border-radius: 8px;
+
+  @media screen and (min-width: 768px) {
+    width: 70%;
+  }
 }
 
 .feedback-icon {

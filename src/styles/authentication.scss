@@ -9,21 +9,46 @@
 
 .auth-logo {
   margin-bottom: 20px;
-  height: 130px;
-  width: 170px;
+  height: 70px;
+  width: 90px;
+
+  @media screen and (min-width: 768px) {
+    height: 130px;
+    width: 170px;
+  }
 }
 
 .auth-card {
-  padding: 20px 10px;
+  padding: 10px 5px;
+  
+  @media screen and (min-width: 768px) {
+    padding: 20px 10px;
+  }
+}
+
+.auth-card-body {
+  padding: 20px 12px 0px 15px;
+
+  @media screen and (min-width: 768px) {
+    padding: 20px 20px 0px 20px;
+  }
 }
 
 .login-card {
-  width: 450px;
+  width: 350px;
   min-height: 440px;
+
+  @media screen and (min-width: 768px) {
+    width: 450px;
+  }
 }
 
 .registration-card {
-  width: 450px;
+  width: 350px;
+
+  @media screen and (min-width: 768px) {
+    width: 450px;
+  }
 }
 
 .auth-alert {
@@ -31,9 +56,14 @@
 }
 
 .forgot-password-card {
-  width: 450px;
+  width: 345px;
   min-height: 350px;
-  padding: 20px;
+  padding: 20px 5px;
+
+  @media screen and (min-width: 768px) {
+    width: 450px;
+    padding: 20px;
+  }
 
   .forgot-password-alert {
     margin: 20px 0;
@@ -42,14 +72,17 @@
   }
 }
 
-.auth-card-body {
-  padding: 20px 20px 0px 20px;
-  flex: none;
+.forgot-password-button {
+  width: 100%;
 }
 
 .auth-button {
-  width: 356px;
   margin-top: 20px;
+  width: 280px;
+
+  @media screen and (min-width: 768px) {
+    width: 356px;
+  }
 }
 
 .auth-paragraph {
@@ -57,7 +90,12 @@
 }
 
 .text-input input, .password-input input {
-  width: 356px;
+  width: 280px;
+
+  @media screen and (min-width: 768px) {
+    width: 356px;
+  }
+
 }
 
 .password-icon {

@@ -9,7 +9,7 @@ interface CoursesListProps {
 
 const CoursesList: React.FC<CoursesListProps> = ({ courses, onSelectVideo }) => {
   return (
-    <div className="px-4 pt-2">
+    <div className="px-3 pt-2">
       {courses.map((course, courseIndex) => {
         return (
           <div

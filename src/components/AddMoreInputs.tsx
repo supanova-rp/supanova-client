@@ -10,7 +10,7 @@ interface Props {
   marginBottom?: string,
 }
 
-const AddMoreInputs: React.FC<Props> = ({ onClick, title, marginTop, marginBottom = "mb-4" }) => {
+const AddMoreInputs: React.FC<Props> = ({ onClick, title, marginTop = "", marginBottom = "mb-4" }) => {
   return (
     <div className={`${marginBottom} ${marginTop} add-more-inputs-container`}>
       <p className="m-0"><strong>{title}</strong></p>

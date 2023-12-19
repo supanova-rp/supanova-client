@@ -84,18 +84,16 @@ const Video: React.FC<VideoProps> = ({
   };
 
   return (
-    <div className="mb-4">
+    <div className="mb-4 ms-4">
       <div>
         <div className="d-flex align-items-center">
-          <div
-            className="p-1 me-1"
-            role="button">
+          <div role="button">
             <ChevronLeft
               stroke={colors.orange}
               className="mt-4 me-1"
               onClick={onExitVideo} />
           </div>
-          <Header title={courses[currentCourseIndex].title}/>
+          <Header title={courses[currentCourseIndex].title} />
         </div>
         <h5 className="mt-2 mb-4">{`${currentSectionIndex + 1}. ${currentSection.title}`}</h5>
         {currentSection.videoUrl

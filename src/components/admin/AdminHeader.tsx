@@ -14,7 +14,8 @@ const AdminHeader: React.FC<Props> = ({ title }) => {
         variant="link"
         data-testid="back-home"
         className="nav-link admin">
-        <Link to="/">
+        <Link
+          to="/">
           Back Home
         </Link>
       </Button>

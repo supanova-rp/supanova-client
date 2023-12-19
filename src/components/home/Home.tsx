@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
 
 import { Course } from "src/types";
+import useRequest from "src/hooks/useRequest";
 import { useAuth } from "src/contexts/AuthContext";
+import { HOME_TABS } from "src/constants/constants";
 
 import SidebarContainer from "./SidebarContainer";
 import Navbar from "../nav/Navbar";
 import Instructor from "./Instructor";
 import Courses from "./Courses";
 import CourseErrorLoadingHandler from "../CourseErrorLoadingHandler";
-import useRequest from "src/hooks/useRequest";
-import { HOME_TABS } from "src/constants/constants";
-import Header from "./Header";
 
 const Home = () => {
   const [courses, setCourses] = useState<[] | Course[]>([]);
@@ -77,8 +76,6 @@ const Home = () => {
     if (activeTab === COURSES) {
       return (
         <div>
-          <Header title="Course Curriculum" />
-
           <CourseErrorLoadingHandler
             error={error}
             onClick={() => getCourses(isAdmin)}
@@ -108,7 +105,7 @@ const Home = () => {
           activeTab={activeTab}
           setActiveTab={setActiveTab} />
         <div
-          className="px-5 w-100 min-vh-100"
+          className="home-content-container"
           style={{ boxShadow: "inset 1px 0px 5px 0px hsl(228deg 66% 45% / 15%)" }}>
           {renderTabContent()}
         </div>

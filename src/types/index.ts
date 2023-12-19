@@ -1,4 +1,5 @@
 import { User as FirebaseUserLib } from "firebase/auth";
+import { FunctionComponent } from "react";
 
 export type SetStringFunction = (parameter: string) => void;
 
@@ -127,4 +128,10 @@ export type RequestOptions = {
   requestBody: RequestBody,
   endpoint: string,
   method: string,
+}
+
+export type MobileNavbarIcon = {
+  icon: FunctionComponent,
+  tabName: string | null,
+  id: number
 }

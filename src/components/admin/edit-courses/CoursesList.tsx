@@ -19,7 +19,7 @@ const CoursesList: React.FC<Props> = ({ courses, successMessage, onClickEditCour
         return (
           <div
             key={course.id}
-            className="d-flex w-100 courses-list-container"
+            className="courses-list-container"
             onClick={() => onClickEditCourse(course.id)}>
             <div className="d-flex flex-column w-100">
               <div className="d-flex align-items-center">

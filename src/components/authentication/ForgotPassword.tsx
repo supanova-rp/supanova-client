@@ -21,7 +21,7 @@ const ForgotPassword = () => {
       setIsLoading(true);
 
       await resetPassword(emailInput);
-      // toast.success(feedbackMessages.passwordResetSuccess);
+      toast.success(feedbackMessages.passwordResetSuccess);
 
     } catch (error: any) {
       console.log(error);
@@ -43,14 +43,15 @@ const ForgotPassword = () => {
       subTitle="Reset your password below"
       isLoading={isLoading}
       buttonText="Reset password"
+      buttonClassName="forgot-password-button"
       onSubmit={onHandleResetPassword}
       footerText="Have an account?"
       footerLinkText="Login"
       footerLinkPath="/login">
       <FormInput
         formId="email"
-        formGroupClassname="mb-2 pe-4"
-        inputContainerClassname="text-input forgot-password-input"
+        formGroupClassname="mb-2"
+        inputContainerClassname="forgot-password-input"
         label="Email"
         type="email"
         value={emailInput}

@@ -1,10 +1,11 @@
+import toast from "react-hot-toast";
 import { Button, Navbar as BootstrapNavbar } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 import { useAuth } from "../../contexts/AuthContext";
+import { useIsMobile } from "src/hooks/useIsMobile";
 
 import SupanovaLogo from "../../images/Supanova-logo-nav.png";
-import toast from "react-hot-toast";
 import { feedbackMessages } from "src/constants/constants";
 
 interface NavbarProps {
@@ -12,7 +13,10 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ isAdmin }) => {
+  const isMobile = useIsMobile();
   const { logout } = useAuth();
+
+  const navbarClassname = isMobile ? "navbar nav p-0 px-3" : "navbar nav px-4 py-0";
 
   const onClickHandleLogout = async () => {
     try {
@@ -25,13 +29,13 @@ const Navbar: React.FC<NavbarProps> = ({ isAdmin }) => {
   };
 
   return (
-    <BootstrapNavbar>
-      <nav className="navbar nav px-4 py-0">
+    <BootstrapNavbar className="home-navbar">
+      <nav className={navbarClassname}>
         <img
           className="navbar-brand"
           src={SupanovaLogo}
           alt="Logo" />
-        <div className="d-flex align-items-center">
+        <div className="d-flex align-items-center home-navbar-links">
           {isAdmin
             ? (
               <Link

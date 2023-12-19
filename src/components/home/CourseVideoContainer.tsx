@@ -105,19 +105,17 @@ const CourseVideoContainer: React.FC<CourseProps> = ({
   };
 
   return (
-    <div className="ms-4">
-      <Video
-        courses={courses}
-        initialCurrentVideoTime={initialCurrentVideoTime}
-        hasNext={hasNext}
-        hasPrevAndNext={hasPrevAndNext}
-        currentCourseIndex={currentCourseIndex}
-        currentSectionIndex={currentSectionIndex}
-        onExitVideo={onExitVideo}
-        onChangeVideo={onChangeVideo}
-        handleOnVideoEnded={handleOnVideoEnded}
-        onTimeUpdateSaveToLocalStorage={onTimeUpdateSaveToLocalStorage} />
-    </div>
+    <Video
+      courses={courses}
+      initialCurrentVideoTime={initialCurrentVideoTime}
+      hasNext={hasNext}
+      hasPrevAndNext={hasPrevAndNext}
+      currentCourseIndex={currentCourseIndex}
+      currentSectionIndex={currentSectionIndex}
+      onExitVideo={onExitVideo}
+      onChangeVideo={onChangeVideo}
+      handleOnVideoEnded={handleOnVideoEnded}
+      onTimeUpdateSaveToLocalStorage={onTimeUpdateSaveToLocalStorage} />
   );
 };
 

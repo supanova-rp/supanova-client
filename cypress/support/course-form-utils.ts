@@ -26,7 +26,7 @@ export const checkCourseFormIsEmpty = () => {
     cy.wrap($el).should("have.value", "");
   });
 
-  cy.get(".video-js-edit").should("not.exist");
+  cy.get(".video-admin").should("not.exist");
 };
 
 const fillInCourseTitleAndDescription = (title: string, description: string) => {
@@ -47,7 +47,7 @@ export const fillInCourseForm = (title: string, description: string, sections: s
       cy.intercept("GET", "**/supanova-dev.s3**").as("getUploadUrl");
       cy.get("input[type=file]").eq(index).selectFile(video, { force: true });
       cy.get(".tick-upload-icon").should("exist");
-      cy.get(".video-js-edit").eq(index).should("exist");
+      cy.get(".video-admin").eq(index).should("exist");
     }});
 };
 
@@ -68,7 +68,7 @@ export const fillInCourseFormSaveBeforeVideoUploadCompleted = (title: string, de
 
   cy.get("input[type=file]").eq(0).selectFile(sections[0].video, { force: true });
   cy.get(".tick-upload-icon").should("exist");
-  cy.get(".video-js-edit").eq(0).should("exist");
+  cy.get(".video-admin").eq(0).should("exist");
 
 };
 

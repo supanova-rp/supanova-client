@@ -8,6 +8,7 @@ import AddUsers from "./add-users/AddUsers";
 import SidebarContainer from "./sidebar/SidebarContainer";
 import EditCourses from "./edit-courses/EditCourses";
 import AssignUsers from "./assign-users/AssignUsers";
+import BottomMobileNavbar from "../nav/BottomMobileNavbar";
 
 const { ADD_COURSE, ADD_USERS, ASSIGN_USERS, EDIT_COURSES } = ADMINS_TABS;
 
@@ -41,11 +42,12 @@ const Admin = () => {
         activeTab={activeTab}
         setActiveTab={setActiveTab} />
       <Card
-        className="w-100 p-3 d-flex mh-100 rounded-0 admin-card">
+        className="w-100 p-3 d-flex mh-100 rounded-0">
         <Card.Body>
           {renderAdminContent()}
         </Card.Body>
       </Card>
+      <BottomMobileNavbar setActiveTab={setActiveTab} />
     </div>
   );
 };

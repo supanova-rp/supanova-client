@@ -1,5 +1,46 @@
+.edit-course-header-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
 .section-input {
-  width: 74%;
+  width: 100%;
+
+  @media screen and (min-width: 768px) {
+    width: 74%; 
+  }
+}
+
+.video-section-title-container {
+  display: flex;
+  align-items: center;
+  margin-top: 25px;
+}
+
+.video-section-input-container {
+    display: flex;
+    flex-direction: column;
+
+    @media screen and (min-width: 768px) {
+      flex-direction: row;
+      align-items: center;
+    }
+}
+
+.video-container-admin {
+  @media screen and (min-width: 768px) {
+    margin-left: 20px;
+  }
+}
+
+.video-admin {
+  width: 250px;
+
+  @media screen and (min-width: 768px) {
+    width: 300px;
+  }
 }
 
 .file-picker {
@@ -46,10 +87,6 @@
 .upload-file-icons-container {
   display: flex;
   align-items: center;
-}
-
-.video-js-edit {
-  width: 300px;
 }
 
 .edit-course-save-btn {
@@ -104,13 +141,33 @@
 
 .btn-link.nav-link.admin {
   a {
-    color: var(--link-color);
+    display: none;   
+
+    @media screen and (min-width: 768px) {
+      display: inline;
+      color: var(--link-color); 
+    }
   }
 }
 
 .courses-list-container {
-  padding: 10px 16px;
+  display: flex;
+  width: 100%;
   cursor: pointer;
+
+  @media screen and (min-width: 768px) {
+    padding: 10px 16px;
+  }
+
+  .courses-list-horizontal-line {
+    height: 10px;
+    margin-top: 10px;
+
+    @media screen and (min-width: 768px) {
+      height: 5px;
+      margin-top: 0;
+    }
+  }
 
   &:hover {
     h5 {
@@ -132,7 +189,11 @@
 
   .courses-list-section-title {
     text-align: left;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
+
+    @media screen and (min-width: 768px) {
+      margin-bottom: 15px;
+    }
   }
   
   .courses-list-vertical-line {
@@ -192,5 +253,24 @@
   display: flex;
   align-items: center; 
   justify-content: space-between;
-  width: 17%; 
+  width: 11rem;
+}
+
+.add-users-form-container {
+  display: flex;
+  flex-direction: column;
+
+  @media screen and (min-width: 768px) {
+    align-items: center;
+    flex-direction: row;
+  }
+}
+
+.add-users-input-container {
+  display: flex;
+  flex-direction: column;
+
+  @media screen and (min-width: 768px) {
+    flex-direction: row;
+  }
 }

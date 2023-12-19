@@ -4,6 +4,7 @@ import { Course } from "../../types/index";
 
 import CoursesList from "./CoursesList";
 import CourseVideoContainer from "./CourseVideoContainer";
+import Header from "./Header";
 
 interface CoursesProps {
   courses: Course[],
@@ -53,6 +54,7 @@ const Courses: React.FC<CoursesProps> = ({ courses, setCourses }) => {
 
   return (
     <div className="w-100">
+      <Header title="Course Curriculum" />
       <CoursesList
         courses={courses}
         onSelectVideo={onSelectVideo} />

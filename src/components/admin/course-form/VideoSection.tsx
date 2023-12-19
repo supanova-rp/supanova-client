@@ -33,14 +33,18 @@ const VideoSection: React.FC<VideoSectionProps> = ({
 }) => {
   const { id, title, videoUrl, uploadProgress } = section;
 
-  const marginStartRemoveSectionIcon = videoUrl ? "ms-4" : "ms-2";
-
   return (
     <div
       className="d-flex flex-column"
       key={`video-section-${id}`}>
-      <h6 className="mt-4">Video Section</h6>
-      <div className="d-flex flex-row align-items-center">
+      <div className="video-section-title-container">
+        <h6>Video Section</h6>
+        {canRemoveVideoSection
+          ? <RemoveInput onClickFunction={onClickRemoveSection} />
+          : null
+        }
+      </div>
+      <div className="video-section-input-container">
         <FormInput
           formId={`course-section-${id}`}
           formGroupClassname="my-4 section-input"
@@ -59,30 +63,19 @@ const VideoSection: React.FC<VideoSectionProps> = ({
               onClickCancelFileUpload={onClickCancelFileUpload} />
           )} />
 
-        <div className="d-flex align-items-center">
-          {videoUrl
-            ? (
-              <div className="ms-5">
-                <video
-                  id="my-player"
-                  className="video-js-edit mb-4"
-                  controls
-                  preload="auto"
-                  src={videoUrl} />
-              </div>
-            )
-            : null
-          }
-
-          {canRemoveVideoSection
-            ? (
-              <RemoveInput
-                onClickFunction={onClickRemoveSection}
-                margin={`${marginStartRemoveSectionIcon} mb-3`} />
-            )
-            : null
-          }
-        </div>
+        {videoUrl
+          ? (
+            <div className="video-container-admin">
+              <video
+                id="my-player"
+                className="video-admin mb-4"
+                controls
+                preload="auto"
+                src={videoUrl} />
+            </div>
+          )
+          : null
+        }
       </div>
 
       {!isLastSection

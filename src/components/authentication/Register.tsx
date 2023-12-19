@@ -76,6 +76,7 @@ const Register = () => {
   return (
     <AuthCard
       cardClassname="registration-card"
+      logoClassname="mt-3"
       title="Welcome!"
       subTitle="Create your Supanova account"
       buttonText="Sign up"
