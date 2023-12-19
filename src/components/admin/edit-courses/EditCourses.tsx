@@ -5,17 +5,17 @@ import {
   getDeletedSectionsIds,
   getSectionsWithPositions,
 } from "../course-form/utils";
-import { feedbackMessages } from "src/constants/constants";
+import { REACT_TOAST_DURATION, feedbackMessages } from "src/constants/constants";
 
 import CourseErrorLoadingHandler from "../../CourseErrorLoadingHandler";
 import RequestWrapper from "../../RequestWrapper";
 import AdminHeader from "../AdminHeader";
 import CoursesList from "./CoursesList";
 import CourseFormContainer from "../course-form/CourseFormContainer";
+import toast from "react-hot-toast";
 
 type EditCoursesState = {
   isLoading: boolean,
-  successMessage: null | string,
   getCoursesErrorMessage: null | string,
   allCourses: [] | Course[],
   editingCourseId: null | number,
@@ -25,7 +25,6 @@ export default class EditCourses extends Component {
   state: EditCoursesState = {
     isLoading: true,
     editingCourseId: null,
-    successMessage: null,
     getCoursesErrorMessage: null,
     allCourses: [],
   };
@@ -42,15 +41,7 @@ export default class EditCourses extends Component {
     this.setState({ editingCourseId: null });
   };
 
-  resetFeedbackMessage = (key: string) => {
-    setTimeout(() => {
-      this.setState({
-        [key]: null,
-      });
-    }, 1000);
-  };
-
-  onCourseEditedSuccess = (editedCourse: Course,) => {
+  onCourseEditedSuccess = (editedCourse: Course) => {
     const { allCourses, editingCourseId } = this.state;
 
     const updatedCoursesWithEditedCourse = allCourses.map((course) => {
@@ -62,12 +53,11 @@ export default class EditCourses extends Component {
     });
 
     this.setState({
-      successMessage: feedbackMessages.saveCourseSuccess,
       editingCourseId: null,
       allCourses: updatedCoursesWithEditedCourse,
     });
 
-    this.resetFeedbackMessage("successMessage");
+    toast.success(feedbackMessages.saveCourseSuccess, REACT_TOAST_DURATION);
   };
 
   onCourseDeletedSuccess = (courseId: number) => {
@@ -76,10 +66,9 @@ export default class EditCourses extends Component {
     this.setState({
       allCourses: coursesWithoutDeletedCourse,
       editingCourseId: null,
-      successMessage: feedbackMessages.deleteCourseSuccess
     });
 
-    this.resetFeedbackMessage("successMessage");
+    toast.success(feedbackMessages.deleteCourseSuccess, REACT_TOAST_DURATION);
   };
 
   getRequestBody = (course: Course, initialCourse: Course,) => {
@@ -115,7 +104,6 @@ export default class EditCourses extends Component {
       allCourses,
       editingCourseId,
       getCoursesErrorMessage,
-      successMessage,
     } = this.state;
 
     const editingCourse = allCourses.find((course) => course.id === editingCourseId);
@@ -151,7 +139,6 @@ export default class EditCourses extends Component {
                   : (
                     <CoursesList
                       courses={allCourses}
-                      successMessage={successMessage}
                       onClickEditCourse={this.onClickEditCourse}/>
                   )
                 }
