@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Card } from "react-bootstrap";
 
 import { ADMINS_TABS } from "src/constants/constants";
+import { AdminTabValue } from "src/types";
 
 import AddCourse from "./add-course/AddCourse";
 import AddUsers from "./add-users/AddUsers";
@@ -13,7 +14,7 @@ import BottomMobileNavbar from "../nav/BottomMobileNavbar";
 const { ADD_COURSE, ADD_USERS, ASSIGN_USERS, EDIT_COURSES } = ADMINS_TABS;
 
 const Admin = () => {
-  const [activeTab, setActiveTab] = useState(ADD_COURSE);
+  const [activeTab, setActiveTab] = useState<AdminTabValue>(ADD_COURSE);
 
   const renderAdminContent = () => {
     if (activeTab === ADD_COURSE) {

@@ -1,7 +1,12 @@
 import { AxiosProgressEvent } from "axios";
 import { Button } from "react-bootstrap";
 
-import { Course, CourseQuizQuestion, CourseSection } from "src/types";
+import {
+  Course,
+  CourseQuizQuestion,
+  CourseSection,
+  onChangeCourseFieldKey
+} from "src/types";
 
 import AddMoreInputs from "../../AddMoreInputs";
 import EditingCourseHeader from "../edit-courses/EditingCourseHeader";
@@ -13,7 +18,7 @@ interface Props {
   isEditing: boolean,
   videoSections: CourseSection[],
   areActionsDisabled: boolean,
-  onChangeCourseField: (key: string, newInputValue: string) => void,
+  onChangeCourseField: (key: onChangeCourseFieldKey, newInputValue: string) => void,
   onChangeSectionTitle: (sectionId: number, newInputValue: string) => void,
   onHandleUpdateQuiz: (quizId: number, quizQuestionsAndAnswers: CourseQuizQuestion[]) => void,
   onFileUploaded: (sectionId: number, videoUrl: string) => void,

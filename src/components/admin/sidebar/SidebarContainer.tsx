@@ -1,14 +1,14 @@
 import React from "react";
 
-import { SetStringFunction } from "../../../types/index";
-
-import Sidebar from "../../nav/Sidebar";
+import { AdminTabValue, setActiveTabFunction } from "../../../types/index";
 import { ADMINS_TABS } from "src/constants/constants";
 
+import Sidebar from "../../nav/Sidebar";
+
 interface Props {
-  activeTab: string,
+  activeTab: AdminTabValue,
   isAdminDashboard?: boolean,
-  setActiveTab: SetStringFunction;
+  setActiveTab: setActiveTabFunction;
 }
 
 const SidebarContainer: React.FC<Props> = ({ activeTab, isAdminDashboard, setActiveTab }) => {

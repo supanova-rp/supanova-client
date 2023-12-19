@@ -2,14 +2,14 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { bottomMobileNavbarIcons } from "src/constants/constants";
-import { MobileNavbarIcon, SetStringFunction } from "src/types";
+import { MobileNavbarIcon, setActiveTabFunction } from "src/types";
 
 interface BottomMobileNavbarProps {
-  setActiveTab: SetStringFunction;
+  setActiveTab: setActiveTabFunction;
 }
 
 const BottomMobileNavbar : React.FC<BottomMobileNavbarProps> = ({ setActiveTab }) => {
-  const [activeIconId, setActiveIconId] = useState(1);
+  const [activeIconId, setActiveIconId] = useState<number>(1);
 
   const navigate = useNavigate();
 

@@ -11,10 +11,10 @@ import PasswordVisibilityIcon from "./PasswordVisibilityIcon";
 import AuthCard from "./AuthCard";
 
 const Login = () => {
-  const [emailInput, setEmailInput] = useState("");
-  const [passwordInput, setPasswordInput] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [isPasswordShowing, setIsPasswordShowing] = useState(false);
+  const [emailInput, setEmailInput] = useState<string>("");
+  const [passwordInput, setPasswordInput] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isPasswordShowing, setIsPasswordShowing] = useState<boolean>(false);
 
   const navigate = useNavigate();
 

@@ -35,7 +35,7 @@ export const useAuth = () => {
 export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [signedInStatus, setSignedInStatus] = useState<string | null>(null);
   const [currentUser, setCurrentUser] = useState<FirebaseUser | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const navigate = useNavigate();
   const location = useLocation().pathname;

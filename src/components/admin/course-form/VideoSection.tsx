@@ -12,10 +12,10 @@ interface VideoSectionProps {
   canRemoveVideoSection?: boolean,
   abortController: AbortController,
   fileInputRef: React.RefObject<HTMLInputElement>,
-  onChangeSectionTitle: (parameter1: number, parameter2: string) => void,
+  onChangeSectionTitle: (sectionId: number, title: string) => void,
   onClickRemoveSection: () => void,
   handleFileUploaded: (sectionId: number, videoUrl: string) => void,
-  onFileUploadProgress: (parameter1: AxiosProgressEvent, parameter2: number) => void,
+  onFileUploadProgress: (data: AxiosProgressEvent, sectionId: number) => void,
   onClickCancelFileUpload: () => void,
 }
 

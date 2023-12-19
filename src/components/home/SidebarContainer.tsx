@@ -1,14 +1,14 @@
 import { Card } from "react-bootstrap";
 
-import { SetStringFunction } from "../../types/index";
+import { AdminTabValue, setActiveTabFunction } from "../../types/index";
 import { HOME_TABS } from "src/constants/constants";
 import HomeImage from "../../images/Home-image.png";
 
 import Sidebar from "../nav/Sidebar";
 
 interface Props {
-  activeTab: string,
-  setActiveTab: SetStringFunction,
+  activeTab: AdminTabValue,
+  setActiveTab: setActiveTabFunction,
 }
 
 const SidebarContainer: React.FC<Props> = ({ activeTab, setActiveTab }) => {

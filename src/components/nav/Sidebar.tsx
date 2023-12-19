@@ -1,14 +1,14 @@
 import React from "react";
 import { Button } from "react-bootstrap";
 
-import { SetStringFunction } from "../../types/index";
+import { AdminTabValue, setActiveTabFunction } from "../../types/index";
 import { getClassNameSidebarTab } from "src/utils/utils";
 
 interface Props {
-  activeTab: string,
+  activeTab: AdminTabValue,
   isAdminDashboard?: boolean,
   tabs: string[],
-  setActiveTab: SetStringFunction,
+  setActiveTab: setActiveTabFunction,
 }
 
 const Sidebar: React.FC<Props> = ({

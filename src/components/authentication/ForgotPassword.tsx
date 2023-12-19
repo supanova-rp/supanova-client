@@ -9,8 +9,8 @@ import AuthCard from "./AuthCard";
 import FormInput from "../FormInput";
 
 const ForgotPassword = () => {
-  const [emailInput, setEmailInput] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [emailInput, setEmailInput] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { resetPassword } = useAuth();
 

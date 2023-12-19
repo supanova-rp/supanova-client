@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, SyntheticEvent } from "react";
 
-import { Course } from "../../types/index";
+import { Course, VideoChangeDirection } from "../../types/index";
 import Video from "./Video";
 
 interface CourseProps {
@@ -9,9 +9,9 @@ interface CourseProps {
   currentSectionId: number,
   initialCurrentVideoTime: number,
   courses: Course[],
-  setCurrentCourseIndex: (parameter: number) => void,
-  setCurrentSectionIndex: (parameter: number) => void,
-  setIsVideoShowing: (parameter: boolean) => void,
+  setCurrentCourseIndex: (courseIndex: number) => void,
+  setCurrentSectionIndex: (sectionIndex: number) => void,
+  setIsVideoShowing: (value: boolean) => void,
   setCourses: Dispatch<SetStateAction<Course[]>>,
   setInitialCurrentVideoTime: Dispatch<SetStateAction<number>>,
 }
@@ -42,7 +42,7 @@ const CourseVideoContainer: React.FC<CourseProps> = ({
     }
   };
 
-  const onChangeVideo = (direction: string) => {
+  const onChangeVideo = (direction: VideoChangeDirection) => {
     const newSectionIndex = direction === "next" ? currentSectionIndex + 1 : currentSectionIndex - 1;
     const newSectionId = courses[currentCourseIndex].sections[newSectionIndex].id;
 

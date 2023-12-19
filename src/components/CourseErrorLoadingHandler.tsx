@@ -1,5 +1,4 @@
 /* eslint-disable react/jsx-no-useless-fragment */
-import { Alert } from "react-bootstrap";
 import { PulseLoader } from "react-spinners";
 
 import { colors } from "src/constants/colorPalette";

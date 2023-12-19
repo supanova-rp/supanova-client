@@ -1,14 +1,18 @@
 import { User as FirebaseUserLib } from "firebase/auth";
-import { FunctionComponent } from "react";
+import { Dispatch, FunctionComponent, SetStateAction } from "react";
+import { ADMINS_TABS } from "src/constants/constants";
 
-export type SetStringFunction = (parameter: string) => void;
+type AdminTabKey = keyof typeof ADMINS_TABS;
+export type AdminTabValue = typeof ADMINS_TABS[AdminTabKey];
+export type setActiveTabFunction = Dispatch<SetStateAction<AdminTabValue>>
 
 export type InputChangeEvent = React.ChangeEvent<HTMLInputElement>;
 export type FormSubmitEvent = React.FormEvent<HTMLFormElement>;
-
 export type InputChangeFunction = (e: InputChangeEvent) => void;
 
 export type UploadProgress = number | null | undefined;
+
+export type saveFormEndpoint = "/edit-course" | "/add-course"
 
 export type Course = {
   id: number,
@@ -21,6 +25,8 @@ export type CourseTitle = {
   id: number,
   title: string,
 }
+
+export type onChangeCourseFieldKey = "description" | "title"
 
 export type CourseSection = CourseVideoSection | CourseQuizSection
 
@@ -68,11 +74,15 @@ export type CourseQuizAnswer = {
   isCorrectAnswer: boolean,
 }
 
+export type VideoChangeDirection = "next" | "prev"
+
 export type ErrorOptions = {
   message: null | string,
   type: null | string,
   error?: null | string,
 }
+
+export type getUpdatedSectionsKey = "title" | "videoUrl" | "uploadProgress" | "questions"
 
 export type User = {
   id: string
@@ -95,6 +105,11 @@ export type UserInfoToUpdate = {
   addUserError?: boolean,
   alreadyRegistered?: boolean,
 };
+
+export type PasswordsShowing = {
+  password: boolean,
+  repeatPassword: boolean,
+}
 
 export type FirebaseUser = FirebaseUserLib & {accessToken?: string}
 

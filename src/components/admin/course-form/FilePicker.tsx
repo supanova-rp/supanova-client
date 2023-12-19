@@ -19,8 +19,8 @@ interface Props {
   sectionId: number,
   abortController: AbortController,
   fileInputRef: React.RefObject<HTMLInputElement>,
-  onFileUploaded: (paramater1: number, parameter2: string) => void,
-  onFileUploadProgress: (parameter1: AxiosProgressEvent, parameter2: number) => void,
+  onFileUploaded: (sectionId: number, videoUrl: string) => void,
+  onFileUploadProgress: (data: AxiosProgressEvent, sectionId: number) => void,
   uploadProgress: UploadProgress,
   onClickCancelFileUpload: React.MouseEventHandler<HTMLButtonElement>
 }

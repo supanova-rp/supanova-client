@@ -42,7 +42,8 @@ export const feedbackMessages = {
   registrationError: "Failed to create an account. Try again.",
   loginError: "Login failed. Try again.",
   loginValidationError: "Wrong email and/or password.",
-  logoutError: "Failed to log out. Please try again."
+  logoutError: "Failed to log out. Please try again.",
+  adminAccessError: "You are trying to access a page that requires Admin access...",
 };
 
 const { ADD_COURSE, ADD_USERS, ASSIGN_USERS, EDIT_COURSES } = ADMINS_TABS;

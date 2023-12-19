@@ -2,6 +2,7 @@ import { Button, Card, Form } from "react-bootstrap";
 
 import SupanovaLogo from "../../images/Supanova-logo.png";
 import { FormSubmitEvent } from "src/types";
+
 import AuthFooter from "./AuthFooter";
 
 type AuthCardProps = React.PropsWithChildren & {

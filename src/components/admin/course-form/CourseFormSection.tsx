@@ -12,15 +12,15 @@ interface Props {
   isLastSection: boolean,
   isEditing: boolean,
   canRemoveVideoSection: boolean,
-  onChangeSectionTitle: (parameter1: number, parameter2: string) => void,
+  onChangeSectionTitle: (sectionId: number, inputValue: string) => void,
   onHandleUpdateQuiz: (quizId: number, quizQuestionsAndAnswers: CourseQuizQuestion[]) => void,
   onClickAddNewQuizQuestion: (quizId: number) => void,
   onHandleAddNewQuizAnswer: (quizId: number, updatedQuizQuestions: CourseQuizQuestion[]) => void,
   onClickRemoveQuizQuestion: (quizId: number, questionId: string) => void,
-  onFileUploaded: (parameter1: number, parameter2: string) => void,
-  onFileUploadProgress: (parameter1: AxiosProgressEvent, parameter2: number) => void,
-  onFileUploadCancelled: (paramater: number) => void,
-  handleRemoveSection: (parameter: number) => void,
+  onFileUploaded: (sectionId: number, videoUrl: string) => void,
+  onFileUploadProgress: (data: AxiosProgressEvent, sectionId: number) => void,
+  onFileUploadCancelled: (sectionId: number) => void,
+  handleRemoveSection: (sectionId: number) => void,
 }
 
 export default class CourseFormSection extends React.Component<Props> {

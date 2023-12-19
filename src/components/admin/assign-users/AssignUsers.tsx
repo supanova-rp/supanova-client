@@ -9,7 +9,7 @@ import AssignUsersAccordion from "./AssignUsersAccordion";
 
 const AssignUsers = () => {
   const [isLoadingCourses, setIsLoadingCourses] = useState<boolean>(true);
-  const [isLoadingUserCourses, setIsLoadingUserCourses] = useState(false);
+  const [isLoadingUserCourses, setIsLoadingUserCourses] = useState<boolean>(false);
   const [error, setError] = useState<null | string>(null);
   const [courses, setCourses] = useState<CourseTitle[]>([]);
   const [usersToCourses, setUsersToCourses] = useState<UserToCourses[]>([]);

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 
-import { FormSubmitEvent } from "src/types";
+import { FormSubmitEvent, PasswordsShowing } from "src/types";
 import { useAuth } from "src/contexts/AuthContext";
 import useRequest from "src/hooks/useRequest";
 import { REACT_TOAST_DURATION, feedbackMessages } from "src/constants/constants";
@@ -12,12 +12,12 @@ import AuthCard from "./AuthCard";
 import PasswordVisibilityIcon from "./PasswordVisibilityIcon";
 
 const Register = () => {
-  const [emailInput, setEmailInput] = useState("");
-  const [passwordInput, setPasswordInput] = useState("");
-  const [nameInput, setNameInput] = useState("");
-  const [repeatPasswordInput, setRepeatPasswordInput] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [isPasswordShowing, setIsPasswordShowing] = useState({ password: false, repeatPassword: false });
+  const [emailInput, setEmailInput] = useState<string>("");
+  const [passwordInput, setPasswordInput] = useState<string>("");
+  const [nameInput, setNameInput] = useState<string>("");
+  const [repeatPasswordInput, setRepeatPasswordInput] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isPasswordShowing, setIsPasswordShowing] = useState<PasswordsShowing>({ password: false, repeatPassword: false });
 
   const registerUser = useRequest("/register");
   const { login } = useAuth();
@@ -65,7 +65,7 @@ const Register = () => {
     setIsLoading(false);
   };
 
-  const onTogglePasswordVisibility = (key: string, value: boolean) => {
+  const onTogglePasswordVisibility = (key: "password" | "repeatPassword", value: boolean) => {
     const updatedPasswordShowingState = {
       ...isPasswordShowing,
       [key]: value,

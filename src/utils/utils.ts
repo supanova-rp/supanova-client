@@ -1,10 +1,12 @@
+import uuid from "react-uuid";
+
 import { API_DOMAIN, EMAIL_JS_PUBLIC_KEY, EMAIL_JS_SERVICE_ID, EMAIL_JS_TEMPLATE_ID } from "src/constants/constants";
 import {
   UserInfoToUpdate,
   User,
   FirebaseUser,
+  AdminTabValue,
 } from "../types/index";
-import uuid from "react-uuid";
 
 export const updateUsers = (users: User[], userId: string, userInfoToUpdate: UserInfoToUpdate) => {
   return users.map((user) => {
@@ -19,7 +21,7 @@ export const updateUsers = (users: User[], userId: string, userInfoToUpdate: Use
   });
 };
 
-export const getClassNameSidebarTab = (activeTab: string, tabName: string) => {
+export const getClassNameSidebarTab = (activeTab: AdminTabValue, tabName: AdminTabValue) => {
   if (activeTab === tabName) {
     return "secondary-button";
   }
@@ -29,7 +31,7 @@ export const getClassNameSidebarTab = (activeTab: string, tabName: string) => {
 
 interface RequestOptions {
   endpoint: string,
-  method: string,
+  method: "POST" | "PUT" | "DELETE" | "GET",
   requestBody: any,
   currentUser: FirebaseUser | null,
   onRequestBegin?: () => void,

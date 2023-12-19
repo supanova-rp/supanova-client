@@ -4,7 +4,7 @@ import TableRow from "./TableRow";
 
 interface CoursesListProps {
   courses: Course[],
-  onSelectVideo: (parameter1: number, parameter2: number) => void,
+  onSelectVideo: (courseIndex: number, sectionIndex: number) => void,
 }
 
 const CoursesList: React.FC<CoursesListProps> = ({ courses, onSelectVideo }) => {

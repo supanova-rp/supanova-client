@@ -2,12 +2,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { PulseLoader } from "react-spinners";
-import { colors } from "src/constants/colorPalette";
 
+import { colors } from "src/constants/colorPalette";
 import { useAuth } from "src/contexts/AuthContext";
 
 const RedirectLoggedInUser = ({ children }: React.PropsWithChildren) => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const navigate = useNavigate();
 

@@ -5,7 +5,8 @@ import {
   CourseQuizQuestion,
   CourseQuizSection,
   CourseSection,
-  CourseVideoSection
+  CourseVideoSection,
+  getUpdatedSectionsKey
 } from "src/types";
 
 export const isVideoSection = (section: CourseSection): section is CourseVideoSection => {
@@ -119,7 +120,7 @@ const getDeletedQuizQuestionIds = (editedSections: CourseQuizSection[], initialS
 };
 
 const getDeletedQuizAnswers = (initialSectionQuestion: CourseQuizQuestion, editedSections: CourseQuizSection[]) => {
-  let editedQuizQuestion: CourseQuizQuestion | undefined | null = null;
+  let editedQuizQuestion: CourseQuizQuestion | undefined | null;
 
   editedSections.forEach((editedSection) => {
     editedQuizQuestion = editedSection.questions.find((editedSectionQuestion) => editedSectionQuestion.id === initialSectionQuestion.id);
@@ -192,7 +193,7 @@ export const getSectionsWithPositions = (course: Course) => {
   return sectionsWithPositions;
 };
 
-export const getUpdatedSections = (sections: CourseSection[], sectionId: number, key: string, value: any) => {
+export const getUpdatedSections = (sections: CourseSection[], sectionId: number, key: getUpdatedSectionsKey, value: any) => {
   const updatedSections = sections.map((section) => {
     if (sectionId === section.id) {
       return {
@@ -207,7 +208,7 @@ export const getUpdatedSections = (sections: CourseSection[], sectionId: number,
   return updatedSections;
 };
 
-export const getUpdatedCourse = (course: Course, sectionId: number, key: string, value: any) => {
+export const getUpdatedCourse = (course: Course, sectionId: number, key: getUpdatedSectionsKey, value: any) => {
   return {
     ...course,
     sections: getUpdatedSections(course.sections, sectionId, key, value),

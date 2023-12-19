@@ -5,7 +5,7 @@ import { Button } from "react-bootstrap";
 
 import { colors } from "../../constants/colorPalette";
 import { ReactComponent as ChevronLeft }  from "../../icons/chevronLeft.svg";
-import { Course } from "../../types/index";
+import { Course, VideoChangeDirection } from "../../types/index";
 
 import Header from "./Header";
 
@@ -17,7 +17,7 @@ interface VideoProps {
   hasNext: boolean,
   hasPrevAndNext: boolean,
   onExitVideo: () => void,
-  onChangeVideo: (parameter: string) => void,
+  onChangeVideo: (direction: VideoChangeDirection) => void,
   handleOnVideoEnded: () => void,
   onTimeUpdateSaveToLocalStorage: (e: SyntheticEvent<HTMLVideoElement>) => void,
 }

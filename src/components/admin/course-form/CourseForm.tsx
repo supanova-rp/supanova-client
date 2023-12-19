@@ -5,6 +5,7 @@ import {
   Course,
   CourseQuizQuestion,
   CourseSection,
+  onChangeCourseFieldKey,
 } from "src/types";
 import {
   getCourseWithNewSection,
@@ -26,7 +27,7 @@ interface CourseFormProps {
 }
 
 export default class CourseForm extends Component <CourseFormProps> {
-  onChangeCourseField = (key: string, newInputValue: string) => {
+  onChangeCourseField = (key: onChangeCourseFieldKey, newInputValue: string) => {
     const { course, onUpdateCourse } = this.props;
 
     onUpdateCourse({
@@ -50,7 +51,7 @@ export default class CourseForm extends Component <CourseFormProps> {
   onFileUploadProgress = (data: AxiosProgressEvent, sectionId: number) => {
     const { course, onUpdateCourse } = this.props;
 
-    onUpdateCourse(getUpdatedCourse(course, sectionId,  "uploadProgress", data.progress));
+    onUpdateCourse(getUpdatedCourse(course, sectionId, "uploadProgress", data.progress));
   };
 
   onChangeSectionTitle = (sectionId: number, inputValue: string) => {

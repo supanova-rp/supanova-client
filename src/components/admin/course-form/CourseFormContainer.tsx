@@ -8,7 +8,8 @@ import {
   CourseQuizQuestionServer,
   ErrorOptions,
   FormSubmitEvent,
-  RequestBody
+  RequestBody,
+  saveFormEndpoint
 } from "src/types";
 import {
   everyQuizQuestionHasCorrectAnswer,
@@ -36,7 +37,7 @@ type CourseFormContainerState = {
 interface CourseFormContainerProps {
   initialCourse: Course,
   isEditing: boolean,
-  saveFormEndpoint: string,
+  saveFormEndpoint: saveFormEndpoint,
   getRequestBody: (course: Course, initialCourse: Course) => RequestBody,
   onCourseSavedSuccess: (editedCourse: Course) => void,
   onCourseFormCancelled: () => void,

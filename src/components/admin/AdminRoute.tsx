@@ -3,14 +3,14 @@ import { useEffect, useState } from "react";
 import { PulseLoader } from "react-spinners";
 
 import { colors } from "src/constants/colorPalette";
-
 import { useAuth } from "src/contexts/AuthContext";
+import { feedbackMessages } from "src/constants/constants";
 
 import PageErrorScreen from "../PageErrorScreen";
 
 const AdminRoute = ({ children }: React.PropsWithChildren) => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
   const { getIsAdmin } = useAuth();
 
@@ -44,7 +44,7 @@ const AdminRoute = ({ children }: React.PropsWithChildren) => {
     return (
       <PageErrorScreen
         title="Oops!"
-        text="You are trying to access a page that requires Admin access..." />
+        text={feedbackMessages.adminAccessError} />
     );
   }
 

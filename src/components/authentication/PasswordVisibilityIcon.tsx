@@ -4,7 +4,7 @@ import { ReactComponent as ShowPasswordIcon } from "../../icons/showPasswordIcon
 
 interface Props {
   isPasswordShowing: boolean,
-  onTogglePasswordVisibility: (parameter: boolean) => void,
+  onTogglePasswordVisibility: (value: boolean) => void,
 }
 
 const PasswordVisibilityIcon: React.FC<Props> = ({ isPasswordShowing, onTogglePasswordVisibility }) => {

@@ -4,7 +4,7 @@ import uuid from "react-uuid";
 
 import { ReactComponent as TickIcon } from "../../../icons/tickIcon.svg";
 
-import { InputChangeEvent, FormSubmitEvent } from "../../../types/index";
+import { InputChangeEvent, FormSubmitEvent, User } from "../../../types/index";
 import useRequest from "src/hooks/useRequest";
 import { useIsMobile } from "src/hooks/useIsMobile";
 import { colors } from "../../../constants/colorPalette";
@@ -17,8 +17,8 @@ import RemoveInput from "../../RemoveInput";
 import AddMoreInputs from "../../AddMoreInputs";
 
 const AddUsers = () => {
-  const [users, setUsers] = useState(getAddUsersDefaultState());
-  const [isLoading, setIsLoading] = useState(false);
+  const [users, setUsers] = useState<User[]>(getAddUsersDefaultState());
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const isMobile = useIsMobile();
 

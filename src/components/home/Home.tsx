@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { Course } from "src/types";
+import { AdminTabValue, Course } from "src/types";
 import useRequest from "src/hooks/useRequest";
 import { useAuth } from "src/contexts/AuthContext";
 import { HOME_TABS } from "src/constants/constants";
@@ -13,7 +13,7 @@ import CourseErrorLoadingHandler from "../CourseErrorLoadingHandler";
 
 const Home = () => {
   const [courses, setCourses] = useState<[] | Course[]>([]);
-  const [activeTab, setActiveTab] = useState<string>("Courses");
+  const [activeTab, setActiveTab] = useState<AdminTabValue>("Courses");
   const [error, setError] = useState<null | string>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
@@ -25,11 +25,11 @@ const Home = () => {
   const requestAllCourses = useRequest("/courses");
   const requestAssignedCourses = useRequest("/assigned-courses");
 
-  const getCourses = (isAnAdmin: boolean) => {
+  const getCourses = (isAdmin: boolean) => {
     setIsLoading(true);
     setError(null);
 
-    if (isAnAdmin) {
+    if (isAdmin) {
       requestAllCourses({
         onSuccess,
         onError: (error) => onError(error, "Failed to load courses."),
