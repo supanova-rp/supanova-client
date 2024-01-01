@@ -13,7 +13,7 @@ export const ADMINS_TABS = {
   ADD_USERS: "Add Users",
 };
 
-export const HOME_TABS = {
+export const COURSE_TABS = {
   COURSES: "Courses",
   INSTRUCTOR: "Instructor",
 };
@@ -27,6 +27,7 @@ export const unauthedRoutes = ["/register", "/forgot-password"];
 export const feedbackMessages = {
   videoMissing: "Every section needs a video.",
   correctAnswerMissing: "Every quiz question needs a correct answer.",
+  getCourseError: "Failed to get course.",
   getEditCourseError: "Failed to load course.",
   addCourseSuccess: "Successfully created a new course!",
   saveCourseError: "Failed to save course. Try again.",
@@ -44,6 +45,7 @@ export const feedbackMessages = {
   loginValidationError: "Wrong email and/or password.",
   logoutError: "Failed to log out. Please try again.",
   adminAccessError: "You are trying to access a page that requires Admin access...",
+  adminVerificationError: "Failed to very if user is Admin."
 };
 
 const { ADD_COURSE, ADD_USERS, ASSIGN_USERS, EDIT_COURSES } = ADMINS_TABS;

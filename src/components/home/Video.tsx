@@ -5,15 +5,15 @@ import { Button } from "react-bootstrap";
 
 import { colors } from "../../constants/colorPalette";
 import { ReactComponent as ChevronLeft }  from "../../icons/chevronLeft.svg";
-import { Course, VideoChangeDirection } from "../../types/index";
+import { CourseSection, VideoChangeDirection } from "../../types/index";
 
 import Header from "./Header";
 
 interface VideoProps {
-  currentCourseIndex: number,
   currentSectionIndex: number,
   initialCurrentVideoTime: number,
-  courses: Course[],
+  courseTitle: string,
+  sections: CourseSection[],
   hasNext: boolean,
   hasPrevAndNext: boolean,
   onExitVideo: () => void,
@@ -23,18 +23,18 @@ interface VideoProps {
 }
 
 const Video: React.FC<VideoProps> = ({
-  courses,
+  sections,
+  courseTitle,
   hasNext,
   hasPrevAndNext,
   initialCurrentVideoTime,
-  currentCourseIndex,
   currentSectionIndex,
   onExitVideo,
   onChangeVideo,
   handleOnVideoEnded,
   onTimeUpdateSaveToLocalStorage,
 }) => {
-  const currentSection = courses[currentCourseIndex].sections[currentSectionIndex];
+  const currentSection = sections[currentSectionIndex];
 
   const renderDirectionButtons = (className: string) => {
     if (hasPrevAndNext) {
@@ -93,14 +93,14 @@ const Video: React.FC<VideoProps> = ({
               className="mt-4 me-1"
               onClick={onExitVideo} />
           </div>
-          <Header title={courses[currentCourseIndex].title} />
+          <Header title={courseTitle} />
         </div>
         <h5 className="mt-2 mb-4">{`${currentSectionIndex + 1}. ${currentSection.title}`}</h5>
         {currentSection.videoUrl
           ? (
             <video
               id="my-player"
-              className="video-js-home"
+              className="video-js-course-view"
               controls
               preload="auto"
               data-setup="{}"

@@ -1,27 +1,28 @@
 import { Dispatch, SetStateAction, useState } from "react";
 
-import { Course } from "../../types/index";
+import { Course as CourseType, CourseSection } from "../../types/index";
 
 import CoursesList from "./CoursesList";
 import CourseVideoContainer from "./CourseVideoContainer";
 import Header from "./Header";
+import CourseQuizContainer from "./CourseQuizContainer";
 
 interface CoursesProps {
-  courses: Course[],
-  setCourses: Dispatch<SetStateAction<Course[]>>,
+  course: CourseType,
+  setCourse: Dispatch<SetStateAction<CourseType>>,
 }
 
-const Courses: React.FC<CoursesProps> = ({ courses, setCourses }) => {
+const Course: React.FC<CoursesProps> = ({ course, setCourse }) => {
   const [isVideoShowing, setIsVideoShowing] = useState<boolean>(false);
-  const [currentCourseIndex, setCurrentCourseIndex] = useState<number>(0);
+  const [isQuizShowing, setIsQuizShowing] = useState<boolean>(false);
   const [currentSectionIndex, setCurrentSectionIndex] = useState<number>(0);
   const [initialCurrentVideoTime, setInitialCurrentVideoTime] = useState<number>(0);
 
-  const currentSection = courses[currentCourseIndex].sections[currentSectionIndex];
+  const currentSection = course.sections[currentSectionIndex];
   const currentSectionId = currentSection.id;
 
   const onSelectVideo = (courseIndex: number, sectionIndex: number) => {
-    const sectionId = courses[courseIndex].sections[sectionIndex].id;
+    const sectionId = course.sections[sectionIndex].id;
 
     if (localStorage.getItem(`section-progress-${sectionId}`)) {
       const localStorageCurrentVideoTimeValue = JSON.parse(localStorage.getItem(`section-progress-${sectionId}`) || "{}").currentTime;
@@ -32,34 +33,66 @@ const Courses: React.FC<CoursesProps> = ({ courses, setCourses }) => {
     }
 
     setIsVideoShowing(true);
-    setCurrentCourseIndex(courseIndex);
     setCurrentSectionIndex(sectionIndex);
+  };
+
+  const onSelectQuiz = (courseIndex: number, sectionIndex: number) => {
+    setIsQuizShowing(true);
+    setCurrentSectionIndex(sectionIndex);
+  };
+
+  const updateCourses = (updatedSections: CourseSection[]) => {
+    const updatedCourses = courses.map((course, index) => {
+      if (index === currentCourseIndex) {
+        return {
+          ...course,
+          sections: updatedSections,
+        };
+      }
+
+      return course;
+    });
+
+    setCourses(updatedCourses);
   };
 
   if (isVideoShowing) {
     return (
       <CourseVideoContainer
-        currentCourseIndex={currentCourseIndex}
         currentSectionIndex={currentSectionIndex}
         currentSectionId={currentSectionId}
+        courseTitle={courses[currentCourseIndex].title}
+        sections={courses[currentCourseIndex].sections}
+        updateCourses={updateCourses}
         initialCurrentVideoTime={initialCurrentVideoTime}
-        courses={courses}
         setCurrentCourseIndex={setCurrentCourseIndex}
         setCurrentSectionIndex={setCurrentSectionIndex}
         setIsVideoShowing={setIsVideoShowing}
-        setCourses={setCourses}
         setInitialCurrentVideoTime={setInitialCurrentVideoTime} />
     );
   }
+
+  if (isQuizShowing) {
+    return (
+      <CourseQuizContainer
+        currentSectionIndex={currentSectionIndex}
+        sections={courses[currentCourseIndex].sections} />
+    );
+  }
+
+  console.log(">>> isQuizShowing: ", isQuizShowing);
+  console.log(">>> currentSectionIndex: ", currentSectionIndex);
+  console.log(">>> currentCourseIndex: ", currentCourseIndex);
 
   return (
     <div className="w-100">
       <Header title="Course Curriculum" />
       <CoursesList
         courses={courses}
-        onSelectVideo={onSelectVideo} />
+        onSelectVideo={onSelectVideo}
+        onSelectQuiz={onSelectQuiz} />
     </div>
   );
 };
 
-export default Courses;
+export default Course;

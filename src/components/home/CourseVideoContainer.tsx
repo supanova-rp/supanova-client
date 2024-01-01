@@ -1,34 +1,35 @@
 import { Dispatch, SetStateAction, SyntheticEvent } from "react";
 
-import { Course, VideoChangeDirection } from "../../types/index";
+import { CourseSection, VideoChangeDirection } from "../../types/index";
 import Video from "./Video";
+import { isVideoSection } from "../admin/course-form/utils";
 
 interface CourseProps {
-  currentCourseIndex: number,
   currentSectionIndex: number,
   currentSectionId: number,
   initialCurrentVideoTime: number,
-  courses: Course[],
+  courseTitle: string,
+  sections: CourseSection[],
+  updateCourses: (updatedSections: CourseSection[]) => void;
   setCurrentCourseIndex: (courseIndex: number) => void,
   setCurrentSectionIndex: (sectionIndex: number) => void,
   setIsVideoShowing: (value: boolean) => void,
-  setCourses: Dispatch<SetStateAction<Course[]>>,
   setInitialCurrentVideoTime: Dispatch<SetStateAction<number>>,
 }
 
 const CourseVideoContainer: React.FC<CourseProps> = ({
-  currentCourseIndex,
   currentSectionIndex,
   currentSectionId,
   initialCurrentVideoTime,
-  courses,
+  courseTitle,
+  sections,
+  updateCourses,
   setCurrentCourseIndex,
   setCurrentSectionIndex,
   setIsVideoShowing,
-  setCourses,
   setInitialCurrentVideoTime,
 }) => {
-  const hasNext = currentSectionIndex + 1 !== courses[currentCourseIndex].sections.length;
+  const hasNext = currentSectionIndex + 1 !== sections.length;
   const hasPrev = currentSectionIndex !== 0;
   const hasPrevAndNext = hasNext && hasPrev;
 
@@ -44,7 +45,7 @@ const CourseVideoContainer: React.FC<CourseProps> = ({
 
   const onChangeVideo = (direction: VideoChangeDirection) => {
     const newSectionIndex = direction === "next" ? currentSectionIndex + 1 : currentSectionIndex - 1;
-    const newSectionId = courses[currentCourseIndex].sections[newSectionIndex].id;
+    const newSectionId = sections[newSectionIndex].id;
 
     setCurrentSectionIndex(newSectionIndex);
     updateInitialCurrentVideoTime(newSectionId);
@@ -65,8 +66,8 @@ const CourseVideoContainer: React.FC<CourseProps> = ({
 
     localStorage.setItem(`section-progress-${currentSectionId}`, JSON.stringify(sectionProgressInfo));
 
-    const updatedSectionsWithVideoCompletedFlag = courses[currentCourseIndex].sections.map((section, index) => {
-      if (index === currentSectionIndex) {
+    const updatedSectionsWithVideoCompletedFlag = sections.map((section, index) => {
+      if (index === currentSectionIndex && isVideoSection(section)) {
         return {
           ...section,
           completed: true,
@@ -76,18 +77,7 @@ const CourseVideoContainer: React.FC<CourseProps> = ({
       return section;
     });
 
-    const updatedCourses = courses.map((course, index) => {
-      if (index === currentCourseIndex) {
-        return {
-          ...course,
-          sections: updatedSectionsWithVideoCompletedFlag,
-        };
-      }
-
-      return course;
-    });
-
-    setCourses(updatedCourses);
+    updateCourses(updatedSectionsWithVideoCompletedFlag);
   };
 
   const onTimeUpdateSaveToLocalStorage = (e: SyntheticEvent<HTMLVideoElement>) => {
@@ -106,11 +96,11 @@ const CourseVideoContainer: React.FC<CourseProps> = ({
 
   return (
     <Video
-      courses={courses}
+      sections={sections}
+      courseTitle={courseTitle}
       initialCurrentVideoTime={initialCurrentVideoTime}
       hasNext={hasNext}
       hasPrevAndNext={hasPrevAndNext}
-      currentCourseIndex={currentCourseIndex}
       currentSectionIndex={currentSectionIndex}
       onExitVideo={onExitVideo}
       onChangeVideo={onChangeVideo}

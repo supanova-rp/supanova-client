@@ -7,7 +7,6 @@ import { Toaster } from "react-hot-toast";
 
 import { AuthProvider } from "./contexts/AuthContext";
 
-import Home from "./components/home/Home";
 import PageErrorScreen from "./components/PageErrorScreen";
 import Admin from "./components/admin/Admin";
 import AdminRoute from "./components/admin/AdminRoute";
@@ -15,6 +14,8 @@ import ForgotPassword from "./components/authentication/ForgotPassword";
 import Login from "./components/authentication/Login";
 import Register from "./components/authentication/Register";
 import RedirectLoggedInUser from "./components/authentication/RedirectLoggedInUser";
+import CoursesDashboard from "./components/home/CoursesDashboard";
+import Course from "./components/home/CourseContainer";
 
 const App = () => {
   return (
@@ -23,7 +24,10 @@ const App = () => {
         <Routes>
           <Route
             path="/"
-            element={<Home />} />
+            element={<CoursesDashboard />} />
+          <Route
+            path="/course/:id"
+            element={<Course />} />
           <Route
             path="/admin"
             element={(

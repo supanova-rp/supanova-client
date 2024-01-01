@@ -1,7 +1,7 @@
 import { Card } from "react-bootstrap";
 
 import { AdminTabValue, setActiveTabFunction } from "../../types/index";
-import { HOME_TABS } from "src/constants/constants";
+import { COURSE_TABS } from "src/constants/constants";
 import HomeImage from "../../images/Home-image.png";
 
 import Sidebar from "../nav/Sidebar";
@@ -12,7 +12,7 @@ interface Props {
 }
 
 const SidebarContainer: React.FC<Props> = ({ activeTab, setActiveTab }) => {
-  const homeTabs = Object.values(HOME_TABS);
+  const homeTabs = Object.values(COURSE_TABS);
 
   return (
     <Card
@@ -21,8 +21,8 @@ const SidebarContainer: React.FC<Props> = ({ activeTab, setActiveTab }) => {
         <img
           src={HomeImage}
           alt="Supanova"
-          className="home-course-image" />
-        <h5 className="course-title-home">Radiation Safety Training Course</h5>
+          className="course-image" />
+        <h5 className="course-title-course-view">Radiation Safety Training Course</h5>
         <div className="row w-100">
           <div className="col-20 p-0">
             <Sidebar

@@ -6,6 +6,7 @@ import { CourseQuizQuestion, CourseSection } from "../../../types/index";
 import VideoSection from "./VideoSection";
 import QuizSection from "./QuizSection";
 import AddMoreInputs from "src/components/AddMoreInputs";
+import { isQuizSection } from "./utils";
 
 interface Props {
   section: CourseSection,
@@ -89,7 +90,7 @@ export default class CourseFormSection extends React.Component<Props> {
       onClickRemoveQuizQuestion,
     } = this.props;
 
-    if (section.videoUrl === undefined) {
+    if (isQuizSection(section)) {
       return (
         <>
           <QuizSection

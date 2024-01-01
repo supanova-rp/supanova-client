@@ -40,6 +40,15 @@ body, html, #root {
   }
 }
 
+.full-screen-loading-container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex; 
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 50px;
+}
+
 .page-not-found-container {
   display: flex;
   flex-direction: column;

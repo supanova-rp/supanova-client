@@ -11,7 +11,9 @@ interface Props extends React.PropsWithChildren {
   error: string | null,
   onClick: () => void,
   isLoading: boolean,
+  isCoursesDashboard?: boolean,
   courses?: Course[] | CourseTitle[],
+  course?: Course | null,
   usersToCourses?: UserToCourses[],
 }
 
@@ -19,7 +21,9 @@ const CourseErrorLoadingHandler = ({
   error,
   onClick,
   isLoading,
+  isCoursesDashboard = false,
   courses,
+  course,
   usersToCourses,
   children
 }: Props) => {
@@ -28,13 +32,14 @@ const CourseErrorLoadingHandler = ({
     return (
       <ErrorCard
         errorMessage={error}
+        isCoursesDashboard={isCoursesDashboard}
         clickHandlerFunction={onClick} />
     );
   }
 
   if (isLoading) {
     return (
-      <div className="w-100 h-100 d-flex justify-content-center align-items-center pb-5">
+      <div className="full-screen-loading-container">
         <PulseLoader
           color={colors.orange}
           className="m-5" />
@@ -42,7 +47,7 @@ const CourseErrorLoadingHandler = ({
     );
   }
 
-  if (courses && !courses?.length) {
+  if ((courses && !courses?.length) || course) {
     return <WarningCard warningMessage="You don't have any courses yet..." />;
   }
 

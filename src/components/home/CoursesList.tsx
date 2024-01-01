@@ -1,13 +1,15 @@
 import { Course } from "../../types/index";
+import { isVideoSection } from "../admin/course-form/utils";
 
-import TableRow from "./TableRow";
+import SectionTableRow from "./SectionTableRow";
 
 interface CoursesListProps {
   courses: Course[],
   onSelectVideo: (courseIndex: number, sectionIndex: number) => void,
+  onSelectQuiz: (courseIndex: number, sectionIndex: number) => void,
 }
 
-const CoursesList: React.FC<CoursesListProps> = ({ courses, onSelectVideo }) => {
+const CoursesList: React.FC<CoursesListProps> = ({ courses, onSelectVideo, onSelectQuiz }) => {
   return (
     <div className="px-3 pt-2">
       {courses.map((course, courseIndex) => {
@@ -24,12 +26,13 @@ const CoursesList: React.FC<CoursesListProps> = ({ courses, onSelectVideo }) => 
                   const isCompletedInLocalStorage = JSON.parse(localStorage.getItem(`section-progress-${sectionId}`) || "{}").completed;
 
                   return (
-                    <TableRow
+                    <SectionTableRow
                       key={section.id}
                       completed={section.completed || isCompletedInLocalStorage}
+                      isVideoSection={isVideoSection(section)}
                       sectionId={section.id}
-                      title={`${sectionIndex + 1}. ${section.title}`}
-                      onClickSetCurrentVideoInfo={() => onSelectVideo(courseIndex, sectionIndex)} />
+                      title={isVideoSection(section) ? `${sectionIndex + 1}. ${section.title}` : `${sectionIndex + 1}. Quiz`}
+                      onClickFunc={isVideoSection(section) ? () => onSelectVideo(courseIndex, sectionIndex) : () => onSelectQuiz(courseIndex, sectionIndex)} />
                   );
                 })}
               </tbody>

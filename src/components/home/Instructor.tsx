@@ -1,5 +1,4 @@
 /* eslint-disable max-len */
-
 import Header from "./Header";
 
 import JoelProfilePicture from "../../images/Joel-Profile.png";

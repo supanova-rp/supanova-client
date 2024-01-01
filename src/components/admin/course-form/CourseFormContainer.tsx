@@ -239,7 +239,7 @@ export default class CourseFormContainer extends Component <CourseFormContainerP
                       render={(requestDeleteCourse) => {
                         if (isLoading) {
                           return (
-                            <div className="w-100 h-100 d-flex justify-content-center align-items-center pb-5">
+                            <div className="full-screen-loading-container">
                               <PulseLoader
                                 color={colors.orange}
                                 className="m-5" />
