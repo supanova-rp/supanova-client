@@ -4,24 +4,33 @@ import useRequest from "../../../hooks/useRequest";
 
 import AdminHeader from "../AdminHeader";
 import { CourseTitle, UserToCourses } from "src/types";
-import CourseErrorLoadingHandler from "src/components/CourseErrorLoadingHandler";
+import RequestHandler from "src/components/RequestHandler";
 import AssignUsersAccordion from "./AssignUsersAccordion";
 
 const AssignUsers = () => {
   const [isLoadingCourses, setIsLoadingCourses] = useState<boolean>(true);
   const [isLoadingUserCourses, setIsLoadingUserCourses] = useState<boolean>(false);
-  const [error, setError] = useState<null | string>(null);
+  const [coursesError, setCoursesError] = useState<null | string>(null);
+  const [userCoursesError, setUserCoursesError] = useState<null | string>(null);
   const [courses, setCourses] = useState<CourseTitle[]>([]);
   const [usersToCourses, setUsersToCourses] = useState<UserToCourses[]>([]);
 
   const requestCourseTitles = useRequest("/course-titles");
   const requestUsersToCourses = useRequest("/users-to-courses");
 
-  const onError = (error: string, errorMessage: string) => {
+  // TODO: extract this to a hook that returns error and loading state
+  const onCoursesError = (error: string, errorMessage: string) => {
     console.log(error);
 
     setIsLoadingCourses(false);
-    setError(errorMessage);
+    setCoursesError(errorMessage);
+  };
+
+  const onUserCoursesError = (error: string, errorMessage: string) => {
+    console.log(error);
+
+    setIsLoadingUserCourses(false);
+    setUserCoursesError(errorMessage);
   };
 
   const onSuccessUserCourses = (results: UserToCourses[]) => {
@@ -38,10 +47,10 @@ const AssignUsers = () => {
     }
   };
 
-  const getCoursesAndUsers = () => {
+  const getCourseTitles = () => {
     requestCourseTitles({
       onSuccess: onSuccessCourses,
-      onError: (error) => onError(error, "Failed to load courses.")
+      onError: (error) => onCoursesError(error, "Failed to load courses.")
     });
 
   };
@@ -51,28 +60,35 @@ const AssignUsers = () => {
 
     requestUsersToCourses({
       onSuccess: onSuccessUserCourses,
-      onError: (error) => onError(error, "Failed to load users.")
+      onError: (error) => onUserCoursesError(error, "Failed to load users.")
     });
   };
 
   useEffect(() => {
-    getCoursesAndUsers();
+    getCourseTitles();
   }, []);
 
   return (
     <>
       <AdminHeader title="Assign Users to Courses" />
-      <CourseErrorLoadingHandler
-        error={error}
-        courses={courses}
-        onClick={getCoursesAndUsers}
-        isLoading={isLoadingCourses || isLoadingUserCourses}
-        usersToCourses={usersToCourses}>
-        <AssignUsersAccordion
-          usersToCourses={usersToCourses}
-          courses={courses}
-          setUsersToCourses={setUsersToCourses}/>
-      </CourseErrorLoadingHandler>
+      <RequestHandler
+        error={coursesError}
+        onClick={getCourseTitles}
+        isLoading={isLoadingCourses}
+        shouldShowWarning={!courses?.length}
+        warningMessage="You don't have any courses yet...">
+        <RequestHandler
+          error={userCoursesError}
+          onClick={getUsersWithAssignedCourses}
+          isLoading={isLoadingUserCourses}
+          shouldShowWarning={!usersToCourses?.length}
+          warningMessage="You don't have any users yet...">
+          <AssignUsersAccordion
+            usersToCourses={usersToCourses}
+            courses={courses}
+            setUsersToCourses={setUsersToCourses}/>
+        </RequestHandler>
+      </RequestHandler>
     </>
   );
 };

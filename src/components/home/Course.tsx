@@ -53,10 +53,11 @@ const Course: React.FC<CoursesProps> = ({ course, setCourse }) => {
       return course;
     });
 
-    setCourses(updatedCourses);
+    setCourse(updatedCourses);
   };
 
   if (isVideoShowing) {
+    // TODO: update to only take the video section as a prop
     return (
       <CourseVideoContainer
         currentSectionIndex={currentSectionIndex}

@@ -11,13 +11,13 @@ import Navbar from "../nav/Navbar";
 import Instructor from "./Instructor";
 import Course from "./Course";
 
-import CourseErrorLoadingHandler from "../CourseErrorLoadingHandler";
+import RequestHandler from "../RequestHandler";
 
 const CourseContainer = () => {
   const [course, setCourse] = useState<null | CourseType>(null);
   const [activeTab, setActiveTab] = useState<AdminTabValue>("Courses");
   const [error, setError] = useState<null | string>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
   const { COURSES, INSTRUCTOR } = COURSE_TABS;
@@ -31,6 +31,8 @@ const CourseContainer = () => {
   const getCourse = () => {
     setIsLoading(true);
     setError(null);
+
+    console.log(">>>> id: ", id);
 
     requestCourse({
       requestBody: {
@@ -57,6 +59,8 @@ const CourseContainer = () => {
   }, []);
 
   const onSuccess = (result: CourseType) => {
+    console.log(">>>> result: ", result);
+
     setCourse(result);
     setIsLoading(false);
   };
@@ -69,18 +73,21 @@ const CourseContainer = () => {
   };
 
   const renderTabContent = () => {
+    console.log(">>>> course: ", course);
+
     if (activeTab === COURSES) {
       return (
         <div>
-          <CourseErrorLoadingHandler
+          <RequestHandler
             error={error}
             onClick={getCourse}
             isLoading={isLoading}
-            course={course}>
+            shouldShowWarning={!course}
+            warningMessage="Failed to load course...">
             <Course
               course={course}
               setCourse={setCourse} />
-          </CourseErrorLoadingHandler>
+          </RequestHandler>
         </div>
       );
     }

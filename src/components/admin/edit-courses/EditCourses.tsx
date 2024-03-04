@@ -7,7 +7,7 @@ import {
 } from "../course-form/utils";
 import { REACT_TOAST_DURATION, feedbackMessages } from "src/constants/constants";
 
-import CourseErrorLoadingHandler from "../../CourseErrorLoadingHandler";
+import RequestHandler from "../../RequestHandler";
 import RequestWrapper from "../../RequestWrapper";
 import AdminHeader from "../AdminHeader";
 import CoursesList from "./CoursesList";
@@ -83,6 +83,8 @@ export default class EditCourses extends Component {
   };
 
   onSuccess = (result: Course[]) => {
+    console.log(">>>> edit courses: ", result);
+
     this.setState({
       allCourses: result,
       isLoading: false
@@ -119,10 +121,11 @@ export default class EditCourses extends Component {
           onSuccess={this.onSuccess}
           render={(requestCourses) => {
             return (
-              <CourseErrorLoadingHandler
+              <RequestHandler
                 isLoading={isLoading}
                 error={getCoursesErrorMessage}
-                courses={allCourses}
+                shouldShowWarning={!allCourses?.length}
+                warningMessage="You don't have any courses yet..."
                 onClick={requestCourses}>
 
                 {editingCourse
@@ -142,7 +145,7 @@ export default class EditCourses extends Component {
                       onClickEditCourse={this.onClickEditCourse}/>
                   )
                 }
-              </CourseErrorLoadingHandler>
+              </RequestHandler>
             );
           }}/>
       </>

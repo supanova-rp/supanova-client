@@ -2,7 +2,6 @@
 import { PulseLoader } from "react-spinners";
 
 import { colors } from "src/constants/colorPalette";
-import { Course, CourseTitle, UserToCourses } from "src/types";
 
 import ErrorCard from "./ErrorCard";
 import WarningCard from "./WarningCard";
@@ -12,19 +11,20 @@ interface Props extends React.PropsWithChildren {
   onClick: () => void,
   isLoading: boolean,
   isCoursesDashboard?: boolean,
-  courses?: Course[] | CourseTitle[],
-  course?: Course | null,
-  usersToCourses?: UserToCourses[],
+  // courses?: Course[] | CourseTitle[],
+  // course?: Course | null,
+  // usersToCourses?: UserToCourses[],
+  shouldShowWarning: boolean,
+  warningMessage: string,
 }
 
-const CourseErrorLoadingHandler = ({
+const RequestHandler = ({
   error,
   onClick,
   isLoading,
   isCoursesDashboard = false,
-  courses,
-  course,
-  usersToCourses,
+  shouldShowWarning,
+  warningMessage,
   children
 }: Props) => {
 
@@ -47,15 +47,11 @@ const CourseErrorLoadingHandler = ({
     );
   }
 
-  if ((courses && !courses?.length) || course) {
-    return <WarningCard warningMessage="You don't have any courses yet..." />;
-  }
-
-  if (usersToCourses && !usersToCourses?.length) {
-    return <WarningCard warningMessage="You don't have any users yet..." />;
+  if (shouldShowWarning) {
+    return <WarningCard warningMessage={warningMessage} />;
   }
 
   return <>{children}</>;
 };
 
-export default CourseErrorLoadingHandler;
+export default RequestHandler;

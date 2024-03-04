@@ -6,7 +6,7 @@ import { useAuth } from "src/contexts/AuthContext";
 
 import CourseCard from "./CourseCard";
 import Navbar from "../nav/Navbar";
-import CourseErrorLoadingHandler from "../CourseErrorLoadingHandler";
+import RequestHandler from "../RequestHandler";
 
 const CoursesDashboard = () => {
   const [courses, setCourses] = useState<[] | Course[]>([]);
@@ -55,12 +55,14 @@ const CoursesDashboard = () => {
   }, []);
 
   const onSuccess = (result: Course[]) => {
+    console.log(">>>> result: ", result);
+
     setCourses(result);
     setIsLoading(false);
   };
 
   const onError = (error = "", courseErrorMessage: string ) => {
-    console.log(">>> error: ", error || courseErrorMessage);
+    console.log(error || courseErrorMessage);
 
     setIsLoading(false);
     setError(courseErrorMessage);
@@ -70,12 +72,13 @@ const CoursesDashboard = () => {
     <>
       <Navbar isAdmin={isAdmin} />
       <div className="courses-dashboard-container">
-        <CourseErrorLoadingHandler
+        <RequestHandler
           error={error}
           isCoursesDashboard
           onClick={() => getCourses(isAdmin)}
           isLoading={isLoading}
-          courses={courses}>
+          shouldShowWarning={!courses?.length}
+          warningMessage="You don't have any courses yet...">
           <div className="courses-dashboard-grid">
             {courses?.map((course) => {
               return (
@@ -85,7 +88,7 @@ const CoursesDashboard = () => {
               );
             })}
           </div>
-        </CourseErrorLoadingHandler>
+        </RequestHandler>
       </div>
     </>
   );

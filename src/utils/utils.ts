@@ -57,6 +57,8 @@ export const request = async ({
   const accessToken = await currentUser?.getIdTokenResult();
 
   try {
+    console.log(`sending ${method} request to ${endpoint}, with requestBody: `, requestBody);
+
     const response = await fetch(`${API_DOMAIN}${endpoint}`, {
       method,
       headers: { "Content-Type": "application/json" },
@@ -64,6 +66,9 @@ export const request = async ({
     });
 
     const result = await response.json();
+
+    console.log(`response from ${method} request to ${endpoint}`, response);
+    console.log(`result from ${method} request to ${endpoint}`, result);
 
     if (!result.error) {
       onSuccess(result);

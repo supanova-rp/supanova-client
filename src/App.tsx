@@ -15,7 +15,7 @@ import Login from "./components/authentication/Login";
 import Register from "./components/authentication/Register";
 import RedirectLoggedInUser from "./components/authentication/RedirectLoggedInUser";
 import CoursesDashboard from "./components/home/CoursesDashboard";
-import Course from "./components/home/CourseContainer";
+import CourseContainer from "./components/home/CourseContainer";
 
 const App = () => {
   return (
@@ -27,7 +27,7 @@ const App = () => {
             element={<CoursesDashboard />} />
           <Route
             path="/course/:id"
-            element={<Course />} />
+            element={<CourseContainer />} />
           <Route
             path="/admin"
             element={(
