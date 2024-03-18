@@ -27,7 +27,7 @@ export const unauthedRoutes = ["/register", "/forgot-password"];
 export const feedbackMessages = {
   videoMissing: "Every section needs a video.",
   correctAnswerMissing: "Every quiz question needs a correct answer.",
-  getCourseError: "Failed to get course.",
+  getCourseError: "Oops something went wrong! Failed to get course.",
   getEditCourseError: "Failed to load course.",
   addCourseSuccess: "Successfully created a new course!",
   saveCourseError: "Failed to save course. Try again.",

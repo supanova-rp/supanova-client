@@ -83,6 +83,8 @@ export const request = async ({
       }
     }
   } catch (error) {
+    console.log(`error from ${method} request to ${endpoint}`, error);
+
     onError(error as string);
   }
 };

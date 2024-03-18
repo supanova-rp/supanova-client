@@ -23,7 +23,8 @@ export type AuthContextType = {
   login: (email: string, password: string) => Promise<UserCredential>,
   logout: () => Promise<void>,
   resetPassword: (email: string) => Promise<void>,
-  getIsAdmin: () => Promise<boolean>
+  isAdmin: boolean,
+  isLoading: boolean
 };
 
 export const AuthContext = createContext<AuthContextType>({} as AuthContextType);
@@ -36,6 +37,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
   const [signedInStatus, setSignedInStatus] = useState<string | null>(null);
   const [currentUser, setCurrentUser] = useState<FirebaseUser | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
   const navigate = useNavigate();
   const location = useLocation().pathname;
@@ -46,8 +48,26 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
     }
   }, [signedInStatus]);
 
+  const setAdminStatus = async (user: FirebaseUser) => {
+    try {
+      const response = await user?.getIdTokenResult();
+      const result = await response?.claims.admin;
+
+      setIsAdmin(result);
+    } catch (e) {
+      setIsAdmin(false);
+    }
+  };
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user: FirebaseUser | null) => {
+
+      if (user) {
+        await setAdminStatus(user);
+      } else {
+        setIsAdmin(false);
+      }
+
       setCurrentUser(user);
       setIsLoading(false);
       setSignedInStatus(user ? "signed_in" : "signed_out");
@@ -69,23 +89,13 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
       return sendPasswordResetEmail(auth, email);
     };
 
-    const getIsAdmin = async () => {
-      try {
-        const response = await currentUser?.getIdTokenResult();
-        const result = await response?.claims.admin;
-
-        return result;
-      } catch (e) {
-        return false;
-      }
-    };
-
     return {
       currentUser,
       login,
       logout,
       resetPassword,
-      getIsAdmin,
+      isAdmin,
+      isLoading,
     };
   }, [currentUser]);
 

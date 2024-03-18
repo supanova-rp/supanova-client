@@ -12,14 +12,13 @@ const CoursesDashboard = () => {
   const [courses, setCourses] = useState<[] | Course[]>([]);
   const [error, setError] = useState<null | string>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
-  const { getIsAdmin, currentUser } = useAuth();
+  const { isAdmin, currentUser } = useAuth();
 
   const requestCourseTitles = useRequest("/course-titles");
   const requestAssignedCourseTitles = useRequest("/assigned-course-titles");
 
-  const getCourses = (isAdmin: boolean) => {
+  const getCourses = () => {
     setIsLoading(true);
     setError(null);
 
@@ -39,19 +38,17 @@ const CoursesDashboard = () => {
     }
   };
 
-  const verifyIsAdmin = async () => {
+  // TODO: test gpt to make useQuery hook
+  const handleGetCourses = async () => {
     try {
-      const result = await getIsAdmin();
-
-      setIsAdmin(result);
-      getCourses(result);
+      getCourses();
     } catch (error) {
       onError("Failed to load courses.", error as string);
     }
   };
 
   useEffect(() => {
-    verifyIsAdmin();
+    handleGetCourses();
   }, []);
 
   const onSuccess = (result: Course[]) => {
@@ -75,7 +72,7 @@ const CoursesDashboard = () => {
         <RequestHandler
           error={error}
           isCoursesDashboard
-          onClick={() => getCourses(isAdmin)}
+          onClick={handleGetCourses}
           isLoading={isLoading}
           shouldShowWarning={!courses?.length}
           warningMessage="You don't have any courses yet...">

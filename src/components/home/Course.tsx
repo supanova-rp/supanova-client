@@ -1,28 +1,29 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 
-import { Course as CourseType, CourseSection } from "../../types/index";
+import { Course as CourseType, ChangeDirection } from "../../types/index";
 
-import CoursesList from "./CoursesList";
 import CourseVideoContainer from "./CourseVideoContainer";
 import Header from "./Header";
-import CourseQuizContainer from "./CourseQuizContainer";
+import { CourseSummary } from "./CourseSummary";
+import { getVideoProgressKey } from "src/utils/course-utils";
+import { isVideoSection } from "../admin/course-form/utils";
 
 interface CoursesProps {
   course: CourseType,
-  setCourse: Dispatch<SetStateAction<CourseType>>,
 }
 
-const Course: React.FC<CoursesProps> = ({ course, setCourse }) => {
-  const [isVideoShowing, setIsVideoShowing] = useState<boolean>(false);
-  const [isQuizShowing, setIsQuizShowing] = useState<boolean>(false);
-  const [currentSectionIndex, setCurrentSectionIndex] = useState<number>(0);
+const Course: React.FC<CoursesProps> = ({ course }) => {
+  const [currentSectionIndex, setCurrentSectionIndex] = useState<number | null>(null);
   const [initialCurrentVideoTime, setInitialCurrentVideoTime] = useState<number>(0);
 
-  const currentSection = course.sections[currentSectionIndex];
-  const currentSectionId = currentSection.id;
+  const { sections, id: courseId } = course;
 
-  const onSelectVideo = (courseIndex: number, sectionIndex: number) => {
-    const sectionId = course.sections[sectionIndex].id;
+  const currentSection = typeof currentSectionIndex === "number" ? sections[currentSectionIndex] : null;
+
+  console.log(">>>> currentSection: ", currentSection);
+
+  const onSelectVideo = (sectionIndex: number) => {
+    const sectionId = sections[sectionIndex].id;
 
     if (localStorage.getItem(`section-progress-${sectionId}`)) {
       const localStorageCurrentVideoTimeValue = JSON.parse(localStorage.getItem(`section-progress-${sectionId}`) || "{}").currentTime;
@@ -32,68 +33,76 @@ const Course: React.FC<CoursesProps> = ({ course, setCourse }) => {
       setInitialCurrentVideoTime(0);
     }
 
-    setIsVideoShowing(true);
+    console.log(">>>> sectionIndex: ", sectionIndex);
+
     setCurrentSectionIndex(sectionIndex);
   };
 
-  const onSelectQuiz = (courseIndex: number, sectionIndex: number) => {
-    setIsQuizShowing(true);
+  const onSelectQuiz = (sectionIndex: number) => {
     setCurrentSectionIndex(sectionIndex);
   };
 
-  const updateCourses = (updatedSections: CourseSection[]) => {
-    const updatedCourses = courses.map((course, index) => {
-      if (index === currentCourseIndex) {
-        return {
-          ...course,
-          sections: updatedSections,
-        };
-      }
+  const updateInitialCurrentVideoTime = (sectionId: number) => {
+    const key = getVideoProgressKey(courseId, sectionId);
 
-      return course;
-    });
+    if (localStorage.getItem(key)) {
+      const localStorageCurrentVideoTimeValue = JSON.parse(localStorage.getItem(key) || "{}").currentTime;
 
-    setCourse(updatedCourses);
+      setInitialCurrentVideoTime(localStorageCurrentVideoTimeValue);
+    } else {
+      setInitialCurrentVideoTime(0);
+    }
   };
 
-  if (isVideoShowing) {
-    // TODO: update to only take the video section as a prop
+  const onChangeSection = (direction: ChangeDirection) => {
+    const sectionIndex = currentSectionIndex || 0;
+    const newSectionIndex = direction === "next" ? sectionIndex + 1 : sectionIndex - 1;
+    const newSectionId = sections[newSectionIndex].id;
+
+    setCurrentSectionIndex(newSectionIndex);
+    updateInitialCurrentVideoTime(newSectionId);
+  };
+
+  if (typeof currentSectionIndex !== "number") {
+    return (
+      <div className="w-100">
+        <Header title="Course Curriculum" />
+
+        <CourseSummary
+          course={course}
+          onSelectVideo={onSelectVideo}
+          onSelectQuiz={onSelectQuiz} />
+      </div>
+    );
+  }
+
+  if (currentSection && isVideoSection(currentSection)) {
     return (
       <CourseVideoContainer
-        currentSectionIndex={currentSectionIndex}
-        currentSectionId={currentSectionId}
-        courseTitle={courses[currentCourseIndex].title}
-        sections={courses[currentCourseIndex].sections}
-        updateCourses={updateCourses}
+        courseId={course.id}
+        videoSection={currentSection}
+        courseTitle={course.title}
+        hasNext={currentSectionIndex + 1 !== sections.length}
+        hasPrevious={currentSectionIndex !== 0}
         initialCurrentVideoTime={initialCurrentVideoTime}
-        setCurrentCourseIndex={setCurrentCourseIndex}
         setCurrentSectionIndex={setCurrentSectionIndex}
-        setIsVideoShowing={setIsVideoShowing}
-        setInitialCurrentVideoTime={setInitialCurrentVideoTime} />
+        setInitialCurrentVideoTime={setInitialCurrentVideoTime}
+        onChangeSection={onChangeSection} />
     );
   }
 
-  if (isQuizShowing) {
-    return (
-      <CourseQuizContainer
-        currentSectionIndex={currentSectionIndex}
-        sections={courses[currentCourseIndex].sections} />
-    );
+  if (currentSection) {
+    return null;
+
+    // TODO:
+    // return (
+    //   <CourseQuizContainer
+    //     currentSectionIndex={currentSectionIndex}
+    //     sections={courses[currentCourseIndex].sections} />
+    // );
   }
 
-  console.log(">>> isQuizShowing: ", isQuizShowing);
-  console.log(">>> currentSectionIndex: ", currentSectionIndex);
-  console.log(">>> currentCourseIndex: ", currentCourseIndex);
-
-  return (
-    <div className="w-100">
-      <Header title="Course Curriculum" />
-      <CoursesList
-        courses={courses}
-        onSelectVideo={onSelectVideo}
-        onSelectQuiz={onSelectQuiz} />
-    </div>
-  );
+  return null;
 };
 
 export default Course;

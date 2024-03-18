@@ -1,111 +1,79 @@
 import { Dispatch, SetStateAction, SyntheticEvent } from "react";
 
-import { CourseSection, VideoChangeDirection } from "../../types/index";
+import { ChangeDirection, CourseVideoSection } from "../../types/index";
 import Video from "./Video";
-import { isVideoSection } from "../admin/course-form/utils";
+import { getVideoProgressKey } from "src/utils/course-utils";
 
 interface CourseProps {
-  currentSectionIndex: number,
-  currentSectionId: number,
+  courseId: number,
+  videoSection: CourseVideoSection,
   initialCurrentVideoTime: number,
   courseTitle: string,
-  sections: CourseSection[],
-  updateCourses: (updatedSections: CourseSection[]) => void;
-  setCurrentCourseIndex: (courseIndex: number) => void,
-  setCurrentSectionIndex: (sectionIndex: number) => void,
-  setIsVideoShowing: (value: boolean) => void,
+  hasNext: boolean,
+  hasPrevious: boolean,
+  setCurrentSectionIndex: (sectionIndex: number | null) => void,
   setInitialCurrentVideoTime: Dispatch<SetStateAction<number>>,
+  onChangeSection: (d: ChangeDirection) => void,
 }
 
 const CourseVideoContainer: React.FC<CourseProps> = ({
-  currentSectionIndex,
-  currentSectionId,
+  courseId,
+  videoSection,
   initialCurrentVideoTime,
   courseTitle,
-  sections,
-  updateCourses,
-  setCurrentCourseIndex,
+  hasNext,
+  hasPrevious,
   setCurrentSectionIndex,
-  setIsVideoShowing,
   setInitialCurrentVideoTime,
+  onChangeSection,
 }) => {
-  const hasNext = currentSectionIndex + 1 !== sections.length;
-  const hasPrev = currentSectionIndex !== 0;
-  const hasPrevAndNext = hasNext && hasPrev;
+  const hasPrevAndNext = hasNext && hasPrevious;
 
-  const updateInitialCurrentVideoTime = (sectionId: number) => {
-    if (localStorage.getItem(`section-progress-${sectionId}`)) {
-      const localStorageCurrentVideoTimeValue = JSON.parse(localStorage.getItem(`section-progress-${sectionId}`) || "{}").currentTime;
-
-      setInitialCurrentVideoTime(localStorageCurrentVideoTimeValue);
-    } else {
-      setInitialCurrentVideoTime(0);
-    }
-  };
-
-  const onChangeVideo = (direction: VideoChangeDirection) => {
-    const newSectionIndex = direction === "next" ? currentSectionIndex + 1 : currentSectionIndex - 1;
-    const newSectionId = sections[newSectionIndex].id;
-
-    setCurrentSectionIndex(newSectionIndex);
-    updateInitialCurrentVideoTime(newSectionId);
-  };
+  const { id: sectionId, videoUrl, title } = videoSection;
 
   const onExitVideo = () => {
     setInitialCurrentVideoTime(0);
-    setIsVideoShowing(false);
-    setCurrentCourseIndex(0);
-    setCurrentSectionIndex(0);
+    setCurrentSectionIndex(null);
   };
 
-  const handleOnVideoEnded = () => {
+  const onVideoEnded = () => {
     const sectionProgressInfo = {
       completed: true,
       currentTime: 0,
     };
 
-    localStorage.setItem(`section-progress-${currentSectionId}`, JSON.stringify(sectionProgressInfo));
-
-    const updatedSectionsWithVideoCompletedFlag = sections.map((section, index) => {
-      if (index === currentSectionIndex && isVideoSection(section)) {
-        return {
-          ...section,
-          completed: true,
-        };
-      }
-
-      return section;
-    });
-
-    updateCourses(updatedSectionsWithVideoCompletedFlag);
+    // TODO:
+    // implement course progress saving on server
+    // in this func will want to say they have just completed this section
+    localStorage.setItem(getVideoProgressKey(courseId, sectionId), JSON.stringify(sectionProgressInfo));
   };
 
-  const onTimeUpdateSaveToLocalStorage = (e: SyntheticEvent<HTMLVideoElement>) => {
+  const onVideoTimeUpdate = (e: SyntheticEvent<HTMLVideoElement>) => {
     const videoElement = e.target as HTMLVideoElement;
     const { currentTime } = videoElement;
 
-    const localStorageValue = JSON.parse(localStorage.getItem(`section-progress-${currentSectionId}`) || "{}");
+    const localStorageValue = JSON.parse(localStorage.getItem(`section-progress-${sectionId}`) || "{}");
 
     const sectionProgressInfo = {
       ...localStorageValue,
       currentTime,
     };
 
-    localStorage.setItem(`section-progress-${currentSectionId}`, JSON.stringify(sectionProgressInfo));
+    localStorage.setItem(`section-progress-${sectionId}`, JSON.stringify(sectionProgressInfo));
   };
 
   return (
     <Video
-      sections={sections}
+      title={title}
+      videoUrl={videoUrl}
       courseTitle={courseTitle}
       initialCurrentVideoTime={initialCurrentVideoTime}
       hasNext={hasNext}
       hasPrevAndNext={hasPrevAndNext}
-      currentSectionIndex={currentSectionIndex}
       onExitVideo={onExitVideo}
-      onChangeVideo={onChangeVideo}
-      handleOnVideoEnded={handleOnVideoEnded}
-      onTimeUpdateSaveToLocalStorage={onTimeUpdateSaveToLocalStorage} />
+      onChangeVideo={onChangeSection}
+      onVideoEnded={onVideoEnded}
+      onVideoTimeUpdate={onVideoTimeUpdate} />
   );
 };
 

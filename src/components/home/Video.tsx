@@ -4,37 +4,36 @@ import { SyntheticEvent } from "react";
 import { Button } from "react-bootstrap";
 
 import { colors } from "../../constants/colorPalette";
-import { ReactComponent as ChevronLeft }  from "../../icons/chevronLeft.svg";
-import { CourseSection, VideoChangeDirection } from "../../types/index";
+import { ReactComponent as ChevronLeft } from "../../icons/chevronLeft.svg";
+import { ChangeDirection } from "../../types/index";
 
 import Header from "./Header";
 
 interface VideoProps {
-  currentSectionIndex: number,
-  initialCurrentVideoTime: number,
+  title: string,
+  videoUrl: string,
   courseTitle: string,
-  sections: CourseSection[],
   hasNext: boolean,
   hasPrevAndNext: boolean,
+  initialCurrentVideoTime: number,
   onExitVideo: () => void,
-  onChangeVideo: (direction: VideoChangeDirection) => void,
-  handleOnVideoEnded: () => void,
-  onTimeUpdateSaveToLocalStorage: (e: SyntheticEvent<HTMLVideoElement>) => void,
+  onChangeVideo: (direction: ChangeDirection) => void,
+  onVideoEnded: () => void,
+  onVideoTimeUpdate: (e: SyntheticEvent<HTMLVideoElement>) => void,
 }
 
 const Video: React.FC<VideoProps> = ({
-  sections,
+  title,
+  videoUrl,
   courseTitle,
   hasNext,
   hasPrevAndNext,
   initialCurrentVideoTime,
-  currentSectionIndex,
   onExitVideo,
   onChangeVideo,
-  handleOnVideoEnded,
-  onTimeUpdateSaveToLocalStorage,
+  onVideoEnded,
+  onVideoTimeUpdate,
 }) => {
-  const currentSection = sections[currentSectionIndex];
 
   const renderDirectionButtons = (className: string) => {
     if (hasPrevAndNext) {
@@ -95,8 +94,8 @@ const Video: React.FC<VideoProps> = ({
           </div>
           <Header title={courseTitle} />
         </div>
-        <h5 className="mt-2 mb-4">{`${currentSectionIndex + 1}. ${currentSection.title}`}</h5>
-        {currentSection.videoUrl
+        <h5 className="mt-2 mb-4">{title}</h5>
+        {videoUrl
           ? (
             <video
               id="my-player"
@@ -105,9 +104,9 @@ const Video: React.FC<VideoProps> = ({
               preload="auto"
               data-setup="{}"
               ref={onVideoMounted}
-              onTimeUpdate={onTimeUpdateSaveToLocalStorage}
-              onEnded={handleOnVideoEnded}
-              src={currentSection.videoUrl} />
+              onTimeUpdate={onVideoTimeUpdate}
+              onEnded={onVideoEnded}
+              src={videoUrl} />
           )
           : null
         }

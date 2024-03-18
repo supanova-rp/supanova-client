@@ -30,20 +30,25 @@ export type onChangeCourseFieldKey = "description" | "title"
 
 export type CourseSection = CourseVideoSection | CourseQuizSection
 
+export enum SectionTypes {
+  Video = "video",
+  Quiz = "quiz",
+}
+
 export type CourseVideoSection = {
   id: number,
+  type: SectionTypes,
   title: string,
-  videoUrl: string | null,
+  videoUrl: string,
   isNewSection?: boolean,
   uploadProgress?: UploadProgress,
   completed?: boolean,
   questions?: never,
-  type?: never,
 };
 
 export type CourseQuizSection = {
   id: number,
-  type: string,
+  type: SectionTypes,
   questions: CourseQuizQuestion[],
   isNewSection: boolean,
   title?: never,
@@ -74,7 +79,7 @@ export type CourseQuizAnswer = {
   isCorrectAnswer: boolean,
 }
 
-export type VideoChangeDirection = "next" | "prev"
+export type ChangeDirection = "next" | "prev"
 
 export type ErrorOptions = {
   message: null | string,

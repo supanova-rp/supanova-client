@@ -9,29 +9,9 @@ import { feedbackMessages } from "src/constants/constants";
 import PageErrorScreen from "../PageErrorScreen";
 
 const AdminRoute = ({ children }: React.PropsWithChildren) => {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const { isLoading, isAdmin } = useAuth();
 
-  const { getIsAdmin } = useAuth();
-
-  useEffect(() => {
-    const verifyIsAdmin = async () => {
-      try {
-        const result = await getIsAdmin();
-
-        setIsLoading(false);
-        setIsAdmin(result);
-      } catch (e) {
-        console.log(">>> isAdminError: ", e);
-        setIsLoading(false);
-        setIsAdmin(false);
-      }
-    };
-
-    verifyIsAdmin();
-
-  }, [getIsAdmin]);
-
+  // TODO: test if this still works as a non admin
   if (isLoading) {
     return (
       <div className="d-flex flex-column align-items-center justify-content-center h-100">
