@@ -1,15 +1,15 @@
 import { colors } from "src/constants/colorPalette";
-import { CourseSection } from "src/types";
+import { CourseQuizSection, CourseSection } from "src/types";
 import { ReactComponent as ChevronLeft } from "src/icons/chevronLeft.svg";
 
 import Header from "./Header";
 
 interface QuizProps {
+  quizSection: CourseQuizSection,
   currentSectionIndex: number,
-  sections: CourseSection[],
 }
 
-const Quiz : React.FC<QuizProps> = ({ currentSectionIndex, sections }) => {
+const Quiz : React.FC<QuizProps> = ({ quizSection, currentSectionIndex }) => {
   return (
     <div className="mb-4 ms-4">
       <div>
@@ -19,11 +19,11 @@ const Quiz : React.FC<QuizProps> = ({ currentSectionIndex, sections }) => {
               stroke={colors.orange}
               className="mt-4 me-1"/>
           </div>
-          <Header title="Multiple Choice Quiz" />
+          <Header title="Quiz" />
         </div>
-        {sections[currentSectionIndex].questions.map((currentSection) => {
+        {quizSection.questions.map(({ question }) => {
           return (
-            <h5 className="mt-2 mb-4">{`${currentSectionIndex + 1}. ${currentSection.question}`}</h5>
+            <h5 className="mt-2 mb-4">{question}</h5>
           );
         })}
       </div>

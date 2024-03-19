@@ -1,19 +1,17 @@
-import { CourseSection } from "src/types";
+import { CourseQuizSection } from "src/types";
 
 import Quiz from "./Quiz";
 
 interface CourseQuizContainerProps {
   currentSectionIndex: number,
-  sections: CourseSection[],
+  quizSection: CourseQuizSection,
 }
 
-const CourseQuizContainer : React.FC<CourseQuizContainerProps> = ({ currentSectionIndex, sections }) => {
-  console.log(">>> sections: ", sections);
-
+const CourseQuizContainer : React.FC<CourseQuizContainerProps> = ({ quizSection, currentSectionIndex }) => {
   return (
     <Quiz
-      currentSectionIndex={currentSectionIndex}
-      sections={sections} />
+      quizSection={quizSection}
+      currentSectionIndex={currentSectionIndex} />
   );
 };
 

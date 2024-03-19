@@ -6,7 +6,8 @@ import CourseVideoContainer from "./CourseVideoContainer";
 import Header from "./Header";
 import { CourseSummary } from "./CourseSummary";
 import { getVideoProgressKey } from "src/utils/course-utils";
-import { isVideoSection } from "../admin/course-form/utils";
+import { isQuizSection, isVideoSection } from "../admin/course-form/utils";
+import CourseQuizContainer from "./CourseQuizContainer";
 
 interface CoursesProps {
   course: CourseType,
@@ -91,15 +92,12 @@ const Course: React.FC<CoursesProps> = ({ course }) => {
     );
   }
 
-  if (currentSection) {
-    return null;
-
-    // TODO:
-    // return (
-    //   <CourseQuizContainer
-    //     currentSectionIndex={currentSectionIndex}
-    //     sections={courses[currentCourseIndex].sections} />
-    // );
+  if (currentSection && isQuizSection(currentSection)) {
+    return (
+      <CourseQuizContainer
+        quizSection={currentSection}
+        currentSectionIndex={currentSectionIndex} />
+    );
   }
 
   return null;
