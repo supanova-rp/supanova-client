@@ -9,9 +9,7 @@ interface CourseQuizContainerProps {
 
 const CourseQuizContainer : React.FC<CourseQuizContainerProps> = ({ quizSection, currentSectionIndex }) => {
   return (
-    <Quiz
-      quizSection={quizSection}
-      currentSectionIndex={currentSectionIndex} />
+    <Quiz quizSection={quizSection} />
   );
 };
 

@@ -75,8 +75,8 @@ export type CourseQuizQuestionServer = {
 export type CourseQuizAnswer = {
   id: string,
   answer: string,
-  isNewAnswer: boolean,
-  isCorrectAnswer: boolean,
+  correctAnswer: boolean,
+  isNewAnswer?: boolean,
 }
 
 export type ChangeDirection = "next" | "prev"
