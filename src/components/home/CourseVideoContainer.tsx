@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, SyntheticEvent } from "react";
 
-import { ChangeDirection, CourseVideoSection } from "../../types/index";
+import { CourseVideoSection } from "../../types/index";
 import Video from "./Video";
 import { getVideoProgressKey } from "src/utils/course-utils";
 
@@ -9,11 +9,8 @@ interface CourseProps {
   videoSection: CourseVideoSection,
   initialCurrentVideoTime: number,
   courseTitle: string,
-  hasNext: boolean,
-  hasPrevious: boolean,
   setCurrentSectionIndex: (sectionIndex: number | null) => void,
   setInitialCurrentVideoTime: Dispatch<SetStateAction<number>>,
-  onChangeSection: (d: ChangeDirection) => void,
 }
 
 const CourseVideoContainer: React.FC<CourseProps> = ({
@@ -21,13 +18,9 @@ const CourseVideoContainer: React.FC<CourseProps> = ({
   videoSection,
   initialCurrentVideoTime,
   courseTitle,
-  hasNext,
-  hasPrevious,
   setCurrentSectionIndex,
   setInitialCurrentVideoTime,
-  onChangeSection,
 }) => {
-  const hasPrevAndNext = hasNext && hasPrevious;
 
   const { id: sectionId, videoUrl, title } = videoSection;
 
@@ -68,10 +61,7 @@ const CourseVideoContainer: React.FC<CourseProps> = ({
       videoUrl={videoUrl}
       courseTitle={courseTitle}
       initialCurrentVideoTime={initialCurrentVideoTime}
-      hasNext={hasNext}
-      hasPrevAndNext={hasPrevAndNext}
       onExitVideo={onExitVideo}
-      onChangeVideo={onChangeSection}
       onVideoEnded={onVideoEnded}
       onVideoTimeUpdate={onVideoTimeUpdate} />
   );

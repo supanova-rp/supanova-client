@@ -1,16 +1,107 @@
-import { CourseQuizSection } from "src/types";
 
+import { useState } from "react";
+import { ChangeDirection, CourseQuizSection } from "../../types/index";
+
+import CourseSectionContainer from "./CourseSectionContainer";
 import Quiz from "./Quiz";
 
-interface CourseQuizContainerProps {
-  currentSectionIndex: number,
+interface Props {
+  canGoBack: boolean,
+  isLastSection: boolean,
   quizSection: CourseQuizSection,
+  onChangeSection: (direction: ChangeDirection) => void,
+  onCourseComplete: () => void,
 }
 
-const CourseQuizContainer : React.FC<CourseQuizContainerProps> = ({ quizSection, currentSectionIndex }) => {
+export const CourseQuizContainer: React.FC<Props> = ({
+  canGoBack,
+  isLastSection,
+  quizSection,
+  onChangeSection,
+  onCourseComplete,
+}) => {
+  const [selectedAnswers, setSelectedAnswers] = useState(new Array(quizSection.questions.length).fill([]));
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const [allAnswersAreCorrect, setAllAnswersAreCorrect] = useState(false);
+  const [score, setScore] = useState<number | null>(null);
+
+  const onChangeAnswer = (questionIndex: number, answerIndex: number) => {
+    const updatedSelectedAnswers = [...selectedAnswers];
+    const currentSelectedAnswers = updatedSelectedAnswers[questionIndex];
+
+    if (currentSelectedAnswers.includes(answerIndex)) {
+      // Deselect the answer if already selected
+      updatedSelectedAnswers[questionIndex] = currentSelectedAnswers.filter((index: any) => index !== answerIndex);
+    } else {
+      // Select the answer if not selected
+      updatedSelectedAnswers[questionIndex] = [...currentSelectedAnswers, answerIndex];
+    }
+
+    setSelectedAnswers(updatedSelectedAnswers);
+  };
+
+  const calculateScore = () => {
+    let correctAnswersCount = 0;
+
+    quizSection.questions.forEach((question, questionIndex) => {
+      const selectedAnswerIndices = selectedAnswers[questionIndex];
+      const correctAnswerIndices = question.answers
+        .map((answer, index) => (answer.correctAnswer ? index : null))
+        .filter((index) => index !== null);
+
+      if (
+        correctAnswerIndices.every((index) => selectedAnswerIndices.includes(index)) &&
+        correctAnswerIndices.length === selectedAnswerIndices.length
+      ) {
+        correctAnswersCount++;
+      }
+    });
+
+    return correctAnswersCount;
+  };
+
+  const onCloseModal = () => {
+    setScore(null);
+    setShowFeedbackModal(false);
+    setAllAnswersAreCorrect(false);
+  };
+
+  const onSubmitQuiz = () => {
+    const correctAnswersCount = calculateScore();
+    const totalQuestions = quizSection.questions.length;
+
+    setAllAnswersAreCorrect(correctAnswersCount === totalQuestions);
+
+    setScore(correctAnswersCount);
+    setShowFeedbackModal(true);
+  };
+
+  const onClickModalConfirm = () => {
+    if (allAnswersAreCorrect) {
+      if (isLastSection) {
+        onCourseComplete();
+      } else {
+        onChangeSection("next");
+      }
+    } else {
+      onCloseModal();
+    }
+  };
+
   return (
-    <Quiz quizSection={quizSection} />
+    <CourseSectionContainer
+      canGoBack={canGoBack}
+      continueText="Submit"
+      onChangeSection={onChangeSection}
+      onClickContinue={onSubmitQuiz}>
+      <Quiz
+        quizSection={quizSection}
+        score={score}
+        allAnswersAreCorrect={allAnswersAreCorrect}
+        selectedAnswers={selectedAnswers}
+        showFeedbackModal={showFeedbackModal}
+        onChangeAnswer={onChangeAnswer}
+        onClickModalConfirm={onClickModalConfirm}/>
+    </CourseSectionContainer>
   );
 };
-
-export default CourseQuizContainer;

@@ -1,66 +1,29 @@
-import React, { useState } from "react";
+import React from "react";
 import { ReactComponent as ChevronLeft } from "src/icons/chevronLeft.svg";
 import Header from "./Header";
 import { colors } from "src/constants/colorPalette";
 import { CourseQuizSection } from "src/types";
-// import Modal from "./Modal";
+import Modal from "../modals/Modal";
 
 interface Props {
   quizSection: CourseQuizSection,
+  selectedAnswers: any[],
+  score: number | null,
+  showFeedbackModal: boolean,
+  allAnswersAreCorrect: boolean,
+  onChangeAnswer: (questionIndex: number, answerIndex: number) => void,
+  onClickModalConfirm: () => void,
 }
 
-const Quiz: React.FC<Props> = ({ quizSection }) => {
-  const [selectedAnswers, setSelectedAnswers] = useState(new Array(quizSection.questions.length).fill([]));
-  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
-  const [score, setScore] = useState<number | null>(null);
-
-  const handleAnswerChange = (questionIndex: number, answerIndex: number) => {
-    const updatedSelectedAnswers = [...selectedAnswers];
-    const currentSelectedAnswers = updatedSelectedAnswers[questionIndex];
-
-    if (currentSelectedAnswers.includes(answerIndex)) {
-      // Deselect the answer if already selected
-      updatedSelectedAnswers[questionIndex] = currentSelectedAnswers.filter((index) => index !== answerIndex);
-    } else {
-      // Select the answer if not selected
-      updatedSelectedAnswers[questionIndex] = [...currentSelectedAnswers, answerIndex];
-    }
-
-    setSelectedAnswers(updatedSelectedAnswers);
-  };
-
-  const handleSubmit = () => {
-    const correctAnswersCount = calculateScore();
-
-    setScore(correctAnswersCount);
-    setShowFeedbackModal(true);
-  };
-
-  const calculateScore = () => {
-    let correctAnswersCount = 0;
-
-    quizSection.questions.forEach((question, questionIndex) => {
-      const selectedAnswerIndices = selectedAnswers[questionIndex];
-      const correctAnswerIndices = question.answers
-        .map((answer, index) => (answer.correctAnswer ? index : null))
-        .filter((index) => index !== null);
-
-      if (
-        correctAnswerIndices.every((index) => selectedAnswerIndices.includes(index)) &&
-        correctAnswerIndices.length === selectedAnswerIndices.length
-      ) {
-        correctAnswersCount++;
-      }
-    });
-
-    return correctAnswersCount;
-  };
-
-  const closeModal = () => {
-    setScore(null);
-    setShowFeedbackModal(false);
-  };
-
+const Quiz: React.FC<Props> = ({
+  quizSection,
+  selectedAnswers,
+  score,
+  showFeedbackModal,
+  allAnswersAreCorrect,
+  onChangeAnswer,
+  onClickModalConfirm,
+}) => {
   const totalQuestions = quizSection.questions.length;
 
   return (
@@ -86,7 +49,7 @@ const Quiz: React.FC<Props> = ({ quizSection }) => {
                   className="form-check-input"
                   id={`question-${questionIndex}-answer-${answerIndex}`}
                   checked={selectedAnswers[questionIndex].includes(answerIndex)}
-                  onChange={() => handleAnswerChange(questionIndex, answerIndex)}/>
+                  onChange={() => onChangeAnswer(questionIndex, answerIndex)}/>
                 <label
                   className="form-check-label"
                   htmlFor={`question-${questionIndex}-answer-${answerIndex}`}>
@@ -96,26 +59,35 @@ const Quiz: React.FC<Props> = ({ quizSection }) => {
             ))}
           </div>
         ))}
-        <button
-          className="btn btn-primary mt-3"
-          onClick={handleSubmit}>
-          Submit
-        </button>
       </div>
-      {/* {showFeedbackModal && (
-        <Modal onClose={closeModal}>
-          {score !== null ? (
-            <>
-              <div className={score === totalQuestions ? 'text-success' : 'text-danger'}>
-                {score === totalQuestions ? '✔' : '✘'}
-              </div>
+      {showFeedbackModal && score !== null && (
+        <Modal
+          confirmText={allAnswersAreCorrect ? "Continue" : "Try again"}
+          onClickConfirm={onClickModalConfirm}>
+          <>
+            <div className={score === totalQuestions ? "text-success" : "text-danger"}>
+              {score === totalQuestions ? "✔" : "✘"}
+            </div>
+            <div>
               <p>
                 {score}/{totalQuestions} answered correctly!
               </p>
-            </>
-          ) : null}
+              {allAnswersAreCorrect
+                ? (
+                  <p>
+                    You got everything correct! Continue to the next section of the course.
+                  </p>
+                )
+                : (
+                  <p>
+                    Try again to get the correct answers before continuing to the next section of the course
+                  </p>
+                )
+              }
+            </div>
+          </>
         </Modal>
-      )} */}
+      )}
     </div>
   );
 };

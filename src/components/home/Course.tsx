@@ -7,7 +7,9 @@ import Header from "./Header";
 import { CourseSummary } from "./CourseSummary";
 import { getVideoProgressKey } from "src/utils/course-utils";
 import { isQuizSection, isVideoSection } from "../admin/course-form/utils";
-import CourseQuizContainer from "./CourseQuizContainer";
+import CourseSectionContainer from "./CourseSectionContainer";
+import { CourseQuizContainer } from "./CourseQuizContainer";
+import { CourseComplete } from "./CourseComplete";
 
 interface CoursesProps {
   course: CourseType,
@@ -16,6 +18,7 @@ interface CoursesProps {
 const Course: React.FC<CoursesProps> = ({ course }) => {
   const [currentSectionIndex, setCurrentSectionIndex] = useState<number | null>(null);
   const [initialCurrentVideoTime, setInitialCurrentVideoTime] = useState<number>(0);
+  const [isCourseComplete, setCourseComplete] = useState<boolean>(false);
 
   const { sections, id: courseId } = course;
 
@@ -58,11 +61,24 @@ const Course: React.FC<CoursesProps> = ({ course }) => {
   const onChangeSection = (direction: ChangeDirection) => {
     const sectionIndex = currentSectionIndex || 0;
     const newSectionIndex = direction === "next" ? sectionIndex + 1 : sectionIndex - 1;
-    const newSectionId = sections[newSectionIndex].id;
+    const newSection = sections[newSectionIndex];
+    const { id: newSectionId } = newSection;
 
     setCurrentSectionIndex(newSectionIndex);
-    updateInitialCurrentVideoTime(newSectionId);
+
+    if (isVideoSection(newSection)) {
+      updateInitialCurrentVideoTime(newSectionId);
+    }
   };
+
+  const onCourseComplete = () => {
+    setCourseComplete(true);
+  };
+
+  if (isCourseComplete) {
+    // TODO: update pdfUrl with actual pdf
+    return <CourseComplete pdfUrl="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" />;
+  }
 
   if (typeof currentSectionIndex !== "number") {
     return (
@@ -77,26 +93,35 @@ const Course: React.FC<CoursesProps> = ({ course }) => {
     );
   }
 
+  const canGoBack = currentSectionIndex !== 0;
+  const isLastSection = currentSectionIndex === sections.length - 1;
+
   if (currentSection && isVideoSection(currentSection)) {
     return (
-      <CourseVideoContainer
-        courseId={course.id}
-        videoSection={currentSection}
-        courseTitle={course.title}
-        hasNext={currentSectionIndex + 1 !== sections.length}
-        hasPrevious={currentSectionIndex !== 0}
-        initialCurrentVideoTime={initialCurrentVideoTime}
-        setCurrentSectionIndex={setCurrentSectionIndex}
-        setInitialCurrentVideoTime={setInitialCurrentVideoTime}
-        onChangeSection={onChangeSection} />
+      <CourseSectionContainer
+        canGoBack={canGoBack}
+        continueText={isLastSection ? "Finish" : "Continue"}
+        onChangeSection={onChangeSection}
+        onClickContinue={isLastSection ? onCourseComplete : undefined}>
+        <CourseVideoContainer
+          courseId={course.id}
+          videoSection={currentSection}
+          courseTitle={course.title}
+          initialCurrentVideoTime={initialCurrentVideoTime}
+          setCurrentSectionIndex={setCurrentSectionIndex}
+          setInitialCurrentVideoTime={setInitialCurrentVideoTime} />
+      </CourseSectionContainer>
     );
   }
 
   if (currentSection && isQuizSection(currentSection)) {
     return (
       <CourseQuizContainer
+        canGoBack={canGoBack}
         quizSection={currentSection}
-        currentSectionIndex={currentSectionIndex} />
+        isLastSection={isLastSection}
+        onChangeSection={onChangeSection}
+        onCourseComplete={onCourseComplete} />
     );
   }
 

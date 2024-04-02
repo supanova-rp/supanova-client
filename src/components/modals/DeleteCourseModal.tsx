@@ -13,7 +13,7 @@ const DeleteCourseModal: React.FC<Props> = ({
   onClickDelete,
 }) => {
   return (
-    <Modal onClick={onHideDeleteModal}>
+    <Modal onClose={onHideDeleteModal}>
       <div className="d-flex flex-column align-items-center justify-content-center">
         <h5>Are you sure you want to delete this Course?</h5>
         <div className="mt-3">
