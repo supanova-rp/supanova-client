@@ -1,3 +1,5 @@
+import { Divider } from "../Divider";
+
 interface HeaderProps {
   title: string,
   margin?: string,
@@ -10,6 +12,9 @@ const Header: React.FC<HeaderProps> = ({ title, margin = "mt-4", padding = "p-4"
       <header className="d-flex flex-column">
         <h3 className="main-header">{title}</h3>
       </header>
+      {/* <div style={{ width: "100px" }}>
+        <Divider />
+      </div> */}
     </div>
   );
 };

@@ -21,7 +21,7 @@ export const updateUsers = (users: User[], userId: string, userInfoToUpdate: Use
   });
 };
 
-export const getClassNameSidebarTab = (activeTab: AdminTabValue, tabName: AdminTabValue) => {
+export const getClassNameSidebarTab = (activeTab: string | null, tabName: AdminTabValue) => {
   if (activeTab === tabName) {
     return "secondary-button";
   }

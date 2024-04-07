@@ -64,28 +64,25 @@ const Quiz: React.FC<Props> = ({
         <Modal
           confirmText={allAnswersAreCorrect ? "Continue" : "Try again"}
           onClickConfirm={onClickModalConfirm}>
-          <>
-            <div className={score === totalQuestions ? "text-success" : "text-danger"}>
-              {score === totalQuestions ? "✔" : "✘"}
-            </div>
+          <div className="d-flex flex-column align-items-center justify-content-center">
+            <h5>
+              {score} / {totalQuestions}
+            </h5>
             <div>
-              <p>
-                {score}/{totalQuestions} answered correctly!
-              </p>
               {allAnswersAreCorrect
                 ? (
-                  <p>
+                  <h5>
                     You got everything correct! Continue to the next section of the course.
-                  </p>
+                  </h5>
                 )
                 : (
-                  <p>
+                  <h5>
                     Try again to get the correct answers before continuing to the next section of the course
-                  </p>
+                  </h5>
                 )
               }
             </div>
-          </>
+          </div>
         </Modal>
       )}
     </div>

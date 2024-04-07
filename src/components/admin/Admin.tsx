@@ -6,7 +6,7 @@ import { AdminTabValue } from "src/types";
 
 import AddCourse from "./add-course/AddCourse";
 import AddUsers from "./add-users/AddUsers";
-import SidebarContainer from "./sidebar/SidebarContainer";
+import AdminSidebarContainer from "./sidebar/AdminSidebarContainer";
 import EditCourses from "./edit-courses/EditCourses";
 import AssignUsers from "./assign-users/AssignUsers";
 import BottomMobileNavbar from "../nav/BottomMobileNavbar";
@@ -38,7 +38,7 @@ const Admin = () => {
 
   return (
     <div className="d-flex admin-container">
-      <SidebarContainer
+      <AdminSidebarContainer
         isAdminDashboard
         activeTab={activeTab}
         setActiveTab={setActiveTab} />

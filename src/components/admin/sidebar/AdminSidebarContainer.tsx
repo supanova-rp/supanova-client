@@ -11,7 +11,7 @@ interface Props {
   setActiveTab: setActiveTabFunction;
 }
 
-const SidebarContainer: React.FC<Props> = ({ activeTab, isAdminDashboard, setActiveTab }) => {
+const AdminSidebarContainer: React.FC<Props> = ({ activeTab, isAdminDashboard, setActiveTab }) => {
   const adminTabs = (Object.values(ADMINS_TABS));
 
   return (
@@ -27,4 +27,4 @@ const SidebarContainer: React.FC<Props> = ({ activeTab, isAdminDashboard, setAct
   );
 };
 
-export default SidebarContainer;
+export default AdminSidebarContainer;

@@ -1,15 +1,11 @@
-.courses-dashboard-container {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    justify-content: center;
-}
-
 .courses-dashboard-grid {
   flex-wrap: wrap;
   display: flex;
-  justify-content: center;
   column-gap: 30px;
+
+  @media screen and (min-width: 768px) {
+    justify-content: center;
+  }
 }
 
 .course-card-container {
@@ -207,4 +203,21 @@
     margin-right: 20px;
     margin-bottom: 0px;
   }
+}
+
+.course-dashboard-item {
+  cursor: pointer;
+  
+}
+
+.course-dashboard-item-overlay {
+  position: absolute;
+  width: 100%;
+  height: 200px;
+  background: transparent;
+  transition: background 150ms ease-in;
+}
+
+.course-dashboard-item-overlay:hover{
+  background: hsla(0%, 0%, 98%, 0.35);
 }

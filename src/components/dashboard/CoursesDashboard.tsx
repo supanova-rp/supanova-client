@@ -5,8 +5,8 @@ import useRequest from "src/hooks/useRequest";
 import { useAuth } from "src/contexts/AuthContext";
 
 import CourseCard from "./CourseCard";
-import Navbar from "../nav/Navbar";
 import RequestHandler from "../RequestHandler";
+import Header from "../home/Header";
 
 const CoursesDashboard = () => {
   const [courses, setCourses] = useState<[] | Course[]>([]);
@@ -52,8 +52,6 @@ const CoursesDashboard = () => {
   }, []);
 
   const onSuccess = (result: Course[]) => {
-    console.log(">>>> result: ", result);
-
     setCourses(result);
     setIsLoading(false);
   };
@@ -66,28 +64,27 @@ const CoursesDashboard = () => {
   };
 
   return (
-    <>
-      <Navbar isAdmin={isAdmin} />
-      <div className="courses-dashboard-container">
-        <RequestHandler
-          error={error}
-          isCoursesDashboard
-          onClick={handleGetCourses}
-          isLoading={isLoading}
-          shouldShowWarning={!courses?.length}
-          warningMessage="You don't have any courses yet...">
-          <div className="courses-dashboard-grid">
-            {courses?.map((course) => {
-              return (
-                <CourseCard
-                  key={course.id}
-                  course={course} />
-              );
-            })}
-          </div>
-        </RequestHandler>
-      </div>
-    </>
+    <div className="w-100">
+      <Header title="Courses" />
+      <RequestHandler
+        error={error}
+        isCoursesDashboard
+        onClick={handleGetCourses}
+        isLoading={isLoading}
+        shouldShowWarning={!courses?.length}
+        warningMessage="You don't have any courses yet...">
+        <div className="courses-dashboard-grid px-3 pt-2">
+          {courses?.map((course, index) => {
+            return (
+              <CourseCard
+                key={course.id}
+                course={course}
+                index={index} />
+            );
+          })}
+        </div>
+      </RequestHandler>
+    </div>
   );
 };
 

@@ -13,9 +13,9 @@ export const ADMINS_TABS = {
   ADD_USERS: "Add Users",
 };
 
-export const COURSE_TABS = {
-  COURSES: "Courses",
-  INSTRUCTOR: "Instructor",
+export enum CourseTabs {
+  Courses = "Courses",
+  Instructor = "Instructor",
 };
 
 export const EMAIL_JS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;

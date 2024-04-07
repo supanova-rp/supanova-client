@@ -1,18 +1,14 @@
 import { Card } from "react-bootstrap";
 
-import { AdminTabValue, setActiveTabFunction } from "../../types/index";
-import { COURSE_TABS } from "src/constants/constants";
+import { CourseTabs } from "src/constants/constants";
 import HomeImage from "../../images/Home-image.png";
 
 import Sidebar from "../nav/Sidebar";
+import { useAppContext } from "src/contexts/AppContext";
 
-interface Props {
-  activeTab: AdminTabValue,
-  setActiveTab: setActiveTabFunction,
-}
-
-const SidebarContainer: React.FC<Props> = ({ activeTab, setActiveTab }) => {
-  const homeTabs = Object.values(COURSE_TABS);
+const SidebarContainer: React.FC = () => {
+  const { activeTab, setActiveTab } = useAppContext();
+  const homeTabs = Object.values(CourseTabs);
 
   return (
     <Card
@@ -26,8 +22,8 @@ const SidebarContainer: React.FC<Props> = ({ activeTab, setActiveTab }) => {
         <div className="row w-100">
           <div className="col-20 p-0">
             <Sidebar
-              setActiveTab={setActiveTab}
               activeTab={activeTab}
+              setActiveTab={setActiveTab}
               tabs={homeTabs} />
           </div>
         </div>

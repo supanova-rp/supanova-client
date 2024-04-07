@@ -14,52 +14,55 @@ import ForgotPassword from "./components/authentication/ForgotPassword";
 import Login from "./components/authentication/Login";
 import Register from "./components/authentication/Register";
 import RedirectLoggedInUser from "./components/authentication/RedirectLoggedInUser";
-import CoursesDashboard from "./components/home/CoursesDashboard";
 import CourseContainer from "./components/home/CourseContainer";
+import { AppProvider } from "./contexts/AppContext";
+import { DashboardContainer } from "./components/dashboard/DashboardContainer";
 
 const App = () => {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <Routes>
-          <Route
-            path="/"
-            element={<CoursesDashboard />} />
-          <Route
-            path="/course/:id"
-            element={<CourseContainer />} />
-          <Route
-            path="/admin"
-            element={(
-              <AdminRoute>
-                <Admin />
-              </AdminRoute>
-            )} />
-          <Route
-            path="/forgot-password"
-            element={<ForgotPassword />} />
-          <Route
-            path="/login"
-            element={(
-              <RedirectLoggedInUser>
-                <Login />
-              </RedirectLoggedInUser>
-            )} />
-          <Route
-            path="/register"
-            element={(
-              <RedirectLoggedInUser>
-                <Register />
-              </RedirectLoggedInUser>
-            )} />
-          <Route
-            path="*"
-            element={(
-              <PageErrorScreen
-                title="Oops"
-                text="The page you were looking for could not be found..." />
-            )}/>
-        </Routes>
+        <AppProvider>
+          <Routes>
+            <Route
+              path="/"
+              element={<DashboardContainer />} />
+            <Route
+              path="/course/:id"
+              element={<CourseContainer />} />
+            <Route
+              path="/admin"
+              element={(
+                <AdminRoute>
+                  <Admin />
+                </AdminRoute>
+              )} />
+            <Route
+              path="/forgot-password"
+              element={<ForgotPassword />} />
+            <Route
+              path="/login"
+              element={(
+                <RedirectLoggedInUser>
+                  <Login />
+                </RedirectLoggedInUser>
+              )} />
+            <Route
+              path="/register"
+              element={(
+                <RedirectLoggedInUser>
+                  <Register />
+                </RedirectLoggedInUser>
+              )} />
+            <Route
+              path="*"
+              element={(
+                <PageErrorScreen
+                  title="Oops"
+                  text="The page you were looking for could not be found..." />
+              )}/>
+          </Routes>
+        </AppProvider>
       </AuthProvider>
       <Toaster position="top-right"/>
     </BrowserRouter>

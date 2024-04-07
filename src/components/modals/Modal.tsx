@@ -36,16 +36,16 @@ const Modal: React.FC<Props> = ({
 
         {onClickConfirm
           ? (
-            <Button
-              onClick={onClickConfirm}
-              type="button"
-              className="me-4 main-button">
-              {confirmText}
-            </Button>
+            <div className="d-flex flex-column align-items-center justify-content-center">
+              <Button
+                onClick={onClickConfirm}
+                className="btn btn-primary">
+                {confirmText}
+              </Button>
+            </div>
           )
           : null
         }
-
       </div>
     </div>
   );
