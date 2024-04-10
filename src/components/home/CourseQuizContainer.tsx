@@ -100,6 +100,7 @@ export const CourseQuizContainer: React.FC<Props> = ({
         allAnswersAreCorrect={allAnswersAreCorrect}
         selectedAnswers={selectedAnswers}
         showFeedbackModal={showFeedbackModal}
+        isLastSection={isLastSection}
         onChangeAnswer={onChangeAnswer}
         onClickModalConfirm={onClickModalConfirm}/>
     </CourseSectionContainer>

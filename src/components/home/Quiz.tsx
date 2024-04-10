@@ -11,6 +11,7 @@ interface Props {
   score: number | null,
   showFeedbackModal: boolean,
   allAnswersAreCorrect: boolean,
+  isLastSection: boolean,
   onChangeAnswer: (questionIndex: number, answerIndex: number) => void,
   onClickModalConfirm: () => void,
 }
@@ -21,10 +22,29 @@ const Quiz: React.FC<Props> = ({
   score,
   showFeedbackModal,
   allAnswersAreCorrect,
+  isLastSection,
   onChangeAnswer,
   onClickModalConfirm,
 }) => {
   const totalQuestions = quizSection.questions.length;
+
+  const getFeedbackButtonText = () => {
+    if (!allAnswersAreCorrect) {
+      return "Try again";
+    }
+
+    return isLastSection ? "Finish" : "Continue";
+  };
+
+  const getFeedbackText = () => {
+    if (!allAnswersAreCorrect) {
+      return "Try again to get the correct answers before continuing with the course";
+    }
+
+    return isLastSection
+      ? "You got everything correct! Congratulations, you have completed the course!"
+      : "You got everything correct! Continue to the next section of the course.";
+  };
 
   return (
     <div className="mb-4 ms-4">
@@ -62,25 +82,16 @@ const Quiz: React.FC<Props> = ({
       </div>
       {showFeedbackModal && score !== null && (
         <Modal
-          confirmText={allAnswersAreCorrect ? "Continue" : "Try again"}
+          confirmText={getFeedbackButtonText()}
           onClickConfirm={onClickModalConfirm}>
           <div className="d-flex flex-column align-items-center justify-content-center">
             <h5>
               {score} / {totalQuestions}
             </h5>
             <div>
-              {allAnswersAreCorrect
-                ? (
-                  <h5>
-                    You got everything correct! Continue to the next section of the course.
-                  </h5>
-                )
-                : (
-                  <h5>
-                    Try again to get the correct answers before continuing to the next section of the course
-                  </h5>
-                )
-              }
+              <h5>
+                {getFeedbackText()}
+              </h5>
             </div>
           </div>
         </Modal>

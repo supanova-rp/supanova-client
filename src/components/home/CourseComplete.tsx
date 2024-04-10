@@ -1,4 +1,5 @@
 import React from "react";
+import Header from "./Header";
 
 interface Props {
   pdfUrl: string
@@ -7,13 +8,16 @@ interface Props {
 export const CourseComplete: React.FC<Props> = ({ pdfUrl }) => {
   return (
     <div>
-      Course Complete!
+      <Header title="Course Complete!" />
 
-      {/* TODO: add View button also */}
-
-      <a href={pdfUrl}>
-        Download Certificate
-      </a>
+      <h5>
+        <a
+          href={pdfUrl}
+          target="_blank"
+          rel="noopener noreferrer">
+          View Certificate
+        </a>
+      </h5>
     </div>
   );
 };
