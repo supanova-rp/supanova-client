@@ -8,7 +8,9 @@ interface Props {
 export const CourseComplete: React.FC<Props> = ({ pdfUrl }) => {
   return (
     <div>
-      <Header title="Course Complete!" />
+      <Header
+        className="default-header"
+        title="Course Complete!" />
 
       <h5>
         <a

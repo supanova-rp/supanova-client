@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, SyntheticEvent } from "react";
+import { SyntheticEvent } from "react";
 
 import { CourseVideoSection } from "../../types/index";
 import Video from "./Video";
@@ -8,26 +8,14 @@ interface CourseProps {
   courseId: number,
   videoSection: CourseVideoSection,
   initialCurrentVideoTime: number,
-  courseTitle: string,
-  setCurrentSectionIndex: (sectionIndex: number | null) => void,
-  setInitialCurrentVideoTime: Dispatch<SetStateAction<number>>,
 }
 
 const CourseVideoContainer: React.FC<CourseProps> = ({
   courseId,
   videoSection,
   initialCurrentVideoTime,
-  courseTitle,
-  setCurrentSectionIndex,
-  setInitialCurrentVideoTime,
 }) => {
-
   const { id: sectionId, videoUrl, title } = videoSection;
-
-  const onExitVideo = () => {
-    setInitialCurrentVideoTime(0);
-    setCurrentSectionIndex(null);
-  };
 
   const onVideoEnded = () => {
     const sectionProgressInfo = {
@@ -59,9 +47,7 @@ const CourseVideoContainer: React.FC<CourseProps> = ({
     <Video
       title={title}
       videoUrl={videoUrl}
-      courseTitle={courseTitle}
       initialCurrentVideoTime={initialCurrentVideoTime}
-      onExitVideo={onExitVideo}
       onVideoEnded={onVideoEnded}
       onVideoTimeUpdate={onVideoTimeUpdate} />
   );

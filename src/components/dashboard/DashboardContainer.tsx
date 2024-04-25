@@ -27,8 +27,7 @@ export const DashboardContainer = () => {
 
   return (
     <>
-      <Navbar
-        isAdmin={isAdmin} />
+      <Navbar isAdmin={isAdmin} />
       <div className="course-container">
         <SidebarContainer />
         <div

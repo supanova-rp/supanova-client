@@ -8,17 +8,21 @@ import Quiz from "./Quiz";
 interface Props {
   canGoBack: boolean,
   isLastSection: boolean,
+  courseTitle: string,
   quizSection: CourseQuizSection,
   onChangeSection: (direction: ChangeDirection) => void,
   onCourseComplete: () => void,
+  onClickBackChevron: () => void,
 }
 
 export const CourseQuizContainer: React.FC<Props> = ({
   canGoBack,
+  courseTitle,
   isLastSection,
   quizSection,
   onChangeSection,
   onCourseComplete,
+  onClickBackChevron,
 }) => {
   const [selectedAnswers, setSelectedAnswers] = useState(new Array(quizSection.questions.length).fill([]));
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
@@ -91,9 +95,11 @@ export const CourseQuizContainer: React.FC<Props> = ({
   return (
     <CourseSectionContainer
       canGoBack={canGoBack}
+      courseTitle={courseTitle}
       continueText="Submit"
       onChangeSection={onChangeSection}
-      onClickContinue={onSubmitQuiz}>
+      onClickContinue={onSubmitQuiz}
+      onClickBackChevron={onClickBackChevron}>
       <Quiz
         quizSection={quizSection}
         score={score}

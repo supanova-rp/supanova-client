@@ -1,7 +1,8 @@
 import {
   useState, useContext,
   createContext,
-  useMemo
+  useMemo,
+  useEffect
 } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -23,7 +24,11 @@ export const AppProvider: React.FC<React.PropsWithChildren> = ({ children }) => 
   const navigate = useNavigate();
   const location = useLocation().pathname;
 
-  console.log(">>>> location: ", location);
+  useEffect(() => {
+    if (!activeTab && location === "/") {
+      setActiveTab(CourseTabs.Courses);
+    }
+  }, [location]);
 
   const onSetActiveTab = (tab: CourseTabs | null) => {
     if (tab && location !== "/") {

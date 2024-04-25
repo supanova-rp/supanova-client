@@ -6,10 +6,12 @@ import { CourseQuizQuestion, CourseSection } from "../../../types/index";
 import VideoSection from "./VideoSection";
 import QuizSection from "./QuizSection";
 import AddMoreInputs from "src/components/AddMoreInputs";
-import { isQuizSection } from "./utils";
+import { MoveSectionFn, isQuizSection } from "./utils";
+import MoveSection from "./MoveSection";
 
 interface Props {
   section: CourseSection,
+  isFirstSection: boolean,
   isLastSection: boolean,
   isEditing: boolean,
   canRemoveVideoSection: boolean,
@@ -22,6 +24,7 @@ interface Props {
   onFileUploadProgress: (data: AxiosProgressEvent, sectionId: number) => void,
   onFileUploadCancelled: (sectionId: number) => void,
   handleRemoveSection: (sectionId: number) => void,
+  onMoveSection: MoveSectionFn
 }
 
 export default class CourseFormSection extends React.Component<Props> {
@@ -79,6 +82,7 @@ export default class CourseFormSection extends React.Component<Props> {
     const {
       section,
       isEditing,
+      isFirstSection,
       isLastSection,
       canRemoveVideoSection,
       onChangeSectionTitle,
@@ -88,6 +92,7 @@ export default class CourseFormSection extends React.Component<Props> {
       onClickAddNewQuizQuestion,
       onHandleAddNewQuizAnswer,
       onClickRemoveQuizQuestion,
+      onMoveSection,
     } = this.props;
 
     if (isQuizSection(section)) {
@@ -99,31 +104,46 @@ export default class CourseFormSection extends React.Component<Props> {
             onHandleUpdateQuiz={onHandleUpdateQuiz}
             onHandleAddNewQuizAnswer={onHandleAddNewQuizAnswer}
             handleRemoveSection={handleRemoveSection}
+
             onClickRemoveQuizQuestion={onClickRemoveQuizQuestion} />
           <AddMoreInputs
             title="Add quiz question"
             onClick={() => onClickAddNewQuizQuestion(section.id)}
             marginBottom="mb-5" />
-          {!isLastSection
-            ? <hr />
-            : null
-          }
+
+          <MoveSection
+            sectionId={section.id}
+            isFirst={isFirstSection}
+            isLast={isLastSection}
+            onMoveSection={onMoveSection} />
+
+          <hr />
         </>
       );
     }
 
     return (
-      <VideoSection
-        section={section}
-        isLastSection={isLastSection}
-        canRemoveVideoSection={canRemoveVideoSection}
-        abortController={this.abortController}
-        fileInputRef={this.fileInputRef}
-        onChangeSectionTitle={onChangeSectionTitle}
-        handleFileUploaded={this.handleFileUploaded}
-        onFileUploadProgress={onFileUploadProgress}
-        onClickCancelFileUpload={this.onClickCancelFileUpload}
-        onClickRemoveSection={this.onClickRemoveSection} />
+      <>
+        <VideoSection
+          section={section}
+          isLastSection={isLastSection}
+          canRemoveVideoSection={canRemoveVideoSection}
+          abortController={this.abortController}
+          fileInputRef={this.fileInputRef}
+          onChangeSectionTitle={onChangeSectionTitle}
+          handleFileUploaded={this.handleFileUploaded}
+          onFileUploadProgress={onFileUploadProgress}
+          onClickCancelFileUpload={this.onClickCancelFileUpload}
+          onClickRemoveSection={this.onClickRemoveSection} />
+
+        <MoveSection
+          sectionId={section.id}
+          isFirst={isFirstSection}
+          isLast={isLastSection}
+          onMoveSection={onMoveSection} />
+
+        <hr />
+      </>
     );
   }
 }

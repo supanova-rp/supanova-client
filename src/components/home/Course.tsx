@@ -71,6 +71,11 @@ const Course: React.FC<CoursesProps> = ({ course }) => {
     }
   };
 
+  const onClickBackChevron = () => {
+    setInitialCurrentVideoTime(0);
+    setCurrentSectionIndex(null);
+  };
+
   const onCourseComplete = () => {
     setCourseComplete(true);
   };
@@ -83,7 +88,9 @@ const Course: React.FC<CoursesProps> = ({ course }) => {
   if (typeof currentSectionIndex !== "number") {
     return (
       <div className="w-100">
-        <Header title="Course Curriculum" />
+        <Header
+          className="default-header"
+          title={course.title} />
 
         <CourseSummary
           course={course}
@@ -100,16 +107,15 @@ const Course: React.FC<CoursesProps> = ({ course }) => {
     return (
       <CourseSectionContainer
         canGoBack={canGoBack}
+        courseTitle={course.title}
         continueText={isLastSection ? "Finish" : "Continue"}
         onChangeSection={onChangeSection}
-        onClickContinue={isLastSection ? onCourseComplete : undefined}>
+        onClickContinue={isLastSection ? onCourseComplete : undefined}
+        onClickBackChevron={onClickBackChevron}>
         <CourseVideoContainer
           courseId={course.id}
           videoSection={currentSection}
-          courseTitle={course.title}
-          initialCurrentVideoTime={initialCurrentVideoTime}
-          setCurrentSectionIndex={setCurrentSectionIndex}
-          setInitialCurrentVideoTime={setInitialCurrentVideoTime} />
+          initialCurrentVideoTime={initialCurrentVideoTime} />
       </CourseSectionContainer>
     );
   }
@@ -118,10 +124,12 @@ const Course: React.FC<CoursesProps> = ({ course }) => {
     return (
       <CourseQuizContainer
         canGoBack={canGoBack}
+        courseTitle={course.title}
         quizSection={currentSection}
         isLastSection={isLastSection}
         onChangeSection={onChangeSection}
-        onCourseComplete={onCourseComplete} />
+        onCourseComplete={onCourseComplete}
+        onClickBackChevron={onClickBackChevron} />
     );
   }
 

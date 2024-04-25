@@ -49,14 +49,7 @@ const Quiz: React.FC<Props> = ({
   return (
     <div className="mb-4 ms-4">
       <div>
-        <div className="d-flex align-items-center">
-          <div role="button">
-            <ChevronLeft
-              stroke={colors.orange}
-              className="mt-4 me-1" />
-          </div>
-          <Header title="Quiz" />
-        </div>
+        <h4 className="mt-2 mb-4">Quiz</h4>
         {quizSection.questions.map((question, questionIndex) => (
           <div key={question.id}>
             <h5 className="mt-2 mb-4">{question.question}</h5>

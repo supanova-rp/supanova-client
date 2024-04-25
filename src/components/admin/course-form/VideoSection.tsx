@@ -44,6 +44,7 @@ const VideoSection: React.FC<VideoSectionProps> = ({
           : null
         }
       </div>
+
       <div className="video-section-input-container">
         <FormInput
           formId={`course-section-${id}`}
@@ -77,11 +78,6 @@ const VideoSection: React.FC<VideoSectionProps> = ({
           : null
         }
       </div>
-
-      {!isLastSection
-        ? <hr/>
-        : null
-      }
     </div>
   );
 };

@@ -12,6 +12,7 @@ import AddMoreInputs from "../../AddMoreInputs";
 import EditingCourseHeader from "../edit-courses/EditingCourseHeader";
 import CourseFormSection from "./CourseFormSection";
 import FormInput from "../../FormInput";
+import { MoveSectionFn } from "./utils";
 
 interface Props {
   course: Course,
@@ -32,6 +33,7 @@ interface Props {
   onClickRemoveQuizQuestion: (quizId: number, questionId: string) => void,
   onCourseFormCancelled: () => void,
   onShowDeleteModal: () => void,
+  onMoveSection: MoveSectionFn
 }
 
 const CourseFormBody: React.FC<Props> = ({
@@ -46,6 +48,7 @@ const CourseFormBody: React.FC<Props> = ({
   onFileUploadProgress,
   onFileUploadCancelled,
   handleRemoveSection,
+  onMoveSection,
   onClickRemoveQuizQuestion,
   onClickAddNewVideoSection,
   onClickAddNewQuizSection,
@@ -92,6 +95,7 @@ const CourseFormBody: React.FC<Props> = ({
               key={section.id}
               section={section}
               isEditing={isEditing}
+              isFirstSection={index === 0}
               isLastSection={index === course.sections.length - 1}
               canRemoveVideoSection={videoSections.length > 1}
               onHandleAddNewQuizAnswer={onHandleAddNewQuizAnswer}
@@ -99,6 +103,7 @@ const CourseFormBody: React.FC<Props> = ({
               onClickRemoveQuizQuestion={onClickRemoveQuizQuestion}
               onChangeSectionTitle={onChangeSectionTitle}
               onHandleUpdateQuiz={onHandleUpdateQuiz}
+              onMoveSection={onMoveSection}
               onFileUploaded={onFileUploaded}
               onFileUploadProgress={onFileUploadProgress}
               onFileUploadCancelled={onFileUploadCancelled}

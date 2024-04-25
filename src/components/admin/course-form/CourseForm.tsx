@@ -137,12 +137,34 @@ export default class CourseForm extends Component <CourseFormProps> {
       }
 
       return section;
-
     });
 
     onUpdateCourse({
       ...course,
       sections: updatedSectionsMinusQuizQuestion
+    });
+  };
+
+  onMoveSection = (sectionId: number, direction: "up" | "down") => {
+    const { course, onUpdateCourse } = this.props;
+
+    const currentIndex = course.sections.findIndex(s => s.id === sectionId);
+
+    if (currentIndex === -1) {
+      return;
+    }
+
+    const targetIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1;
+
+    const updatedSections = structuredClone(course.sections);
+    const currentSection = updatedSections[currentIndex];
+
+    updatedSections[currentIndex] = updatedSections[targetIndex];
+    updatedSections[targetIndex] = currentSection;
+
+    onUpdateCourse({
+      ...course,
+      sections: updatedSections
     });
   };
 
@@ -169,6 +191,7 @@ export default class CourseForm extends Component <CourseFormProps> {
         onFileUploadProgress={this.onFileUploadProgress}
         onFileUploadCancelled={this.onFileUploadCancelled}
         handleRemoveSection={this.handleRemoveSection}
+        onMoveSection={this.onMoveSection}
         onClickAddNewVideoSection={this.onClickAddNewVideoSection}
         onClickAddNewQuizSection={this.onClickAddNewQuizSection}
         onClickAddNewQuizQuestion={this.onClickAddNewQuizQuestion}

@@ -9,6 +9,8 @@ import {
   getUpdatedSectionsKey
 } from "src/types";
 
+export type MoveSectionFn = (id: number, direction: "up" | "down") => void
+
 export const isVideoSection = (section: CourseSection): section is CourseVideoSection => {
   return section.videoUrl !== undefined;
 };

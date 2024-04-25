@@ -1,16 +1,9 @@
 import { SyntheticEvent } from "react";
 
-import { colors } from "../../constants/colorPalette";
-import { ReactComponent as ChevronLeft } from "../../icons/chevronLeft.svg";
-
-import Header from "./Header";
-
 interface VideoProps {
   title: string,
   videoUrl: string,
-  courseTitle: string,
   initialCurrentVideoTime: number,
-  onExitVideo: () => void,
   onVideoEnded: () => void,
   onVideoTimeUpdate: (e: SyntheticEvent<HTMLVideoElement>) => void,
 }
@@ -18,9 +11,7 @@ interface VideoProps {
 const Video: React.FC<VideoProps> = ({
   title,
   videoUrl,
-  courseTitle,
   initialCurrentVideoTime,
-  onExitVideo,
   onVideoEnded,
   onVideoTimeUpdate,
 }) => {
@@ -32,16 +23,7 @@ const Video: React.FC<VideoProps> = ({
 
   return (
     <div className="mb-4 ms-4">
-      <div className="d-flex align-items-center">
-        <div role="button">
-          <ChevronLeft
-            stroke={colors.orange}
-            className="mt-4 me-1"
-            onClick={onExitVideo} />
-        </div>
-        <Header title={courseTitle} />
-      </div>
-      <h5 className="mt-2 mb-4">{title}</h5>
+      <h4 className="mt-2 mb-4">{title}</h4>
       {videoUrl
         ? (
           <video

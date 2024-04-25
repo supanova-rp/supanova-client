@@ -65,7 +65,9 @@ const CoursesDashboard = () => {
 
   return (
     <div className="w-100">
-      <Header title="Courses" />
+      <Header
+        className="default-header"
+        title="Courses" />
       <RequestHandler
         error={error}
         isCoursesDashboard
@@ -73,7 +75,7 @@ const CoursesDashboard = () => {
         isLoading={isLoading}
         shouldShowWarning={!courses?.length}
         warningMessage="You don't have any courses yet...">
-        <div className="courses-dashboard-grid px-3 pt-2">
+        <div className="courses-dashboard-grid pt-2">
           {courses?.map((course, index) => {
             return (
               <CourseCard

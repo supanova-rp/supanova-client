@@ -7,6 +7,7 @@ const Instructor = () => {
   return (
     <div className="instructor-container">
       <Header
+        className="mt-4 p-4"
         title="Meet Your Instructor" />
       <div className="instructor-content-container">
         <img
