@@ -10,12 +10,15 @@ import { isQuizSection, isVideoSection } from "../admin/course-form/utils";
 import CourseSectionContainer from "./CourseSectionContainer";
 import { CourseQuizContainer } from "./CourseQuizContainer";
 import { CourseComplete } from "./CourseComplete";
+import { useNavigate } from "react-router-dom";
 
 interface CoursesProps {
   course: CourseType,
 }
 
 const Course: React.FC<CoursesProps> = ({ course }) => {
+  const navigate = useNavigate();
+
   const [currentSectionIndex, setCurrentSectionIndex] = useState<number | null>(null);
   const [initialCurrentVideoTime, setInitialCurrentVideoTime] = useState<number>(0);
   const [isCourseComplete, setCourseComplete] = useState<boolean>(false);
@@ -23,8 +26,6 @@ const Course: React.FC<CoursesProps> = ({ course }) => {
   const { sections, id: courseId } = course;
 
   const currentSection = typeof currentSectionIndex === "number" ? sections[currentSectionIndex] : null;
-
-  console.log(">>>> currentSection: ", currentSection);
 
   const onSelectVideo = (sectionIndex: number) => {
     const sectionId = sections[sectionIndex].id;
@@ -36,8 +37,6 @@ const Course: React.FC<CoursesProps> = ({ course }) => {
     } else {
       setInitialCurrentVideoTime(0);
     }
-
-    console.log(">>>> sectionIndex: ", sectionIndex);
 
     setCurrentSectionIndex(sectionIndex);
   };
@@ -76,6 +75,10 @@ const Course: React.FC<CoursesProps> = ({ course }) => {
     setCurrentSectionIndex(null);
   };
 
+  const onClickBackSummary = () => {
+    navigate("/");
+  };
+
   const onCourseComplete = () => {
     setCourseComplete(true);
   };
@@ -90,7 +93,8 @@ const Course: React.FC<CoursesProps> = ({ course }) => {
       <div className="w-100">
         <Header
           className="default-header"
-          title={course.title} />
+          title={course.title}
+          onClickBack={onClickBackSummary} />
 
         <CourseSummary
           course={course}

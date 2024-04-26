@@ -47,7 +47,7 @@ const Quiz: React.FC<Props> = ({
   };
 
   return (
-    <div className="mb-4 ms-4">
+    <div className="mb-4">
       <div>
         <h4 className="mt-2 mb-4">Quiz</h4>
         {quizSection.questions.map((question, questionIndex) => (
