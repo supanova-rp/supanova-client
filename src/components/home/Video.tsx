@@ -23,7 +23,7 @@ const Video: React.FC<VideoProps> = ({
 
   return (
     <div className="mb-2">
-      <h4 className="mt-2 mb-4">{title}</h4>
+      <h4 className="mt-2 mb-3">{title}</h4>
       {videoUrl
         ? (
           <video

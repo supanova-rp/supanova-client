@@ -1,5 +1,5 @@
 import { getIsVideoSection } from "src/utils/course-utils";
-import { Course, SectionTypes } from "../../types/index";
+import { Course } from "../../types/index";
 
 import SectionTableRow from "./SectionTableRow";
 

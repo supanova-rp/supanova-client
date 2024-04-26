@@ -71,8 +71,12 @@ const Course: React.FC<CoursesProps> = ({ course }) => {
   };
 
   const onClickBackChevron = () => {
-    setInitialCurrentVideoTime(0);
-    setCurrentSectionIndex(null);
+    if (currentSectionIndex === 0) {
+      setInitialCurrentVideoTime(0);
+      setCurrentSectionIndex(null);
+    } else {
+      onChangeSection("prev");
+    }
   };
 
   const onClickBackSummary = () => {

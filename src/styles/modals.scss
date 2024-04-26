@@ -32,12 +32,14 @@
   z-index: 1;
   background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, .25);
+  border-radius: 12px;
+  padding: 24px;
 }
 
 .x-mark-modal-container {
   display: flex;
   align-self: flex-end;
-  margin: 15px 20px 0 0;
+  margin-bottom: 20px;
 }
 
 .modal-text-container {

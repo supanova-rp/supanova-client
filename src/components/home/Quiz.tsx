@@ -38,7 +38,7 @@ const Quiz: React.FC<Props> = ({
 
   const getFeedbackText = () => {
     if (!allAnswersAreCorrect) {
-      return "Try again to get the correct answers before continuing with the course";
+      return "Try again to get all the correct answers before continuing with the course";
     }
 
     return isLastSection
@@ -78,11 +78,11 @@ const Quiz: React.FC<Props> = ({
           confirmText={getFeedbackButtonText()}
           onClickConfirm={onClickModalConfirm}>
           <div className="d-flex flex-column align-items-center justify-content-center">
-            <h5>
+            <h5 className="pb-3">
               {score} / {totalQuestions}
             </h5>
             <div>
-              <h5>
+              <h5 className="text-center">
                 {getFeedbackText()}
               </h5>
             </div>
