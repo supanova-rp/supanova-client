@@ -97,6 +97,7 @@ export const CourseQuizContainer: React.FC<Props> = ({
       canGoBack={canGoBack}
       courseTitle={courseTitle}
       continueText="Submit"
+      className="quiz-container"
       onChangeSection={onChangeSection}
       onClickContinue={onSubmitQuiz}
       onClickBackChevron={onClickBackChevron}>

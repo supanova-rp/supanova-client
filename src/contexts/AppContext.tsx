@@ -27,6 +27,8 @@ export const AppProvider: React.FC<React.PropsWithChildren> = ({ children }) => 
   useEffect(() => {
     if (!activeTab && location === "/") {
       setActiveTab(CourseTabs.Courses);
+    } else if (location !== "/") {
+      setActiveTab(null);
     }
   }, [location]);
 

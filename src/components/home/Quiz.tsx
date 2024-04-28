@@ -4,6 +4,7 @@ import Header from "./Header";
 import { colors } from "src/constants/colorPalette";
 import { CourseQuizSection } from "src/types";
 import Modal from "../modals/Modal";
+import QuizAnswer from "./QuizAnswer";
 
 interface Props {
   quizSection: CourseQuizSection,
@@ -46,29 +47,24 @@ const Quiz: React.FC<Props> = ({
       : "You got everything correct! Continue to the next section of the course.";
   };
 
+  console.log(">>>> selectedAnswers: ", selectedAnswers);
+
   return (
     <div className="mb-4">
       <div>
         <h4 className="mt-2 mb-4">Quiz</h4>
         {quizSection.questions.map((question, questionIndex) => (
-          <div key={question.id}>
-            <h5 className="mt-2 mb-4">{question.question}</h5>
+          <div
+            key={question.id}
+            className="quiz-question">
+            <h5 className="mt-2 mb-3">{question.question}</h5>
             {question.answers.map((answer, answerIndex) => (
-              <div
+              <QuizAnswer
                 key={answer.id}
-                className="form-check">
-                <input
-                  type="checkbox"
-                  className="form-check-input"
-                  id={`question-${questionIndex}-answer-${answerIndex}`}
-                  checked={selectedAnswers[questionIndex].includes(answerIndex)}
-                  onChange={() => onChangeAnswer(questionIndex, answerIndex)}/>
-                <label
-                  className="form-check-label"
-                  htmlFor={`question-${questionIndex}-answer-${answerIndex}`}>
-                  {answer.answer}
-                </label>
-              </div>
+                answer={answer}
+                answerIndex={answerIndex}
+                questionIndex={questionIndex}
+                onClickAnswer={onChangeAnswer} />
             ))}
           </div>
         ))}

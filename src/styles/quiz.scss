@@ -1,0 +1,26 @@
+.quiz-question:not(:last-child) {
+  padding-bottom: 20px;
+}
+
+.quiz-answer:not(:last-child) {
+  padding-bottom: 6px;
+}
+
+.quiz-answer {
+  cursor: pointer;
+
+  label, input {
+    cursor: pointer;
+  }
+
+  .form-check-label {
+    margin-left: 4px;
+    margin-bottom: 0;
+  }
+}
+
+.quiz-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}

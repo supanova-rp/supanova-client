@@ -8,6 +8,7 @@ interface Props extends PropsWithChildren {
   canGoBack: boolean,
   courseTitle: string,
   continueText?: string,
+  className?: string,
   onChangeSection: (direction: ChangeDirection) => void,
   onClickContinue?: () => void,
   onCourseComplete?: () => void,
@@ -18,6 +19,7 @@ const CourseSectionContainer : React.FC<Props> = ({
   children,
   courseTitle,
   continueText = "Continue",
+  className = "",
   canGoBack,
   onChangeSection,
   onClickContinue,
@@ -63,7 +65,7 @@ const CourseSectionContainer : React.FC<Props> = ({
   };
 
   return (
-    <div>
+    <div className={className}>
       <Header
         className="default-header"
         title={courseTitle}
