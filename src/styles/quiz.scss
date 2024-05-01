@@ -7,15 +7,41 @@
 }
 
 .quiz-answer {
+  display: flex;
   cursor: pointer;
+  border: 1px solid var(--border-color-light-grey);
+  border-radius: 8px;
+  margin-bottom: 16px;
+  padding: 8px 12px;
+  width: 100%;
+  background: transparent;
+  transition: background 100ms ease-in;
+  justify-content: center;
 
-  label, input {
-    cursor: pointer;
+  @media screen and (min-width: 768px) {
+    width: 64%;
   }
 
-  .form-check-label {
-    margin-left: 4px;
-    margin-bottom: 0;
+  span {
+    color: var(--darker-grey);
+    text-align: center;
+  }
+
+  &:hover{
+    border: 1px solid var(--darkgrey);
+
+    span {
+      color: inherit;
+    }
+  }
+}
+
+.quiz-answer-selected {
+  border: 1px solid var(--secondary-color) !important;
+  box-shadow: 0px 0px 2px 1px rgba(241,143,15,0.5);
+
+  span {
+    color: inherit !important;
   }
 }
 
@@ -23,4 +49,5 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  padding-bottom: 48px;
 }

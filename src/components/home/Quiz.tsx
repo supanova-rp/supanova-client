@@ -1,7 +1,4 @@
 import React from "react";
-import { ReactComponent as ChevronLeft } from "src/icons/chevronLeft.svg";
-import Header from "./Header";
-import { colors } from "src/constants/colorPalette";
 import { CourseQuizSection } from "src/types";
 import Modal from "../modals/Modal";
 import QuizAnswer from "./QuizAnswer";
@@ -47,8 +44,6 @@ const Quiz: React.FC<Props> = ({
       : "You got everything correct! Continue to the next section of the course.";
   };
 
-  console.log(">>>> selectedAnswers: ", selectedAnswers);
-
   return (
     <div className="mb-4">
       <div>
@@ -57,13 +52,14 @@ const Quiz: React.FC<Props> = ({
           <div
             key={question.id}
             className="quiz-question">
-            <h5 className="mt-2 mb-3">{question.question}</h5>
+            <h5 className="mt-2 mb-4">{questionIndex + 1}. {question.question}</h5>
             {question.answers.map((answer, answerIndex) => (
               <QuizAnswer
                 key={answer.id}
                 answer={answer}
                 answerIndex={answerIndex}
                 questionIndex={questionIndex}
+                selectedAnswers={selectedAnswers}
                 onClickAnswer={onChangeAnswer} />
             ))}
           </div>

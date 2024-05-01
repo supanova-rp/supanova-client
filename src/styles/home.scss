@@ -114,7 +114,6 @@
 .progress-circle-container {
   padding-top: 2px;
   padding-right: 12px;
-  border-right: 1px solid #dee2e6;
 }
 
 .progress-circle {
@@ -137,18 +136,30 @@
   border-right: 1px solid #dee2e6;
 }
 
-.btn-light.row-buttons {
-  background: white;
-  border: none;
-  padding: 10px 16px;
-
-  &:hover, &:active {
-    background-color: var(--hover-color-grey) !important;
-  }
-}
-
 .table .section-row-data {
   padding: 0;
+}
+
+.section-row-data {
+  .description {
+    width: 100%;
+    text-align: left;
+  }
+
+  .row-buttons {
+    background: white;
+    border: none;
+    padding: 10px 16px;
+    display: flex;
+  
+    &:hover, &:active {
+      background-color: var(--hover-color-grey) !important;
+    }
+  }
+
+  .icon-and-description {
+    border-left: 1px solid #dee2e6;
+  }
 }
 
 .video-js-course-view {

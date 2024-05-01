@@ -175,19 +175,6 @@
   padding: 10px 10px 10px 40px;
 }
 
-.toggle-button .form-check-input:checked {
-  background-color: var(--secondary-color);
-  border-color: var(--secondary-color);
-}
-
-.toggle-button .form-check-input {
-  cursor: pointer;
-}
-
-.toggle-button .form-check-input:focus {
-  box-shadow: none;
-}
-
 .quiz-checkbox {
   display: flex;
   align-items: center;

@@ -83,8 +83,6 @@ export default class EditCourses extends Component {
   };
 
   onSuccess = (result: Course[]) => {
-    console.log(">>>> edit courses: ", result);
-
     this.setState({
       allCourses: result,
       isLoading: false

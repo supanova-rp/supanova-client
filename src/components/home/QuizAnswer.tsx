@@ -1,10 +1,12 @@
-import React, { useRef } from "react";
+import React from "react";
 import { CourseQuizAnswer } from "src/types";
+import Checkbox from "../Checkbox";
 
 interface Props {
   answer: CourseQuizAnswer,
   answerIndex: number,
   questionIndex: number,
+  selectedAnswers: any[],
   onClickAnswer: (questionIndex: number, answerIndex: number) => void,
 }
 
@@ -12,31 +14,20 @@ const QuizAnswer: React.FC<Props> = ({
   answer,
   answerIndex,
   questionIndex,
+  selectedAnswers,
   onClickAnswer,
 }) => {
-  const checkboxRef = useRef<HTMLInputElement>();
-
   const handleClickAnswer = () => {
-    if (checkboxRef.current) {
-      checkboxRef.current.checked = !checkboxRef.current.checked;
-    }
-
     onClickAnswer(questionIndex, answerIndex);
   };
 
+  const selectedClass = selectedAnswers[questionIndex].includes(answerIndex) ? "quiz-answer-selected" : "";
+
   return (
     <div
-      className="quiz-answer form-check"
+      className={`quiz-answer ${selectedClass}`}
       onClick={handleClickAnswer}>
-      <input
-        type="checkbox"
-        className="form-check-input"
-        id={`question-${questionIndex}-answer-${answerIndex}`}
-        ref={checkboxRef} />
-      <p
-        className="form-check-label">
-        {answer.answer}
-      </p>
+      <span>{answer.answer}</span>
     </div>
   );
 };

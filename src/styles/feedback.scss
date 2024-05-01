@@ -1,4 +1,5 @@
 .feedback-card-container {
+  width: 100%;
   margin-top: 50px;
   display: flex;
   justify-content: center;
@@ -10,7 +11,7 @@
   align-items: center;
   width: 100%;
   border: 2px solid var(--hover-color-grey);
-  padding: 55px 0;
+  padding: 55px 16px;
   box-shadow: 0 3px 7px hsl(228deg 66% 45% / 15%);
   border-radius: 8px;
 
