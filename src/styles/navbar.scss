@@ -79,3 +79,23 @@ nav {
     transform: scale(1.2);
   }
 }
+
+.navbar-dropdown-menu {
+  width: 100%;
+  position: absolute;
+  top: 80px;
+  background: var(--primary-color);
+}
+
+.dropdown-nav-link {
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  border-top: 1px solid rgba(173, 170, 170, 0.6);
+  border-color: rgba(173, 170, 170, 0.6) !important;
+  border-radius: 0;
+  width: 100%;
+  text-align: center;
+  padding: 12px 0;
+  font-size: 18px;
+}

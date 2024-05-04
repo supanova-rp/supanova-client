@@ -1,11 +1,14 @@
 import toast from "react-hot-toast";
 import { Button, Navbar as BootstrapNavbar } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Twirl as Hamburger } from "hamburger-react";
 
 import { useAuth } from "../../contexts/AuthContext";
 import { useIsMobile } from "src/hooks/useIsMobile";
-import { REACT_TOAST_DURATION, feedbackMessages } from "src/constants/constants";
+import { CourseTabs, REACT_TOAST_DURATION, feedbackMessages } from "src/constants/constants";
 import SupanovaLogo from "../../images/Supanova-logo-nav.png";
+import { useState } from "react";
+import { useAppContext } from "src/contexts/AppContext";
 
 interface NavbarProps {
   isAdmin: boolean,
@@ -14,10 +17,15 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ isAdmin }) => {
   const isMobile = useIsMobile();
   const { logout } = useAuth();
+  const { setActiveTab } = useAppContext();
+  const navigate = useNavigate();
+  const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navbarClassname = isMobile ? "navbar nav p-0 px-3" : "navbar nav px-4 py-0";
 
   const onClickHandleLogout = async () => {
+    setMobileMenuOpen(false);
+
     try {
       await logout();
 
@@ -27,6 +35,55 @@ const Navbar: React.FC<NavbarProps> = ({ isAdmin }) => {
     }
   };
 
+  const onClickHomeTab = (tab: CourseTabs) => {
+    setMobileMenuOpen(false);
+    setActiveTab(tab);
+    navigate("/");
+  };
+
+  const renderNavbarContent = () => {
+    if (isMobile) {
+      return (
+        <div className="d-flex align-items-center home-navbar-links">
+          <div className="mx-1">
+            <Hamburger
+              size={28}
+              color="white"
+              toggled={isMobileMenuOpen}
+              toggle={setMobileMenuOpen} />
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="d-flex align-items-center home-navbar-links">
+        {isAdmin
+          ? (
+            <Link
+              to="/admin"
+              className="link-light nav-link admin">
+              Admin
+            </Link>
+          )
+          : null
+        }
+        <Link
+          to="https://supanova-rp.setmore.com"
+          target="_blank"
+          className="link-light nav-link">
+          Book
+        </Link>
+        <Button
+          variant="link"
+          className="link-light nav-link logout"
+          onClick={onClickHandleLogout}>
+          Log out
+        </Button>
+      </div>
+    );
+  };
+
   return (
     <BootstrapNavbar className="home-navbar">
       <nav className={navbarClassname}>
@@ -34,31 +91,55 @@ const Navbar: React.FC<NavbarProps> = ({ isAdmin }) => {
           className="navbar-brand"
           src={SupanovaLogo}
           alt="Logo" />
-        <div className="d-flex align-items-center home-navbar-links">
-          {isAdmin
-            ? (
-              <Link
-                to="/admin"
-                className="link-light nav-link admin">
-                Admin
-              </Link>
-            )
-            : null
-          }
-          <Link
-            to="https://supanova-rp.setmore.com"
-            target="_blank"
-            className="link-light nav-link">
-            Book
-          </Link>
-          <Button
-            variant="link"
-            className="link-light nav-link logout"
-            onClick={onClickHandleLogout}>
-            Log out
-          </Button>
-        </div>
+        {renderNavbarContent()}
       </nav>
+
+      {isMobile && isMobileMenuOpen
+        ? (
+          <div className="navbar-dropdown-menu">
+            {isAdmin
+              ? (
+                <Link
+                  to="/admin"
+                  className="dropdown-nav-link link-light nav-link admin">
+                  Admin
+                </Link>
+              )
+              : null
+            }
+
+            <Button
+              variant="link"
+              className="dropdown-nav-link link-light nav-link logout"
+              onClick={() => onClickHomeTab(CourseTabs.Courses)}>
+              Courses
+            </Button>
+
+            <Link
+              to="https://supanova-rp.setmore.com"
+              target="_blank"
+              className="dropdown-nav-link link-light nav-link">
+              Book
+            </Link>
+
+            <Button
+              variant="link"
+              className="dropdown-nav-link link-light nav-link logout"
+              onClick={() => onClickHomeTab(CourseTabs.Instructor)}>
+              Instructor
+            </Button>
+
+            <Button
+              variant="link"
+              className="dropdown-nav-link link-light nav-link logout"
+              onClick={onClickHandleLogout}>
+              Log out
+            </Button>
+          </div>
+        )
+        : null
+      }
+
     </BootstrapNavbar>
   );
 };
