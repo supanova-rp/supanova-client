@@ -43,8 +43,8 @@ const Login = () => {
 
   return (
     <AuthCard
-      cardClassname="login-card"
-      title="Hi again!"
+      cardClassname="auth-card"
+      title="Welcome!"
       subTitle="Log in to your Supanova account"
       buttonText="Log in"
       footerText="Don't have an account?"
@@ -54,7 +54,7 @@ const Login = () => {
       onSubmit={onHandleLogin}>
       <FormInput
         formId="email"
-        formGroupClassname="mb-2 pe-4"
+        formGroupClassname="mb-2 auth-form-input"
         inputContainerClassname="text-input"
         label="Email"
         type="email"
@@ -62,7 +62,7 @@ const Login = () => {
         onChange={(e) => setEmailInput(e.target.value)}/>
       <FormInput
         formId="password"
-        formGroupClassname="mb-2"
+        formGroupClassname="mb-2 auth-form-input"
         inputContainerClassname="d-flex align-items-center password-input"
         label="Password"
         type={isPasswordShowing ? "text" : "password"}

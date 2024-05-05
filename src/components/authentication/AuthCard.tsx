@@ -51,7 +51,7 @@ const AuthCard: React.FC<AuthCardProps>=
           </div>
           <Form
             onSubmit={onSubmit}
-            className="has-success">
+            className="login-form">
             {children}
             <Button
               disabled={isLoading}
