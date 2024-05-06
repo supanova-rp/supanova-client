@@ -67,6 +67,7 @@ const CoursesDashboard = () => {
     <div className="w-100">
       <Header
         className="default-header"
+        headerClassname="courses-header"
         title="Courses" />
       <RequestHandler
         error={error}
