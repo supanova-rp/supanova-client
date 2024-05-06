@@ -11,6 +11,8 @@ import FormInput from "../FormInput";
 import AuthCard from "./AuthCard";
 import PasswordVisibilityIcon from "./PasswordVisibilityIcon";
 
+const formGroupClassname = "mb-2 auth-form-input";
+
 const Register = () => {
   const [emailInput, setEmailInput] = useState<string>("");
   const [passwordInput, setPasswordInput] = useState<string>("");
@@ -21,8 +23,6 @@ const Register = () => {
 
   const registerUser = useRequest("/register");
   const { login } = useAuth();
-
-  const formGroupClassname = "mb-2 pe-4";
 
   const onError = (errorName: string, error: any) => {
     console.log(`${errorName}: ${error}`);
@@ -104,7 +104,7 @@ const Register = () => {
         onChange={(e) => setEmailInput(e.target.value)}/>
       <FormInput
         formId="password"
-        formGroupClassname="mb-2"
+        formGroupClassname={formGroupClassname}
         inputContainerClassname="d-flex align-items-center password-input"
         label="Password"
         type={isPasswordShowing.password ? "text" : "password"}
@@ -118,7 +118,7 @@ const Register = () => {
         )}/>
       <FormInput
         formId="repeat-password"
-        formGroupClassname="mb-2"
+        formGroupClassname={formGroupClassname}
         inputContainerClassname="d-flex align-items-center password-input"
         label="Repeat password"
         type={isPasswordShowing.repeatPassword ? "text" : "password"}

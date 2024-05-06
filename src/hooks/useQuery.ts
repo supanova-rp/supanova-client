@@ -59,6 +59,7 @@ export const useQuery = <T>(endpoint: string, options: RequestOptions<T>): Query
         requestBody: requestBody,
         onSuccess: (result: T) => {
           setData(result);
+          setLoading(false);
 
           if (onSuccess) {
             onSuccess(result);
@@ -68,7 +69,6 @@ export const useQuery = <T>(endpoint: string, options: RequestOptions<T>): Query
       });
     } catch (error: any) {
       handleError(error);
-    } finally {
       setLoading(false);
     }
   };

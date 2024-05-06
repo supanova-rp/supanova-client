@@ -11,11 +11,8 @@ interface Props extends React.PropsWithChildren {
   onClick: () => void,
   isLoading: boolean,
   isCoursesDashboard?: boolean,
-  // courses?: Course[] | CourseTitle[],
-  // course?: Course | null,
-  // usersToCourses?: UserToCourses[],
-  shouldShowWarning: boolean,
-  warningMessage: string,
+  shouldShowWarning?: boolean,
+  warningMessage?: string,
 }
 
 const RequestHandler = ({
@@ -47,7 +44,7 @@ const RequestHandler = ({
     );
   }
 
-  if (shouldShowWarning) {
+  if (shouldShowWarning && warningMessage) {
     return <WarningCard warningMessage={warningMessage} />;
   }
 

@@ -33,9 +33,7 @@ const CourseContainer = () => {
           <RequestHandler
             error={error}
             onClick={refetch}
-            isLoading={loading}
-            shouldShowWarning={!course}
-            warningMessage={feedbackMessages.getCourseError}>
+            isLoading={loading}>
             {course
               ? <Course course={course} />
               : null

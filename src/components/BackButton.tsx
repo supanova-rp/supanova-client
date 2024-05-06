@@ -12,7 +12,7 @@ const BackButton: React.FC<Props> = ({ onClickBack }) => {
     <div role="button">
       <ChevronLeft
         stroke={colors.orange}
-        className="mt-4 me-1"
+        className="me-1"
         onClick={onClickBack} />
     </div>
   );

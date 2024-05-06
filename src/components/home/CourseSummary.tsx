@@ -13,8 +13,8 @@ export const CourseSummary: React.FC<Props> = ({ course, onSelectVideo, onSelect
   return (
     <div
       key={`${course.title} ${course.id}`}
-      className="">
-      <h5 className="mb-4">{course.description}</h5>
+      className="course-summary-container">
+      <p className="course-desc">{course.description}</p>
       <table className="table table-bordered mt-3">
         <tbody>
           {course.sections.map((section, sectionIndex) => {
