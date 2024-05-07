@@ -24,8 +24,6 @@ const QuizAnswers: React.FC<QuizAnswersProps> = ({
   onClickRemoveQuizAnswer,
   onClickToggleCorrectQuizAnswer,
 }) => {
-  const lastAnswerInput = answers.length - 1;
-
   return (
     <div>
       <FormLabel className="m-0">Answers (tick correct ones)</FormLabel>
@@ -58,20 +56,20 @@ const QuizAnswers: React.FC<QuizAnswersProps> = ({
                 : null
               }
             </div>
-            <div className="quiz-plus-icon">
-              {index === lastAnswerInput
-                ? (
-                  <PlusIcon
-                    stroke={colors.green}
-                    className="mb-4"
-                    onClick={onClickAddNewQuizAnswer} />
-                )
-                : null
-              }
-            </div>
           </div>
         );
       })}
+      <div
+        className="quiz-plus-icon-container"
+        onClick={onClickAddNewQuizAnswer}>
+        <p className="m-0"><strong>Add quiz answer</strong></p>
+
+        <div className="quiz-plus-icon">
+          <PlusIcon
+            stroke={colors.green}
+            className="mb-4"/>
+        </div>
+      </div>
     </div>
   );
 };

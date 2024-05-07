@@ -181,13 +181,18 @@
   cursor: pointer;
 }
 
-.quiz-plus-icon {
+.quiz-plus-icon-container {
   margin-top: -10px;
   cursor: pointer;
   display: flex;
   justify-content: center;
   width: 74%;
   margin-left: 24px;
+}
+
+.quiz-plus-icon {
+  padding-top: 3px;
+  padding-left: 6px;
 }
 
 .add-more-inputs-container {
