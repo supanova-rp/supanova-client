@@ -71,6 +71,7 @@ const VideoSection: React.FC<VideoSectionProps> = ({
                 id="my-player"
                 className="video-admin mb-4"
                 controls
+                playsInline
                 preload="auto"
                 src={videoUrl} />
             </div>

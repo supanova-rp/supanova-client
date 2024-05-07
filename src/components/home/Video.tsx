@@ -30,6 +30,7 @@ const Video: React.FC<VideoProps> = ({
             id="my-player"
             className="video-js-course-view"
             controls
+            playsInline
             preload="auto"
             data-setup="{}"
             ref={onVideoMounted}
