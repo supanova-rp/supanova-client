@@ -71,11 +71,10 @@ const VideoSection: React.FC<VideoSectionProps> = ({
                 id="my-player"
                 className="video-admin mb-4"
                 controls
-                playsInline
-                preload="auto"
-                src={videoUrl}>
+                playsInline // <-- required for iOS
+                preload="auto">
                 <source
-                  src={videoUrl}
+                  src={`${videoUrl}#t=0.001`} // <-- https://muffinman.io/blog/hack-for-ios-safari-to-display-html-video-thumbnail
                   type="video/mp4" />
               </video>
             </div>

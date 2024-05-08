@@ -30,14 +30,14 @@ const Video: React.FC<VideoProps> = ({
             id="my-player"
             className="video-js-course-view"
             controls
-            playsInline
+            playsInline // <-- required for iOS
             preload="auto"
             data-setup="{}"
             ref={onVideoMounted}
             onTimeUpdate={onVideoTimeUpdate}
             onEnded={onVideoEnded}>
             <source
-              src={videoUrl}
+              src={`${videoUrl}#t=0.001`} // <-- https://muffinman.io/blog/hack-for-ios-safari-to-display-html-video-thumbnail
               type="video/mp4" />
           </video>
         )
