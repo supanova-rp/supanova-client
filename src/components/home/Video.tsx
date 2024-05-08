@@ -30,14 +30,16 @@ const Video: React.FC<VideoProps> = ({
             id="my-player"
             className="video-js-course-view"
             controls
-            autoPlay
             playsInline
             preload="auto"
             data-setup="{}"
             ref={onVideoMounted}
             onTimeUpdate={onVideoTimeUpdate}
-            onEnded={onVideoEnded}
-            src={videoUrl} />
+            onEnded={onVideoEnded}>
+            <source
+              src={videoUrl}
+              type="video/mp4" />
+          </video>
         )
         : null
       }
