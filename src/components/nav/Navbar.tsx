@@ -68,12 +68,6 @@ const Navbar: React.FC<NavbarProps> = ({ isAdmin }) => {
           )
           : null
         }
-        <Link
-          to="https://supanova-rp.setmore.com"
-          target="_blank"
-          className="link-light nav-link">
-          Book
-        </Link>
         <Button
           variant="link"
           className="link-light nav-link logout"
@@ -114,13 +108,6 @@ const Navbar: React.FC<NavbarProps> = ({ isAdmin }) => {
               onClick={() => onClickHomeTab(CourseTabs.Courses)}>
               Courses
             </Button>
-
-            <Link
-              to="https://supanova-rp.setmore.com"
-              target="_blank"
-              className="dropdown-nav-link link-light nav-link">
-              Book
-            </Link>
 
             <Button
               variant="link"

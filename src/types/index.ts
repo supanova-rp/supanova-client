@@ -36,7 +36,7 @@ export enum SectionTypes {
 }
 
 export type CourseVideoSection = {
-  id: number,
+  id: number | string,
   type: SectionTypes,
   title: string,
   videoUrl: string,
@@ -47,7 +47,7 @@ export type CourseVideoSection = {
 };
 
 export type CourseQuizSection = {
-  id: number,
+  id: number | string,
   type: SectionTypes,
   questions: CourseQuizQuestion[],
   isNewSection: boolean,

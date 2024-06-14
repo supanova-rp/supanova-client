@@ -71,6 +71,8 @@ const VideoSection: React.FC<VideoSectionProps> = ({
                 id="my-player"
                 className="video-admin mb-4"
                 controls
+                controlsList="nodownload" // <-- removes download option
+                disablePictureInPicture
                 playsInline // <-- required for iOS
                 preload="auto">
                 <source

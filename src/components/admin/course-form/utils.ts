@@ -72,87 +72,57 @@ export const getInitialCourseState = () => {
   };
 };
 
-const getDeletedSectionIds = (editedSections: CourseSection[], initialSections: CourseSection[]) => {
-  const videoSectionsThatDontExistInEditedSections = initialSections.filter((initialSection) => {
-    const sectionExistsInEditedCourse = editedSections.some((editedSection) => {
-      return editedSection.id === initialSection.id;
-    });
-
-    if (sectionExistsInEditedCourse) {
-      return false;
-    }
-
-    return true;
+const getDeletedIds = (idsBeforeEdit: (string | number)[], idsAfterEdit: (string | number)[]) => {
+  // any ID that existed before editing (i.e. in idsBeforeEdit) but does not
+  // exist after editing (i.e. in idsAfterEdit) must have been removed
+  // (whether that is because an entire section was removed, an entire question, or just a single answer)
+  return idsBeforeEdit.filter(idBeforeEdit => {
+    return !idsAfterEdit.includes(idBeforeEdit);
   });
-
-  const idsOfDeletedVideoSections = videoSectionsThatDontExistInEditedSections?.map((section) => section.id);
-
-  return idsOfDeletedVideoSections;
 };
 
-const getDeletedQuizQuestions = (initialSection: CourseQuizSection, editedSections: CourseQuizSection[]) => {
-  const editedSection = editedSections.find((editedSection) => editedSection.id === initialSection.id);
-
-  // if the editedSection was deleted then we return all the questions
-  if (!editedSection) {
-    return initialSection.questions;
-  }
-
-  return initialSection.questions?.filter((initialQuestion) => {
-    const questionExistsInEditedCourse = editedSection?.questions?.some((editedQuestion) => {
-      return editedQuestion.id === initialQuestion.id;
-    });
-
-    if (questionExistsInEditedCourse) {
-      return false;
-    }
-
-    return true;
+const getDeletedSectionIds = (editedSections: CourseSection[], initialSections: CourseSection[]) => {
+  const allSectionIDsBeforeEdit = initialSections.map(section => {
+    return section.id;
   });
+
+  const allSectionIDsAfterEdit = editedSections.flatMap(section => {
+    return section.id;
+  });
+
+  return getDeletedIds(allSectionIDsBeforeEdit, allSectionIDsAfterEdit);
 };
 
 const getDeletedQuizQuestionIds = (editedSections: CourseQuizSection[], initialSections: CourseQuizSection[]) => {
-  const deletedQuizQuestions = initialSections.flatMap((initialSection) => {
-    return getDeletedQuizQuestions(initialSection, editedSections);
-  });
-
-  const idsOfDeletedQuizQuestions = deletedQuizQuestions?.map((question) => question?.id);
-
-  return idsOfDeletedQuizQuestions;
-};
-
-const getDeletedQuizAnswers = (initialSectionQuestion: CourseQuizQuestion, editedSections: CourseQuizSection[]) => {
-  let editedQuizQuestion: CourseQuizQuestion | undefined | null;
-
-  editedSections.forEach((editedSection) => {
-    editedQuizQuestion = editedSection.questions.find((editedSectionQuestion) => editedSectionQuestion.id === initialSectionQuestion.id);
-  });
-
-  if (!editedQuizQuestion) {
-    return initialSectionQuestion.answers;
-  }
-
-  return initialSectionQuestion.answers.filter((initialSectionAnswer) => {
-    const answerExistsInEditedSection = editedQuizQuestion?.answers?.some((editedQuizAnswer: CourseQuizAnswer) => editedQuizAnswer.id === initialSectionAnswer.id);
-
-    if (answerExistsInEditedSection) {
-      return false;
-    }
-
-    return true;
-  });
-};
-
-const getDeletedQuizAnswerIds = (editedSections: CourseQuizSection[], initialSections: CourseQuizSection[]) => {
-  const deletedQuizAnswers = initialSections.flatMap((initialSection) => {
-    return initialSection.questions.flatMap((initialSectionQuestion) => {
-      return getDeletedQuizAnswers(initialSectionQuestion, editedSections);
+  const allQuestionIDsBeforeEdit = initialSections.flatMap(section => {
+    return section.questions.flatMap(question => {
+      return question.id;
     });
   });
 
-  const idsOfDeletedQuizAnswers = deletedQuizAnswers?.map((quizAnswer) => quizAnswer?.id);
+  const allQuestionIDsAfterEdit = editedSections.flatMap(section => {
+    return section.questions.flatMap(question => {
+      return question.id;
+    });
+  });
 
-  return idsOfDeletedQuizAnswers;
+  return getDeletedIds(allQuestionIDsBeforeEdit, allQuestionIDsAfterEdit);
+};
+
+const getDeletedQuizAnswerIds = (editedSections: CourseQuizSection[], initialSections: CourseQuizSection[]) => {
+  const allAnswerIDsBeforeEdit = initialSections.flatMap(section => {
+    return section.questions.flatMap(question => {
+      return question.answers.flatMap(answer => answer.id);
+    });
+  });
+
+  const allAnswerIDsAfterEdit = editedSections.flatMap(section => {
+    return section.questions.flatMap(question => {
+      return question.answers.flatMap(answer => answer.id);
+    });
+  });
+
+  return getDeletedIds(allAnswerIDsBeforeEdit, allAnswerIDsAfterEdit);
 };
 
 export const getDeletedSectionsIds = (course: Course, initialCourse: Course) => {

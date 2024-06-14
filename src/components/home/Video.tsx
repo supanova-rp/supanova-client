@@ -30,6 +30,8 @@ const Video: React.FC<VideoProps> = ({
             id="my-player"
             className="video-js-course-view"
             controls
+            controlsList="nodownload" // <-- removes download option
+            disablePictureInPicture
             playsInline // <-- required for iOS
             preload="auto"
             data-setup="{}"

@@ -18,7 +18,7 @@ const SidebarContainer: React.FC = () => {
           src={HomeImage}
           alt="Supanova"
           className="course-image" />
-        <h5 className="course-title-course-view">Radiation Safety Training</h5>
+        <h5 className="course-title-course-view">On-demand Radiation Safety Training Hub</h5>
         <div className="row w-100">
           <div className="col-20 p-0">
             <Sidebar

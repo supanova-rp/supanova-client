@@ -71,7 +71,7 @@ export default class EditCourses extends Component {
     toast.success(feedbackMessages.deleteCourseSuccess, REACT_TOAST_DURATION);
   };
 
-  getRequestBody = (course: Course, initialCourse: Course,) => {
+  getRequestBody = (course: Course, initialCourse: Course) => {
     return {
       edited_course_id: course.id,
       edited_course: {

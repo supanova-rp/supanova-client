@@ -162,12 +162,12 @@ export default class CourseFormContainer extends Component <CourseFormContainerP
     });
   };
 
-  onSaveCourseSuccess = () => {
+  onSaveCourseSuccess = (editedCourse: Course) => {
     this.setState({
       areActionsDisabled: false,
     });
 
-    this.props.onCourseSavedSuccess(this.state.course);
+    this.props.onCourseSavedSuccess(editedCourse);
   };
 
   onSaveCourseError = (error: string) => {
