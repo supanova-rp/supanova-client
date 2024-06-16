@@ -6,6 +6,7 @@ import {
   CourseQuizSection,
   CourseSection,
   CourseVideoSection,
+  SectionTypes,
   getUpdatedSectionsKey
 } from "src/types";
 
@@ -56,8 +57,8 @@ export const everyQuizQuestionHasCorrectAnswer = (quizSections: CourseQuizSectio
   return everyQuizQuestionHasAtLeast1CorrectAnswer;
 };
 
-export const getInitialCourseState = () => {
-  return  {
+export const getInitialCourseState = (): Course => {
+  return {
     id: Date.now(),
     title: "",
     description: "",
@@ -65,7 +66,8 @@ export const getInitialCourseState = () => {
       {
         id: Date.now(),
         title: "",
-        videoUrl: null,
+        type: SectionTypes.Video,
+        videoUrl: "",
         uploadProgress: null,
       },
     ],
