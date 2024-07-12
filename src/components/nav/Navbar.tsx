@@ -6,7 +6,7 @@ import { Twirl as Hamburger } from "hamburger-react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useIsMobile } from "src/hooks/useIsMobile";
 import { CourseTabs, REACT_TOAST_DURATION, feedbackMessages } from "src/constants/constants";
-import SupanovaLogo from "../../images/Supanova-logo-nav.png";
+import SupanovaLogo from "../../images/supanova-logo.png";
 import { useState } from "react";
 import { useAppContext } from "src/contexts/AppContext";
 

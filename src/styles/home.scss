@@ -80,7 +80,7 @@
   margin-bottom: 5px;
 }
 
-.courses-header {
+.centered-header {
   text-align: center;
 
   @media screen and (min-width: 768px) {
@@ -106,17 +106,14 @@
   }
 }
 
-.course-image {
-  height: 200px;
+.sidebar-image {
   width: 200px;
 
   @media screen and (min-width: 768px) {
-    height: 10rem;
     width: 10rem;
   }
 
   @media screen and (min-width: 1024px) {
-    height: 12rem;
     width: 12rem;
   }
 }
@@ -217,9 +214,9 @@
   display: flex;
   flex-direction: column;
   padding: 10px 40px;
-  align-items: flex-start;
+  align-items: center;
 
-  @media screen and (min-width: 768px) {
+  @media screen and (min-width: 468px) {
     flex-direction: row;
     padding: 8px 0;
   }
@@ -231,11 +228,15 @@
   width: 150px;
   margin-bottom: 30px;
 
+  @media screen and (min-width: 468px) {
+    align-self: flex-start;
+    margin-right: 20px;
+  }
+
 
   @media screen and (min-width: 768px) {
-    width: 90px;
-    height: 80px;
-    margin-right: 20px;
+    width: 158px;
+    height: 158px;
     margin-bottom: 0px;
   }
 }

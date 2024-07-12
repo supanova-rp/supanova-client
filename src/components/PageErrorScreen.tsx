@@ -1,11 +1,11 @@
-import RocketLogo from "../images/Rocket-logo.png";
+import RocketLogo from "../images/rocket-logo.png";
 
 interface Props {
   title: string,
   text: string,
 }
 
-const PageHeroScreen: React.FC<Props> = ({ title, text }) => {
+const PageErrorScreen: React.FC<Props> = ({ title, text }) => {
   return (
     <div className="page-not-found-container">
       <img
@@ -18,4 +18,4 @@ const PageHeroScreen: React.FC<Props> = ({ title, text }) => {
   );
 };
 
-export default PageHeroScreen;
+export default PageErrorScreen;

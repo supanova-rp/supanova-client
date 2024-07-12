@@ -1,13 +1,14 @@
 /* eslint-disable max-len */
 import Header from "./Header";
 
-import JoelProfilePicture from "../../images/Joel-Profile.png";
+import JoelProfilePicture from "../../images/joel-profile.jpg";
 
 const Instructor = () => {
   return (
     <div className="instructor-container">
       <Header
         className="default-header"
+        headerClassname="centered-header"
         title="Meet Your Instructor" />
       <div className="instructor-content-container">
         <img
