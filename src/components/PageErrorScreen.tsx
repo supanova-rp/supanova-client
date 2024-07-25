@@ -1,4 +1,4 @@
-import RocketLogo from "../images/rocket-logo.png";
+// import RocketLogo from "../images/rocket-logo.png";
 
 interface Props {
   title: string,
@@ -8,10 +8,10 @@ interface Props {
 const PageErrorScreen: React.FC<Props> = ({ title, text }) => {
   return (
     <div className="page-not-found-container">
-      <img
+      {/* <img
         src={RocketLogo}
         alt="Rocket"
-        className="page-not-found-logo" />
+        className="page-not-found-logo" /> */}
       <h1>{title}</h1>
       <p>{text}</p>
     </div>
