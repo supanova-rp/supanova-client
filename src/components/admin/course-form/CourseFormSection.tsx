@@ -1,30 +1,35 @@
-import React, { createRef } from "react";
 import { AxiosProgressEvent } from "axios";
+import React, { createRef } from "react";
+import AddMoreInputs from "src/components/AddMoreInputs";
 
+import MoveSection from "./MoveSection";
+import QuizSection from "./QuizSection";
+import { MoveSectionFn, isQuizSection } from "./utils";
+import VideoSection from "./VideoSection";
 import { CourseQuizQuestion, CourseSection } from "../../../types/index";
 
-import VideoSection from "./VideoSection";
-import QuizSection from "./QuizSection";
-import AddMoreInputs from "src/components/AddMoreInputs";
-import { MoveSectionFn, isQuizSection } from "./utils";
-import MoveSection from "./MoveSection";
-
 interface Props {
-  section: CourseSection,
-  isFirstSection: boolean,
-  isLastSection: boolean,
-  isEditing: boolean,
-  canRemoveVideoSection: boolean,
-  onChangeSectionTitle: (sectionId: number, inputValue: string) => void,
-  onHandleUpdateQuiz: (quizId: number, quizQuestionsAndAnswers: CourseQuizQuestion[]) => void,
-  onClickAddNewQuizQuestion: (quizId: number) => void,
-  onHandleAddNewQuizAnswer: (quizId: number, updatedQuizQuestions: CourseQuizQuestion[]) => void,
-  onClickRemoveQuizQuestion: (quizId: number, questionId: string) => void,
-  onFileUploaded: (sectionId: number, videoUrl: string) => void,
-  onFileUploadProgress: (data: AxiosProgressEvent, sectionId: number) => void,
-  onFileUploadCancelled: (sectionId: number) => void,
-  handleRemoveSection: (sectionId: number) => void,
-  onMoveSection: MoveSectionFn
+  section: CourseSection;
+  isFirstSection: boolean;
+  isLastSection: boolean;
+  isEditing: boolean;
+  canRemoveVideoSection: boolean;
+  onChangeSectionTitle: (sectionId: number, inputValue: string) => void;
+  onHandleUpdateQuiz: (
+    quizId: number,
+    quizQuestionsAndAnswers: CourseQuizQuestion[],
+  ) => void;
+  onClickAddNewQuizQuestion: (quizId: number) => void;
+  onHandleAddNewQuizAnswer: (
+    quizId: number,
+    updatedQuizQuestions: CourseQuizQuestion[],
+  ) => void;
+  onClickRemoveQuizQuestion: (quizId: number, questionId: string) => void;
+  onFileUploaded: (sectionId: number, videoUrl: string) => void;
+  onFileUploadProgress: (data: AxiosProgressEvent, sectionId: number) => void;
+  onFileUploadCancelled: (sectionId: number) => void;
+  handleRemoveSection: (sectionId: number) => void;
+  onMoveSection: MoveSectionFn;
 }
 
 export default class CourseFormSection extends React.Component<Props> {
@@ -104,18 +109,20 @@ export default class CourseFormSection extends React.Component<Props> {
             onHandleUpdateQuiz={onHandleUpdateQuiz}
             onHandleAddNewQuizAnswer={onHandleAddNewQuizAnswer}
             handleRemoveSection={handleRemoveSection}
-
-            onClickRemoveQuizQuestion={onClickRemoveQuizQuestion} />
+            onClickRemoveQuizQuestion={onClickRemoveQuizQuestion}
+          />
           <AddMoreInputs
             title="Add quiz question"
             onClick={() => onClickAddNewQuizQuestion(section.id)}
-            marginBottom="mb-5" />
+            marginBottom="mb-5"
+          />
 
           <MoveSection
             sectionId={section.id}
             isFirst={isFirstSection}
             isLast={isLastSection}
-            onMoveSection={onMoveSection} />
+            onMoveSection={onMoveSection}
+          />
 
           <hr />
         </>
@@ -134,13 +141,15 @@ export default class CourseFormSection extends React.Component<Props> {
           handleFileUploaded={this.handleFileUploaded}
           onFileUploadProgress={onFileUploadProgress}
           onClickCancelFileUpload={this.onClickCancelFileUpload}
-          onClickRemoveSection={this.onClickRemoveSection} />
+          onClickRemoveSection={this.onClickRemoveSection}
+        />
 
         <MoveSection
           sectionId={section.id}
           isFirst={isFirstSection}
           isLast={isLastSection}
-          onMoveSection={onMoveSection} />
+          onMoveSection={onMoveSection}
+        />
 
         <hr />
       </>

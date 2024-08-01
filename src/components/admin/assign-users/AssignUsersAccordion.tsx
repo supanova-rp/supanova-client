@@ -1,48 +1,56 @@
 import { useState } from "react";
-import toast from "react-hot-toast";
 import { Form } from "react-bootstrap";
 import Accordion from "react-bootstrap/Accordion";
-
-import { CourseTitle, UserToCourses } from "src/types";
+import toast from "react-hot-toast";
+import {
+  REACT_TOAST_DURATION,
+  feedbackMessages,
+} from "src/constants/constants";
 import useRequest from "src/hooks/useRequest";
-import { REACT_TOAST_DURATION, feedbackMessages } from "src/constants/constants";
+import { CourseTitle, UserToCourses } from "src/types";
 
 import ToggleButton from "../../ToggleButton";
 
 interface AccordionProps {
-  usersToCourses: UserToCourses[],
-  courses: CourseTitle[],
-  setUsersToCourses: (parameter: UserToCourses[]) => void
+  usersToCourses: UserToCourses[];
+  courses: CourseTitle[];
+  setUsersToCourses: (parameter: UserToCourses[]) => void;
 }
 
-const AssignUsersAccordion: React.FC<AccordionProps> = ({ usersToCourses, courses, setUsersToCourses }) => {
-  const [loadingUserToCourseId, setLoadingUserToCourseId] = useState<{ courseId: number, userId: string} | null>(null);
+const AssignUsersAccordion: React.FC<AccordionProps> = ({
+  usersToCourses,
+  courses,
+  setUsersToCourses,
+}) => {
+  const [loadingUserToCourseId, setLoadingUserToCourseId] = useState<{
+    courseId: number;
+    userId: string;
+  } | null>(null);
 
   const updateUsersToCourses = useRequest("/update-users-to-courses");
 
   const onSuccess = (isAssigned: boolean, userId: string, courseId: number) => {
     setLoadingUserToCourseId(null);
 
-    const newUsersToCoursesWithUpdatedCourseIds = usersToCourses.map((userToCourse) => {
-      if (userToCourse.id === userId && isAssigned) {
-        return {
-          ...userToCourse,
-          courseIds: userToCourse.courseIds.filter((id) => id !== courseId)
-        };
-      }
+    const newUsersToCoursesWithUpdatedCourseIds = usersToCourses.map(
+      userToCourse => {
+        if (userToCourse.id === userId && isAssigned) {
+          return {
+            ...userToCourse,
+            courseIds: userToCourse.courseIds.filter(id => id !== courseId),
+          };
+        }
 
-      if (userToCourse.id === userId) {
-        return {
-          ...userToCourse,
-          courseIds: [
-            ...userToCourse.courseIds,
-            courseId
-          ]
-        };
-      }
+        if (userToCourse.id === userId) {
+          return {
+            ...userToCourse,
+            courseIds: [...userToCourse.courseIds, courseId],
+          };
+        }
 
-      return userToCourse;
-    });
+        return userToCourse;
+      },
+    );
 
     setUsersToCourses(newUsersToCoursesWithUpdatedCourseIds);
   };
@@ -52,7 +60,11 @@ const AssignUsersAccordion: React.FC<AccordionProps> = ({ usersToCourses, course
     toast.error(feedbackMessages.saveChangesError, REACT_TOAST_DURATION);
   };
 
-  const onChangeUpdateTickedCourseIds = (userId: string, courseId: number, isAssigned: boolean) => {
+  const onChangeUpdateTickedCourseIds = (
+    userId: string,
+    courseId: number,
+    isAssigned: boolean,
+  ) => {
     setLoadingUserToCourseId({ courseId, userId });
 
     updateUsersToCourses({
@@ -67,16 +79,11 @@ const AssignUsersAccordion: React.FC<AccordionProps> = ({ usersToCourses, course
   };
 
   return (
-    <Accordion
-      flush
-      className="admin-accordion">
+    <Accordion flush className="admin-accordion">
       {usersToCourses.map((user: UserToCourses, index: number) => {
         return (
-          <Accordion.Item
-            eventKey={index.toString()}
-            key={user.id}>
-            <Accordion.Header
-              className="admin-accordion-button">
+          <Accordion.Item eventKey={index.toString()} key={user.id}>
+            <Accordion.Header className="admin-accordion-button">
               {`${user.name} (${user.email})`}
             </Accordion.Header>
             <Accordion.Body className="p-0 my-3">
@@ -89,8 +96,18 @@ const AssignUsersAccordion: React.FC<AccordionProps> = ({ usersToCourses, course
                       key={course.id}
                       label={course.title}
                       isChecked={isAssigned}
-                      isLoading={course.id === loadingUserToCourseId?.courseId && user.id === loadingUserToCourseId?.userId}
-                      onChange={() => onChangeUpdateTickedCourseIds(user.id, course.id, isAssigned)} />
+                      isLoading={
+                        course.id === loadingUserToCourseId?.courseId &&
+                        user.id === loadingUserToCourseId?.userId
+                      }
+                      onChange={() =>
+                        onChangeUpdateTickedCourseIds(
+                          user.id,
+                          course.id,
+                          isAssigned,
+                        )
+                      }
+                    />
                   );
                 })}
               </Form>

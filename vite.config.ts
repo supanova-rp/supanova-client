@@ -1,36 +1,14 @@
-/// <reference types="vitest" />
-import { defineConfig } from "vite";
+/// <reference types="vite-plugin-svgr/client" />
 import react from "@vitejs/plugin-react";
+import { defineConfig } from "vite";
 import svgr from "vite-plugin-svgr";
-import viteTsConfigPaths from "vite-tsconfig-paths";
 
+// https://vitejs.dev/config/
 export default defineConfig({
-  cacheDir: "./node_modules/.vite/supanova-client",
-
-  server: {
-    port: 3000,
-    host: "0.0.0.0",
-  },
-
-  preview: {
-    port: 3000,
-    host: "0.0.0.0",
-  },
-
-  plugins: [
-    react(),
-    svgr(),
-    viteTsConfigPaths({
-      root: "./",
-    }),
-  ],
-
-  test: {
-    globals: true,
-    cache: {
-      dir: "./node_modules/.vitest",
+  plugins: [react(), svgr()],
+  resolve: {
+    alias: {
+      src: "/src",
     },
-    environment: "jsdom",
-    include: ["src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
   },
 });

@@ -1,10 +1,10 @@
 import React from "react";
 
+import XCircleErrorIcon from "../assets/icons/xCircleIcon.svg?react";
 import { colors } from "../constants/colorPalette";
-import { ReactComponent as XCircleErrorIcon } from "../icons/xCircleIcon.svg";
 
 interface Props {
-  text: string,
+  text: string;
 }
 
 const XIcon: React.FC<Props> = ({ text }) => {
@@ -13,7 +13,6 @@ const XIcon: React.FC<Props> = ({ text }) => {
       <XCircleErrorIcon stroke={colors.red} />
       <p className="text-danger ms-2 mb-0">{text}</p>
     </div>
-
   );
 };
 

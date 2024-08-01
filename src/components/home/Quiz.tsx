@@ -1,17 +1,18 @@
 import React from "react";
 import { CourseQuizSection } from "src/types";
-import Modal from "../modals/Modal";
+
 import QuizAnswer from "./QuizAnswer";
+import Modal from "../modals/Modal";
 
 interface Props {
-  quizSection: CourseQuizSection,
-  selectedAnswers: any[],
-  score: number | null,
-  showFeedbackModal: boolean,
-  allAnswersAreCorrect: boolean,
-  isLastSection: boolean,
-  onChangeAnswer: (questionIndex: number, answerIndex: number) => void,
-  onClickModalConfirm: () => void,
+  quizSection: CourseQuizSection;
+  selectedAnswers: any[];
+  score: number | null;
+  showFeedbackModal: boolean;
+  allAnswersAreCorrect: boolean;
+  isLastSection: boolean;
+  onChangeAnswer: (questionIndex: number, answerIndex: number) => void;
+  onClickModalConfirm: () => void;
 }
 
 const Quiz: React.FC<Props> = ({
@@ -49,10 +50,10 @@ const Quiz: React.FC<Props> = ({
       <div>
         <h4 className="mt-2 mb-4">Quiz</h4>
         {quizSection.questions.map((question, questionIndex) => (
-          <div
-            key={question.id}
-            className="quiz-question">
-            <h5 className="mt-2 mb-4">{questionIndex + 1}. {question.question}</h5>
+          <div key={question.id} className="quiz-question">
+            <h5 className="mt-2 mb-4">
+              {questionIndex + 1}. {question.question}
+            </h5>
             {question.answers.map((answer, answerIndex) => (
               <QuizAnswer
                 key={answer.id}
@@ -60,27 +61,27 @@ const Quiz: React.FC<Props> = ({
                 answerIndex={answerIndex}
                 questionIndex={questionIndex}
                 selectedAnswers={selectedAnswers}
-                onClickAnswer={onChangeAnswer} />
+                onClickAnswer={onChangeAnswer}
+              />
             ))}
           </div>
         ))}
       </div>
-      {showFeedbackModal && score !== null && (
+      {showFeedbackModal && score !== null ? (
         <Modal
           confirmText={getFeedbackButtonText()}
-          onClickConfirm={onClickModalConfirm}>
+          onClickConfirm={onClickModalConfirm}
+        >
           <div className="d-flex flex-column align-items-center justify-content-center">
             <h5 className="pb-3">
               {score} / {totalQuestions}
             </h5>
             <div>
-              <h5 className="text-center">
-                {getFeedbackText()}
-              </h5>
+              <h5 className="text-center">{getFeedbackText()}</h5>
             </div>
           </div>
         </Modal>
-      )}
+      ) : null}
     </div>
   );
 };

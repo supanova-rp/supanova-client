@@ -1,10 +1,7 @@
-/* eslint-disable react/jsx-no-useless-fragment */
-import { useEffect, useState } from "react";
 import { PulseLoader } from "react-spinners";
-
 import { colors } from "src/constants/colorPalette";
-import { useAuth } from "src/contexts/AuthContext";
 import { feedbackMessages } from "src/constants/constants";
+import { useAuth } from "src/contexts/AuthContext";
 
 import PageErrorScreen from "../PageErrorScreen";
 
@@ -22,9 +19,7 @@ const AdminRoute = ({ children }: React.PropsWithChildren) => {
 
   if (!isAdmin) {
     return (
-      <PageErrorScreen
-        title="Oops!"
-        text={feedbackMessages.adminAccessError} />
+      <PageErrorScreen title="Oops!" text={feedbackMessages.adminAccessError} />
     );
   }
 

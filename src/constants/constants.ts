@@ -1,8 +1,8 @@
-import { ReactComponent as HomeIcon } from "../icons/homeIcon.svg";
-import { ReactComponent as AddUserIcon } from "../icons/addUserIcon.svg";
-import { ReactComponent as EditCourseIcon } from "../icons/editCourseIcon.svg";
-import { ReactComponent as AddCourseIcon } from "../icons/addCourseIcon.svg";
-import { ReactComponent as AssignUserIcon } from "../icons/assignUserIcon.svg";
+import AddCourseIcon from "../assets/icons/addCourseIcon.svg?react";
+import AddUserIcon from "../assets/icons/addUserIcon.svg?react";
+import AssignUserIcon from "../assets/icons/assignUserIcon.svg?react";
+import EditCourseIcon from "../assets/icons/editCourseIcon.svg?react";
+import HomeIcon from "../assets/icons/homeIcon.svg?react";
 
 export const API_DOMAIN = import.meta.env.VITE_API_DOMAIN;
 
@@ -16,7 +16,7 @@ export const ADMINS_TABS = {
 export enum CourseTabs {
   Courses = "Courses",
   Instructor = "Instructor",
-};
+}
 
 export const EMAIL_JS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
 export const EMAIL_JS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
@@ -44,8 +44,9 @@ export const feedbackMessages = {
   loginError: "Login failed. Try again.",
   loginValidationError: "Wrong email and/or password.",
   logoutError: "Failed to log out. Please try again.",
-  adminAccessError: "You are trying to access a page that requires Admin access...",
-  adminVerificationError: "Failed to very if user is Admin."
+  adminAccessError:
+    "You are trying to access a page that requires Admin access...",
+  adminVerificationError: "Failed to very if user is Admin.",
 };
 
 const { ADD_COURSE, ADD_USERS, ASSIGN_USERS, EDIT_COURSES } = ADMINS_TABS;

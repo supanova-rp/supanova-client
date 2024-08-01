@@ -1,24 +1,31 @@
 import { getIsVideoSection } from "src/utils/course-utils";
-import { Course } from "../../types/index";
 
 import SectionTableRow from "./SectionTableRow";
+import { Course } from "../../types/index";
 
 interface Props {
-  course: Course,
-  onSelectVideo: (sectionIndex: number) => void,
-  onSelectQuiz: (sectionIndex: number) => void,
+  course: Course;
+  onSelectVideo: (sectionIndex: number) => void;
+  onSelectQuiz: (sectionIndex: number) => void;
 }
 
-export const CourseSummary: React.FC<Props> = ({ course, onSelectVideo, onSelectQuiz }) => {
+export const CourseSummary: React.FC<Props> = ({
+  course,
+  onSelectVideo,
+  onSelectQuiz,
+}) => {
   return (
     <div
       key={`${course.title} ${course.id}`}
-      className="course-summary-container">
+      className="course-summary-container"
+    >
       <p className="course-desc">{course.description}</p>
       <table className="table table-bordered mt-3">
         <tbody>
           {course.sections.map((section, sectionIndex) => {
-            const isCompletedInLocalStorage = JSON.parse(localStorage.getItem(`section-progress-${section.id}`) || "{}").completed;
+            const isCompletedInLocalStorage = JSON.parse(
+              localStorage.getItem(`section-progress-${section.id}`) || "{}",
+            ).completed;
             const isVideoSection = getIsVideoSection(section);
 
             return (
@@ -28,7 +35,12 @@ export const CourseSummary: React.FC<Props> = ({ course, onSelectVideo, onSelect
                 isVideoSection={isVideoSection}
                 sectionId={section.id}
                 title={isVideoSection ? section.title : "Quiz"}
-                onClickFunc={isVideoSection ? () => onSelectVideo(sectionIndex) : () => onSelectQuiz(sectionIndex)} />
+                onClickFunc={
+                  isVideoSection
+                    ? () => onSelectVideo(sectionIndex)
+                    : () => onSelectQuiz(sectionIndex)
+                }
+              />
             );
           })}
         </tbody>

@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
-
-import useRequest from "../../../hooks/useRequest";
-
-import AdminHeader from "../AdminHeader";
-import { CourseTitle, UserToCourses } from "src/types";
 import RequestHandler from "src/components/RequestHandler";
+import { CourseTitle, UserToCourses } from "src/types";
+
 import AssignUsersAccordion from "./AssignUsersAccordion";
+import useRequest from "../../../hooks/useRequest";
+import AdminHeader from "../AdminHeader";
 
 const AssignUsers = () => {
   const [isLoadingCourses, setIsLoadingCourses] = useState<boolean>(true);
-  const [isLoadingUserCourses, setIsLoadingUserCourses] = useState<boolean>(false);
+  const [isLoadingUserCourses, setIsLoadingUserCourses] =
+    useState<boolean>(false);
   const [coursesError, setCoursesError] = useState<null | string>(null);
   const [userCoursesError, setUserCoursesError] = useState<null | string>(null);
   const [courses, setCourses] = useState<CourseTitle[]>([]);
@@ -50,9 +50,8 @@ const AssignUsers = () => {
   const getCourseTitles = () => {
     requestCourseTitles({
       onSuccess: onSuccessCourses,
-      onError: (error) => onCoursesError(error, "Failed to load courses.")
+      onError: error => onCoursesError(error, "Failed to load courses."),
     });
-
   };
 
   const getUsersWithAssignedCourses = () => {
@@ -60,7 +59,7 @@ const AssignUsers = () => {
 
     requestUsersToCourses({
       onSuccess: onSuccessUserCourses,
-      onError: (error) => onUserCoursesError(error, "Failed to load users.")
+      onError: error => onUserCoursesError(error, "Failed to load users."),
     });
   };
 
@@ -76,17 +75,20 @@ const AssignUsers = () => {
         onClick={getCourseTitles}
         isLoading={isLoadingCourses}
         shouldShowWarning={!courses?.length}
-        warningMessage="You don't have any courses yet...">
+        warningMessage="You don't have any courses yet..."
+      >
         <RequestHandler
           error={userCoursesError}
           onClick={getUsersWithAssignedCourses}
           isLoading={isLoadingUserCourses}
           shouldShowWarning={!usersToCourses?.length}
-          warningMessage="You don't have any users yet...">
+          warningMessage="You don't have any users yet..."
+        >
           <AssignUsersAccordion
             usersToCourses={usersToCourses}
             courses={courses}
-            setUsersToCourses={setUsersToCourses}/>
+            setUsersToCourses={setUsersToCourses}
+          />
         </RequestHandler>
       </RequestHandler>
     </>

@@ -1,13 +1,13 @@
 import { SyntheticEvent } from "react";
-
-import { CourseVideoSection } from "../../types/index";
-import Video from "./Video";
 import { getVideoProgressKey } from "src/utils/course-utils";
 
+import Video from "./Video";
+import { CourseVideoSection } from "../../types/index";
+
 interface CourseProps {
-  courseId: number,
-  videoSection: CourseVideoSection,
-  initialCurrentVideoTime: number,
+  courseId: number;
+  videoSection: CourseVideoSection;
+  initialCurrentVideoTime: number;
 }
 
 const CourseVideoContainer: React.FC<CourseProps> = ({
@@ -26,21 +26,29 @@ const CourseVideoContainer: React.FC<CourseProps> = ({
     // TODO:
     // implement course progress saving on server
     // in this func will want to say they have just completed this section
-    localStorage.setItem(getVideoProgressKey(courseId, sectionId), JSON.stringify(sectionProgressInfo));
+    localStorage.setItem(
+      getVideoProgressKey(courseId, sectionId),
+      JSON.stringify(sectionProgressInfo),
+    );
   };
 
   const onVideoTimeUpdate = (e: SyntheticEvent<HTMLVideoElement>) => {
     const videoElement = e.target as HTMLVideoElement;
     const { currentTime } = videoElement;
 
-    const localStorageValue = JSON.parse(localStorage.getItem(`section-progress-${sectionId}`) || "{}");
+    const localStorageValue = JSON.parse(
+      localStorage.getItem(`section-progress-${sectionId}`) || "{}",
+    );
 
     const sectionProgressInfo = {
       ...localStorageValue,
       currentTime,
     };
 
-    localStorage.setItem(`section-progress-${sectionId}`, JSON.stringify(sectionProgressInfo));
+    localStorage.setItem(
+      `section-progress-${sectionId}`,
+      JSON.stringify(sectionProgressInfo),
+    );
   };
 
   return (
@@ -49,7 +57,8 @@ const CourseVideoContainer: React.FC<CourseProps> = ({
       videoUrl={videoUrl}
       initialCurrentVideoTime={initialCurrentVideoTime}
       onVideoEnded={onVideoEnded}
-      onVideoTimeUpdate={onVideoTimeUpdate} />
+      onVideoTimeUpdate={onVideoTimeUpdate}
+    />
   );
 };
 

@@ -7,16 +7,20 @@ import {
   CourseSection,
   CourseVideoSection,
   SectionTypes,
-  getUpdatedSectionsKey
+  getUpdatedSectionsKey,
 } from "src/types";
 
-export type MoveSectionFn = (id: number, direction: "up" | "down") => void
+export type MoveSectionFn = (id: number, direction: "up" | "down") => void;
 
-export const isVideoSection = (section: CourseSection): section is CourseVideoSection => {
+export const isVideoSection = (
+  section: CourseSection,
+): section is CourseVideoSection => {
   return section.videoUrl !== undefined;
 };
 
-export const isQuizSection = (section: CourseSection): section is CourseQuizSection => {
+export const isQuizSection = (
+  section: CourseSection,
+): section is CourseQuizSection => {
   return section.videoUrl === undefined;
 };
 
@@ -29,16 +33,22 @@ export const getQuizSections = (course: Course) => {
 };
 
 export const isVideoUploadInProgress = (course: Course) => {
-  return course.sections.some((section) => {
-    return typeof section.uploadProgress === "number" && section.uploadProgress < 1;
+  return course.sections.some(section => {
+    return (
+      typeof section.uploadProgress === "number" && section.uploadProgress < 1
+    );
   });
 };
 
-export const everyVideoSectionHasVideo = (videoSections: CourseVideoSection[]) => {
-  return videoSections.every((videoSection) => videoSection.videoUrl);
+export const everyVideoSectionHasVideo = (
+  videoSections: CourseVideoSection[],
+) => {
+  return videoSections.every(videoSection => videoSection.videoUrl);
 };
 
-export const everyQuizQuestionHasCorrectAnswer = (quizSections: CourseQuizSection[]) => {
+export const everyQuizQuestionHasCorrectAnswer = (
+  quizSections: CourseQuizSection[],
+) => {
   let everyQuizQuestionHasAtLeast1CorrectAnswer = true;
 
   for (let i = 0; i < quizSections.length; i++) {
@@ -47,7 +57,11 @@ export const everyQuizQuestionHasCorrectAnswer = (quizSections: CourseQuizSectio
     for (let j = 0; j < currentQuizSection.questions.length; j++) {
       const currentQuizQuestion = currentQuizSection.questions[j];
 
-      if (!currentQuizQuestion.answers.some((quizAnswer) => quizAnswer.isCorrectAnswer)) {
+      if (
+        !currentQuizQuestion.answers.some(
+          quizAnswer => quizAnswer.isCorrectAnswer,
+        )
+      ) {
         everyQuizQuestionHasAtLeast1CorrectAnswer = false;
         break;
       }
@@ -74,7 +88,10 @@ export const getInitialCourseState = (): Course => {
   };
 };
 
-const getDeletedIds = (idsBeforeEdit: (string | number)[], idsAfterEdit: (string | number)[]) => {
+const getDeletedIds = (
+  idsBeforeEdit: (string | number)[],
+  idsAfterEdit: (string | number)[],
+) => {
   // any ID that existed before editing (i.e. in idsBeforeEdit) but does not
   // exist after editing (i.e. in idsAfterEdit) must have been removed
   // (whether that is because an entire section was removed, an entire question, or just a single answer)
@@ -83,7 +100,10 @@ const getDeletedIds = (idsBeforeEdit: (string | number)[], idsAfterEdit: (string
   });
 };
 
-const getDeletedSectionIds = (editedSections: CourseSection[], initialSections: CourseSection[]) => {
+const getDeletedSectionIds = (
+  editedSections: CourseSection[],
+  initialSections: CourseSection[],
+) => {
   const allSectionIDsBeforeEdit = initialSections.map(section => {
     return section.id;
   });
@@ -95,7 +115,10 @@ const getDeletedSectionIds = (editedSections: CourseSection[], initialSections: 
   return getDeletedIds(allSectionIDsBeforeEdit, allSectionIDsAfterEdit);
 };
 
-const getDeletedQuizQuestionIds = (editedSections: CourseQuizSection[], initialSections: CourseQuizSection[]) => {
+const getDeletedQuizQuestionIds = (
+  editedSections: CourseQuizSection[],
+  initialSections: CourseQuizSection[],
+) => {
   const allQuestionIDsBeforeEdit = initialSections.flatMap(section => {
     return section.questions.flatMap(question => {
       return question.id;
@@ -111,7 +134,10 @@ const getDeletedQuizQuestionIds = (editedSections: CourseQuizSection[], initialS
   return getDeletedIds(allQuestionIDsBeforeEdit, allQuestionIDsAfterEdit);
 };
 
-const getDeletedQuizAnswerIds = (editedSections: CourseQuizSection[], initialSections: CourseQuizSection[]) => {
+const getDeletedQuizAnswerIds = (
+  editedSections: CourseQuizSection[],
+  initialSections: CourseQuizSection[],
+) => {
   const allAnswerIDsBeforeEdit = initialSections.flatMap(section => {
     return section.questions.flatMap(question => {
       return question.answers.flatMap(answer => answer.id);
@@ -127,11 +153,26 @@ const getDeletedQuizAnswerIds = (editedSections: CourseQuizSection[], initialSec
   return getDeletedIds(allAnswerIDsBeforeEdit, allAnswerIDsAfterEdit);
 };
 
-export const getDeletedSectionsIds = (course: Course, initialCourse: Course) => {
-  const idsOfDeletedVideoSections = getDeletedSectionIds(getVideoSections(course), getVideoSections(initialCourse));
-  const idsOfDeletedQuizSections = getDeletedSectionIds(getQuizSections(course), getQuizSections(initialCourse));
-  const idsOfDeletedQuizQuestions = getDeletedQuizQuestionIds(getQuizSections(course), getQuizSections(initialCourse));
-  const idsOfDeletedQuizAnswers = getDeletedQuizAnswerIds(getQuizSections(course), getQuizSections(initialCourse));
+export const getDeletedSectionsIds = (
+  course: Course,
+  initialCourse: Course,
+) => {
+  const idsOfDeletedVideoSections = getDeletedSectionIds(
+    getVideoSections(course),
+    getVideoSections(initialCourse),
+  );
+  const idsOfDeletedQuizSections = getDeletedSectionIds(
+    getQuizSections(course),
+    getQuizSections(initialCourse),
+  );
+  const idsOfDeletedQuizQuestions = getDeletedQuizQuestionIds(
+    getQuizSections(course),
+    getQuizSections(initialCourse),
+  );
+  const idsOfDeletedQuizAnswers = getDeletedQuizAnswerIds(
+    getQuizSections(course),
+    getQuizSections(initialCourse),
+  );
 
   return {
     videoSectionIds: idsOfDeletedVideoSections,
@@ -144,17 +185,19 @@ export const getDeletedSectionsIds = (course: Course, initialCourse: Course) => 
 export const getSectionsWithPositions = (course: Course) => {
   const sectionsWithPositions = course.sections.map((section, sectionIndex) => {
     if (section?.questions) {
-      const quizQuestionsWithPositions = section.questions.map((quizQuestion, quizQuestionIndex) => {
-        return {
-          ...quizQuestion,
-          position: quizQuestionIndex,
-        };
-      });
+      const quizQuestionsWithPositions = section.questions.map(
+        (quizQuestion, quizQuestionIndex) => {
+          return {
+            ...quizQuestion,
+            position: quizQuestionIndex,
+          };
+        },
+      );
 
       return {
         ...section,
         position: sectionIndex,
-        questions: quizQuestionsWithPositions
+        questions: quizQuestionsWithPositions,
       };
     }
 
@@ -167,8 +210,13 @@ export const getSectionsWithPositions = (course: Course) => {
   return sectionsWithPositions;
 };
 
-export const getUpdatedSections = (sections: CourseSection[], sectionId: number, key: getUpdatedSectionsKey, value: any) => {
-  const updatedSections = sections.map((section) => {
+export const getUpdatedSections = (
+  sections: CourseSection[],
+  sectionId: number,
+  key: getUpdatedSectionsKey,
+  value: any,
+) => {
+  const updatedSections = sections.map(section => {
     if (sectionId === section.id) {
       return {
         ...section,
@@ -182,22 +230,31 @@ export const getUpdatedSections = (sections: CourseSection[], sectionId: number,
   return updatedSections;
 };
 
-export const getUpdatedCourse = (course: Course, sectionId: number, key: getUpdatedSectionsKey, value: any) => {
+export const getUpdatedCourse = (
+  course: Course,
+  sectionId: number,
+  key: getUpdatedSectionsKey,
+  value: any,
+) => {
   return {
     ...course,
     sections: getUpdatedSections(course.sections, sectionId, key, value),
   };
 };
 
-export const getQuizWithNewQuizQuestion = (course: Course, quizId: number, isEditing: boolean) => {
-  const updatedSectionsWithNewQuizQuestion = course.sections.map((section) => {
+export const getQuizWithNewQuizQuestion = (
+  course: Course,
+  quizId: number,
+  isEditing: boolean,
+) => {
+  const updatedSectionsWithNewQuizQuestion = course.sections.map(section => {
     if (section.id === quizId && isQuizSection(section)) {
       return {
         ...section,
         questions: [
           ...section.questions,
-          getInitialEmptyQuizQuestionAndAnswers(isEditing)
-        ]
+          getInitialEmptyQuizQuestionAndAnswers(isEditing),
+        ],
       };
     }
 
@@ -206,7 +263,7 @@ export const getQuizWithNewQuizQuestion = (course: Course, quizId: number, isEdi
 
   return {
     ...course,
-    sections: updatedSectionsWithNewQuizQuestion
+    sections: updatedSectionsWithNewQuizQuestion,
   };
 };
 
@@ -230,12 +287,12 @@ export const getInitialEmptyQuizQuestionAndAnswers = (isEditing: boolean) => {
   };
 };
 
-export const getCourseWithNewSection = (course: Course, newSection: CourseSection) => {
+export const getCourseWithNewSection = (
+  course: Course,
+  newSection: CourseSection,
+) => {
   return {
     ...course,
-    sections: [
-      ...course.sections,
-      newSection
-    ],
+    sections: [...course.sections, newSection],
   };
 };

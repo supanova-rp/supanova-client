@@ -1,10 +1,11 @@
 import React from "react";
-import Header from "./Header";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
+import Header from "./Header";
+
 interface Props {
-  pdfUrl: string
+  pdfUrl: string;
 }
 
 export const CourseComplete: React.FC<Props> = ({ pdfUrl }) => {
@@ -16,22 +17,15 @@ export const CourseComplete: React.FC<Props> = ({ pdfUrl }) => {
 
   return (
     <div>
-      <Header
-        className="default-header"
-        title="Course Complete!" />
+      <Header className="default-header" title="Course Complete!" />
 
       <h5>
-        <a
-          href={pdfUrl}
-          target="_blank"
-          rel="noopener noreferrer">
+        <a href={pdfUrl} target="_blank" rel="noopener noreferrer">
           View Certificate
         </a>
       </h5>
 
-      <Button
-        onClick={onClickBack}
-        className="btn btn-primary mt-3">
+      <Button onClick={onClickBack} className="btn btn-primary mt-3">
         Back to all courses
       </Button>
     </div>

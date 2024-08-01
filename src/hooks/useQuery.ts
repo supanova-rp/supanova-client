@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+
 import useRequest from "./useRequest";
 
 interface RequestOptions<T> {
@@ -16,13 +17,17 @@ interface QueryResult<T> {
   refetch: () => void;
 }
 
-export const useQuery = <T>(endpoint: string, options: RequestOptions<T>): QueryResult<T> => {
+export const useQuery = <T>(
+  endpoint: string,
+  options: RequestOptions<T>,
+): QueryResult<T> => {
   const makeRequest = useRequest(endpoint);
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<null | string>(null);
 
-  const { requestBody, defaultError, onRequestBegin, onError, onSuccess } = options;
+  const { requestBody, defaultError, onRequestBegin, onError, onSuccess } =
+    options;
 
   const getError = (error: any): string => {
     if (defaultError) {
@@ -56,7 +61,7 @@ export const useQuery = <T>(endpoint: string, options: RequestOptions<T>): Query
       }
 
       makeRequest({
-        requestBody: requestBody,
+        requestBody,
         onSuccess: (result: T) => {
           setData(result);
           setLoading(false);

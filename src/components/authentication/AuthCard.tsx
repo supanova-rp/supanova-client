@@ -1,26 +1,24 @@
 import { Button, Card, Form } from "react-bootstrap";
-
-import SupanovaLogo from "../../images/supanova-logo.png";
 import { FormSubmitEvent } from "src/types";
 
 import AuthFooter from "./AuthFooter";
+import SupanovaLogo from "../../assets/images/supanova-logo.png";
 
 type AuthCardProps = React.PropsWithChildren & {
-  cardClassname: string,
-  logoClassname?: string,
-  buttonClassName?: string,
-  title: string,
-  subTitle: string,
-  buttonText: string,
-  footerText: string,
-  footerLinkText: string,
-  footerLinkPath: string,
-  isLoading: boolean,
-  onSubmit: (event: FormSubmitEvent) => Promise<void>
-}
+  cardClassname: string;
+  logoClassname?: string;
+  buttonClassName?: string;
+  title: string;
+  subTitle: string;
+  buttonText: string;
+  footerText: string;
+  footerLinkText: string;
+  footerLinkPath: string;
+  isLoading: boolean;
+  onSubmit: (event: FormSubmitEvent) => Promise<void>;
+};
 
-const AuthCard: React.FC<AuthCardProps>=
-({
+const AuthCard: React.FC<AuthCardProps> = ({
   children,
   cardClassname,
   buttonClassName,
@@ -34,14 +32,15 @@ const AuthCard: React.FC<AuthCardProps>=
   isLoading,
   onSubmit,
 }) => {
-  const forgotPasswordButtonClassname = buttonClassName ? buttonClassName : "auth-button";
+  const forgotPasswordButtonClassname = buttonClassName || "auth-button";
 
   return (
     <div className="auth-container">
       <img
         src={SupanovaLogo}
         alt="Supanova Logo"
-        className={`auth-logo ${logoClassname}`} />
+        className={`auth-logo ${logoClassname}`}
+      />
 
       <Card className={`auth-card ${cardClassname}`}>
         <Card.Body className="auth-card-body">
@@ -49,32 +48,32 @@ const AuthCard: React.FC<AuthCardProps>=
             <h2 className="text-center mb-2">{title}</h2>
             <p className="auth-paragraph">{subTitle}</p>
           </div>
-          <Form
-            onSubmit={onSubmit}
-            className="login-form">
+          <Form onSubmit={onSubmit} className="login-form">
             {children}
             <Button
               disabled={isLoading}
               type="submit"
-              className={`main-button ${forgotPasswordButtonClassname}`}>
-              {isLoading
-                ? (
-                  <>
-                    <span
-                      className="spinner-border spinner-border-sm me-2"
-                      role="status"
-                      aria-hidden="true"></span>
-                    Loading...
-                  </>
-                )
-                : buttonText
-              }
+              className={`main-button ${forgotPasswordButtonClassname}`}
+            >
+              {isLoading ? (
+                <>
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    role="status"
+                    aria-hidden="true"
+                  />
+                  Loading...
+                </>
+              ) : (
+                buttonText
+              )}
             </Button>
 
             <AuthFooter
               footerText={footerText}
               footerLinkPath={footerLinkPath}
-              footerLinkText={footerLinkText} />
+              footerLinkText={footerLinkText}
+            />
           </Form>
         </Card.Body>
       </Card>

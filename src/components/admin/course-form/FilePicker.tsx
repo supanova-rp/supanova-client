@@ -1,28 +1,25 @@
-import React from "react";
 import axios, { AxiosProgressEvent } from "axios";
-
-import { ReactComponent as TickIcon } from "../../../icons/tickIcon.svg";
-
-import {
-  InputChangeEvent,
-  UploadProgress,
-  UploadUrlResponse
-} from "../../../types/index";
-import { colors } from "../../../constants/colorPalette";
-
-import { useWakeLock } from "../../../hooks/useWakeLock";
+import React from "react";
 import useRequest from "src/hooks/useRequest";
 
 import ProgressBar from "./ProgressBar";
+import TickIcon from "../../../assets/icons/tickIcon.svg?react";
+import { colors } from "../../../constants/colorPalette";
+import { useWakeLock } from "../../../hooks/useWakeLock";
+import {
+  InputChangeEvent,
+  UploadProgress,
+  UploadUrlResponse,
+} from "../../../types/index";
 
 interface Props {
-  sectionId: number,
-  abortController: AbortController,
-  fileInputRef: React.RefObject<HTMLInputElement>,
-  onFileUploaded: (sectionId: number, videoUrl: string) => void,
-  onFileUploadProgress: (data: AxiosProgressEvent, sectionId: number) => void,
-  uploadProgress: UploadProgress,
-  onClickCancelFileUpload: React.MouseEventHandler<HTMLButtonElement>
+  sectionId: number;
+  abortController: AbortController;
+  fileInputRef: React.RefObject<HTMLInputElement>;
+  onFileUploaded: (sectionId: number, videoUrl: string) => void;
+  onFileUploadProgress: (data: AxiosProgressEvent, sectionId: number) => void;
+  uploadProgress: UploadProgress;
+  onClickCancelFileUpload: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 const FilePicker: React.FC<Props> = ({
@@ -46,7 +43,8 @@ const FilePicker: React.FC<Props> = ({
           "Content-Type": "multipart/form-data",
         },
         signal: abortController.signal,
-        onUploadProgress: (data: AxiosProgressEvent) => onFileUploadProgress(data, sectionId),
+        onUploadProgress: (data: AxiosProgressEvent) =>
+          onFileUploadProgress(data, sectionId),
       });
 
       releaseWakeLock();
@@ -74,7 +72,7 @@ const FilePicker: React.FC<Props> = ({
   const handleFileSelected = (e: InputChangeEvent) => {
     requestUploadUrl({
       onSuccess: (result: any) => onSuccess(e, result),
-      onError
+      onError,
     });
   };
 
@@ -90,25 +88,20 @@ const FilePicker: React.FC<Props> = ({
           <button
             type="button"
             className="btn btn-outline-secondary btn-sm ms-3"
-            onClick={onClickCancelFileUpload}>
+            onClick={onClickCancelFileUpload}
+          >
             Cancel
           </button>
         </div>
       );
     }
 
-    return (
-      <TickIcon
-        stroke={colors.green}
-        className="tick-upload-icon ms-2" />
-    );
+    return <TickIcon stroke={colors.green} className="tick-upload-icon ms-2" />;
   };
 
   return (
     <div className="d-flex align-items-center mt-3">
-      <label
-        htmlFor={`inputTag-${sectionId}`}
-        className="secondary-btn">
+      <label htmlFor={`inputTag-${sectionId}`} className="secondary-btn">
         Select Video
         <input
           ref={fileInputRef}
@@ -117,7 +110,8 @@ const FilePicker: React.FC<Props> = ({
           id={`inputTag-${sectionId}`}
           type="file"
           accept="video/mp4, video/quicktime"
-          onChange={handleFileSelected} />
+          onChange={handleFileSelected}
+        />
       </label>
       {renderUploadProgressIcon()}
     </div>

@@ -1,7 +1,7 @@
 import { CircularProgressbar } from "react-circular-progressbar";
 
 interface Props {
-  value: number,
+  value: number;
 }
 
 const ProgressBar: React.FC<Props> = ({ value }) => {
@@ -10,7 +10,8 @@ const ProgressBar: React.FC<Props> = ({ value }) => {
       <CircularProgressbar
         value={value * 100}
         text={`${Math.round(value * 100)}%`}
-        className="progress-bar" />
+        className="progress-bar"
+      />
     </div>
   );
 };

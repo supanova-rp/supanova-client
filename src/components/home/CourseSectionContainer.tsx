@@ -1,21 +1,21 @@
-import { ChangeDirection } from "src/types";
-
 import { PropsWithChildren } from "react";
 import { Button } from "react-bootstrap";
+import { ChangeDirection } from "src/types";
+
 import Header from "./Header";
 
 interface Props extends PropsWithChildren {
-  canGoBack: boolean,
-  courseTitle: string,
-  continueText?: string,
-  className?: string,
-  onChangeSection: (direction: ChangeDirection) => void,
-  onClickContinue?: () => void,
-  onCourseComplete?: () => void,
-  onClickBackChevron: () => void,
+  canGoBack: boolean;
+  courseTitle: string;
+  continueText?: string;
+  className?: string;
+  onChangeSection: (direction: ChangeDirection) => void;
+  onClickContinue?: () => void;
+  onCourseComplete?: () => void;
+  onClickBackChevron: () => void;
 }
 
-const CourseSectionContainer : React.FC<Props> = ({
+const CourseSectionContainer: React.FC<Props> = ({
   children,
   courseTitle,
   continueText = "Continue",
@@ -23,7 +23,7 @@ const CourseSectionContainer : React.FC<Props> = ({
   canGoBack,
   onChangeSection,
   onClickContinue,
-  onClickBackChevron
+  onClickBackChevron,
 }) => {
   const handleClickContinue = () => {
     if (onClickContinue) {
@@ -40,14 +40,16 @@ const CourseSectionContainer : React.FC<Props> = ({
           <Button
             onClick={() => onChangeSection("prev")}
             type="button"
-            className="me-4 main-button">
+            className="me-4 main-button"
+          >
             Back
           </Button>
 
           <Button
             onClick={handleClickContinue}
             type="button"
-            className="main-button">
+            className="main-button"
+          >
             {continueText}
           </Button>
         </div>
@@ -58,7 +60,8 @@ const CourseSectionContainer : React.FC<Props> = ({
       <Button
         onClick={handleClickContinue}
         type="button"
-        className="main-button">
+        className="main-button"
+      >
         {continueText}
       </Button>
     );
@@ -69,7 +72,8 @@ const CourseSectionContainer : React.FC<Props> = ({
       <Header
         className="default-header"
         title={courseTitle}
-        onClickBack={onClickBackChevron} />
+        onClickBack={onClickBackChevron}
+      />
       {children}
       {renderDirectionButtons()}
     </div>

@@ -1,14 +1,13 @@
 import { useState } from "react";
 import { Card } from "react-bootstrap";
-
 import { ADMINS_TABS } from "src/constants/constants";
 import { AdminTabValue } from "src/types";
 
 import AddCourse from "./add-course/AddCourse";
 import AddUsers from "./add-users/AddUsers";
-import AdminSidebarContainer from "./sidebar/AdminSidebarContainer";
-import EditCourses from "./edit-courses/EditCourses";
 import AssignUsers from "./assign-users/AssignUsers";
+import EditCourses from "./edit-courses/EditCourses";
+import AdminSidebarContainer from "./sidebar/AdminSidebarContainer";
 import BottomMobileNavbar from "../nav/BottomMobileNavbar";
 
 const { ADD_COURSE, ADD_USERS, ASSIGN_USERS, EDIT_COURSES } = ADMINS_TABS;
@@ -41,12 +40,10 @@ const Admin = () => {
       <AdminSidebarContainer
         isAdminDashboard
         activeTab={activeTab}
-        setActiveTab={setActiveTab} />
-      <Card
-        className="w-100 p-3 d-flex mh-100 rounded-0">
-        <Card.Body>
-          {renderAdminContent()}
-        </Card.Body>
+        setActiveTab={setActiveTab}
+      />
+      <Card className="w-100 p-3 d-flex mh-100 rounded-0">
+        <Card.Body>{renderAdminContent()}</Card.Body>
       </Card>
       <BottomMobileNavbar setActiveTab={setActiveTab} />
     </div>

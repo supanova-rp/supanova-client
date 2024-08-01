@@ -1,39 +1,47 @@
 import { AxiosProgressEvent } from "axios";
 import { Button } from "react-bootstrap";
-
 import {
   Course,
   CourseQuizQuestion,
   CourseSection,
-  onChangeCourseFieldKey
+  onChangeCourseFieldKey,
 } from "src/types";
 
-import AddMoreInputs from "../../AddMoreInputs";
-import EditingCourseHeader from "../edit-courses/EditingCourseHeader";
 import CourseFormSection from "./CourseFormSection";
-import FormInput from "../../FormInput";
 import { MoveSectionFn } from "./utils";
+import AddMoreInputs from "../../AddMoreInputs";
+import FormInput from "../../FormInput";
+import EditingCourseHeader from "../edit-courses/EditingCourseHeader";
 
 interface Props {
-  course: Course,
-  isEditing: boolean,
-  videoSections: CourseSection[],
-  areActionsDisabled: boolean,
-  onChangeCourseField: (key: onChangeCourseFieldKey, newInputValue: string) => void,
-  onChangeSectionTitle: (sectionId: number, newInputValue: string) => void,
-  onHandleUpdateQuiz: (quizId: number, quizQuestionsAndAnswers: CourseQuizQuestion[]) => void,
-  onFileUploaded: (sectionId: number, videoUrl: string) => void,
-  onFileUploadProgress: (data: AxiosProgressEvent, sectionId: number) => void,
-  onFileUploadCancelled: (sectionId: number) => void,
-  handleRemoveSection: (sectionId: number) => void,
-  onClickAddNewVideoSection: () => void,
-  onClickAddNewQuizSection: () => void,
-  onClickAddNewQuizQuestion: (quizId: number) => void,
-  onHandleAddNewQuizAnswer: (quizId: number, updatedQuizQuestions: CourseQuizQuestion[]) => void,
-  onClickRemoveQuizQuestion: (quizId: number, questionId: string) => void,
-  onCourseFormCancelled: () => void,
-  onShowDeleteModal: () => void,
-  onMoveSection: MoveSectionFn
+  course: Course;
+  isEditing: boolean;
+  videoSections: CourseSection[];
+  areActionsDisabled: boolean;
+  onChangeCourseField: (
+    key: onChangeCourseFieldKey,
+    newInputValue: string,
+  ) => void;
+  onChangeSectionTitle: (sectionId: number, newInputValue: string) => void;
+  onHandleUpdateQuiz: (
+    quizId: number,
+    quizQuestionsAndAnswers: CourseQuizQuestion[],
+  ) => void;
+  onFileUploaded: (sectionId: number, videoUrl: string) => void;
+  onFileUploadProgress: (data: AxiosProgressEvent, sectionId: number) => void;
+  onFileUploadCancelled: (sectionId: number) => void;
+  handleRemoveSection: (sectionId: number) => void;
+  onClickAddNewVideoSection: () => void;
+  onClickAddNewQuizSection: () => void;
+  onClickAddNewQuizQuestion: (quizId: number) => void;
+  onHandleAddNewQuizAnswer: (
+    quizId: number,
+    updatedQuizQuestions: CourseQuizQuestion[],
+  ) => void;
+  onClickRemoveQuizQuestion: (quizId: number, questionId: string) => void;
+  onCourseFormCancelled: () => void;
+  onShowDeleteModal: () => void;
+  onMoveSection: MoveSectionFn;
 }
 
 const CourseFormBody: React.FC<Props> = ({
@@ -59,35 +67,32 @@ const CourseFormBody: React.FC<Props> = ({
 }) => {
   return (
     <div className="my-4">
-      {isEditing
-        ? (
-          <EditingCourseHeader
-            onShowDeleteModal={onShowDeleteModal}
-            onCourseFormCancelled={onCourseFormCancelled} />
-        )
-        : null
-      }
+      {isEditing ? (
+        <EditingCourseHeader
+          onShowDeleteModal={onShowDeleteModal}
+          onCourseFormCancelled={onCourseFormCancelled}
+        />
+      ) : null}
 
       <div>
         <FormInput
           formId="course-title"
           value={course.title}
           label="Course Title"
-          onChange={(e) => onChangeCourseField("title", e.target.value)}
+          onChange={e => onChangeCourseField("title", e.target.value)}
           type="text"
-          formGroupClassname="mb-4 course-title" />
+          formGroupClassname="mb-4 course-title"
+        />
         <FormInput
           formId="course-desription"
           value={course.description}
           label="Course Description"
-          onChange={(e) => onChangeCourseField("description", e.target.value)}
+          onChange={e => onChangeCourseField("description", e.target.value)}
           type="text"
-          formGroupClassname="mb-4 course-description" />
+          formGroupClassname="mb-4 course-description"
+        />
 
-        {!isEditing
-          ? <h5 className="mt-5 mb-1">Add Course Sections</h5>
-          : null
-        }
+        {!isEditing ? <h5 className="mt-5 mb-1">Add Course Sections</h5> : null}
 
         {course.sections.map((section, index) => {
           return (
@@ -107,7 +112,8 @@ const CourseFormBody: React.FC<Props> = ({
               onFileUploaded={onFileUploaded}
               onFileUploadProgress={onFileUploadProgress}
               onFileUploadCancelled={onFileUploadCancelled}
-              handleRemoveSection={handleRemoveSection} />
+              handleRemoveSection={handleRemoveSection}
+            />
           );
         })}
       </div>
@@ -115,22 +121,26 @@ const CourseFormBody: React.FC<Props> = ({
         <AddMoreInputs
           title="Add quiz section"
           onClick={onClickAddNewQuizSection}
-          marginBottom="mb-0" />
+          marginBottom="mb-0"
+        />
         <AddMoreInputs
           title="Add video section"
-          onClick={onClickAddNewVideoSection} />
+          onClick={onClickAddNewVideoSection}
+        />
       </div>
       <div className="mb-5">
         <Button
           className="edit-course-save-btn main-button small-main-button"
           type="submit"
-          disabled={areActionsDisabled}>
+          disabled={areActionsDisabled}
+        >
           Save
         </Button>
         <Button
           className="btn-danger"
           type="button"
-          onClick={onCourseFormCancelled}>
+          onClick={onCourseFormCancelled}
+        >
           Cancel
         </Button>
       </div>

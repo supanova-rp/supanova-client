@@ -1,10 +1,11 @@
 import { Button } from "react-bootstrap";
+
 import Modal from "./Modal";
 
 interface Props {
-  areActionsDisabled: boolean,
-  onHideDeleteModal: () => void,
-  onClickDelete: React.MouseEventHandler<HTMLButtonElement>,
+  areActionsDisabled: boolean;
+  onHideDeleteModal: () => void;
+  onClickDelete: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 const DeleteCourseModal: React.FC<Props> = ({
@@ -21,14 +22,16 @@ const DeleteCourseModal: React.FC<Props> = ({
             type="button"
             disabled={areActionsDisabled}
             onClick={onHideDeleteModal}
-            className="me-2 secondary-button">
+            className="me-2 secondary-button"
+          >
             Cancel
           </Button>
           <Button
             type="button"
             disabled={areActionsDisabled}
             onClick={onClickDelete}
-            className="ms-2 btn-danger">
+            className="ms-2 btn-danger"
+          >
             Confirm
           </Button>
         </div>

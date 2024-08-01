@@ -1,11 +1,13 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
-
-import { useAuth } from "../../contexts/AuthContext";
-import { FormSubmitEvent } from "../../types/index";
-import { REACT_TOAST_DURATION, feedbackMessages } from "src/constants/constants";
+import {
+  REACT_TOAST_DURATION,
+  feedbackMessages,
+} from "src/constants/constants";
 
 import AuthCard from "./AuthCard";
+import { useAuth } from "../../contexts/AuthContext";
+import { FormSubmitEvent } from "../../types/index";
 import FormInput from "../FormInput";
 
 const ForgotPassword = () => {
@@ -21,8 +23,10 @@ const ForgotPassword = () => {
       setIsLoading(true);
 
       await resetPassword(emailInput);
-      toast.success(feedbackMessages.passwordResetSuccess, REACT_TOAST_DURATION);
-
+      toast.success(
+        feedbackMessages.passwordResetSuccess,
+        REACT_TOAST_DURATION,
+      );
     } catch (error: any) {
       console.log(error);
 
@@ -47,7 +51,8 @@ const ForgotPassword = () => {
       onSubmit={onHandleResetPassword}
       footerText="Have an account?"
       footerLinkText="Login"
-      footerLinkPath="/login">
+      footerLinkPath="/login"
+    >
       <FormInput
         formId="email"
         formGroupClassname="mb-2"
@@ -55,10 +60,10 @@ const ForgotPassword = () => {
         label="Email"
         type="email"
         value={emailInput}
-        onChange={(e) => setEmailInput(e.target.value)}/>
+        onChange={e => setEmailInput(e.target.value)}
+      />
     </AuthCard>
   );
-
 };
 
 export default ForgotPassword;

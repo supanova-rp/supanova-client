@@ -1,6 +1,11 @@
 import uuid from "react-uuid";
+import {
+  API_DOMAIN,
+  EMAIL_JS_PUBLIC_KEY,
+  EMAIL_JS_SERVICE_ID,
+  EMAIL_JS_TEMPLATE_ID,
+} from "src/constants/constants";
 
-import { API_DOMAIN, EMAIL_JS_PUBLIC_KEY, EMAIL_JS_SERVICE_ID, EMAIL_JS_TEMPLATE_ID } from "src/constants/constants";
 import {
   UserInfoToUpdate,
   User,
@@ -8,8 +13,12 @@ import {
   AdminTabValue,
 } from "../types/index";
 
-export const updateUsers = (users: User[], userId: string, userInfoToUpdate: UserInfoToUpdate) => {
-  return users.map((user) => {
+export const updateUsers = (
+  users: User[],
+  userId: string,
+  userInfoToUpdate: UserInfoToUpdate,
+) => {
+  return users.map(user => {
     if (user.id === userId) {
       return {
         ...user,
@@ -21,7 +30,10 @@ export const updateUsers = (users: User[], userId: string, userInfoToUpdate: Use
   });
 };
 
-export const getClassNameSidebarTab = (activeTab: string | null, tabName: AdminTabValue) => {
+export const getClassNameSidebarTab = (
+  activeTab: string | null,
+  tabName: AdminTabValue,
+) => {
   if (activeTab === tabName) {
     return "secondary-button";
   }
@@ -30,14 +42,14 @@ export const getClassNameSidebarTab = (activeTab: string | null, tabName: AdminT
 };
 
 interface RequestOptions {
-  endpoint: string,
-  method: "POST" | "PUT" | "DELETE" | "GET",
-  requestBody: any,
-  currentUser: FirebaseUser | null,
-  onRequestBegin?: () => void,
-  onSuccess: (result: any) => void,
-  onError: (error: string) => void,
-  onUnauthorised: () => void,
+  endpoint: string;
+  method: "POST" | "PUT" | "DELETE" | "GET";
+  requestBody: any;
+  currentUser: FirebaseUser | null;
+  onRequestBegin?: () => void;
+  onSuccess: (result: any) => void;
+  onError: (error: string) => void;
+  onUnauthorised: () => void;
 }
 
 export const request = async ({
@@ -48,8 +60,8 @@ export const request = async ({
   onSuccess,
   onError,
   onUnauthorised,
-  currentUser
-} : RequestOptions) => {
+  currentUser,
+}: RequestOptions) => {
   if (onRequestBegin) {
     onRequestBegin();
   }
@@ -57,12 +69,18 @@ export const request = async ({
   const accessToken = await currentUser?.getIdTokenResult();
 
   try {
-    console.log(`sending ${method} request to ${endpoint}, with requestBody: `, requestBody);
+    console.log(
+      `sending ${method} request to ${endpoint}, with requestBody: `,
+      requestBody,
+    );
 
     const response = await fetch(`${API_DOMAIN}${endpoint}`, {
       method,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ access_token: accessToken?.token, ...requestBody }),
+      body: JSON.stringify({
+        access_token: accessToken?.token,
+        ...requestBody,
+      }),
     });
 
     const result = await response.json();
@@ -72,15 +90,10 @@ export const request = async ({
 
     if (!result.error) {
       onSuccess(result);
-
+    } else if (response.status === 401) {
+      onUnauthorised();
     } else {
-      if (response.status === 401) {
-        onUnauthorised();
-      }
-
-      else {
-        onError(result.error);
-      }
+      onError(result.error);
     }
   } catch (error) {
     console.log(`error from ${method} request to ${endpoint}`, error);
@@ -90,14 +103,14 @@ export const request = async ({
 };
 
 export const getEmailJsParams = (username: string, email: string) => {
-  return  {
+  return {
     service_id: EMAIL_JS_SERVICE_ID,
     template_id: EMAIL_JS_TEMPLATE_ID,
     user_id: EMAIL_JS_PUBLIC_KEY,
     template_params: {
-      "user_name": username,
-      "user_email": email
-    }
+      user_name: username,
+      user_email: email,
+    },
   };
 };
 
@@ -110,6 +123,6 @@ export const getAddUsersDefaultState = () => {
       added: false,
       addUserError: false,
       alreadyRegistered: false,
-    }
+    },
   ];
 };

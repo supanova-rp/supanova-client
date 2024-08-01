@@ -1,25 +1,27 @@
 import { Component } from "react";
+import toast from "react-hot-toast";
+import {
+  REACT_TOAST_DURATION,
+  feedbackMessages,
+} from "src/constants/constants";
 
+import CoursesList from "./CoursesList";
 import { Course } from "../../../types/index";
+import RequestHandler from "../../RequestHandler";
+import RequestWrapper from "../../RequestWrapper";
+import AdminHeader from "../AdminHeader";
+import CourseFormContainer from "../course-form/CourseFormContainer";
 import {
   getDeletedSectionsIds,
   getSectionsWithPositions,
 } from "../course-form/utils";
-import { REACT_TOAST_DURATION, feedbackMessages } from "src/constants/constants";
-
-import RequestHandler from "../../RequestHandler";
-import RequestWrapper from "../../RequestWrapper";
-import AdminHeader from "../AdminHeader";
-import CoursesList from "./CoursesList";
-import CourseFormContainer from "../course-form/CourseFormContainer";
-import toast from "react-hot-toast";
 
 type EditCoursesState = {
-  isLoading: boolean,
-  getCoursesErrorMessage: null | string,
-  allCourses: [] | Course[],
-  editingCourseId: null | number,
-}
+  isLoading: boolean;
+  getCoursesErrorMessage: null | string;
+  allCourses: [] | Course[];
+  editingCourseId: null | number;
+};
 
 export default class EditCourses extends Component {
   state: EditCoursesState = {
@@ -44,7 +46,7 @@ export default class EditCourses extends Component {
   onCourseEditedSuccess = (editedCourse: Course) => {
     const { allCourses, editingCourseId } = this.state;
 
-    const updatedCoursesWithEditedCourse = allCourses.map((course) => {
+    const updatedCoursesWithEditedCourse = allCourses.map(course => {
       if (course.id === editingCourseId) {
         return editedCourse;
       }
@@ -61,7 +63,9 @@ export default class EditCourses extends Component {
   };
 
   onCourseDeletedSuccess = (courseId: number) => {
-    const coursesWithoutDeletedCourse = this.state.allCourses.filter((course) => course.id !== courseId);
+    const coursesWithoutDeletedCourse = this.state.allCourses.filter(
+      course => course.id !== courseId,
+    );
 
     this.setState({
       allCourses: coursesWithoutDeletedCourse,
@@ -76,7 +80,7 @@ export default class EditCourses extends Component {
       edited_course_id: course.id,
       edited_course: {
         ...course,
-        sections: getSectionsWithPositions(course)
+        sections: getSectionsWithPositions(course),
       },
       deleted_section_ids_map: getDeletedSectionsIds(course, initialCourse),
     };
@@ -85,7 +89,7 @@ export default class EditCourses extends Component {
   onSuccess = (result: Course[]) => {
     this.setState({
       allCourses: result,
-      isLoading: false
+      isLoading: false,
     });
   };
 
@@ -99,14 +103,12 @@ export default class EditCourses extends Component {
   };
 
   render() {
-    const {
-      isLoading,
-      allCourses,
-      editingCourseId,
-      getCoursesErrorMessage,
-    } = this.state;
+    const { isLoading, allCourses, editingCourseId, getCoursesErrorMessage } =
+      this.state;
 
-    const editingCourse = allCourses.find((course) => course.id === editingCourseId);
+    const editingCourse = allCourses.find(
+      course => course.id === editingCourseId,
+    );
 
     return (
       <>
@@ -115,37 +117,39 @@ export default class EditCourses extends Component {
           endpoint="/courses"
           requestOnMount
           onRequestBegin={this.onBeginRequestCourses}
-          onError={(error: string) => this.onError("Failed to load courses.", error)}
+          onError={(error: string) =>
+            this.onError("Failed to load courses.", error)
+          }
           onSuccess={this.onSuccess}
-          render={(requestCourses) => {
+          render={requestCourses => {
             return (
               <RequestHandler
                 isLoading={isLoading}
                 error={getCoursesErrorMessage}
                 shouldShowWarning={!allCourses?.length}
                 warningMessage="You don't have any courses yet..."
-                onClick={requestCourses}>
-
-                {editingCourse
-                  ? (
-                    <CourseFormContainer
-                      initialCourse={editingCourse}
-                      isEditing
-                      saveFormEndpoint="/edit-course"
-                      getRequestBody={this.getRequestBody}
-                      onCourseSavedSuccess={this.onCourseEditedSuccess}
-                      onCourseFormCancelled={this.onEditCourseCancelled}
-                      onCourseDeletedSuccess={this.onCourseDeletedSuccess} />
-                  )
-                  : (
-                    <CoursesList
-                      courses={allCourses}
-                      onClickEditCourse={this.onClickEditCourse}/>
-                  )
-                }
+                onClick={requestCourses}
+              >
+                {editingCourse ? (
+                  <CourseFormContainer
+                    initialCourse={editingCourse}
+                    isEditing
+                    saveFormEndpoint="/edit-course"
+                    getRequestBody={this.getRequestBody}
+                    onCourseSavedSuccess={this.onCourseEditedSuccess}
+                    onCourseFormCancelled={this.onEditCourseCancelled}
+                    onCourseDeletedSuccess={this.onCourseDeletedSuccess}
+                  />
+                ) : (
+                  <CoursesList
+                    courses={allCourses}
+                    onClickEditCourse={this.onClickEditCourse}
+                  />
+                )}
               </RequestHandler>
             );
-          }}/>
+          }}
+        />
       </>
     );
   }

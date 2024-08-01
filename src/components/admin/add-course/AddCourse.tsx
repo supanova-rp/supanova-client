@@ -1,18 +1,19 @@
 import { Component } from "react";
 import toast from "react-hot-toast";
-
-import { Course } from "src/types";
-import { REACT_TOAST_DURATION, feedbackMessages } from "src/constants/constants";
 import {
-  getInitialCourseState,
-  getSectionsWithPositions
-} from "../course-form/utils";
+  REACT_TOAST_DURATION,
+  feedbackMessages,
+} from "src/constants/constants";
+import { Course } from "src/types";
 
 import AdminHeader from "../AdminHeader";
 import CourseFormContainer from "../course-form/CourseFormContainer";
+import {
+  getInitialCourseState,
+  getSectionsWithPositions,
+} from "../course-form/utils";
 
 export default class AddCourse extends Component {
-
   initialCourse = getInitialCourseState();
 
   state = {
@@ -57,7 +58,8 @@ export default class AddCourse extends Component {
           saveFormEndpoint="/add-course"
           getRequestBody={this.getRequestBody}
           onCourseSavedSuccess={this.onCourseAddedSuccess}
-          onCourseFormCancelled={this.onAddCourseCancelled} />
+          onCourseFormCancelled={this.onAddCourseCancelled}
+        />
       </>
     );
   }

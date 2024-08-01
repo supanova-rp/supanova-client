@@ -1,21 +1,21 @@
-
-import { ReactComponent as CheckMark } from "../../icons/checkIcon.svg";
+import CheckMark from "../../assets/icons/checkIcon.svg?react";
 
 interface Props {
-  className: string
+  className: string;
 }
 
 const SectionProgress: React.FC<Props> = ({ className }) => {
   return (
     <div className="d-flex justify-content-center progress-circle-container align-items-center">
-      {className.includes("full")
-        ? (
-          <div className={`progress-circle ${className} d-flex align-items-center justify-content-center`}>
-            <CheckMark stroke="white" />
-          </div>
-        )
-        : <div className={`progress-circle ${className}`} />
-      }
+      {className.includes("full") ? (
+        <div
+          className={`progress-circle ${className} d-flex align-items-center justify-content-center`}
+        >
+          <CheckMark stroke="white" />
+        </div>
+      ) : (
+        <div className={`progress-circle ${className}`} />
+      )}
     </div>
   );
 };

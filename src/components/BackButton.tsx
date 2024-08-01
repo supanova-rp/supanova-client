@@ -1,10 +1,10 @@
 import React from "react";
-
-import { ReactComponent as ChevronLeft } from "../icons/chevronLeft.svg";
 import { colors } from "src/constants/colorPalette";
 
+import ChevronLeft from "../assets/icons/chevronLeft.svg?react";
+
 interface Props {
-  onClickBack: () => void,
+  onClickBack: () => void;
 }
 
 const BackButton: React.FC<Props> = ({ onClickBack }) => {
@@ -13,7 +13,8 @@ const BackButton: React.FC<Props> = ({ onClickBack }) => {
       <ChevronLeft
         stroke={colors.orange}
         className="me-1"
-        onClick={onClickBack} />
+        onClick={onClickBack}
+      />
     </div>
   );
 };

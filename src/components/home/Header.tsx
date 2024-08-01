@@ -1,13 +1,18 @@
 import BackButton from "../BackButton";
 
 interface HeaderProps {
-  title: string,
-  className?: string,
-  headerClassname?: string,
-  onClickBack?: () => void,
+  title: string;
+  className?: string;
+  headerClassname?: string;
+  onClickBack?: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ title, className = "", headerClassname = "", onClickBack }) => {
+const Header: React.FC<HeaderProps> = ({
+  title,
+  className = "",
+  headerClassname = "",
+  onClickBack,
+}) => {
   const HeaderComponent = (
     <div className={className}>
       <header className="d-flex flex-column">

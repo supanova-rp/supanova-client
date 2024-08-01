@@ -4,16 +4,16 @@ import { Form } from "react-bootstrap";
 import { InputChangeFunction } from "../types/index";
 
 interface Props {
-  formId: string,
-  label?: string,
-  type: string,
-  formGroupClassname: string,
-  inputContainerClassname?: string,
-  disabled?: boolean,
-  onChange: InputChangeFunction,
-  value: string,
+  formId: string;
+  label?: string;
+  type: string;
+  formGroupClassname: string;
+  inputContainerClassname?: string;
+  disabled?: boolean;
+  onChange: InputChangeFunction;
+  value: string;
   minLength?: number;
-  Component?: React.ReactNode,
+  Component?: React.ReactNode;
 }
 const FormInput: React.FC<Props> = ({
   formId,
@@ -28,13 +28,8 @@ const FormInput: React.FC<Props> = ({
   onChange,
 }) => {
   return (
-    <Form.Group
-      id={formId}
-      className={formGroupClassname}>
-      {label
-        ? <Form.Label>{label}</Form.Label>
-        : null
-      }
+    <Form.Group id={formId} className={formGroupClassname}>
+      {label ? <Form.Label>{label}</Form.Label> : null}
       <div className={inputContainerClassname || ""}>
         <Form.Control
           type={type}
@@ -42,7 +37,8 @@ const FormInput: React.FC<Props> = ({
           minLength={minLength}
           required
           value={value}
-          onChange={onChange} />
+          onChange={onChange}
+        />
         {Component}
       </div>
     </Form.Group>

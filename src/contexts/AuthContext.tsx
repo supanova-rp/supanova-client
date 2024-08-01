@@ -1,39 +1,36 @@
 import {
-  useState,
-  useEffect,
-  useContext,
-  createContext,
-  useMemo,
-} from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-
-import {
   signOut,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   UserCredential,
 } from "firebase/auth";
-
-import { FirebaseUser } from "src/types";
-import { auth } from "../firebase/firebase";
+import { useState, useEffect, useContext, createContext, useMemo } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { unauthedRoutes } from "src/constants/constants";
+import { FirebaseUser } from "src/types";
+
+import { auth } from "../firebase/firebase";
 
 export type AuthContextType = {
-  currentUser: FirebaseUser | null,
-  login: (email: string, password: string) => Promise<UserCredential>,
-  logout: () => Promise<void>,
-  resetPassword: (email: string) => Promise<void>,
-  isAdmin: boolean,
-  isLoading: boolean
+  currentUser: FirebaseUser | null;
+  login: (email: string, password: string) => Promise<UserCredential>;
+  logout: () => Promise<void>;
+  resetPassword: (email: string) => Promise<void>;
+  isAdmin: boolean;
+  isLoading: boolean;
 };
 
-export const AuthContext = createContext<AuthContextType>({} as AuthContextType);
+export const AuthContext = createContext<AuthContextType>(
+  {} as AuthContextType,
+);
 
 export const useAuth = () => {
   return useContext(AuthContext);
 };
 
-export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
+export const AuthProvider: React.FC<React.PropsWithChildren> = ({
+  children,
+}) => {
   const [signedInStatus, setSignedInStatus] = useState<string | null>(null);
   const [currentUser, setCurrentUser] = useState<FirebaseUser | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -43,7 +40,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
   const location = useLocation().pathname;
 
   useEffect(() => {
-    if (signedInStatus === "signed_out" && !unauthedRoutes.includes(location) ) {
+    if (signedInStatus === "signed_out" && !unauthedRoutes.includes(location)) {
       navigate("/login", { replace: true });
     }
   }, [signedInStatus]);
@@ -60,18 +57,19 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
   };
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (user: FirebaseUser | null) => {
+    const unsubscribe = auth.onAuthStateChanged(
+      async (user: FirebaseUser | null) => {
+        if (user) {
+          await setAdminStatus(user);
+        } else {
+          setIsAdmin(false);
+        }
 
-      if (user) {
-        await setAdminStatus(user);
-      } else {
-        setIsAdmin(false);
-      }
-
-      setCurrentUser(user);
-      setIsLoading(false);
-      setSignedInStatus(user ? "signed_in" : "signed_out");
-    });
+        setCurrentUser(user);
+        setIsLoading(false);
+        setSignedInStatus(user ? "signed_in" : "signed_out");
+      },
+    );
 
     return unsubscribe;
   }, []);
@@ -102,10 +100,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren> = ({ children }) =>
   return (
     <AuthContext.Provider value={value}>
       {/* Only render children when the currentUser has been set */}
-      {!isLoading
-        ? children
-        : null
-      }
+      {!isLoading ? children : null}
     </AuthContext.Provider>
   );
 };

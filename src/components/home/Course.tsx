@@ -1,37 +1,44 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { getVideoProgressKey } from "src/utils/course-utils";
 
-import { Course as CourseType, ChangeDirection } from "../../types/index";
-
+import { CourseComplete } from "./CourseComplete";
+import { CourseQuizContainer } from "./CourseQuizContainer";
+import CourseSectionContainer from "./CourseSectionContainer";
+import { CourseSummary } from "./CourseSummary";
 import CourseVideoContainer from "./CourseVideoContainer";
 import Header from "./Header";
-import { CourseSummary } from "./CourseSummary";
-import { getVideoProgressKey } from "src/utils/course-utils";
+import { Course as CourseType, ChangeDirection } from "../../types/index";
 import { isQuizSection, isVideoSection } from "../admin/course-form/utils";
-import CourseSectionContainer from "./CourseSectionContainer";
-import { CourseQuizContainer } from "./CourseQuizContainer";
-import { CourseComplete } from "./CourseComplete";
-import { useNavigate } from "react-router-dom";
 
 interface CoursesProps {
-  course: CourseType,
+  course: CourseType;
 }
 
 const Course: React.FC<CoursesProps> = ({ course }) => {
   const navigate = useNavigate();
 
-  const [currentSectionIndex, setCurrentSectionIndex] = useState<number | null>(null);
-  const [initialCurrentVideoTime, setInitialCurrentVideoTime] = useState<number>(0);
+  const [currentSectionIndex, setCurrentSectionIndex] = useState<number | null>(
+    null,
+  );
+  const [initialCurrentVideoTime, setInitialCurrentVideoTime] =
+    useState<number>(0);
   const [isCourseComplete, setCourseComplete] = useState<boolean>(false);
 
   const { sections, id: courseId } = course;
 
-  const currentSection = typeof currentSectionIndex === "number" ? sections[currentSectionIndex] : null;
+  const currentSection =
+    typeof currentSectionIndex === "number"
+      ? sections[currentSectionIndex]
+      : null;
 
   const onSelectVideo = (sectionIndex: number) => {
     const sectionId = sections[sectionIndex].id;
 
     if (localStorage.getItem(`section-progress-${sectionId}`)) {
-      const localStorageCurrentVideoTimeValue = JSON.parse(localStorage.getItem(`section-progress-${sectionId}`) || "{}").currentTime;
+      const localStorageCurrentVideoTimeValue = JSON.parse(
+        localStorage.getItem(`section-progress-${sectionId}`) || "{}",
+      ).currentTime;
 
       setInitialCurrentVideoTime(localStorageCurrentVideoTimeValue);
     } else {
@@ -49,7 +56,9 @@ const Course: React.FC<CoursesProps> = ({ course }) => {
     const key = getVideoProgressKey(courseId, sectionId);
 
     if (localStorage.getItem(key)) {
-      const localStorageCurrentVideoTimeValue = JSON.parse(localStorage.getItem(key) || "{}").currentTime;
+      const localStorageCurrentVideoTimeValue = JSON.parse(
+        localStorage.getItem(key) || "{}",
+      ).currentTime;
 
       setInitialCurrentVideoTime(localStorageCurrentVideoTimeValue);
     } else {
@@ -59,7 +68,8 @@ const Course: React.FC<CoursesProps> = ({ course }) => {
 
   const onChangeSection = (direction: ChangeDirection) => {
     const sectionIndex = currentSectionIndex || 0;
-    const newSectionIndex = direction === "next" ? sectionIndex + 1 : sectionIndex - 1;
+    const newSectionIndex =
+      direction === "next" ? sectionIndex + 1 : sectionIndex - 1;
     const newSection = sections[newSectionIndex];
     const { id: newSectionId } = newSection;
 
@@ -85,7 +95,9 @@ const Course: React.FC<CoursesProps> = ({ course }) => {
 
   if (isCourseComplete) {
     // TODO: update pdfUrl with actual pdf
-    return <CourseComplete pdfUrl="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" />;
+    return (
+      <CourseComplete pdfUrl="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" />
+    );
   }
 
   if (typeof currentSectionIndex !== "number") {
@@ -94,12 +106,14 @@ const Course: React.FC<CoursesProps> = ({ course }) => {
         <Header
           className="default-header"
           title={course.title}
-          onClickBack={onClickBackSummary} />
+          onClickBack={onClickBackSummary}
+        />
 
         <CourseSummary
           course={course}
           onSelectVideo={onSelectVideo}
-          onSelectQuiz={onSelectQuiz} />
+          onSelectQuiz={onSelectQuiz}
+        />
       </div>
     );
   }
@@ -115,11 +129,13 @@ const Course: React.FC<CoursesProps> = ({ course }) => {
         continueText={isLastSection ? "Finish" : "Continue"}
         onChangeSection={onChangeSection}
         onClickContinue={isLastSection ? onCourseComplete : undefined}
-        onClickBackChevron={onClickBackChevron}>
+        onClickBackChevron={onClickBackChevron}
+      >
         <CourseVideoContainer
           courseId={course.id}
           videoSection={currentSection}
-          initialCurrentVideoTime={initialCurrentVideoTime} />
+          initialCurrentVideoTime={initialCurrentVideoTime}
+        />
       </CourseSectionContainer>
     );
   }
@@ -133,7 +149,8 @@ const Course: React.FC<CoursesProps> = ({ course }) => {
         isLastSection={isLastSection}
         onChangeSection={onChangeSection}
         onCourseComplete={onCourseComplete}
-        onClickBackChevron={onClickBackChevron} />
+        onClickBackChevron={onClickBackChevron}
+      />
     );
   }
 

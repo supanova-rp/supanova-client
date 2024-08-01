@@ -1,20 +1,18 @@
-import { ReactComponent as NotAvailableIcon } from "../icons/notAvailableIcon.svg";
+import NotAvailableIcon from "../assets/icons/notAvailableIcon.svg?react";
 
 interface Props {
-  warningMessage: string,
+  warningMessage: string;
 }
 
 const WarningCard: React.FC<Props> = ({ warningMessage }) => {
   return (
     <div className="feedback-card-container">
       <div className="feedback-card-content">
-        <NotAvailableIcon
-          className="feedback-icon"/>
+        <NotAvailableIcon className="feedback-icon" />
         <h3 className="warning-title">Uh oh!</h3>
         <p className="feedback-description">{warningMessage}</p>
       </div>
     </div>
-
   );
 };
 

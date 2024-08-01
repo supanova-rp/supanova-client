@@ -2,21 +2,20 @@ import { AxiosProgressEvent } from "axios";
 import { CourseVideoSection } from "src/types";
 
 import FilePicker from "./FilePicker";
-
 import FormInput from "../../FormInput";
 import RemoveInput from "../../RemoveInput";
 
 interface VideoSectionProps {
-  section: CourseVideoSection,
-  isLastSection: boolean,
-  canRemoveVideoSection?: boolean,
-  abortController: AbortController,
-  fileInputRef: React.RefObject<HTMLInputElement>,
-  onChangeSectionTitle: (sectionId: number, title: string) => void,
-  onClickRemoveSection: () => void,
-  handleFileUploaded: (sectionId: number, videoUrl: string) => void,
-  onFileUploadProgress: (data: AxiosProgressEvent, sectionId: number) => void,
-  onClickCancelFileUpload: () => void,
+  section: CourseVideoSection;
+  isLastSection: boolean;
+  canRemoveVideoSection?: boolean;
+  abortController: AbortController;
+  fileInputRef: React.RefObject<HTMLInputElement>;
+  onChangeSectionTitle: (sectionId: number, title: string) => void;
+  onClickRemoveSection: () => void;
+  handleFileUploaded: (sectionId: number, videoUrl: string) => void;
+  onFileUploadProgress: (data: AxiosProgressEvent, sectionId: number) => void;
+  onClickCancelFileUpload: () => void;
 }
 
 const VideoSection: React.FC<VideoSectionProps> = ({
@@ -34,15 +33,12 @@ const VideoSection: React.FC<VideoSectionProps> = ({
   const { id, title, videoUrl, uploadProgress } = section;
 
   return (
-    <div
-      className="d-flex flex-column"
-      key={`video-section-${id}`}>
+    <div className="d-flex flex-column" key={`video-section-${id}`}>
       <div className="video-section-title-container">
         <h6>Video Section</h6>
-        {canRemoveVideoSection
-          ? <RemoveInput onClickFunction={onClickRemoveSection} />
-          : null
-        }
+        {canRemoveVideoSection ? (
+          <RemoveInput onClickFunction={onClickRemoveSection} />
+        ) : null}
       </div>
 
       <div className="video-section-input-container">
@@ -52,8 +48,8 @@ const VideoSection: React.FC<VideoSectionProps> = ({
           label="Video Title"
           type="text"
           value={title}
-          onChange={(e) => onChangeSectionTitle(id, e.target.value)}
-          Component={(
+          onChange={e => onChangeSectionTitle(id, e.target.value)}
+          Component={
             <FilePicker
               sectionId={id}
               abortController={abortController}
@@ -61,28 +57,29 @@ const VideoSection: React.FC<VideoSectionProps> = ({
               onFileUploaded={handleFileUploaded}
               onFileUploadProgress={onFileUploadProgress}
               uploadProgress={uploadProgress}
-              onClickCancelFileUpload={onClickCancelFileUpload} />
-          )} />
+              onClickCancelFileUpload={onClickCancelFileUpload}
+            />
+          }
+        />
 
-        {videoUrl
-          ? (
-            <div className="video-container-admin">
-              <video
-                id="my-player"
-                className="video-admin mb-4"
-                controls
-                controlsList="nodownload" // <-- removes download option
-                disablePictureInPicture
-                playsInline // <-- required for iOS
-                preload="auto">
-                <source
-                  src={`${videoUrl}#t=0.001`} // <-- https://muffinman.io/blog/hack-for-ios-safari-to-display-html-video-thumbnail
-                  type="video/mp4" />
-              </video>
-            </div>
-          )
-          : null
-        }
+        {videoUrl ? (
+          <div className="video-container-admin">
+            <video
+              id="my-player"
+              className="video-admin mb-4"
+              controls
+              controlsList="nodownload" // <-- removes download option
+              disablePictureInPicture
+              playsInline // <-- required for iOS
+              preload="auto"
+            >
+              <source
+                src={`${videoUrl}#t=0.001`} // <-- https://muffinman.io/blog/hack-for-ios-safari-to-display-html-video-thumbnail
+                type="video/mp4"
+              />
+            </video>
+          </div>
+        ) : null}
       </div>
     </div>
   );

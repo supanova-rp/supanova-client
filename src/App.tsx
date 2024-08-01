@@ -1,22 +1,17 @@
-import {
-  BrowserRouter,
-  Route,
-  Routes,
-} from "react-router-dom";
 import { Toaster } from "react-hot-toast";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import { AuthProvider } from "./contexts/AuthContext";
-
-import PageErrorScreen from "./components/PageErrorScreen";
 import Admin from "./components/admin/Admin";
 import AdminRoute from "./components/admin/AdminRoute";
 import ForgotPassword from "./components/authentication/ForgotPassword";
 import Login from "./components/authentication/Login";
-import Register from "./components/authentication/Register";
 import RedirectLoggedInUser from "./components/authentication/RedirectLoggedInUser";
-import CourseContainer from "./components/home/CourseContainer";
-import { AppProvider } from "./contexts/AppContext";
+import Register from "./components/authentication/Register";
 import { DashboardContainer } from "./components/dashboard/DashboardContainer";
+import CourseContainer from "./components/home/CourseContainer";
+import PageErrorScreen from "./components/PageErrorScreen";
+import { AppProvider } from "./contexts/AppContext";
+import { AuthProvider } from "./contexts/AuthContext";
 
 const App = () => {
   return (
@@ -24,47 +19,46 @@ const App = () => {
       <AuthProvider>
         <AppProvider>
           <Routes>
-            <Route
-              path="/"
-              element={<DashboardContainer />} />
-            <Route
-              path="/course/:id"
-              element={<CourseContainer />} />
+            <Route path="/" element={<DashboardContainer />} />
+            <Route path="/course/:id" element={<CourseContainer />} />
             <Route
               path="/admin"
-              element={(
+              element={
                 <AdminRoute>
                   <Admin />
                 </AdminRoute>
-              )} />
-            <Route
-              path="/forgot-password"
-              element={<ForgotPassword />} />
+              }
+            />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route
               path="/login"
-              element={(
+              element={
                 <RedirectLoggedInUser>
                   <Login />
                 </RedirectLoggedInUser>
-              )} />
+              }
+            />
             <Route
               path="/register"
-              element={(
+              element={
                 <RedirectLoggedInUser>
                   <Register />
                 </RedirectLoggedInUser>
-              )} />
+              }
+            />
             <Route
               path="*"
-              element={(
+              element={
                 <PageErrorScreen
                   title="Oops"
-                  text="The page you were looking for could not be found..." />
-              )}/>
+                  text="The page you were looking for could not be found..."
+                />
+              }
+            />
           </Routes>
         </AppProvider>
       </AuthProvider>
-      <Toaster position="top-right"/>
+      <Toaster position="top-right" />
     </BrowserRouter>
   );
 };

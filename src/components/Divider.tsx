@@ -1,6 +1,3 @@
-
 export const Divider: React.FC = () => {
-  return (
-    <hr />
-  );
+  return <hr />;
 };

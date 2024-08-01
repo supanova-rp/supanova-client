@@ -1,18 +1,21 @@
 import React from "react";
-
-import { AdminTabValue, setActiveTabFunction } from "../../../types/index";
 import { ADMINS_TABS } from "src/constants/constants";
 
+import { AdminTabValue, setActiveTabFunction } from "../../../types/index";
 import Sidebar from "../../nav/Sidebar";
 
 interface Props {
-  activeTab: AdminTabValue,
-  isAdminDashboard?: boolean,
+  activeTab: AdminTabValue;
+  isAdminDashboard?: boolean;
   setActiveTab: setActiveTabFunction;
 }
 
-const AdminSidebarContainer: React.FC<Props> = ({ activeTab, isAdminDashboard, setActiveTab }) => {
-  const adminTabs = (Object.values(ADMINS_TABS));
+const AdminSidebarContainer: React.FC<Props> = ({
+  activeTab,
+  isAdminDashboard,
+  setActiveTab,
+}) => {
+  const adminTabs = Object.values(ADMINS_TABS);
 
   return (
     <div className="row sidebar-content-container-admin">
@@ -21,7 +24,8 @@ const AdminSidebarContainer: React.FC<Props> = ({ activeTab, isAdminDashboard, s
           setActiveTab={setActiveTab}
           isAdminDashboard={isAdminDashboard}
           tabs={adminTabs}
-          activeTab={activeTab} />
+          activeTab={activeTab}
+        />
       </div>
     </div>
   );

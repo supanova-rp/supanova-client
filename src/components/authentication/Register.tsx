@@ -1,15 +1,17 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
-
-import { FormSubmitEvent, PasswordsShowing } from "src/types";
+import {
+  REACT_TOAST_DURATION,
+  feedbackMessages,
+} from "src/constants/constants";
 import { useAuth } from "src/contexts/AuthContext";
 import useRequest from "src/hooks/useRequest";
-import { REACT_TOAST_DURATION, feedbackMessages } from "src/constants/constants";
-import { ReactComponent as WarningIcon } from "../../icons/warningIcon.svg";
+import { FormSubmitEvent, PasswordsShowing } from "src/types";
 
-import FormInput from "../FormInput";
 import AuthCard from "./AuthCard";
 import PasswordVisibilityIcon from "./PasswordVisibilityIcon";
+import WarningIcon from "../../assets/icons/warningIcon.svg?react";
+import FormInput from "../FormInput";
 
 const formGroupClassname = "mb-2 auth-form-input";
 
@@ -19,7 +21,10 @@ const Register = () => {
   const [nameInput, setNameInput] = useState<string>("");
   const [repeatPasswordInput, setRepeatPasswordInput] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isPasswordShowing, setIsPasswordShowing] = useState<PasswordsShowing>({ password: false, repeatPassword: false });
+  const [isPasswordShowing, setIsPasswordShowing] = useState<PasswordsShowing>({
+    password: false,
+    repeatPassword: false,
+  });
 
   const registerUser = useRequest("/register");
   const { login } = useAuth();
@@ -31,7 +36,6 @@ const Register = () => {
     } else {
       toast.error(feedbackMessages.registrationError, REACT_TOAST_DURATION);
     }
-
   };
 
   const onHandleRegisterUser = async (event: FormSubmitEvent) => {
@@ -39,9 +43,7 @@ const Register = () => {
 
     if (repeatPasswordInput !== passwordInput) {
       toast.error(feedbackMessages.passwordMismatch, {
-        icon: <WarningIcon
-          height="22px"
-          width="22px" />,
+        icon: <WarningIcon height="22px" width="22px" />,
         ...REACT_TOAST_DURATION,
       });
     } else {
@@ -55,7 +57,7 @@ const Register = () => {
             password: passwordInput,
           },
           onSuccess: () => login(emailInput, passwordInput),
-          onError: (error) => onError("Create new user error", error)
+          onError: error => onError("Create new user error", error),
         });
       } catch (createNewUserError) {
         onError("Create new user error", createNewUserError);
@@ -65,7 +67,10 @@ const Register = () => {
     setIsLoading(false);
   };
 
-  const onTogglePasswordVisibility = (key: "password" | "repeatPassword", value: boolean) => {
+  const onTogglePasswordVisibility = (
+    key: "password" | "repeatPassword",
+    value: boolean,
+  ) => {
     const updatedPasswordShowingState = {
       ...isPasswordShowing,
       [key]: value,
@@ -85,7 +90,8 @@ const Register = () => {
       footerText="Have an account?"
       footerLinkText="Login"
       footerLinkPath="/login"
-      onSubmit={onHandleRegisterUser}>
+      onSubmit={onHandleRegisterUser}
+    >
       <FormInput
         formId="username"
         formGroupClassname={formGroupClassname}
@@ -93,7 +99,8 @@ const Register = () => {
         label="First name"
         type="text"
         value={nameInput}
-        onChange={(e) => setNameInput(e.target.value)} />
+        onChange={e => setNameInput(e.target.value)}
+      />
       <FormInput
         formId="email"
         formGroupClassname={formGroupClassname}
@@ -101,7 +108,8 @@ const Register = () => {
         label="Email"
         type="email"
         value={emailInput}
-        onChange={(e) => setEmailInput(e.target.value)}/>
+        onChange={e => setEmailInput(e.target.value)}
+      />
       <FormInput
         formId="password"
         formGroupClassname={formGroupClassname}
@@ -109,13 +117,17 @@ const Register = () => {
         label="Password"
         type={isPasswordShowing.password ? "text" : "password"}
         value={passwordInput}
-        onChange={(e) => setPasswordInput(e.target.value)}
+        onChange={e => setPasswordInput(e.target.value)}
         minLength={6}
-        Component={(
+        Component={
           <PasswordVisibilityIcon
             isPasswordShowing={isPasswordShowing.password}
-            onTogglePasswordVisibility={(value) => onTogglePasswordVisibility("password", value)} />
-        )}/>
+            onTogglePasswordVisibility={value =>
+              onTogglePasswordVisibility("password", value)
+            }
+          />
+        }
+      />
       <FormInput
         formId="repeat-password"
         formGroupClassname={formGroupClassname}
@@ -123,13 +135,17 @@ const Register = () => {
         label="Repeat password"
         type={isPasswordShowing.repeatPassword ? "text" : "password"}
         value={repeatPasswordInput}
-        onChange={(e) => setRepeatPasswordInput(e.target.value)}
+        onChange={e => setRepeatPasswordInput(e.target.value)}
         minLength={6}
-        Component={(
+        Component={
           <PasswordVisibilityIcon
             isPasswordShowing={isPasswordShowing.repeatPassword}
-            onTogglePasswordVisibility={(value) => onTogglePasswordVisibility("repeatPassword", value)} />
-        )}/>
+            onTogglePasswordVisibility={value =>
+              onTogglePasswordVisibility("repeatPassword", value)
+            }
+          />
+        }
+      />
     </AuthCard>
   );
 };

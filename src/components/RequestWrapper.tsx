@@ -1,16 +1,17 @@
 import { ReactElement, useEffect } from "react";
+
 import useRequest from "../hooks/useRequest";
 
 type Props = {
-  render: (r: any) => ReactElement<any, any> | null,
-  endpoint: string,
-  skip?: boolean,
-  requestOnMount?: boolean,
-  requestBody?: any,
-  onSuccess: (d: any) => void,
-  onRequestBegin: () => void,
-  onError: (e: string) => void,
-}
+  render: (r: any) => ReactElement<any, any> | null;
+  endpoint: string;
+  skip?: boolean;
+  requestOnMount?: boolean;
+  requestBody?: any;
+  onSuccess: (d: any) => void;
+  onRequestBegin: () => void;
+  onError: (e: string) => void;
+};
 
 const RequestWrapper: React.FC<Props> = ({
   render,

@@ -6,8 +6,4 @@ import "./styles/index.scss";
 
 import App from "./App";
 
-const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
-);
-
-root.render(<App />);
+ReactDOM.createRoot(document.getElementById("root")!).render(<App />);

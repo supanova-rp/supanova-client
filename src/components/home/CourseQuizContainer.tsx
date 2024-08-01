@@ -1,18 +1,17 @@
-
 import { useState } from "react";
-import { ChangeDirection, CourseQuizSection } from "../../types/index";
 
 import CourseSectionContainer from "./CourseSectionContainer";
 import Quiz from "./Quiz";
+import { ChangeDirection, CourseQuizSection } from "../../types/index";
 
 interface Props {
-  canGoBack: boolean,
-  isLastSection: boolean,
-  courseTitle: string,
-  quizSection: CourseQuizSection,
-  onChangeSection: (direction: ChangeDirection) => void,
-  onCourseComplete: () => void,
-  onClickBackChevron: () => void,
+  canGoBack: boolean;
+  isLastSection: boolean;
+  courseTitle: string;
+  quizSection: CourseQuizSection;
+  onChangeSection: (direction: ChangeDirection) => void;
+  onCourseComplete: () => void;
+  onClickBackChevron: () => void;
 }
 
 export const CourseQuizContainer: React.FC<Props> = ({
@@ -24,7 +23,9 @@ export const CourseQuizContainer: React.FC<Props> = ({
   onCourseComplete,
   onClickBackChevron,
 }) => {
-  const [selectedAnswers, setSelectedAnswers] = useState(new Array(quizSection.questions.length).fill([]));
+  const [selectedAnswers, setSelectedAnswers] = useState(
+    new Array(quizSection.questions.length).fill([]),
+  );
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [allAnswersAreCorrect, setAllAnswersAreCorrect] = useState(false);
   const [score, setScore] = useState<number | null>(null);
@@ -35,10 +36,15 @@ export const CourseQuizContainer: React.FC<Props> = ({
 
     if (currentSelectedAnswers.includes(answerIndex)) {
       // Deselect the answer if already selected
-      updatedSelectedAnswers[questionIndex] = currentSelectedAnswers.filter((index: any) => index !== answerIndex);
+      updatedSelectedAnswers[questionIndex] = currentSelectedAnswers.filter(
+        (index: any) => index !== answerIndex,
+      );
     } else {
       // Select the answer if not selected
-      updatedSelectedAnswers[questionIndex] = [...currentSelectedAnswers, answerIndex];
+      updatedSelectedAnswers[questionIndex] = [
+        ...currentSelectedAnswers,
+        answerIndex,
+      ];
     }
 
     setSelectedAnswers(updatedSelectedAnswers);
@@ -51,10 +57,12 @@ export const CourseQuizContainer: React.FC<Props> = ({
       const selectedAnswerIndices = selectedAnswers[questionIndex];
       const correctAnswerIndices = question.answers
         .map((answer, index) => (answer.correctAnswer ? index : null))
-        .filter((index) => index !== null);
+        .filter(index => index !== null);
 
       if (
-        correctAnswerIndices.every((index) => selectedAnswerIndices.includes(index)) &&
+        correctAnswerIndices.every(index =>
+          selectedAnswerIndices.includes(index),
+        ) &&
         correctAnswerIndices.length === selectedAnswerIndices.length
       ) {
         correctAnswersCount++;
@@ -100,7 +108,8 @@ export const CourseQuizContainer: React.FC<Props> = ({
       className="quiz-container"
       onChangeSection={onChangeSection}
       onClickContinue={onSubmitQuiz}
-      onClickBackChevron={onClickBackChevron}>
+      onClickBackChevron={onClickBackChevron}
+    >
       <Quiz
         quizSection={quizSection}
         score={score}
@@ -109,7 +118,8 @@ export const CourseQuizContainer: React.FC<Props> = ({
         showFeedbackModal={showFeedbackModal}
         isLastSection={isLastSection}
         onChangeAnswer={onChangeAnswer}
-        onClickModalConfirm={onClickModalConfirm}/>
+        onClickModalConfirm={onClickModalConfirm}
+      />
     </CourseSectionContainer>
   );
 };

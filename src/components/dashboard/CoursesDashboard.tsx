@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
-
-import { Course } from "src/types";
-import useRequest from "src/hooks/useRequest";
 import { useAuth } from "src/contexts/AuthContext";
+import useRequest from "src/hooks/useRequest";
+import { Course } from "src/types";
 
 import CourseCard from "./CourseCard";
-import RequestHandler from "../RequestHandler";
 import Header from "../home/Header";
+import RequestHandler from "../RequestHandler";
 
 const CoursesDashboard = () => {
   const [courses, setCourses] = useState<[] | Course[]>([]);
@@ -18,6 +17,18 @@ const CoursesDashboard = () => {
   const requestCourseTitles = useRequest("/course-titles");
   const requestAssignedCourseTitles = useRequest("/assigned-course-titles");
 
+  const onSuccess = (result: Course[]) => {
+    setCourses(result);
+    setIsLoading(false);
+  };
+
+  const onError = (err = "", courseErrorMessage: string = "") => {
+    console.log(err || courseErrorMessage);
+
+    setIsLoading(false);
+    setError(courseErrorMessage);
+  };
+
   const getCourses = () => {
     setIsLoading(true);
     setError(null);
@@ -25,15 +36,15 @@ const CoursesDashboard = () => {
     if (isAdmin) {
       requestCourseTitles({
         onSuccess,
-        onError: (error) => onError(error, "Failed to load courses."),
+        onError: err => onError(err, "Failed to load courses."),
       });
     } else {
       requestAssignedCourseTitles({
         requestBody: {
-          user_id: currentUser?.uid
+          user_id: currentUser?.uid,
         },
         onSuccess,
-        onError: (error) => onError(error, "Failed to load courses.")
+        onError: err => onError(err, "Failed to load courses."),
       });
     }
   };
@@ -42,8 +53,8 @@ const CoursesDashboard = () => {
   const handleGetCourses = async () => {
     try {
       getCourses();
-    } catch (error) {
-      onError("Failed to load courses.", error as string);
+    } catch (err) {
+      onError("Failed to load courses.", err as string);
     }
   };
 
@@ -51,39 +62,24 @@ const CoursesDashboard = () => {
     handleGetCourses();
   }, []);
 
-  const onSuccess = (result: Course[]) => {
-    setCourses(result);
-    setIsLoading(false);
-  };
-
-  const onError = (error = "", courseErrorMessage: string ) => {
-    console.log(error || courseErrorMessage);
-
-    setIsLoading(false);
-    setError(courseErrorMessage);
-  };
-
   return (
     <div className="w-100">
       <Header
         className="default-header"
         headerClassname="centered-header"
-        title="Courses" />
+        title="Courses"
+      />
       <RequestHandler
         error={error}
         isCoursesDashboard
         onClick={handleGetCourses}
         isLoading={isLoading}
         shouldShowWarning={!courses?.length}
-        warningMessage="You don't have any courses yet...">
+        warningMessage="You don't have any courses yet..."
+      >
         <div className="courses-dashboard-grid pt-2">
           {courses?.map((course, index) => {
-            return (
-              <CourseCard
-                key={course.id}
-                course={course}
-                index={index} />
-            );
+            return <CourseCard key={course.id} course={course} index={index} />;
           })}
         </div>
       </RequestHandler>

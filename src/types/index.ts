@@ -3,8 +3,8 @@ import { Dispatch, FunctionComponent, SetStateAction } from "react";
 import { ADMINS_TABS } from "src/constants/constants";
 
 type AdminTabKey = keyof typeof ADMINS_TABS;
-export type AdminTabValue = typeof ADMINS_TABS[AdminTabKey];
-export type setActiveTabFunction = Dispatch<SetStateAction<AdminTabValue>>
+export type AdminTabValue = (typeof ADMINS_TABS)[AdminTabKey];
+export type setActiveTabFunction = Dispatch<SetStateAction<AdminTabValue>>;
 
 export type InputChangeEvent = React.ChangeEvent<HTMLInputElement>;
 export type FormSubmitEvent = React.FormEvent<HTMLFormElement>;
@@ -12,23 +12,23 @@ export type InputChangeFunction = (e: InputChangeEvent) => void;
 
 export type UploadProgress = number | null | undefined;
 
-export type saveFormEndpoint = "/edit-course" | "/add-course"
+export type saveFormEndpoint = "/edit-course" | "/add-course";
 
 export type Course = {
-  id: number,
-  title: string,
-  description: string,
-  sections: CourseSection[],
+  id: number;
+  title: string;
+  description: string;
+  sections: CourseSection[];
 };
 
 export type CourseTitle = {
-  id: number,
-  title: string,
-}
+  id: number;
+  title: string;
+};
 
-export type onChangeCourseFieldKey = "description" | "title"
+export type onChangeCourseFieldKey = "description" | "title";
 
-export type CourseSection = CourseVideoSection | CourseQuizSection
+export type CourseSection = CourseVideoSection | CourseQuizSection;
 
 export enum SectionTypes {
   Video = "video",
@@ -36,122 +36,126 @@ export enum SectionTypes {
 }
 
 export type CourseVideoSection = {
-  id: number | string,
-  type: SectionTypes,
-  title: string,
-  videoUrl: string,
-  isNewSection?: boolean,
-  uploadProgress?: UploadProgress,
-  completed?: boolean,
-  questions?: never,
+  id: number | string;
+  type: SectionTypes;
+  title: string;
+  videoUrl: string;
+  isNewSection?: boolean;
+  uploadProgress?: UploadProgress;
+  completed?: boolean;
+  questions?: never;
 };
 
 export type CourseQuizSection = {
-  id: number | string,
-  type: SectionTypes,
-  questions: CourseQuizQuestion[],
-  isNewSection: boolean,
-  title?: never,
-  uploadProgress?: never,
-  completed?: never,
-  videoUrl?: never,
-}
+  id: number | string;
+  type: SectionTypes;
+  questions: CourseQuizQuestion[];
+  isNewSection: boolean;
+  title?: never;
+  uploadProgress?: never;
+  completed?: never;
+  videoUrl?: never;
+};
 
 export type CourseQuizQuestion = {
-  id: string,
-  question: string,
-  isNewQuestion: boolean,
-  answers: CourseQuizAnswer[],
-}
+  id: string;
+  question: string;
+  isNewQuestion: boolean;
+  answers: CourseQuizAnswer[];
+};
 
 export type CourseQuizQuestionServer = {
-  id: number,
-  question: string,
-  position: number,
-  quizSectionId: number,
-  answers: CourseQuizAnswer[]
-}
+  id: number;
+  question: string;
+  position: number;
+  quizSectionId: number;
+  answers: CourseQuizAnswer[];
+};
 
 export type CourseQuizAnswer = {
-  id: string,
-  answer: string,
-  correctAnswer: boolean,
-  isNewAnswer?: boolean,
-}
+  id: string;
+  answer: string;
+  correctAnswer: boolean;
+  isNewAnswer?: boolean;
+};
 
-export type ChangeDirection = "next" | "prev"
+export type ChangeDirection = "next" | "prev";
 
 export type ErrorOptions = {
-  message: null | string,
-  type: null | string,
-  error?: null | string,
-}
+  message: null | string;
+  type: null | string;
+  error?: null | string;
+};
 
-export type getUpdatedSectionsKey = "title" | "videoUrl" | "uploadProgress" | "questions"
+export type getUpdatedSectionsKey =
+  | "title"
+  | "videoUrl"
+  | "uploadProgress"
+  | "questions";
 
 export type User = {
-  id: string
-  name: string,
-  email: string,
-  added: boolean,
-  addUserError: boolean,
-  alreadyRegistered: boolean,
+  id: string;
+  name: string;
+  email: string;
+  added: boolean;
+  addUserError: boolean;
+  alreadyRegistered: boolean;
 };
 
 export type UserToCourses = {
-  id: string,
-  name: string,
-  email: string,
-  courseIds: number[],
-}
+  id: string;
+  name: string;
+  email: string;
+  courseIds: number[];
+};
 
 export type UserInfoToUpdate = {
-  added?: boolean,
-  addUserError?: boolean,
-  alreadyRegistered?: boolean,
+  added?: boolean;
+  addUserError?: boolean;
+  alreadyRegistered?: boolean;
 };
 
 export type PasswordsShowing = {
-  password: boolean,
-  repeatPassword: boolean,
-}
+  password: boolean;
+  repeatPassword: boolean;
+};
 
-export type FirebaseUser = FirebaseUserLib & {accessToken?: string}
+export type FirebaseUser = FirebaseUserLib & { accessToken?: string };
 
 export type UploadUrlResponse = {
-  uploadUrl: string,
-}
+  uploadUrl: string;
+};
 
 export type EditCoursesRequestBody = {
-  edited_course_id?: number,
-  course?: Course,
-  deleted_section_ids_map?: DeletedSectionIdsMap,
-}
+  edited_course_id?: number;
+  course?: Course;
+  deleted_section_ids_map?: DeletedSectionIdsMap;
+};
 
 type DeletedSectionIdsMap = {
-  videoSectionIds: number[] | [],
-  quizSectionIds: number[] | [],
-  questionIds: number[] | [],
-  answerIds: number[] | [],
-}
+  videoSectionIds: number[] | [];
+  quizSectionIds: number[] | [];
+  questionIds: number[] | [];
+  answerIds: number[] | [];
+};
 
 export type RequestBody = {
-  title?: string,
-  description?: string,
-  sections?: CourseSection[],
-  edited_course_id?: number,
-  edited_course?: Course,
-  deleted_sections_ids?: DeletedSectionIdsMap,
-}
+  title?: string;
+  description?: string;
+  sections?: CourseSection[];
+  edited_course_id?: number;
+  edited_course?: Course;
+  deleted_sections_ids?: DeletedSectionIdsMap;
+};
 
 export type RequestOptions = {
-  requestBody: RequestBody,
-  endpoint: string,
-  method: string,
-}
+  requestBody: RequestBody;
+  endpoint: string;
+  method: string;
+};
 
 export type MobileNavbarIcon = {
-  icon: FunctionComponent,
-  tabName: string | null,
-  id: number
-}
+  icon: FunctionComponent;
+  tabName: string | null;
+  id: number;
+};

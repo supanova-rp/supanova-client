@@ -1,10 +1,10 @@
 import { Button } from "react-bootstrap";
 
-import { ReactComponent as ChevronLeft } from "../../../icons/chevronLeft.svg";
+import ChevronLeft from "../../../assets/icons/chevronLeft.svg?react";
 
 interface Props {
-  onCourseFormCancelled: () => void,
-  onShowDeleteModal: () => void,
+  onCourseFormCancelled: () => void;
+  onShowDeleteModal: () => void;
 }
 
 const EditingCourseHeader: React.FC<Props> = ({
@@ -17,10 +17,9 @@ const EditingCourseHeader: React.FC<Props> = ({
         stroke="black"
         role="button"
         className="edit-course-header-chevron-left"
-        onClick={onCourseFormCancelled} />
-      <Button
-        className="btn-danger"
-        onClick={onShowDeleteModal} >
+        onClick={onCourseFormCancelled}
+      />
+      <Button className="btn-danger" onClick={onShowDeleteModal}>
         Delete
       </Button>
     </div>

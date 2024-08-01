@@ -2,52 +2,54 @@ import { Component } from "react";
 import { Form } from "react-bootstrap";
 import toast from "react-hot-toast";
 import { PulseLoader } from "react-spinners";
-
+import DeleteCourseModal from "src/components/modals/DeleteCourseModal";
+import RequestWrapper from "src/components/RequestWrapper";
+import { colors } from "src/constants/colorPalette";
+import {
+  feedbackMessages,
+  REACT_TOAST_DURATION,
+} from "src/constants/constants";
 import {
   Course,
   CourseQuizQuestionServer,
   ErrorOptions,
   FormSubmitEvent,
   RequestBody,
-  saveFormEndpoint
+  saveFormEndpoint,
 } from "src/types";
+
+import CourseForm from "./CourseForm";
 import {
   everyQuizQuestionHasCorrectAnswer,
   everyVideoSectionHasVideo,
   getQuizSections,
   getVideoSections,
-  isVideoUploadInProgress
+  isVideoUploadInProgress,
 } from "./utils";
-import { feedbackMessages, REACT_TOAST_DURATION } from "src/constants/constants";
-import { ReactComponent as WarningIcon } from "../../../icons/warningIcon.svg";
-import { colors } from "src/constants/colorPalette";
-
-import CourseForm from "./CourseForm";
-import DeleteCourseModal from "src/components/modals/DeleteCourseModal";
-import RequestWrapper from "src/components/RequestWrapper";
+import WarningIcon from "../../../assets/icons/warningIcon.svg?react";
 
 type CourseFormContainerState = {
-  course: Course,
-  initialCourse: Course,
-  isLoading: boolean,
-  areActionsDisabled: boolean,
-  isDeleteModalVisible: boolean,
-}
+  course: Course;
+  initialCourse: Course;
+  isLoading: boolean;
+  areActionsDisabled: boolean;
+  isDeleteModalVisible: boolean;
+};
 
 interface CourseFormContainerProps {
-  initialCourse: Course,
-  isEditing: boolean,
-  saveFormEndpoint: saveFormEndpoint,
-  getRequestBody: (course: Course, initialCourse: Course) => RequestBody,
-  onCourseSavedSuccess: (editedCourse: Course) => void,
-  onCourseFormCancelled: () => void,
-  onCourseDeletedSuccess: (courseId: number) => void,
+  initialCourse: Course;
+  isEditing: boolean;
+  saveFormEndpoint: saveFormEndpoint;
+  getRequestBody: (course: Course, initialCourse: Course) => RequestBody;
+  onCourseSavedSuccess: (editedCourse: Course) => void;
+  onCourseFormCancelled: () => void;
+  onCourseDeletedSuccess: (courseId: number) => void;
 }
 
-export default class CourseFormContainer extends Component <CourseFormContainerProps> {
+export default class CourseFormContainer extends Component<CourseFormContainerProps> {
   static defaultProps = {
     isEditing: false,
-    onCourseDeletedSuccess: () => {}
+    onCourseDeletedSuccess: () => {},
   };
 
   state: CourseFormContainerState = {
@@ -84,13 +86,17 @@ export default class CourseFormContainer extends Component <CourseFormContainerP
   };
 
   onClickDelete = async (requestDeleteCourse: any) => {
-    const { course: { id: courseId } } = this.state;
+    const {
+      course: { id: courseId },
+    } = this.state;
 
     requestDeleteCourse({ course_id: courseId });
   };
 
   onDeleteCourseSuccess = () => {
-    const { course: { id: courseId } } = this.state;
+    const {
+      course: { id: courseId },
+    } = this.state;
 
     this.props.onCourseDeletedSuccess(courseId);
   };
@@ -113,11 +119,18 @@ export default class CourseFormContainer extends Component <CourseFormContainerP
     const { course, initialCourse } = this.state;
     const { getRequestBody } = this.props;
 
-    if (!isVideoUploadInProgress(course) && everyVideoSectionHasVideo(getVideoSections(course)) && everyQuizQuestionHasCorrectAnswer(getQuizSections(course))) {
+    if (
+      !isVideoUploadInProgress(course) &&
+      everyVideoSectionHasVideo(getVideoSections(course)) &&
+      everyQuizQuestionHasCorrectAnswer(getQuizSections(course))
+    ) {
       const requestBody = getRequestBody(course, initialCourse);
 
       requestSaveCourse(requestBody);
-    } else if (isVideoUploadInProgress(course) || !everyVideoSectionHasVideo(getVideoSections(course))) {
+    } else if (
+      isVideoUploadInProgress(course) ||
+      !everyVideoSectionHasVideo(getVideoSections(course))
+    ) {
       this.onError({
         type: "warning",
         message: feedbackMessages.videoMissing,
@@ -125,26 +138,30 @@ export default class CourseFormContainer extends Component <CourseFormContainerP
     } else {
       this.onError({
         type: "warning",
-        message: feedbackMessages.correctAnswerMissing
+        message: feedbackMessages.correctAnswerMissing,
       });
     }
   };
 
   onGetQuizQuestionsSuccess = (quizQuestions: CourseQuizQuestionServer[]) => {
-    const updatedSectionsWithQuizQuestions = this.state.course.sections.map((section) => {
-      if (section.videoUrl) {
-        return section;
-      }
+    const updatedSectionsWithQuizQuestions = this.state.course.sections.map(
+      section => {
+        if (section.videoUrl) {
+          return section;
+        }
 
-      return {
-        ...section,
-        questions: quizQuestions.filter(question => question.quizSectionId === section.id)
-      };
-    });
+        return {
+          ...section,
+          questions: quizQuestions.filter(
+            question => question.quizSectionId === section.id,
+          ),
+        };
+      },
+    );
 
     const updatedCourse = {
       ...this.state.course,
-      sections: updatedSectionsWithQuizQuestions
+      sections: updatedSectionsWithQuizQuestions,
     };
 
     this.setState({
@@ -192,21 +209,15 @@ export default class CourseFormContainer extends Component <CourseFormContainerP
       toast.error(message, REACT_TOAST_DURATION);
     } else {
       toast(message, {
-        icon: <WarningIcon
-          height="22px"
-          width="22px" />,
-        ...REACT_TOAST_DURATION
+        icon: <WarningIcon height="22px" width="22px" />,
+        ...REACT_TOAST_DURATION,
       });
     }
   };
 
   render() {
-    const {
-      course,
-      areActionsDisabled,
-      isLoading,
-      isDeleteModalVisible,
-    } = this.state;
+    const { course, areActionsDisabled, isLoading, isDeleteModalVisible } =
+      this.state;
 
     const { onCourseFormCancelled, isEditing, saveFormEndpoint } = this.props;
     const quizSections = getQuizSections(course);
@@ -221,7 +232,9 @@ export default class CourseFormContainer extends Component <CourseFormContainerP
           onError={this.onGetQuizQuestionsError}
           onRequestBegin={this.onRequestQuizQuestionsBegin}
           onSuccess={this.onGetQuizQuestionsSuccess}
-          requestBody={{ quizSectionIds: quizSections?.map((quizSection) => quizSection.id) }}
+          requestBody={{
+            quizSectionIds: quizSections?.map(quizSection => quizSection.id),
+          }}
           render={() => {
             return (
               <RequestWrapper
@@ -229,27 +242,32 @@ export default class CourseFormContainer extends Component <CourseFormContainerP
                 onRequestBegin={this.onRequestBegin}
                 onError={this.onSaveCourseError}
                 onSuccess={this.onSaveCourseSuccess}
-                render={(requestSaveCourse) => {
+                render={requestSaveCourse => {
                   return (
                     <RequestWrapper
                       endpoint="/delete-course"
                       onRequestBegin={this.onRequestBegin}
                       onError={this.onDeleteCourseError}
                       onSuccess={this.onDeleteCourseSuccess}
-                      render={(requestDeleteCourse) => {
+                      render={requestDeleteCourse => {
                         if (isLoading) {
                           return (
                             <div className="full-screen-loading-container">
                               <PulseLoader
                                 color={colors.orange}
-                                className="m-5" />
+                                className="m-5"
+                              />
                             </div>
                           );
                         }
 
                         return (
                           <>
-                            <Form onSubmit={(e) => this.onClickSave(e, requestSaveCourse)}>
+                            <Form
+                              onSubmit={e =>
+                                this.onClickSave(e, requestSaveCourse)
+                              }
+                            >
                               <CourseForm
                                 course={course}
                                 videoSections={videoSections}
@@ -257,28 +275,32 @@ export default class CourseFormContainer extends Component <CourseFormContainerP
                                 areActionsDisabled={areActionsDisabled}
                                 onUpdateCourse={this.onUpdateCourse}
                                 onShowDeleteModal={this.onShowDeleteModal}
-                                onCourseFormCancelled={onCourseFormCancelled} />
+                                onCourseFormCancelled={onCourseFormCancelled}
+                              />
                             </Form>
 
-                            {isDeleteModalVisible
-                              ? (
-                                <DeleteCourseModal
-                                  areActionsDisabled={areActionsDisabled}
-                                  onHideDeleteModal={this.onHideDeleteModal}
-                                  onClickDelete={() => this.onClickDelete(requestDeleteCourse)} />
-                              )
-                              : null
-                            }
+                            {isDeleteModalVisible ? (
+                              <DeleteCourseModal
+                                areActionsDisabled={areActionsDisabled}
+                                onHideDeleteModal={this.onHideDeleteModal}
+                                onClickDelete={() =>
+                                  this.onClickDelete(requestDeleteCourse)
+                                }
+                              />
+                            ) : null}
                           </>
                         );
-                      }} />
+                      }}
+                    />
                   );
-                }}/>
+                }}
+              />
             );
-          }}/>
+          }}
+        />
       );
     }
 
     return null;
   }
-};
+}

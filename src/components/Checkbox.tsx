@@ -1,11 +1,11 @@
 import React from "react";
-
-import { ReactComponent as Checked } from "../icons/checked.svg";
-import { ReactComponent as Unchecked } from "../icons/unchecked.svg";
 import { colors } from "src/constants/colorPalette";
 
+import Checked from "../assets/icons/checked.svg?react";
+import Unchecked from "../assets/icons/unchecked.svg?react";
+
 interface Props {
-  checked: boolean,
+  checked: boolean;
 }
 
 const Checkbox: React.FC<Props> = ({ checked }) => {
@@ -14,10 +14,7 @@ const Checkbox: React.FC<Props> = ({ checked }) => {
 
   return (
     <div className="checkbox">
-      <Icon
-        width="16"
-        height="16"
-        fill={fill} />
+      <Icon width="16" height="16" fill={fill} />
     </div>
   );
 };
