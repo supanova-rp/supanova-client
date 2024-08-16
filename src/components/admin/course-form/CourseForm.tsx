@@ -5,6 +5,7 @@ import {
   CourseQuizQuestion,
   CourseSection,
   onChangeCourseFieldKey,
+  SectionTypes,
 } from "src/types";
 
 import CourseFormBody from "./CourseFormBody";
@@ -76,13 +77,14 @@ export default class CourseForm extends Component<CourseFormProps> {
   };
 
   onClickAddNewVideoSection = () => {
-    const { course, onUpdateCourse } = this.props;
+    const { course, isEditing, onUpdateCourse } = this.props;
 
-    const newSection = {
+    const newSection: CourseSection = {
       id: Date.now(),
       title: "",
+      type: SectionTypes.Video,
       videoUrl: null,
-      isNewSection: this.props.isEditing,
+      isNewSection: isEditing,
     };
 
     const updatedCourseWithNewVideoSection = getCourseWithNewSection(
@@ -96,11 +98,11 @@ export default class CourseForm extends Component<CourseFormProps> {
   onClickAddNewQuizSection = () => {
     const { course, onUpdateCourse, isEditing } = this.props;
 
-    const newQuizSection = {
+    const newQuizSection: CourseSection = {
       id: Date.now(),
-      type: "quiz",
+      type: SectionTypes.Quiz,
       questions: [getInitialEmptyQuizQuestionAndAnswers(isEditing)],
-      isNewSection: this.props.isEditing,
+      isNewSection: isEditing,
     };
 
     const updatedCourseWithNewQuizSection = getCourseWithNewSection(
@@ -176,7 +178,7 @@ export default class CourseForm extends Component<CourseFormProps> {
     });
   };
 
-  onMoveSection = (sectionId: number, direction: "up" | "down") => {
+  onMoveSection = (sectionId: number | string, direction: "up" | "down") => {
     const { course, onUpdateCourse } = this.props;
 
     const currentIndex = course.sections.findIndex(s => s.id === sectionId);

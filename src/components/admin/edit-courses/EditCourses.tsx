@@ -63,7 +63,8 @@ export default class EditCourses extends Component {
   };
 
   onCourseDeletedSuccess = (courseId: number) => {
-    const coursesWithoutDeletedCourse = this.state.allCourses.filter(
+    const { allCourses } = this.state;
+    const coursesWithoutDeletedCourse = allCourses.filter(
       course => course.id !== courseId,
     );
 
@@ -75,7 +76,7 @@ export default class EditCourses extends Component {
     toast.success(feedbackMessages.deleteCourseSuccess, REACT_TOAST_DURATION);
   };
 
-  getRequestBody = (course: Course, initialCourse: Course) => {
+  static getRequestBody = (course: Course, initialCourse: Course) => {
     return {
       edited_course_id: course.id,
       edited_course: {
@@ -135,7 +136,7 @@ export default class EditCourses extends Component {
                     initialCourse={editingCourse}
                     isEditing
                     saveFormEndpoint="/edit-course"
-                    getRequestBody={this.getRequestBody}
+                    getRequestBody={EditCourses.getRequestBody}
                     onCourseSavedSuccess={this.onCourseEditedSuccess}
                     onCourseFormCancelled={this.onEditCourseCancelled}
                     onCourseDeletedSuccess={this.onCourseDeletedSuccess}

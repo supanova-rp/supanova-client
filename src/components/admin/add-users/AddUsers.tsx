@@ -83,27 +83,6 @@ const AddUsers = () => {
     setIsLoading(false);
   };
 
-  const onSuccessCheckUserExists = (
-    result: { isRegistered: boolean },
-    userId: string,
-    email: string,
-    name: string,
-  ) => {
-    if (result.isRegistered) {
-      setIsLoading(false);
-
-      const usersAfterReg = updateUsers(users, userId, {
-        added: false,
-        alreadyRegistered: result.isRegistered,
-        addUserError: false,
-      });
-
-      setUsers(usersAfterReg);
-    } else {
-      sendRegEmail(userId, email, name);
-    }
-  };
-
   const sendRegEmail = async (userId: string, email: string, name: string) => {
     try {
       const emailJsParams = getEmailJsParams(name, email);
@@ -133,6 +112,27 @@ const AddUsers = () => {
     } catch (error) {
       console.log(error);
       onErrorAddingUser(userId);
+    }
+  };
+
+  const onSuccessCheckUserExists = (
+    result: { isRegistered: boolean },
+    userId: string,
+    email: string,
+    name: string,
+  ) => {
+    if (result.isRegistered) {
+      setIsLoading(false);
+
+      const usersAfterReg = updateUsers(users, userId, {
+        added: false,
+        alreadyRegistered: result.isRegistered,
+        addUserError: false,
+      });
+
+      setUsers(usersAfterReg);
+    } else {
+      sendRegEmail(userId, email, name);
     }
   };
 

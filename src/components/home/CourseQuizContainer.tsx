@@ -56,7 +56,7 @@ export const CourseQuizContainer: React.FC<Props> = ({
     quizSection.questions.forEach((question, questionIndex) => {
       const selectedAnswerIndices = selectedAnswers[questionIndex];
       const correctAnswerIndices = question.answers
-        .map((answer, index) => (answer.correctAnswer ? index : null))
+        .map((answer, index) => (answer.isCorrectAnswer ? index : null))
         .filter(index => index !== null);
 
       if (

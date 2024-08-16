@@ -15,7 +15,7 @@ import {
   ErrorOptions,
   FormSubmitEvent,
   RequestBody,
-  saveFormEndpoint,
+  SaveFormEndpoint,
 } from "src/types";
 
 import CourseForm from "./CourseForm";
@@ -39,7 +39,7 @@ type CourseFormContainerState = {
 interface CourseFormContainerProps {
   initialCourse: Course;
   isEditing: boolean;
-  saveFormEndpoint: saveFormEndpoint;
+  saveFormEndpoint: SaveFormEndpoint;
   getRequestBody: (course: Course, initialCourse: Course) => RequestBody;
   onCourseSavedSuccess: (editedCourse: Course) => void;
   onCourseFormCancelled: () => void;
@@ -97,8 +97,9 @@ export default class CourseFormContainer extends Component<CourseFormContainerPr
     const {
       course: { id: courseId },
     } = this.state;
+    const { onCourseDeletedSuccess } = this.props;
 
-    this.props.onCourseDeletedSuccess(courseId);
+    onCourseDeletedSuccess(courseId);
   };
 
   onDeleteCourseError = (error: string) => {
@@ -144,23 +145,23 @@ export default class CourseFormContainer extends Component<CourseFormContainerPr
   };
 
   onGetQuizQuestionsSuccess = (quizQuestions: CourseQuizQuestionServer[]) => {
-    const updatedSectionsWithQuizQuestions = this.state.course.sections.map(
-      section => {
-        if (section.videoUrl) {
-          return section;
-        }
+    const { course } = this.state;
 
-        return {
-          ...section,
-          questions: quizQuestions.filter(
-            question => question.quizSectionId === section.id,
-          ),
-        };
-      },
-    );
+    const updatedSectionsWithQuizQuestions = course.sections.map(section => {
+      if (section.videoUrl) {
+        return section;
+      }
+
+      return {
+        ...section,
+        questions: quizQuestions.filter(
+          question => question.quizSectionId === section.id,
+        ),
+      };
+    });
 
     const updatedCourse = {
-      ...this.state.course,
+      ...course,
       sections: updatedSectionsWithQuizQuestions,
     };
 

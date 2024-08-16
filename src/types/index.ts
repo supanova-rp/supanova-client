@@ -12,7 +12,7 @@ export type InputChangeFunction = (e: InputChangeEvent) => void;
 
 export type UploadProgress = number | null | undefined;
 
-export type saveFormEndpoint = "/edit-course" | "/add-course";
+export type SaveFormEndpoint = "/edit-course" | "/add-course";
 
 export type Course = {
   id: number;
@@ -39,7 +39,7 @@ export type CourseVideoSection = {
   id: number | string;
   type: SectionTypes;
   title: string;
-  videoUrl: string;
+  videoUrl: string | null;
   isNewSection?: boolean;
   uploadProgress?: UploadProgress;
   completed?: boolean;
@@ -75,7 +75,7 @@ export type CourseQuizQuestionServer = {
 export type CourseQuizAnswer = {
   id: string;
   answer: string;
-  correctAnswer: boolean;
+  isCorrectAnswer: boolean;
   isNewAnswer?: boolean;
 };
 

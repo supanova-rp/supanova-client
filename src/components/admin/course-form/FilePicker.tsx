@@ -13,11 +13,14 @@ import {
 } from "../../../types/index";
 
 interface Props {
-  sectionId: number;
+  sectionId: number | string;
   abortController: AbortController;
   fileInputRef: React.RefObject<HTMLInputElement>;
-  onFileUploaded: (sectionId: number, videoUrl: string) => void;
-  onFileUploadProgress: (data: AxiosProgressEvent, sectionId: number) => void;
+  onFileUploaded: (sectionId: number | string, videoUrl: string) => void;
+  onFileUploadProgress: (
+    data: AxiosProgressEvent,
+    sectionId: number | string,
+  ) => void;
   uploadProgress: UploadProgress;
   onClickCancelFileUpload: React.MouseEventHandler<HTMLButtonElement>;
 }

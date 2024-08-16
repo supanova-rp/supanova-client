@@ -1,5 +1,5 @@
 import { Card } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import CourseImage1 from "src/assets/images/course-placeholder-1.png";
 import CourseImage2 from "src/assets/images/course-placeholder-2.png";
 import { useAppContext } from "src/contexts/AppContext";

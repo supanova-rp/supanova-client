@@ -1,8 +1,6 @@
 import uuid from "react-uuid";
 import {
   Course,
-  CourseQuizAnswer,
-  CourseQuizQuestion,
   CourseQuizSection,
   CourseSection,
   CourseVideoSection,
@@ -10,7 +8,10 @@ import {
   getUpdatedSectionsKey,
 } from "src/types";
 
-export type MoveSectionFn = (id: number, direction: "up" | "down") => void;
+export type MoveSectionFn = (
+  id: number | string,
+  direction: "up" | "down",
+) => void;
 
 export const isVideoSection = (
   section: CourseSection,
@@ -59,7 +60,7 @@ export const everyQuizQuestionHasCorrectAnswer = (
 
       if (
         !currentQuizQuestion.answers.some(
-          quizAnswer => quizAnswer.isCorrectAnswer,
+          quizAnswer => quizAnswer.isCorrectAnswer, // TODO: check
         )
       ) {
         everyQuizQuestionHasAtLeast1CorrectAnswer = false;
@@ -242,6 +243,26 @@ export const getUpdatedCourse = (
   };
 };
 
+export const getInitialEmptyQuizQuestionAndAnswers = (isEditing: boolean) => {
+  const emptyQuizAnswers = [];
+
+  for (let i = 0; i < 4; i++) {
+    emptyQuizAnswers.push({
+      id: uuid(),
+      answer: "",
+      isNewAnswer: isEditing,
+      isCorrectAnswer: false,
+    });
+  }
+
+  return {
+    id: uuid(),
+    question: "",
+    isNewQuestion: isEditing,
+    answers: emptyQuizAnswers,
+  };
+};
+
 export const getQuizWithNewQuizQuestion = (
   course: Course,
   quizId: number,
@@ -264,26 +285,6 @@ export const getQuizWithNewQuizQuestion = (
   return {
     ...course,
     sections: updatedSectionsWithNewQuizQuestion,
-  };
-};
-
-export const getInitialEmptyQuizQuestionAndAnswers = (isEditing: boolean) => {
-  const emptyQuizAnswers = [];
-
-  for (let i = 0; i < 4; i++) {
-    emptyQuizAnswers.push({
-      id: uuid(),
-      answer: "",
-      isNewAnswer: isEditing,
-      isCorrectAnswer: false,
-    });
-  }
-
-  return {
-    id: uuid(),
-    question: "",
-    isNewQuestion: isEditing,
-    answers: emptyQuizAnswers,
   };
 };
 

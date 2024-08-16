@@ -31,8 +31,8 @@ const RequestWrapper: React.FC<Props> = ({
     }
   }, []);
 
-  const executeRequest = (requestBody = {}) => {
-    request({ requestBody, onRequestBegin, onError, onSuccess });
+  const executeRequest = (reqBody = {}) => {
+    request({ requestBody: reqBody, onRequestBegin, onError, onSuccess });
   };
 
   return render(executeRequest);

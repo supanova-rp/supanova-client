@@ -38,7 +38,7 @@ export default class AddCourse extends Component {
     });
   };
 
-  getRequestBody = (course: Course) => {
+  static getRequestBody = (course: Course) => {
     return {
       title: course.title,
       description: course.description,
@@ -56,7 +56,7 @@ export default class AddCourse extends Component {
           key={courseFormKey}
           initialCourse={this.initialCourse}
           saveFormEndpoint="/add-course"
-          getRequestBody={this.getRequestBody}
+          getRequestBody={AddCourse.getRequestBody}
           onCourseSavedSuccess={this.onCourseAddedSuccess}
           onCourseFormCancelled={this.onAddCourseCancelled}
         />

@@ -38,6 +38,15 @@ const AssignUsers = () => {
     setUsersToCourses(results);
   };
 
+  const getUsersWithAssignedCourses = () => {
+    setIsLoadingUserCourses(true);
+
+    requestUsersToCourses({
+      onSuccess: onSuccessUserCourses,
+      onError: error => onUserCoursesError(error, "Failed to load users."),
+    });
+  };
+
   const onSuccessCourses = (result: CourseTitle[]) => {
     setCourses(result);
     setIsLoadingCourses(false);
@@ -51,15 +60,6 @@ const AssignUsers = () => {
     requestCourseTitles({
       onSuccess: onSuccessCourses,
       onError: error => onCoursesError(error, "Failed to load courses."),
-    });
-  };
-
-  const getUsersWithAssignedCourses = () => {
-    setIsLoadingUserCourses(true);
-
-    requestUsersToCourses({
-      onSuccess: onSuccessUserCourses,
-      onError: error => onUserCoursesError(error, "Failed to load users."),
     });
   };
 

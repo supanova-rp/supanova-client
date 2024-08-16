@@ -1,8 +1,6 @@
 import React from "react";
 import { CourseQuizAnswer } from "src/types";
 
-import Checkbox from "../Checkbox";
-
 interface Props {
   answer: CourseQuizAnswer;
   answerIndex: number;

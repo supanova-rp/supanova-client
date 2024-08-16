@@ -14,12 +14,15 @@ interface Props {
   isLastSection: boolean;
   isEditing: boolean;
   canRemoveVideoSection: boolean;
-  onChangeSectionTitle: (sectionId: number, inputValue: string) => void;
+  onChangeSectionTitle: (
+    sectionId: number | string,
+    inputValue: string,
+  ) => void;
   onHandleUpdateQuiz: (
     quizId: number,
     quizQuestionsAndAnswers: CourseQuizQuestion[],
   ) => void;
-  onClickAddNewQuizQuestion: (quizId: number) => void;
+  onClickAddNewQuizQuestion: (quizId: number | string) => void;
   onHandleAddNewQuizAnswer: (
     quizId: number,
     updatedQuizQuestions: CourseQuizQuestion[],
@@ -27,8 +30,8 @@ interface Props {
   onClickRemoveQuizQuestion: (quizId: number, questionId: string) => void;
   onFileUploaded: (sectionId: number, videoUrl: string) => void;
   onFileUploadProgress: (data: AxiosProgressEvent, sectionId: number) => void;
-  onFileUploadCancelled: (sectionId: number) => void;
-  handleRemoveSection: (sectionId: number) => void;
+  onFileUploadCancelled: (sectionId: number | string) => void;
+  handleRemoveSection: (sectionId: number | string) => void;
   onMoveSection: MoveSectionFn;
 }
 
@@ -45,7 +48,9 @@ export default class CourseFormSection extends React.Component<Props> {
   }
 
   componentWillUnmount(): void {
-    const { uploadProgress } = this.props.section;
+    const {
+      section: { uploadProgress },
+    } = this.props;
 
     if (uploadProgress && uploadProgress !== 1) {
       this.onClickCancelFileUpload();
@@ -133,7 +138,6 @@ export default class CourseFormSection extends React.Component<Props> {
       <>
         <VideoSection
           section={section}
-          isLastSection={isLastSection}
           canRemoveVideoSection={canRemoveVideoSection}
           abortController={this.abortController}
           fileInputRef={this.fileInputRef}

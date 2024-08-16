@@ -4,7 +4,7 @@ import { Button } from "react-bootstrap";
 import { MoveSectionFn } from "./utils";
 
 interface Props {
-  sectionId: number;
+  sectionId: number | string;
   isFirst: boolean;
   isLast: boolean;
   onMoveSection: MoveSectionFn;

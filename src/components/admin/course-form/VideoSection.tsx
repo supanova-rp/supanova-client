@@ -7,11 +7,10 @@ import RemoveInput from "../../RemoveInput";
 
 interface VideoSectionProps {
   section: CourseVideoSection;
-  isLastSection: boolean;
   canRemoveVideoSection?: boolean;
   abortController: AbortController;
   fileInputRef: React.RefObject<HTMLInputElement>;
-  onChangeSectionTitle: (sectionId: number, title: string) => void;
+  onChangeSectionTitle: (sectionId: number | string, title: string) => void;
   onClickRemoveSection: () => void;
   handleFileUploaded: (sectionId: number, videoUrl: string) => void;
   onFileUploadProgress: (data: AxiosProgressEvent, sectionId: number) => void;
@@ -20,7 +19,6 @@ interface VideoSectionProps {
 
 const VideoSection: React.FC<VideoSectionProps> = ({
   section,
-  isLastSection,
   canRemoveVideoSection,
   abortController,
   fileInputRef,

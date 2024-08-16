@@ -29,20 +29,20 @@ export const useQuery = <T>(
   const { requestBody, defaultError, onRequestBegin, onError, onSuccess } =
     options;
 
-  const getError = (error: any): string => {
+  const getError = (err: any): string => {
     if (defaultError) {
       return defaultError;
     }
 
-    if (typeof error === "string") {
-      return error;
+    if (typeof err === "string") {
+      return err;
     }
 
-    return error?.message || "An error occurred";
+    return err?.message || "An error occurred";
   };
 
-  const handleError = (error: any) => {
-    const errorMessage = getError(error);
+  const handleError = (err: any) => {
+    const errorMessage = getError(err);
 
     setError(errorMessage);
 
@@ -72,8 +72,8 @@ export const useQuery = <T>(
         },
         onError: handleError,
       });
-    } catch (error: any) {
-      handleError(error);
+    } catch (err: any) {
+      handleError(err);
       setLoading(false);
     }
   };
