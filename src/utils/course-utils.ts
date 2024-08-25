@@ -1,4 +1,4 @@
-import { CourseSection, CourseVideoSection, SectionTypes } from "src/types";
+import { CourseSection, CourseVideoSection, ID, SectionTypes } from "src/types";
 
 export const getIsVideoSection = (
   section: CourseSection,
@@ -6,6 +6,6 @@ export const getIsVideoSection = (
   return section.type === SectionTypes.Video;
 };
 
-export const getVideoProgressKey = (courseId: number, sectionId: number) => {
+export const getVideoProgressKey = (courseId: number, sectionId: ID) => {
   return `section-progress-${courseId}-${sectionId}`;
 };

@@ -2,7 +2,7 @@ import { SyntheticEvent } from "react";
 
 interface VideoProps {
   title: string;
-  videoUrl: string;
+  videoUrl: string | null;
   initialCurrentVideoTime: number;
   onVideoEnded: () => void;
   onVideoTimeUpdate: (e: SyntheticEvent<HTMLVideoElement>) => void;

@@ -4,6 +4,7 @@ import {
   Course,
   CourseQuizQuestion,
   CourseSection,
+  ID,
   onChangeCourseFieldKey,
 } from "src/types";
 
@@ -22,23 +23,23 @@ interface Props {
     key: onChangeCourseFieldKey,
     newInputValue: string,
   ) => void;
-  onChangeSectionTitle: (sectionId: number, newInputValue: string) => void;
+  onChangeSectionTitle: (sectionId: ID, newInputValue: string) => void;
   onHandleUpdateQuiz: (
-    quizId: number,
+    quizId: ID,
     quizQuestionsAndAnswers: CourseQuizQuestion[],
   ) => void;
-  onFileUploaded: (sectionId: number, videoUrl: string) => void;
-  onFileUploadProgress: (data: AxiosProgressEvent, sectionId: number) => void;
-  onFileUploadCancelled: (sectionId: number) => void;
-  handleRemoveSection: (sectionId: number) => void;
+  onFileUploaded: (sectionId: ID, videoUrl: string) => void;
+  onFileUploadProgress: (data: AxiosProgressEvent, sectionId: ID) => void;
+  onFileUploadCancelled: (sectionId: ID) => void;
+  handleRemoveSection: (sectionId: ID) => void;
   onClickAddNewVideoSection: () => void;
   onClickAddNewQuizSection: () => void;
-  onClickAddNewQuizQuestion: (quizId: number) => void;
+  onClickAddNewQuizQuestion: (quizId: ID) => void;
   onHandleAddNewQuizAnswer: (
-    quizId: number,
+    quizId: ID,
     updatedQuizQuestions: CourseQuizQuestion[],
   ) => void;
-  onClickRemoveQuizQuestion: (quizId: number, questionId: string) => void;
+  onClickRemoveQuizQuestion: (quizId: ID, questionId: string) => void;
   onCourseFormCancelled: () => void;
   onShowDeleteModal: () => void;
   onMoveSection: MoveSectionFn;

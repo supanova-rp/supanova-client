@@ -7,20 +7,18 @@ import TickIcon from "../../../assets/icons/tickIcon.svg?react";
 import { colors } from "../../../constants/colorPalette";
 import { useWakeLock } from "../../../hooks/useWakeLock";
 import {
+  ID,
   InputChangeEvent,
   UploadProgress,
   UploadUrlResponse,
 } from "../../../types/index";
 
 interface Props {
-  sectionId: number | string;
+  sectionId: ID;
   abortController: AbortController;
   fileInputRef: React.RefObject<HTMLInputElement>;
-  onFileUploaded: (sectionId: number | string, videoUrl: string) => void;
-  onFileUploadProgress: (
-    data: AxiosProgressEvent,
-    sectionId: number | string,
-  ) => void;
+  onFileUploaded: (sectionId: ID, videoUrl: string) => void;
+  onFileUploadProgress: (data: AxiosProgressEvent, sectionId: ID) => void;
   uploadProgress: UploadProgress;
   onClickCancelFileUpload: React.MouseEventHandler<HTMLButtonElement>;
 }

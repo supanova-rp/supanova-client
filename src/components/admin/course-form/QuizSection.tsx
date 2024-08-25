@@ -5,6 +5,7 @@ import {
   CourseQuizAnswer,
   CourseQuizQuestion,
   CourseQuizSection,
+  ID,
 } from "src/types";
 
 import QuizAnswers from "./QuizAnswers";
@@ -13,15 +14,15 @@ interface QuizSectionProps {
   section: CourseQuizSection;
   isEditing: boolean;
   onHandleUpdateQuiz: (
-    quizId: number,
+    quizId: ID,
     quizQuestionsAndAnswers: CourseQuizQuestion[],
   ) => void;
   onHandleAddNewQuizAnswer: (
-    quizId: number,
+    quizId: ID,
     updatedQuizQuestions: CourseQuizQuestion[],
   ) => void;
-  onClickRemoveQuizQuestion: (quizId: number, questionId: string) => void;
-  handleRemoveSection: (quizId: number) => void;
+  onClickRemoveQuizQuestion: (quizId: ID, questionId: string) => void;
+  handleRemoveSection: (quizId: ID) => void;
 }
 
 const QuizSection: React.FC<QuizSectionProps> = ({

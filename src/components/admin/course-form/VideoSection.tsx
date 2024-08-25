@@ -1,5 +1,5 @@
 import { AxiosProgressEvent } from "axios";
-import { CourseVideoSection } from "src/types";
+import { CourseVideoSection, ID } from "src/types";
 
 import FilePicker from "./FilePicker";
 import FormInput from "../../FormInput";
@@ -10,10 +10,10 @@ interface VideoSectionProps {
   canRemoveVideoSection?: boolean;
   abortController: AbortController;
   fileInputRef: React.RefObject<HTMLInputElement>;
-  onChangeSectionTitle: (sectionId: number | string, title: string) => void;
+  onChangeSectionTitle: (sectionId: ID, title: string) => void;
   onClickRemoveSection: () => void;
-  handleFileUploaded: (sectionId: number, videoUrl: string) => void;
-  onFileUploadProgress: (data: AxiosProgressEvent, sectionId: number) => void;
+  handleFileUploaded: (sectionId: ID, videoUrl: string) => void;
+  onFileUploadProgress: (data: AxiosProgressEvent, sectionId: ID) => void;
   onClickCancelFileUpload: () => void;
 }
 

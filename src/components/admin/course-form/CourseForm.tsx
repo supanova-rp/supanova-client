@@ -4,6 +4,7 @@ import {
   Course,
   CourseQuizQuestion,
   CourseSection,
+  ID,
   onChangeCourseFieldKey,
   SectionTypes,
 } from "src/types";
@@ -39,19 +40,19 @@ export default class CourseForm extends Component<CourseFormProps> {
     });
   };
 
-  onFileUploadCancelled = (sectionId: number) => {
+  onFileUploadCancelled = (sectionId: ID) => {
     const { course, onUpdateCourse } = this.props;
 
     onUpdateCourse(getUpdatedCourse(course, sectionId, "uploadProgress", null));
   };
 
-  onFileUploaded = (sectionId: number, videoUrl: string) => {
+  onFileUploaded = (sectionId: ID, videoUrl: string) => {
     const { course, onUpdateCourse } = this.props;
 
     onUpdateCourse(getUpdatedCourse(course, sectionId, "videoUrl", videoUrl));
   };
 
-  onFileUploadProgress = (data: AxiosProgressEvent, sectionId: number) => {
+  onFileUploadProgress = (data: AxiosProgressEvent, sectionId: ID) => {
     const { course, onUpdateCourse } = this.props;
 
     onUpdateCourse(
@@ -59,14 +60,14 @@ export default class CourseForm extends Component<CourseFormProps> {
     );
   };
 
-  onChangeSectionTitle = (sectionId: number, inputValue: string) => {
+  onChangeSectionTitle = (sectionId: ID, inputValue: string) => {
     const { course, onUpdateCourse } = this.props;
 
     onUpdateCourse(getUpdatedCourse(course, sectionId, "title", inputValue));
   };
 
   onHandleUpdateQuiz = (
-    quizId: number,
+    quizId: ID,
     quizQuestionsAndAnswers: CourseQuizQuestion[],
   ) => {
     const { course, onUpdateCourse } = this.props;
@@ -113,7 +114,7 @@ export default class CourseForm extends Component<CourseFormProps> {
     onUpdateCourse(updatedCourseWithNewQuizSection);
   };
 
-  onClickAddNewQuizQuestion = (quizId: number) => {
+  onClickAddNewQuizQuestion = (quizId: ID) => {
     const { course, onUpdateCourse, isEditing } = this.props;
 
     const courseWithUpdatedQuiz = getQuizWithNewQuizQuestion(
@@ -126,7 +127,7 @@ export default class CourseForm extends Component<CourseFormProps> {
   };
 
   onHandleAddNewQuizAnswer = (
-    quizId: number,
+    quizId: ID,
     updatedQuizQuestions: CourseQuizQuestion[],
   ) => {
     const { course, onUpdateCourse } = this.props;
@@ -141,7 +142,7 @@ export default class CourseForm extends Component<CourseFormProps> {
     onUpdateCourse(courseWithAddedQuizAnswer);
   };
 
-  handleRemoveSection = (sectionId: number) => {
+  handleRemoveSection = (sectionId: ID) => {
     const { course, onUpdateCourse } = this.props;
 
     const updatedSections = course.sections.filter(
@@ -154,7 +155,7 @@ export default class CourseForm extends Component<CourseFormProps> {
     });
   };
 
-  onClickRemoveQuizQuestion = (quizId: number, questionId: string) => {
+  onClickRemoveQuizQuestion = (quizId: ID, questionId: string) => {
     const { course, onUpdateCourse } = this.props;
 
     const updatedSectionsMinusQuizQuestion = course.sections.map(section => {
@@ -178,7 +179,7 @@ export default class CourseForm extends Component<CourseFormProps> {
     });
   };
 
-  onMoveSection = (sectionId: number | string, direction: "up" | "down") => {
+  onMoveSection = (sectionId: ID | string, direction: "up" | "down") => {
     const { course, onUpdateCourse } = this.props;
 
     const currentIndex = course.sections.findIndex(s => s.id === sectionId);

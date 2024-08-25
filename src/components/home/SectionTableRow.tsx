@@ -1,13 +1,14 @@
 import { Button } from "react-bootstrap";
 import QuizIcon from "src/assets/icons/quizIcon.svg?react";
 import VideoIcon from "src/assets/icons/videoIcon.svg?react";
+import { ID } from "src/types";
 
 import SectionProgress from "./SectionProgress";
 import { colors } from "../../constants/colorPalette";
 
 interface Props {
   title: string;
-  sectionId: number;
+  sectionId: ID;
   isVideoSection: boolean;
   onClickFunc: React.MouseEventHandler<HTMLButtonElement>;
   completed?: boolean;

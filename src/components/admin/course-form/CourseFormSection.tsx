@@ -6,7 +6,7 @@ import MoveSection from "./MoveSection";
 import QuizSection from "./QuizSection";
 import { MoveSectionFn, isQuizSection } from "./utils";
 import VideoSection from "./VideoSection";
-import { CourseQuizQuestion, CourseSection } from "../../../types/index";
+import { CourseQuizQuestion, CourseSection, ID } from "../../../types/index";
 
 interface Props {
   section: CourseSection;
@@ -14,24 +14,21 @@ interface Props {
   isLastSection: boolean;
   isEditing: boolean;
   canRemoveVideoSection: boolean;
-  onChangeSectionTitle: (
-    sectionId: number | string,
-    inputValue: string,
-  ) => void;
+  onChangeSectionTitle: (sectionId: ID, inputValue: string) => void;
   onHandleUpdateQuiz: (
-    quizId: number,
+    quizId: ID,
     quizQuestionsAndAnswers: CourseQuizQuestion[],
   ) => void;
-  onClickAddNewQuizQuestion: (quizId: number | string) => void;
+  onClickAddNewQuizQuestion: (quizId: ID | string) => void;
   onHandleAddNewQuizAnswer: (
-    quizId: number,
+    quizId: ID,
     updatedQuizQuestions: CourseQuizQuestion[],
   ) => void;
-  onClickRemoveQuizQuestion: (quizId: number, questionId: string) => void;
-  onFileUploaded: (sectionId: number, videoUrl: string) => void;
-  onFileUploadProgress: (data: AxiosProgressEvent, sectionId: number) => void;
-  onFileUploadCancelled: (sectionId: number | string) => void;
-  handleRemoveSection: (sectionId: number | string) => void;
+  onClickRemoveQuizQuestion: (quizId: ID, questionId: string) => void;
+  onFileUploaded: (sectionId: ID, videoUrl: string) => void;
+  onFileUploadProgress: (data: AxiosProgressEvent, sectionId: ID) => void;
+  onFileUploadCancelled: (sectionId: ID) => void;
+  handleRemoveSection: (sectionId: ID) => void;
   onMoveSection: MoveSectionFn;
 }
 
@@ -66,7 +63,7 @@ export default class CourseFormSection extends React.Component<Props> {
     this.abortController = new AbortController();
   };
 
-  handleFileUploaded = (sectionId: number, videoUrl: string) => {
+  handleFileUploaded = (sectionId: ID, videoUrl: string) => {
     const { onFileUploaded } = this.props;
 
     this.abortController = new AbortController();

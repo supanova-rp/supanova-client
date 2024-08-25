@@ -4,6 +4,7 @@ import {
   CourseQuizSection,
   CourseSection,
   CourseVideoSection,
+  ID,
   SectionTypes,
   getUpdatedSectionsKey,
 } from "src/types";
@@ -213,7 +214,7 @@ export const getSectionsWithPositions = (course: Course) => {
 
 export const getUpdatedSections = (
   sections: CourseSection[],
-  sectionId: number,
+  sectionId: ID,
   key: getUpdatedSectionsKey,
   value: any,
 ) => {
@@ -233,7 +234,7 @@ export const getUpdatedSections = (
 
 export const getUpdatedCourse = (
   course: Course,
-  sectionId: number,
+  sectionId: ID,
   key: getUpdatedSectionsKey,
   value: any,
 ) => {
@@ -265,7 +266,7 @@ export const getInitialEmptyQuizQuestionAndAnswers = (isEditing: boolean) => {
 
 export const getQuizWithNewQuizQuestion = (
   course: Course,
-  quizId: number,
+  quizId: ID,
   isEditing: boolean,
 ) => {
   const updatedSectionsWithNewQuizQuestion = course.sections.map(section => {

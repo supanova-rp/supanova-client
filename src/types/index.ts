@@ -159,3 +159,5 @@ export type MobileNavbarIcon = {
   tabName: string | null;
   id: number;
 };
+
+export type ID = string | number;

@@ -8,7 +8,7 @@ import CourseSectionContainer from "./CourseSectionContainer";
 import { CourseSummary } from "./CourseSummary";
 import CourseVideoContainer from "./CourseVideoContainer";
 import Header from "./Header";
-import { Course as CourseType, ChangeDirection } from "../../types/index";
+import { Course as CourseType, ChangeDirection, ID } from "../../types/index";
 import { isQuizSection, isVideoSection } from "../admin/course-form/utils";
 
 interface CoursesProps {
@@ -52,7 +52,7 @@ const Course: React.FC<CoursesProps> = ({ course }) => {
     setCurrentSectionIndex(sectionIndex);
   };
 
-  const updateInitialCurrentVideoTime = (sectionId: number) => {
+  const updateInitialCurrentVideoTime = (sectionId: ID) => {
     const key = getVideoProgressKey(courseId, sectionId);
 
     if (localStorage.getItem(key)) {
