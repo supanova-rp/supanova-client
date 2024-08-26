@@ -89,14 +89,14 @@ export const CourseQuizContainer: React.FC<Props> = ({
   };
 
   const onClickModalConfirm = () => {
+    onCloseModal();
+
     if (allAnswersAreCorrect) {
       if (isLastSection) {
         onCourseComplete();
       } else {
         onChangeSection("next");
       }
-    } else {
-      onCloseModal();
     }
   };
 

@@ -143,6 +143,7 @@ const Course: React.FC<CoursesProps> = ({ course }) => {
   if (currentSection && isQuizSection(currentSection)) {
     return (
       <CourseQuizContainer
+        key={currentSection.id} // needed to reset the component when the quiz section changes
         canGoBack={canGoBack}
         courseTitle={course.title}
         quizSection={currentSection}
