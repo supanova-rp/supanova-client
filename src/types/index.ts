@@ -42,7 +42,6 @@ export type CourseVideoSection = {
   videoUrl: string | null;
   isNewSection?: boolean;
   uploadProgress?: UploadProgress;
-  completed?: boolean;
   questions?: never;
 };
 
@@ -53,7 +52,6 @@ export type CourseQuizSection = {
   isNewSection: boolean;
   title?: never;
   uploadProgress?: never;
-  completed?: never;
   videoUrl?: never;
 };
 
@@ -108,6 +106,16 @@ export type UserToCourses = {
   email: string;
   courseIds: number[];
 };
+
+export type UserCourseProgress = {
+  currentSectionProgressIndex: number;
+};
+
+export enum SectionProgressState {
+  Completed = "completed",
+  Current = "current",
+  Locked = "locked",
+}
 
 export type UserInfoToUpdate = {
   added?: boolean;

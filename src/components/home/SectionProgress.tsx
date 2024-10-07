@@ -1,21 +1,37 @@
+import { SectionProgressState } from "src/types";
+
 import CheckMark from "../../assets/icons/checkIcon.svg?react";
+import PadlockIcon from "../../assets/icons/padlock.svg?react";
+import HalfFullCircle from "../HalfFullCircle";
 
 interface Props {
-  className: string;
+  sectionProgressState: SectionProgressState;
 }
 
-const SectionProgress: React.FC<Props> = ({ className }) => {
-  return (
-    <div className="d-flex justify-content-center progress-circle-container align-items-center">
-      {className.includes("full") ? (
-        <div
-          className={`progress-circle ${className} d-flex align-items-center justify-content-center`}
-        >
+const SectionProgress: React.FC<Props> = ({ sectionProgressState }) => {
+  const renderContent = () => {
+    if (sectionProgressState === SectionProgressState.Completed) {
+      return (
+        <div className="progress-circle full-circle d-flex align-items-center justify-content-center">
           <CheckMark stroke="white" />
         </div>
-      ) : (
-        <div className={`progress-circle ${className}`} />
-      )}
+      );
+    }
+
+    if (sectionProgressState === SectionProgressState.Current) {
+      return <HalfFullCircle />;
+    }
+
+    return (
+      <div className="progress-circle full-circle d-flex align-items-center justify-content-center">
+        <PadlockIcon width={12} height={12} fill="white" />
+      </div>
+    );
+  };
+
+  return (
+    <div className="d-flex justify-content-center progress-circle-container align-items-center">
+      {renderContent()}
     </div>
   );
 };

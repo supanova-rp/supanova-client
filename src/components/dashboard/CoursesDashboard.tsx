@@ -12,7 +12,7 @@ const CoursesDashboard = () => {
   const [error, setError] = useState<null | string>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const { isAdmin, currentUser } = useAuth();
+  const { isAdmin } = useAuth();
 
   const requestCourseTitles = useRequest("/course-titles");
   const requestAssignedCourseTitles = useRequest("/assigned-course-titles");
@@ -40,16 +40,12 @@ const CoursesDashboard = () => {
       });
     } else {
       requestAssignedCourseTitles({
-        requestBody: {
-          user_id: currentUser?.uid,
-        },
         onSuccess,
         onError: err => onError(err, "Failed to load courses."),
       });
     }
   };
 
-  // TODO: test gpt to make useQuery hook
   const handleGetCourses = async () => {
     try {
       getCourses();

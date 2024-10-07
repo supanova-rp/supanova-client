@@ -25,8 +25,10 @@ export const EMAIL_JS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 export const unauthedRoutes = ["/register", "/forgot-password"];
 
 export const feedbackMessages = {
+  genericError: "Oops something went wrong!",
   videoMissing: "Every section needs a video.",
   correctAnswerMissing: "Every quiz question needs a correct answer.",
+  getProgressError: "Oops something went wrong! Failed to get course progress.",
   getCourseError: "Oops something went wrong! Failed to get course.",
   getEditCourseError: "Failed to load course.",
   addCourseSuccess: "Successfully created a new course!",

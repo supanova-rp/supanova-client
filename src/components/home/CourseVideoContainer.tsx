@@ -18,17 +18,9 @@ const CourseVideoContainer: React.FC<CourseProps> = ({
   const { id: sectionId, videoUrl, title } = videoSection;
 
   const onVideoEnded = () => {
-    const sectionProgressInfo = {
-      completed: true,
-      currentTime: 0,
-    };
-
-    // TODO:
-    // implement course progress saving on server
-    // in this func will want to say they have just completed this section
     localStorage.setItem(
       getVideoProgressKey(courseId, sectionId),
-      JSON.stringify(sectionProgressInfo),
+      JSON.stringify({ currentTime: 0 }),
     );
   };
 

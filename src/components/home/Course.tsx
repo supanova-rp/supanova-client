@@ -1,5 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  Course as CourseType,
+  ChangeDirection,
+  ID,
+  UserCourseProgress,
+} from "src/types";
 import { getVideoProgressKey } from "src/utils/course-utils";
 
 import { CourseComplete } from "./CourseComplete";
@@ -8,15 +14,18 @@ import CourseSectionContainer from "./CourseSectionContainer";
 import { CourseSummary } from "./CourseSummary";
 import CourseVideoContainer from "./CourseVideoContainer";
 import Header from "./Header";
-import { Course as CourseType, ChangeDirection, ID } from "../../types/index";
 import { isQuizSection, isVideoSection } from "../admin/course-form/utils";
 
 interface CoursesProps {
   course: CourseType;
+  courseProgress: UserCourseProgress;
 }
 
-const Course: React.FC<CoursesProps> = ({ course }) => {
+const Course: React.FC<CoursesProps> = ({ course, courseProgress }) => {
   const navigate = useNavigate();
+
+  const { sections, id: courseId } = course;
+  const { currentSectionProgressIndex } = courseProgress;
 
   const [currentSectionIndex, setCurrentSectionIndex] = useState<number | null>(
     null,
@@ -24,8 +33,6 @@ const Course: React.FC<CoursesProps> = ({ course }) => {
   const [initialCurrentVideoTime, setInitialCurrentVideoTime] =
     useState<number>(0);
   const [isCourseComplete, setCourseComplete] = useState<boolean>(false);
-
-  const { sections, id: courseId } = course;
 
   const currentSection =
     typeof currentSectionIndex === "number"
@@ -100,7 +107,7 @@ const Course: React.FC<CoursesProps> = ({ course }) => {
     );
   }
 
-  if (typeof currentSectionIndex !== "number") {
+  if (!currentSection) {
     return (
       <div className="w-100">
         <Header
@@ -111,6 +118,7 @@ const Course: React.FC<CoursesProps> = ({ course }) => {
 
         <CourseSummary
           course={course}
+          currentSectionProgressIndex={currentSectionProgressIndex}
           onSelectVideo={onSelectVideo}
           onSelectQuiz={onSelectQuiz}
         />

@@ -1,38 +1,24 @@
 import { Button } from "react-bootstrap";
 import QuizIcon from "src/assets/icons/quizIcon.svg?react";
 import VideoIcon from "src/assets/icons/videoIcon.svg?react";
-import { ID } from "src/types";
+import { SectionProgressState } from "src/types";
 
 import SectionProgress from "./SectionProgress";
 import { colors } from "../../constants/colorPalette";
 
 interface Props {
   title: string;
-  sectionId: ID;
   isVideoSection: boolean;
+  sectionProgressState: SectionProgressState;
   onClickFunc: React.MouseEventHandler<HTMLButtonElement>;
-  completed?: boolean;
 }
 
 const SectionTableRow: React.FC<Props> = ({
   title,
-  sectionId,
-  completed,
   isVideoSection,
+  sectionProgressState,
   onClickFunc,
 }) => {
-  const renderSectionProgressCircle = () => {
-    if (
-      completed ||
-      JSON.parse(localStorage.getItem(`section-progress-${sectionId}`) || "{}")
-        .completed
-    ) {
-      return <SectionProgress className="full-circle" />;
-    }
-
-    return <SectionProgress className="empty-circle" />;
-  };
-
   return (
     <tr>
       <td className="section-row-data">
@@ -40,7 +26,7 @@ const SectionTableRow: React.FC<Props> = ({
           className="d-flex align-items-center w-100 rounded-0 btn-light row-buttons"
           onClick={onClickFunc}
         >
-          {renderSectionProgressCircle()}
+          <SectionProgress sectionProgressState={sectionProgressState} />
           <div className="d-flex align-items-center icon-and-description">
             <div>
               {isVideoSection ? (

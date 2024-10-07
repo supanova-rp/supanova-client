@@ -1,0 +1,32 @@
+.circle-container {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.circle {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid var(--secondary-color);
+  overflow: hidden;
+  position: relative;
+}
+
+.left-half {
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  background-color: var(--secondary-color);
+  left: 0;
+}
+
+.right-half {
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  background-color: white;
+  right: 0;
+}
