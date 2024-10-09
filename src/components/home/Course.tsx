@@ -10,7 +10,6 @@ import { getVideoProgressKey } from "src/utils/course-utils";
 
 import { CourseComplete } from "./CourseComplete";
 import { CourseQuizContainer } from "./CourseQuizContainer";
-import CourseSectionContainer from "./CourseSectionContainer";
 import { CourseSummary } from "./CourseSummary";
 import CourseVideoContainer from "./CourseVideoContainer";
 import Header from "./Header";
@@ -131,20 +130,18 @@ const Course: React.FC<CoursesProps> = ({ course, courseProgress }) => {
 
   if (currentSection && isVideoSection(currentSection)) {
     return (
-      <CourseSectionContainer
-        canGoBack={canGoBack}
+      <CourseVideoContainer
+        courseId={course.id}
         courseTitle={course.title}
-        continueText={isLastSection ? "Finish" : "Continue"}
+        videoSection={currentSection}
+        initialCurrentVideoTime={initialCurrentVideoTime}
+        canGoBack={canGoBack}
+        isLastSection={isLastSection}
+        currentSectionIndex={currentSectionIndex}
         onChangeSection={onChangeSection}
-        onClickContinue={isLastSection ? onCourseComplete : undefined}
+        onCourseComplete={onCourseComplete}
         onClickBackChevron={onClickBackChevron}
-      >
-        <CourseVideoContainer
-          courseId={course.id}
-          videoSection={currentSection}
-          initialCurrentVideoTime={initialCurrentVideoTime}
-        />
-      </CourseSectionContainer>
+      />
     );
   }
 

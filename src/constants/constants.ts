@@ -26,6 +26,7 @@ export const unauthedRoutes = ["/register", "/forgot-password"];
 
 export const feedbackMessages = {
   genericError: "Oops something went wrong!",
+  genericErrorTryAgain: "Oops something went wrong! Try again.",
   videoMissing: "Every section needs a video.",
   correctAnswerMissing: "Every quiz question needs a correct answer.",
   getProgressError: "Oops something went wrong! Failed to get course progress.",

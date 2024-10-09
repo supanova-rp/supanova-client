@@ -1,5 +1,7 @@
 import { PropsWithChildren } from "react";
 import { Button } from "react-bootstrap";
+import { PulseLoader } from "react-spinners";
+import { colors } from "src/constants/colorPalette";
 import { ChangeDirection } from "src/types";
 
 import Header from "./Header";
@@ -9,6 +11,8 @@ interface Props extends PropsWithChildren {
   courseTitle: string;
   continueText?: string;
   className?: string;
+  loading?: boolean;
+  error?: string;
   onChangeSection: (direction: ChangeDirection) => void;
   onClickContinue?: () => void;
   onCourseComplete?: () => void;
@@ -21,50 +25,56 @@ const CourseSectionContainer: React.FC<Props> = ({
   continueText = "Continue",
   className = "",
   canGoBack,
+  loading,
+  error,
   onChangeSection,
   onClickContinue,
   onClickBackChevron,
 }) => {
-  const handleClickContinue = () => {
-    if (onClickContinue) {
-      onClickContinue();
-    } else {
-      onChangeSection("next");
+  const renderContinue = () => {
+    if (loading) {
+      return (
+        <Button type="button" className="main-button continue-button" disabled>
+          <PulseLoader color={colors.white} size={8} />
+        </Button>
+      );
     }
+
+    return (
+      <Button
+        onClick={onClickContinue}
+        type="button"
+        className="main-button continue-button"
+      >
+        {continueText}
+      </Button>
+    );
+  };
+
+  const renderBack = () => {
+    return (
+      <Button
+        onClick={() => onChangeSection("prev")}
+        disabled={loading}
+        type="button"
+        className="me-4 main-button"
+      >
+        Back
+      </Button>
+    );
   };
 
   const renderDirectionButtons = () => {
     if (canGoBack) {
       return (
         <div>
-          <Button
-            onClick={() => onChangeSection("prev")}
-            type="button"
-            className="me-4 main-button"
-          >
-            Back
-          </Button>
-
-          <Button
-            onClick={handleClickContinue}
-            type="button"
-            className="main-button"
-          >
-            {continueText}
-          </Button>
+          {renderBack()}
+          {renderContinue()}
         </div>
       );
     }
 
-    return (
-      <Button
-        onClick={handleClickContinue}
-        type="button"
-        className="main-button"
-      >
-        {continueText}
-      </Button>
-    );
+    return renderContinue();
   };
 
   return (
@@ -76,6 +86,7 @@ const CourseSectionContainer: React.FC<Props> = ({
       />
       {children}
       {renderDirectionButtons()}
+      {error ? <p className="continue-error">{error}</p> : null}
     </div>
   );
 };
