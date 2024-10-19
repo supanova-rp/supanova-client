@@ -17,14 +17,20 @@ import { isQuizSection, isVideoSection } from "../admin/course-form/utils";
 
 interface CoursesProps {
   course: CourseType;
-  courseProgress: UserCourseProgress;
+  courseProgress: UserCourseProgress | null;
+  refetchProgress: (shouldLoad?: boolean) => void;
 }
 
-const Course: React.FC<CoursesProps> = ({ course, courseProgress }) => {
+const Course: React.FC<CoursesProps> = ({
+  course,
+  courseProgress,
+  refetchProgress,
+}) => {
   const navigate = useNavigate();
 
   const { sections, id: courseId } = course;
-  const { currentSectionProgressIndex } = courseProgress;
+  const currentSectionProgressIndex =
+    courseProgress?.currentSectionProgressIndex || 0;
 
   const [currentSectionIndex, setCurrentSectionIndex] = useState<number | null>(
     null,
@@ -32,11 +38,6 @@ const Course: React.FC<CoursesProps> = ({ course, courseProgress }) => {
   const [initialCurrentVideoTime, setInitialCurrentVideoTime] =
     useState<number>(0);
   const [isCourseComplete, setCourseComplete] = useState<boolean>(false);
-
-  const currentSection =
-    typeof currentSectionIndex === "number"
-      ? sections[currentSectionIndex]
-      : null;
 
   const onSelectVideo = (sectionIndex: number) => {
     const sectionId = sections[sectionIndex].id;
@@ -106,7 +107,7 @@ const Course: React.FC<CoursesProps> = ({ course, courseProgress }) => {
     );
   }
 
-  if (!currentSection) {
+  if (typeof currentSectionIndex !== "number") {
     return (
       <div className="w-100">
         <Header
@@ -118,6 +119,7 @@ const Course: React.FC<CoursesProps> = ({ course, courseProgress }) => {
         <CourseSummary
           course={course}
           currentSectionProgressIndex={currentSectionProgressIndex}
+          refetchProgress={refetchProgress}
           onSelectVideo={onSelectVideo}
           onSelectQuiz={onSelectQuiz}
         />
@@ -125,6 +127,7 @@ const Course: React.FC<CoursesProps> = ({ course, courseProgress }) => {
     );
   }
 
+  const currentSection = sections[currentSectionIndex];
   const canGoBack = currentSectionIndex !== 0;
   const isLastSection = currentSectionIndex === sections.length - 1;
 
@@ -138,6 +141,8 @@ const Course: React.FC<CoursesProps> = ({ course, courseProgress }) => {
         canGoBack={canGoBack}
         isLastSection={isLastSection}
         currentSectionIndex={currentSectionIndex}
+        currentSectionProgressIndex={currentSectionProgressIndex}
+        refetchProgress={refetchProgress}
         onChangeSection={onChangeSection}
         onCourseComplete={onCourseComplete}
         onClickBackChevron={onClickBackChevron}
@@ -149,10 +154,14 @@ const Course: React.FC<CoursesProps> = ({ course, courseProgress }) => {
     return (
       <CourseQuizContainer
         key={currentSection.id} // needed to reset the component when the quiz section changes
+        courseId={course.id}
         canGoBack={canGoBack}
         courseTitle={course.title}
         quizSection={currentSection}
         isLastSection={isLastSection}
+        currentSectionIndex={currentSectionIndex}
+        currentSectionProgressIndex={currentSectionProgressIndex}
+        refetchProgress={refetchProgress}
         onChangeSection={onChangeSection}
         onCourseComplete={onCourseComplete}
         onClickBackChevron={onClickBackChevron}

@@ -14,7 +14,7 @@ interface QueryResult<T> {
   data: T | null;
   loading: boolean;
   error: null | string;
-  refetch: () => void;
+  refetch: (shouldLoad?: boolean) => void;
 }
 
 export const useQuery = <T>(
@@ -51,9 +51,12 @@ export const useQuery = <T>(
     }
   };
 
-  const fetchData = async () => {
+  const fetchData = async (shouldLoad: boolean = true) => {
     try {
-      setLoading(true);
+      if (shouldLoad) {
+        setLoading(true);
+      }
+
       setError(null);
 
       if (onRequestBegin) {

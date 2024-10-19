@@ -62,7 +62,11 @@ const CourseContainer = () => {
             isLoading={loading}
           >
             {course && courseProgress ? (
-              <Course course={course} courseProgress={courseProgress} />
+              <Course
+                course={course}
+                courseProgress={courseProgress}
+                refetchProgress={refetchProgress}
+              />
             ) : null}
           </RequestHandler>
         </div>

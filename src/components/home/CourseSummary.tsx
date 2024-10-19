@@ -1,11 +1,15 @@
+import { Button } from "react-bootstrap";
+import { useAuth } from "src/contexts/AuthContext";
 import { Course, SectionProgressState } from "src/types";
 import { getIsVideoSection } from "src/utils/course-utils";
 
+import useUpdateProgress from "./hooks/useUpdateProgress";
 import SectionTableRow from "./SectionTableRow";
 
 interface Props {
   course: Course;
   currentSectionProgressIndex: number;
+  refetchProgress: (shouldLoad?: boolean) => void;
   onSelectVideo: (sectionIndex: number) => void;
   onSelectQuiz: (sectionIndex: number) => void;
 }
@@ -13,9 +17,22 @@ interface Props {
 export const CourseSummary: React.FC<Props> = ({
   course,
   currentSectionProgressIndex,
+  refetchProgress,
   onSelectVideo,
   onSelectQuiz,
 }) => {
+  const { isAdmin } = useAuth();
+
+  const { requestUpdateProgress } = useUpdateProgress(
+    course.id,
+    refetchProgress,
+  );
+
+  // Only for admin users for testing
+  const resetProgress = () => {
+    requestUpdateProgress(0);
+  };
+
   const getSectionProgressState = (
     sectionIndex: number,
   ): SectionProgressState => {
@@ -57,6 +74,12 @@ export const CourseSummary: React.FC<Props> = ({
           })}
         </tbody>
       </table>
+
+      {isAdmin ? (
+        <Button type="button" onClick={resetProgress} className="mb-4">
+          Reset course progress (admin only power)
+        </Button>
+      ) : null}
     </div>
   );
 };

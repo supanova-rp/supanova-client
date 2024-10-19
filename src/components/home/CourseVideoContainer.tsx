@@ -1,9 +1,9 @@
-import { SyntheticEvent, useState } from "react";
+import { SyntheticEvent } from "react";
 import { feedbackMessages } from "src/constants/constants";
-import useRequest from "src/hooks/useRequest";
 import { getVideoProgressKey } from "src/utils/course-utils";
 
 import CourseSectionContainer from "./CourseSectionContainer";
+import useUpdateProgress from "./hooks/useUpdateProgress";
 import Video from "./Video";
 import { ChangeDirection, CourseVideoSection } from "../../types/index";
 
@@ -14,7 +14,9 @@ interface CourseProps {
   initialCurrentVideoTime: number;
   canGoBack: boolean;
   isLastSection: boolean;
-  currentSectionIndex: number | null;
+  currentSectionIndex: number;
+  currentSectionProgressIndex: number;
+  refetchProgress: (shouldLoad: boolean) => void;
   onChangeSection: (direction: ChangeDirection) => void;
   onCourseComplete: () => void;
   onClickBackChevron: () => void;
@@ -28,14 +30,39 @@ const CourseVideoContainer: React.FC<CourseProps> = ({
   canGoBack,
   isLastSection,
   currentSectionIndex,
+  currentSectionProgressIndex,
+  refetchProgress,
   onChangeSection,
   onCourseComplete,
   onClickBackChevron,
 }) => {
   const { id: sectionId, videoUrl, title } = videoSection;
-  const updateProgress = useRequest("/update-progress");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+
+  const handleSectionComplete = () => {
+    if (isLastSection) {
+      onCourseComplete();
+    } else {
+      onChangeSection("next");
+    }
+  };
+
+  const onUpdateProgressSuccess = () => {
+    refetchProgress(false);
+    handleSectionComplete();
+  };
+
+  const { loading, error, requestUpdateProgress } = useUpdateProgress(
+    courseId,
+    onUpdateProgressSuccess,
+  );
+
+  const onClickContinue = () => {
+    if (currentSectionProgressIndex <= currentSectionIndex) {
+      requestUpdateProgress(currentSectionIndex + 1);
+    } else {
+      handleSectionComplete();
+    }
+  };
 
   const onVideoEnded = () => {
     localStorage.setItem(
@@ -63,33 +90,6 @@ const CourseVideoContainer: React.FC<CourseProps> = ({
     );
   };
 
-  const onUpdateProgressSuccess = () => {
-    setLoading(false);
-
-    if (isLastSection) {
-      onCourseComplete();
-    } else {
-      onChangeSection("next");
-    }
-  };
-
-  const requestUpdateProgress = () => {
-    setLoading(true);
-    setError(false);
-
-    updateProgress({
-      requestBody: {
-        courseId,
-        currentSectionIndex,
-      },
-      onSuccess: onUpdateProgressSuccess,
-      onError: () => {
-        setLoading(false);
-        setError(true);
-      },
-    });
-  };
-
   return (
     <CourseSectionContainer
       canGoBack={canGoBack}
@@ -98,7 +98,7 @@ const CourseVideoContainer: React.FC<CourseProps> = ({
       error={error ? feedbackMessages.genericErrorTryAgain : undefined}
       continueText={isLastSection ? "Finish" : "Continue"}
       onChangeSection={onChangeSection}
-      onClickContinue={requestUpdateProgress}
+      onClickContinue={onClickContinue}
       onClickBackChevron={onClickBackChevron}
     >
       <Video

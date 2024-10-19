@@ -1,24 +1,34 @@
 import { useState } from "react";
+import { feedbackMessages } from "src/constants/constants";
 
 import CourseSectionContainer from "./CourseSectionContainer";
+import useUpdateProgress from "./hooks/useUpdateProgress";
 import Quiz from "./Quiz";
 import { ChangeDirection, CourseQuizSection } from "../../types/index";
 
 interface Props {
+  courseId: number;
   canGoBack: boolean;
   isLastSection: boolean;
   courseTitle: string;
+  currentSectionIndex: number;
+  currentSectionProgressIndex: number;
   quizSection: CourseQuizSection;
+  refetchProgress: (shouldLoad?: boolean) => void;
   onChangeSection: (direction: ChangeDirection) => void;
   onCourseComplete: () => void;
   onClickBackChevron: () => void;
 }
 
 export const CourseQuizContainer: React.FC<Props> = ({
+  courseId,
   canGoBack,
   courseTitle,
   isLastSection,
+  currentSectionIndex,
+  currentSectionProgressIndex,
   quizSection,
+  refetchProgress,
   onChangeSection,
   onCourseComplete,
   onClickBackChevron,
@@ -29,6 +39,24 @@ export const CourseQuizContainer: React.FC<Props> = ({
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [allAnswersAreCorrect, setAllAnswersAreCorrect] = useState(false);
   const [score, setScore] = useState<number | null>(null);
+
+  const handleSectionComplete = () => {
+    if (isLastSection) {
+      onCourseComplete();
+    } else {
+      onChangeSection("next");
+    }
+  };
+
+  const onUpdateProgressSuccess = () => {
+    refetchProgress(false);
+    handleSectionComplete();
+  };
+
+  const { loading, error, requestUpdateProgress } = useUpdateProgress(
+    courseId,
+    onUpdateProgressSuccess,
+  );
 
   const onChangeAnswer = (questionIndex: number, answerIndex: number) => {
     const updatedSelectedAnswers = [...selectedAnswers];
@@ -89,14 +117,14 @@ export const CourseQuizContainer: React.FC<Props> = ({
   };
 
   const onClickModalConfirm = () => {
-    onCloseModal();
-
     if (allAnswersAreCorrect) {
-      if (isLastSection) {
-        onCourseComplete();
+      if (currentSectionProgressIndex <= currentSectionIndex) {
+        requestUpdateProgress(currentSectionIndex + 1);
       } else {
-        onChangeSection("next");
+        handleSectionComplete();
       }
+    } else {
+      onCloseModal();
     }
   };
 
@@ -109,6 +137,9 @@ export const CourseQuizContainer: React.FC<Props> = ({
       onChangeSection={onChangeSection}
       onClickContinue={onSubmitQuiz}
       onClickBackChevron={onClickBackChevron}
+      // TODO: should loading be on the modal for quizzes instead?
+      loading={loading}
+      error={error ? feedbackMessages.genericErrorTryAgain : undefined}
     >
       <Quiz
         quizSection={quizSection}
