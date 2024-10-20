@@ -22,10 +22,17 @@ const SectionProgress: React.FC<Props> = ({ sectionProgressState }) => {
       return <HalfFullCircle />;
     }
 
+    if (sectionProgressState === SectionProgressState.Locked) {
+      return (
+        <div className="progress-circle full-circle d-flex align-items-center justify-content-center">
+          <PadlockIcon width={12} height={12} fill="white" />
+        </div>
+      );
+    }
+
+    // SectionProgressState.Empty
     return (
-      <div className="progress-circle full-circle d-flex align-items-center justify-content-center">
-        <PadlockIcon width={12} height={12} fill="white" />
-      </div>
+      <div className="progress-circle empty-circle d-flex align-items-center justify-content-center" />
     );
   };
 

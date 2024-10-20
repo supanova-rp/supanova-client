@@ -1,14 +1,19 @@
 import { Button } from "react-bootstrap";
 import { useAuth } from "src/contexts/AuthContext";
-import { Course, SectionProgressState } from "src/types";
+import useRequest from "src/hooks/useRequest";
+import {
+  Course,
+  ID,
+  SectionProgressState,
+  UserCourseProgress,
+} from "src/types";
 import { getIsVideoSection } from "src/utils/course-utils";
 
-import useUpdateProgress from "./hooks/useUpdateProgress";
 import SectionTableRow from "./SectionTableRow";
 
 interface Props {
   course: Course;
-  currentSectionProgressIndex: number;
+  completedSectionIds: UserCourseProgress["completedSectionIds"];
   refetchProgress: (shouldLoad?: boolean) => void;
   onSelectVideo: (sectionIndex: number) => void;
   onSelectQuiz: (sectionIndex: number) => void;
@@ -16,35 +21,69 @@ interface Props {
 
 export const CourseSummary: React.FC<Props> = ({
   course,
-  currentSectionProgressIndex,
+  completedSectionIds,
   refetchProgress,
   onSelectVideo,
   onSelectQuiz,
 }) => {
   const { isAdmin } = useAuth();
+  const resetProgress = useRequest("/reset-progress");
 
-  const { requestUpdateProgress } = useUpdateProgress(
-    course.id,
-    refetchProgress,
-  );
+  const getCurrentSectionProgressIndex = () => {
+    if (completedSectionIds.length === 0) {
+      return 0;
+    }
+
+    // Find the completed section id with the highest index
+    const highestCompletedIndex = completedSectionIds.reduce(
+      (acc, sectionId) => {
+        const sectionIndex = course.sections.findIndex(
+          ({ id }) => id === sectionId,
+        );
+
+        if (sectionIndex > acc) {
+          return sectionIndex;
+        }
+
+        return acc;
+      },
+      0,
+    );
+
+    // Then add 1 to it to get the one the user is currently on
+    return highestCompletedIndex + 1;
+  };
+
+  const currentSectionProgressIndex = getCurrentSectionProgressIndex();
 
   // Only for admin users for testing
-  const resetProgress = () => {
-    requestUpdateProgress(0);
+  const onResetProgress = () => {
+    resetProgress({
+      requestBody: {
+        courseId: course.id,
+      },
+      onSuccess: refetchProgress,
+      onError: () => {},
+    });
   };
 
   const getSectionProgressState = (
+    sectionId: ID,
     sectionIndex: number,
   ): SectionProgressState => {
-    if (sectionIndex === currentSectionProgressIndex) {
-      return SectionProgressState.Current;
+    if (completedSectionIds.includes(sectionId as number)) {
+      return SectionProgressState.Completed;
     }
 
     if (sectionIndex > currentSectionProgressIndex) {
       return SectionProgressState.Locked;
     }
 
-    return SectionProgressState.Completed;
+    if (sectionIndex === currentSectionProgressIndex) {
+      return SectionProgressState.Current;
+    }
+
+    return SectionProgressState.Empty;
   };
 
   return (
@@ -62,7 +101,10 @@ export const CourseSummary: React.FC<Props> = ({
               <SectionTableRow
                 key={section.id}
                 isVideoSection={isVideoSection}
-                sectionProgressState={getSectionProgressState(sectionIndex)}
+                sectionProgressState={getSectionProgressState(
+                  section.id,
+                  sectionIndex,
+                )}
                 title={isVideoSection ? section.title : "Quiz"}
                 onClickFunc={
                   isVideoSection
@@ -76,7 +118,7 @@ export const CourseSummary: React.FC<Props> = ({
       </table>
 
       {isAdmin ? (
-        <Button type="button" onClick={resetProgress} className="mb-4">
+        <Button type="button" onClick={onResetProgress} className="mb-4">
           Reset course progress (admin only power)
         </Button>
       ) : null}

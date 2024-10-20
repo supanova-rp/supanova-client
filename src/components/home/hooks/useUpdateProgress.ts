@@ -1,10 +1,11 @@
 import { useState } from "react";
 import useRequest from "src/hooks/useRequest";
+import { ID } from "src/types";
 
 interface UpdateProgressHookResult {
   loading: boolean;
   error: boolean;
-  requestUpdateProgress: (index: number) => void;
+  requestUpdateProgress: (sectionId: ID) => void;
 }
 
 const useUpdateProgress = (
@@ -15,14 +16,14 @@ const useUpdateProgress = (
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
-  const requestUpdateProgress = (updatedSectionIndex: number) => {
+  const requestUpdateProgress = (sectionId: ID) => {
     setLoading(true);
     setError(false);
 
     updateProgress({
       requestBody: {
         courseId,
-        updatedSectionIndex,
+        sectionId,
       },
       onSuccess: () => {
         setLoading(false);

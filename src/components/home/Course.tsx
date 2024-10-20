@@ -17,7 +17,7 @@ import { isQuizSection, isVideoSection } from "../admin/course-form/utils";
 
 interface CoursesProps {
   course: CourseType;
-  courseProgress: UserCourseProgress | null;
+  courseProgress: UserCourseProgress;
   refetchProgress: (shouldLoad?: boolean) => void;
 }
 
@@ -29,8 +29,7 @@ const Course: React.FC<CoursesProps> = ({
   const navigate = useNavigate();
 
   const { sections, id: courseId } = course;
-  const currentSectionProgressIndex =
-    courseProgress?.currentSectionProgressIndex || 0;
+  const completedSectionIds = courseProgress?.completedSectionIds || [];
 
   const [currentSectionIndex, setCurrentSectionIndex] = useState<number | null>(
     null,
@@ -118,7 +117,7 @@ const Course: React.FC<CoursesProps> = ({
 
         <CourseSummary
           course={course}
-          currentSectionProgressIndex={currentSectionProgressIndex}
+          completedSectionIds={completedSectionIds}
           refetchProgress={refetchProgress}
           onSelectVideo={onSelectVideo}
           onSelectQuiz={onSelectQuiz}
@@ -131,6 +130,10 @@ const Course: React.FC<CoursesProps> = ({
   const canGoBack = currentSectionIndex !== 0;
   const isLastSection = currentSectionIndex === sections.length - 1;
 
+  const isCurrentSectionCompleted = completedSectionIds.includes(
+    currentSection?.id as number,
+  );
+
   if (currentSection && isVideoSection(currentSection)) {
     return (
       <CourseVideoContainer
@@ -140,8 +143,7 @@ const Course: React.FC<CoursesProps> = ({
         initialCurrentVideoTime={initialCurrentVideoTime}
         canGoBack={canGoBack}
         isLastSection={isLastSection}
-        currentSectionIndex={currentSectionIndex}
-        currentSectionProgressIndex={currentSectionProgressIndex}
+        isCurrentSectionCompleted={isCurrentSectionCompleted}
         refetchProgress={refetchProgress}
         onChangeSection={onChangeSection}
         onCourseComplete={onCourseComplete}
@@ -159,8 +161,7 @@ const Course: React.FC<CoursesProps> = ({
         courseTitle={course.title}
         quizSection={currentSection}
         isLastSection={isLastSection}
-        currentSectionIndex={currentSectionIndex}
-        currentSectionProgressIndex={currentSectionProgressIndex}
+        isCurrentSectionCompleted={isCurrentSectionCompleted}
         refetchProgress={refetchProgress}
         onChangeSection={onChangeSection}
         onCourseComplete={onCourseComplete}

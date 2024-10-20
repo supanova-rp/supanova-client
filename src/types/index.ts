@@ -108,13 +108,14 @@ export type UserToCourses = {
 };
 
 export type UserCourseProgress = {
-  currentSectionProgressIndex: number;
+  completedSectionIds: number[];
 };
 
 export enum SectionProgressState {
   Completed = "completed",
   Current = "current",
   Locked = "locked",
+  Empty = "empty", // Edge case state that would only happen if a new section is added after user has already made progress further than the new section
 }
 
 export type UserInfoToUpdate = {

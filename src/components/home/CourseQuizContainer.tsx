@@ -10,9 +10,8 @@ interface Props {
   courseId: number;
   canGoBack: boolean;
   isLastSection: boolean;
+  isCurrentSectionCompleted: boolean;
   courseTitle: string;
-  currentSectionIndex: number;
-  currentSectionProgressIndex: number;
   quizSection: CourseQuizSection;
   refetchProgress: (shouldLoad?: boolean) => void;
   onChangeSection: (direction: ChangeDirection) => void;
@@ -25,8 +24,7 @@ export const CourseQuizContainer: React.FC<Props> = ({
   canGoBack,
   courseTitle,
   isLastSection,
-  currentSectionIndex,
-  currentSectionProgressIndex,
+  isCurrentSectionCompleted,
   quizSection,
   refetchProgress,
   onChangeSection,
@@ -118,10 +116,10 @@ export const CourseQuizContainer: React.FC<Props> = ({
 
   const onClickModalConfirm = () => {
     if (allAnswersAreCorrect) {
-      if (currentSectionProgressIndex <= currentSectionIndex) {
-        requestUpdateProgress(currentSectionIndex + 1);
+      if (isCurrentSectionCompleted) {
+        handleSectionComplete(); // no need to update progress
       } else {
-        handleSectionComplete();
+        requestUpdateProgress(quizSection.id);
       }
     } else {
       onCloseModal();

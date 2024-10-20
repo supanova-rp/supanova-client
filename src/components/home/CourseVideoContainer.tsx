@@ -14,8 +14,7 @@ interface CourseProps {
   initialCurrentVideoTime: number;
   canGoBack: boolean;
   isLastSection: boolean;
-  currentSectionIndex: number;
-  currentSectionProgressIndex: number;
+  isCurrentSectionCompleted: boolean;
   refetchProgress: (shouldLoad: boolean) => void;
   onChangeSection: (direction: ChangeDirection) => void;
   onCourseComplete: () => void;
@@ -29,8 +28,7 @@ const CourseVideoContainer: React.FC<CourseProps> = ({
   initialCurrentVideoTime,
   canGoBack,
   isLastSection,
-  currentSectionIndex,
-  currentSectionProgressIndex,
+  isCurrentSectionCompleted,
   refetchProgress,
   onChangeSection,
   onCourseComplete,
@@ -57,10 +55,10 @@ const CourseVideoContainer: React.FC<CourseProps> = ({
   );
 
   const onClickContinue = () => {
-    if (currentSectionProgressIndex <= currentSectionIndex) {
-      requestUpdateProgress(currentSectionIndex + 1);
+    if (isCurrentSectionCompleted) {
+      handleSectionComplete(); // no need to update progress
     } else {
-      handleSectionComplete();
+      requestUpdateProgress(sectionId);
     }
   };
 
