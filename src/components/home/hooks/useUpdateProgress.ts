@@ -11,6 +11,7 @@ interface UpdateProgressHookResult {
 const useUpdateProgress = (
   courseId: number,
   onUpdateProgressSuccess: () => void,
+  onUpdateProgressError?: () => void,
 ): UpdateProgressHookResult => {
   const updateProgress = useRequest("/update-progress");
   const [loading, setLoading] = useState(false);
@@ -32,6 +33,10 @@ const useUpdateProgress = (
       onError: () => {
         setLoading(false);
         setError(true);
+
+        if (onUpdateProgressError) {
+          onUpdateProgressError();
+        }
       },
     });
   };

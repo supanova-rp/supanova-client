@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useRequest from "src/hooks/useRequest";
 import {
   Course as CourseType,
   ChangeDirection,
@@ -27,6 +28,7 @@ const Course: React.FC<CoursesProps> = ({
   refetchProgress,
 }) => {
   const navigate = useNavigate();
+  const setCourseCompleted = useRequest("/set-course-completed");
 
   const { sections, id: courseId } = course;
   const completedSectionIds = courseProgress?.completedSectionIds || [];
@@ -96,6 +98,14 @@ const Course: React.FC<CoursesProps> = ({
   };
 
   const onCourseComplete = () => {
+    setCourseCompleted({
+      requestBody: {
+        courseId: course.id,
+      },
+      onSuccess: () => {},
+      onError: () => {},
+    });
+
     setCourseComplete(true);
   };
 

@@ -11,6 +11,7 @@ interface Props {
   showFeedbackModal: boolean;
   allAnswersAreCorrect: boolean;
   isLastSection: boolean;
+  loading: boolean;
   onChangeAnswer: (questionIndex: number, answerIndex: number) => void;
   onClickModalConfirm: () => void;
 }
@@ -22,6 +23,7 @@ const Quiz: React.FC<Props> = ({
   showFeedbackModal,
   allAnswersAreCorrect,
   isLastSection,
+  loading,
   onChangeAnswer,
   onClickModalConfirm,
 }) => {
@@ -70,6 +72,7 @@ const Quiz: React.FC<Props> = ({
       {showFeedbackModal && score !== null ? (
         <Modal
           confirmText={getFeedbackButtonText()}
+          loading={loading}
           onClickConfirm={onClickModalConfirm}
         >
           <div className="d-flex flex-column align-items-center justify-content-center">

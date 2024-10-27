@@ -23,6 +23,7 @@ const SectionTableRow: React.FC<Props> = ({
     <tr>
       <td className="section-row-data">
         <Button
+          disabled={sectionProgressState === SectionProgressState.Locked}
           className="d-flex align-items-center w-100 rounded-0 btn-light row-buttons"
           onClick={onClickFunc}
         >

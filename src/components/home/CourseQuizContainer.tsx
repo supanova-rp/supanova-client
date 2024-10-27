@@ -46,14 +46,25 @@ export const CourseQuizContainer: React.FC<Props> = ({
     }
   };
 
+  const onCloseModal = () => {
+    setScore(null);
+    setShowFeedbackModal(false);
+    setAllAnswersAreCorrect(false);
+  };
+
   const onUpdateProgressSuccess = () => {
     refetchProgress(false);
     handleSectionComplete();
   };
 
+  const onUpdateProgressError = () => {
+    onCloseModal();
+  };
+
   const { loading, error, requestUpdateProgress } = useUpdateProgress(
     courseId,
     onUpdateProgressSuccess,
+    onUpdateProgressError,
   );
 
   const onChangeAnswer = (questionIndex: number, answerIndex: number) => {
@@ -98,12 +109,6 @@ export const CourseQuizContainer: React.FC<Props> = ({
     return correctAnswersCount;
   };
 
-  const onCloseModal = () => {
-    setScore(null);
-    setShowFeedbackModal(false);
-    setAllAnswersAreCorrect(false);
-  };
-
   const onSubmitQuiz = () => {
     const correctAnswersCount = calculateScore();
     const totalQuestions = quizSection.questions.length;
@@ -135,7 +140,6 @@ export const CourseQuizContainer: React.FC<Props> = ({
       onChangeSection={onChangeSection}
       onClickContinue={onSubmitQuiz}
       onClickBackChevron={onClickBackChevron}
-      // TODO: should loading be on the modal for quizzes instead?
       loading={loading}
       error={error ? feedbackMessages.genericErrorTryAgain : undefined}
     >
@@ -146,6 +150,7 @@ export const CourseQuizContainer: React.FC<Props> = ({
         selectedAnswers={selectedAnswers}
         showFeedbackModal={showFeedbackModal}
         isLastSection={isLastSection}
+        loading={loading}
         onChangeAnswer={onChangeAnswer}
         onClickModalConfirm={onClickModalConfirm}
       />

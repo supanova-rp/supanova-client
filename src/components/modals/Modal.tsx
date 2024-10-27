@@ -1,10 +1,12 @@
 import { Button } from "react-bootstrap";
+import { PulseLoader } from "react-spinners";
 
 import XMarkIcon from "../../assets/icons/xMarkIcon.svg?react";
 import { colors } from "../../constants/colorPalette";
 
 interface Props extends React.PropsWithChildren {
   confirmText?: string;
+  loading?: boolean;
   onClose?: () => void;
   onClickConfirm?: () => void;
 }
@@ -12,6 +14,7 @@ interface Props extends React.PropsWithChildren {
 const Modal: React.FC<Props> = ({
   children,
   confirmText = "Confirm",
+  loading,
   onClose,
   onClickConfirm,
 }) => {
@@ -35,8 +38,16 @@ const Modal: React.FC<Props> = ({
 
         {onClickConfirm ? (
           <div className="d-flex flex-column align-items-center justify-content-center">
-            <Button onClick={onClickConfirm} className="btn btn-primary">
-              {confirmText}
+            <Button
+              onClick={onClickConfirm}
+              className="btn btn-primary modal-confirm"
+              disabled={loading}
+            >
+              {loading ? (
+                <PulseLoader color={colors.white} size={8} />
+              ) : (
+                confirmText
+              )}
             </Button>
           </div>
         ) : null}
