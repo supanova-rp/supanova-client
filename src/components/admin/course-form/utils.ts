@@ -9,10 +9,7 @@ import {
   getUpdatedSectionsKey,
 } from "src/types";
 
-export type MoveSectionFn = (
-  id: number | string,
-  direction: "up" | "down",
-) => void;
+export type MoveSectionFn = (id: ID, direction: "up" | "down") => void;
 
 export const isVideoSection = (
   section: CourseSection,
@@ -80,7 +77,7 @@ export const getInitialCourseState = (): Course => {
     description: "",
     sections: [
       {
-        id: Date.now(),
+        id: `${Date.now()}`,
         title: "",
         type: SectionTypes.Video,
         videoUrl: "",

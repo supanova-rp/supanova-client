@@ -81,7 +81,7 @@ export default class CourseForm extends Component<CourseFormProps> {
     const { course, isEditing, onUpdateCourse } = this.props;
 
     const newSection: CourseSection = {
-      id: Date.now(),
+      id: `${Date.now()}`,
       title: "",
       type: SectionTypes.Video,
       videoUrl: null,
@@ -100,7 +100,7 @@ export default class CourseForm extends Component<CourseFormProps> {
     const { course, onUpdateCourse, isEditing } = this.props;
 
     const newQuizSection: CourseSection = {
-      id: Date.now(),
+      id: `${Date.now()}`,
       type: SectionTypes.Quiz,
       questions: [getInitialEmptyQuizQuestionAndAnswers(isEditing)],
       isNewSection: isEditing,
@@ -179,7 +179,7 @@ export default class CourseForm extends Component<CourseFormProps> {
     });
   };
 
-  onMoveSection = (sectionId: ID | string, direction: "up" | "down") => {
+  onMoveSection = (sectionId: ID, direction: "up" | "down") => {
     const { course, onUpdateCourse } = this.props;
 
     const currentIndex = course.sections.findIndex(s => s.id === sectionId);

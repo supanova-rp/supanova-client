@@ -1,42 +1,42 @@
 export const defaultCourses = [
   {
     id: 1,
-    title: 'Managing Stakeholders',
+    title: "Managing Stakeholders",
     sections: [
       {
         id: 1,
-        title: 'Intro'
+        title: "Intro",
       },
       {
         id: 2,
-        title: 'Definitions'
+        title: "Definitions",
       },
       {
         id: 3,
-        title: 'Important to note'
+        title: "Important to note",
       },
       {
         id: 4,
-        title: 'Conclusion'
-      }
-    ]
+        title: "Conclusion",
+      },
+    ],
   },
   {
     id: 2,
-    title: 'Radiation Basics',
+    title: "Radiation Basics",
     sections: [
       {
         id: 5,
-        title: 'Welcome!'
+        title: "Welcome!",
       },
       {
         id: 6,
-        title: 'Tools'
+        title: "Tools",
       },
       {
         id: 7,
-        title: 'Next steps'
-      }
-    ]
-  }
-]
+        title: "Next steps",
+      },
+    ],
+  },
+];

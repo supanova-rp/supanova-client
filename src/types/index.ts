@@ -36,7 +36,7 @@ export enum SectionTypes {
 }
 
 export type CourseVideoSection = {
-  id: number | string;
+  id: ID;
   type: SectionTypes;
   title: string;
   videoUrl: string | null;
@@ -46,7 +46,7 @@ export type CourseVideoSection = {
 };
 
 export type CourseQuizSection = {
-  id: number | string;
+  id: ID;
   type: SectionTypes;
   questions: CourseQuizQuestion[];
   isNewSection: boolean;
@@ -56,22 +56,22 @@ export type CourseQuizSection = {
 };
 
 export type CourseQuizQuestion = {
-  id: string;
+  id: ID;
   question: string;
   isNewQuestion: boolean;
   answers: CourseQuizAnswer[];
 };
 
 export type CourseQuizQuestionServer = {
-  id: number;
+  id: ID;
   question: string;
   position: number;
-  quizSectionId: number;
+  quizSectionId: ID;
   answers: CourseQuizAnswer[];
 };
 
 export type CourseQuizAnswer = {
-  id: string;
+  id: ID;
   answer: string;
   isCorrectAnswer: boolean;
   isNewAnswer?: boolean;
@@ -108,7 +108,7 @@ export type UserToCourses = {
 };
 
 export type UserCourseProgress = {
-  completedSectionIds: number[];
+  completedSectionIds: ID[];
 };
 
 export enum SectionProgressState {
@@ -169,4 +169,4 @@ export type MobileNavbarIcon = {
   id: number;
 };
 
-export type ID = string | number;
+export type ID = string;

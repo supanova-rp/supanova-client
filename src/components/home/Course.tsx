@@ -141,7 +141,7 @@ const Course: React.FC<CoursesProps> = ({
   const isLastSection = currentSectionIndex === sections.length - 1;
 
   const isCurrentSectionCompleted = completedSectionIds.includes(
-    currentSection?.id as number,
+    currentSection?.id,
   );
 
   if (currentSection && isVideoSection(currentSection)) {

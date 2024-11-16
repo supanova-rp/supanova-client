@@ -1,4 +1,4 @@
-import { getHasNext, getHasNextAndPrev } from './home-test-utils';
+import { getHasNext, getHasNextAndPrev } from "./home-test-utils";
 
 describe("Checks logic to identify whether a course has a next and/or previous video", () => {
   test("only has a previous video", () => {
@@ -13,5 +13,5 @@ describe("Checks logic to identify whether a course has a next and/or previous v
 
   test("has a next and prev video", () => {
     expect(getHasNextAndPrev(1, 0)).toBe(true);
-  }) 
+  });
 });

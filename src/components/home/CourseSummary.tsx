@@ -71,7 +71,7 @@ export const CourseSummary: React.FC<Props> = ({
     sectionId: ID,
     sectionIndex: number,
   ): SectionProgressState => {
-    if (completedSectionIds.includes(sectionId as number)) {
+    if (completedSectionIds.includes(sectionId)) {
       return SectionProgressState.Completed;
     }
 

@@ -1,10 +1,11 @@
 import React from "react";
 import { Button } from "react-bootstrap";
+import { ID } from "src/types";
 
 import { MoveSectionFn } from "./utils";
 
 interface Props {
-  sectionId: number | string;
+  sectionId: ID;
   isFirst: boolean;
   isLast: boolean;
   onMoveSection: MoveSectionFn;
