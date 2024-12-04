@@ -7,7 +7,7 @@ import {
   ID,
   UserCourseProgress,
 } from "src/types";
-import { getVideoProgressKey } from "src/utils/course-utils";
+import { getVideoProgressTime } from "src/utils/course-utils";
 
 import { CourseComplete } from "./CourseComplete";
 import { CourseQuizContainer } from "./CourseQuizContainer";
@@ -30,7 +30,7 @@ const Course: React.FC<CoursesProps> = ({
   const navigate = useNavigate();
   const setCourseCompleted = useRequest("/set-course-completed");
 
-  const { sections, id: courseId } = course;
+  const { sections } = course;
   const completedSectionIds = courseProgress?.completedSectionIds || [];
 
   const [currentSectionIndex, setCurrentSectionIndex] = useState<number | null>(
@@ -42,13 +42,10 @@ const Course: React.FC<CoursesProps> = ({
 
   const onSelectVideo = (sectionIndex: number) => {
     const sectionId = sections[sectionIndex].id;
+    const storedCurrentTime = getVideoProgressTime(sectionId);
 
-    if (localStorage.getItem(`section-progress-${sectionId}`)) {
-      const localStorageCurrentVideoTimeValue = JSON.parse(
-        localStorage.getItem(`section-progress-${sectionId}`) || "{}",
-      ).currentTime;
-
-      setInitialCurrentVideoTime(localStorageCurrentVideoTimeValue);
+    if (storedCurrentTime) {
+      setInitialCurrentVideoTime(storedCurrentTime);
     } else {
       setInitialCurrentVideoTime(0);
     }
@@ -56,19 +53,22 @@ const Course: React.FC<CoursesProps> = ({
     setCurrentSectionIndex(sectionIndex);
   };
 
+  const scrollToTop = () => {
+    const containerEl = document.querySelector("#root");
+    if (containerEl) {
+      containerEl.scrollTo(0, 0);
+    }
+  };
+
   const onSelectQuiz = (sectionIndex: number) => {
     setCurrentSectionIndex(sectionIndex);
   };
 
   const updateInitialCurrentVideoTime = (sectionId: ID) => {
-    const key = getVideoProgressKey(courseId, sectionId);
+    const storedCurrentTime = getVideoProgressTime(sectionId);
 
-    if (localStorage.getItem(key)) {
-      const localStorageCurrentVideoTimeValue = JSON.parse(
-        localStorage.getItem(key) || "{}",
-      ).currentTime;
-
-      setInitialCurrentVideoTime(localStorageCurrentVideoTimeValue);
+    if (storedCurrentTime) {
+      setInitialCurrentVideoTime(storedCurrentTime);
     } else {
       setInitialCurrentVideoTime(0);
     }
@@ -86,6 +86,8 @@ const Course: React.FC<CoursesProps> = ({
     if (isVideoSection(newSection)) {
       updateInitialCurrentVideoTime(newSectionId);
     }
+
+    scrollToTop();
   };
 
   const onClickBackChevron = () => {
@@ -107,6 +109,8 @@ const Course: React.FC<CoursesProps> = ({
     });
 
     setCourseComplete(true);
+
+    scrollToTop();
   };
 
   if (isCourseComplete) {

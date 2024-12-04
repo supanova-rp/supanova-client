@@ -74,8 +74,8 @@ const CoursesDashboard = () => {
         warningMessage="You don't have any courses yet..."
       >
         <div className="courses-dashboard-grid pt-2">
-          {courses?.map((course, index) => {
-            return <CourseCard key={course.id} course={course} index={index} />;
+          {courses?.map(course => {
+            return <CourseCard key={course.id} course={course} />;
           })}
         </div>
       </RequestHandler>

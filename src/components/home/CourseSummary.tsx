@@ -7,7 +7,10 @@ import {
   SectionProgressState,
   UserCourseProgress,
 } from "src/types";
-import { getIsVideoSection } from "src/utils/course-utils";
+import {
+  getIsVideoSection,
+  setVideoProgressTime,
+} from "src/utils/course-utils";
 
 import SectionTableRow from "./SectionTableRow";
 
@@ -56,13 +59,22 @@ export const CourseSummary: React.FC<Props> = ({
 
   const currentSectionProgressIndex = getCurrentSectionProgressIndex();
 
+  const resetVideoProgress = () => {
+    course.sections.forEach(section => {
+      setVideoProgressTime(section.id, 0);
+    });
+  };
+
   // Only for admin users for testing
   const onResetProgress = () => {
     resetProgress({
       requestBody: {
         courseId: course.id,
       },
-      onSuccess: refetchProgress,
+      onSuccess: () => {
+        refetchProgress();
+        resetVideoProgress();
+      },
       onError: () => {},
     });
   };

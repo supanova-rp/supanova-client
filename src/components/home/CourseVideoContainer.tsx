@@ -1,6 +1,6 @@
 import { SyntheticEvent } from "react";
 import { feedbackMessages } from "src/constants/constants";
-import { getVideoProgressKey } from "src/utils/course-utils";
+import { setVideoProgressTime } from "src/utils/course-utils";
 
 import CourseSectionContainer from "./CourseSectionContainer";
 import useUpdateProgress from "./hooks/useUpdateProgress";
@@ -63,29 +63,14 @@ const CourseVideoContainer: React.FC<CourseProps> = ({
   };
 
   const onVideoEnded = () => {
-    localStorage.setItem(
-      getVideoProgressKey(courseId, sectionId),
-      JSON.stringify({ currentTime: 0 }),
-    );
+    setVideoProgressTime(sectionId, 0);
   };
 
   const onVideoTimeUpdate = (e: SyntheticEvent<HTMLVideoElement>) => {
     const videoElement = e.target as HTMLVideoElement;
     const { currentTime } = videoElement;
 
-    const localStorageValue = JSON.parse(
-      localStorage.getItem(`section-progress-${sectionId}`) || "{}",
-    );
-
-    const sectionProgressInfo = {
-      ...localStorageValue,
-      currentTime,
-    };
-
-    localStorage.setItem(
-      `section-progress-${sectionId}`,
-      JSON.stringify(sectionProgressInfo),
-    );
+    setVideoProgressTime(sectionId, currentTime);
   };
 
   return (

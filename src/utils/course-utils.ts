@@ -6,6 +6,19 @@ export const getIsVideoSection = (
   return section.type === SectionTypes.Video;
 };
 
-export const getVideoProgressKey = (courseId: number, sectionId: ID) => {
-  return `section-progress-${courseId}-${sectionId}`;
+export const getVideoProgressKey = (sectionId: ID) => {
+  return `section-progress-${sectionId}`;
+};
+
+export const getVideoProgressTime = (sectionId: ID) => {
+  const item = localStorage.getItem(getVideoProgressKey(sectionId));
+
+  return JSON.parse(item || "{}").currentTime;
+};
+
+export const setVideoProgressTime = (sectionId: ID, time: number) => {
+  localStorage.setItem(
+    getVideoProgressKey(sectionId),
+    JSON.stringify({ currentTime: time }),
+  );
 };
