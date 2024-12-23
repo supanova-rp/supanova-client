@@ -181,13 +181,25 @@ export const getDeletedSectionsIds = (
   };
 };
 
+const addPositionField = <T>(items: T[] = []) => {
+  return items.map((item, itemIndex) => {
+    return {
+      ...item,
+      position: itemIndex,
+    };
+  });
+};
+
 export const getSectionsWithPositions = (course: Course) => {
   const sectionsWithPositions = course.sections.map((section, sectionIndex) => {
     if (section?.questions) {
       const quizQuestionsWithPositions = section.questions.map(
         (quizQuestion, quizQuestionIndex) => {
+          const answersWithPosition = addPositionField(quizQuestion.answers);
+
           return {
             ...quizQuestion,
+            answers: answersWithPosition,
             position: quizQuestionIndex,
           };
         },
