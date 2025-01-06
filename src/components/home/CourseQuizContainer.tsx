@@ -69,7 +69,14 @@ export const CourseQuizContainer: React.FC<Props> = ({
 
   const onChangeAnswer = (questionIndex: number, answerIndex: number) => {
     const updatedSelectedAnswers = [...selectedAnswers];
-    const currentSelectedAnswers = updatedSelectedAnswers[questionIndex];
+    let currentSelectedAnswers = updatedSelectedAnswers[questionIndex];
+
+    // If it is single answer only - deselect everything except the answerIndex answer
+    if (!quizSection.questions[questionIndex].isMultiAnswer) {
+      currentSelectedAnswers = currentSelectedAnswers.filter(
+        (index: any) => index === answerIndex,
+      );
+    }
 
     if (currentSelectedAnswers.includes(answerIndex)) {
       // Deselect the answer if already selected

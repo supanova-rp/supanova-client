@@ -3,6 +3,7 @@ import { Component } from "react";
 import {
   Course,
   CourseQuizQuestion,
+  CourseQuizSection,
   CourseSection,
   ID,
   onChangeCourseFieldKey,
@@ -13,7 +14,7 @@ import CourseFormBody from "./CourseFormBody";
 import {
   getCourseWithNewSection,
   getInitialEmptyQuizQuestionAndAnswers,
-  getQuizWithNewQuizQuestion,
+  getCourseWithNewQuizQuestion,
   getUpdatedCourse,
 } from "./utils";
 
@@ -99,7 +100,7 @@ export default class CourseForm extends Component<CourseFormProps> {
   onClickAddNewQuizSection = () => {
     const { course, onUpdateCourse, isEditing } = this.props;
 
-    const newQuizSection: CourseSection = {
+    const newQuizSection: CourseQuizSection = {
       id: `${Date.now()}`,
       type: SectionTypes.Quiz,
       questions: [getInitialEmptyQuizQuestionAndAnswers(isEditing)],
@@ -117,7 +118,7 @@ export default class CourseForm extends Component<CourseFormProps> {
   onClickAddNewQuizQuestion = (quizId: ID) => {
     const { course, onUpdateCourse, isEditing } = this.props;
 
-    const courseWithUpdatedQuiz = getQuizWithNewQuizQuestion(
+    const courseWithUpdatedQuiz = getCourseWithNewQuizQuestion(
       course,
       quizId,
       isEditing,

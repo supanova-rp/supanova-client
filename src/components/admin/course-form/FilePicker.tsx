@@ -67,7 +67,7 @@ const FilePicker: React.FC<Props> = ({
   };
 
   const onError = (error: string) => {
-    console.log(">>> error: ", error);
+    console.log(error);
   };
 
   const handleFileSelected = (e: InputChangeEvent) => {

@@ -95,7 +95,7 @@ export default class EditCourses extends Component {
   };
 
   onError = (getCoursesErrorMessage: string, error = "") => {
-    console.log(">>> error: ", error || getCoursesErrorMessage);
+    console.log(error || getCoursesErrorMessage);
 
     this.setState({
       getCoursesErrorMessage,

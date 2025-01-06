@@ -1,12 +1,8 @@
+import { FormCheck } from "react-bootstrap";
 import uuid from "react-uuid";
 import FormInput from "src/components/FormInput";
 import RemoveInput from "src/components/RemoveInput";
-import {
-  CourseQuizAnswer,
-  CourseQuizQuestion,
-  CourseQuizSection,
-  ID,
-} from "src/types";
+import { CourseQuizQuestion, CourseQuizSection, ID } from "src/types";
 
 import QuizAnswers from "./QuizAnswers";
 
@@ -140,22 +136,34 @@ const QuizSection: React.FC<QuizSectionProps> = ({
     questionId: string,
     answerId: string,
     isCorrectAnswer: boolean,
+    isMultiAnswer: boolean,
   ) => {
     const updatedQuestionsAndAnswers = section.questions.map(
       (question: CourseQuizQuestion) => {
         if (question.id === questionId) {
-          const updatedAnswers = question.answers.map(
-            (answer: CourseQuizAnswer) => {
-              if (answer.id === answerId) {
-                return {
-                  ...answer,
-                  isCorrectAnswer: !isCorrectAnswer,
-                };
-              }
+          let currentAnswers = question.answers;
 
-              return answer;
-            },
-          );
+          // If only one answer is allowed and we are toggling an answer ON
+          // then toggle OFF everything first
+          if (!isMultiAnswer && !isCorrectAnswer) {
+            currentAnswers = question.answers.map(answer => {
+              return {
+                ...answer,
+                isCorrectAnswer: false,
+              };
+            });
+          }
+
+          const updatedAnswers = currentAnswers.map(answer => {
+            if (answer.id === answerId) {
+              return {
+                ...answer,
+                isCorrectAnswer: !isCorrectAnswer,
+              };
+            }
+
+            return answer;
+          });
 
           return {
             ...question,
@@ -170,6 +178,29 @@ const QuizSection: React.FC<QuizSectionProps> = ({
     onHandleUpdateQuiz(quizId, updatedQuestionsAndAnswers);
   };
 
+  const onToggleIsMultiAnswer = (
+    questionId: string,
+    isMultiAnswer: boolean,
+  ) => {
+    const updatedQuizQuestions = updateQuestion(
+      questionId,
+      (question: CourseQuizQuestion) => {
+        return {
+          ...question,
+          // if we are toggling from multi answer to single answer deselect all answers
+          answers: isMultiAnswer
+            ? question.answers.map(answer => {
+                return { ...answer, isCorrectAnswer: false };
+              })
+            : question.answers,
+          isMultiAnswer: !isMultiAnswer,
+        };
+      },
+    );
+
+    onHandleUpdateQuiz(quizId, updatedQuizQuestions);
+  };
+
   return (
     <div>
       <div className="d-flex align-items-center">
@@ -180,7 +211,7 @@ const QuizSection: React.FC<QuizSectionProps> = ({
           margin="0"
         />
       </div>
-      {questions.map(({ id: questionId, question, answers }) => {
+      {questions.map(({ id: questionId, question, answers, isMultiAnswer }) => {
         return (
           <div key={`quiz-section-${questionId}`}>
             <div className="d-flex flex-row align-items-center">
@@ -203,6 +234,18 @@ const QuizSection: React.FC<QuizSectionProps> = ({
                 />
               ) : null}
             </div>
+
+            <FormCheck
+              className="me-3"
+              type="checkbox"
+              size={8}
+              label="Can have multiple answers"
+              checked={isMultiAnswer}
+              id={`quiz-question-ismultianswer-${questionId}`}
+              style={{ paddingBottom: "24px" }}
+              onChange={() => onToggleIsMultiAnswer(questionId, isMultiAnswer)}
+            />
+
             <QuizAnswers
               answers={answers}
               canRemoveQuizAnswer={answers.length > 2}
@@ -220,6 +263,7 @@ const QuizSection: React.FC<QuizSectionProps> = ({
                   questionId,
                   answerId,
                   isCorrectAnswer,
+                  isMultiAnswer,
                 )
               }
             />

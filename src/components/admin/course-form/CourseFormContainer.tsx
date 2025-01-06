@@ -197,9 +197,7 @@ export default class CourseFormContainer extends Component<CourseFormContainerPr
   };
 
   onError = (errorOptions: ErrorOptions) => {
-    const { message, error, type } = errorOptions;
-
-    console.log(">>> error: ", error || message);
+    const { message, type } = errorOptions;
 
     this.setState({
       areActionsDisabled: false,

@@ -58,6 +58,7 @@ export type CourseQuizSection = {
 export type CourseQuizQuestion = {
   id: ID;
   question: string;
+  isMultiAnswer: boolean;
   isNewQuestion: boolean;
   answers: CourseQuizAnswer[];
 };

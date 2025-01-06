@@ -1,6 +1,7 @@
 import uuid from "react-uuid";
 import {
   Course,
+  CourseQuizQuestion,
   CourseQuizSection,
   CourseSection,
   CourseVideoSection,
@@ -253,7 +254,9 @@ export const getUpdatedCourse = (
   };
 };
 
-export const getInitialEmptyQuizQuestionAndAnswers = (isEditing: boolean) => {
+export const getInitialEmptyQuizQuestionAndAnswers = (
+  isEditing: boolean,
+): CourseQuizQuestion => {
   const emptyQuizAnswers = [];
 
   for (let i = 0; i < 4; i++) {
@@ -268,16 +271,17 @@ export const getInitialEmptyQuizQuestionAndAnswers = (isEditing: boolean) => {
   return {
     id: uuid(),
     question: "",
+    isMultiAnswer: false,
     isNewQuestion: isEditing,
     answers: emptyQuizAnswers,
   };
 };
 
-export const getQuizWithNewQuizQuestion = (
+export const getCourseWithNewQuizQuestion = (
   course: Course,
   quizId: ID,
   isEditing: boolean,
-) => {
+): Course => {
   const updatedSectionsWithNewQuizQuestion = course.sections.map(section => {
     if (section.id === quizId && isQuizSection(section)) {
       return {
