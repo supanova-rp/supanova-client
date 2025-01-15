@@ -1,10 +1,18 @@
 import { useState } from "react";
 import { feedbackMessages } from "src/constants/constants";
+import {
+  getQuizProgressInitialState,
+  setQuizProgress,
+} from "src/utils/course-utils";
 
 import CourseSectionContainer from "./CourseSectionContainer";
 import useUpdateProgress from "./hooks/useUpdateProgress";
 import Quiz from "./Quiz";
-import { ChangeDirection, CourseQuizSection } from "../../types/index";
+import {
+  ChangeDirection,
+  CourseQuizSection,
+  QuizProgressState,
+} from "../../types/index";
 
 interface Props {
   courseId: number;
@@ -31,9 +39,10 @@ export const CourseQuizContainer: React.FC<Props> = ({
   onCourseComplete,
   onClickBackChevron,
 }) => {
-  const [selectedAnswers, setSelectedAnswers] = useState(
-    new Array(quizSection.questions.length).fill([]),
+  const [selectedAnswers, setSelectedAnswers] = useState<QuizProgressState>(
+    getQuizProgressInitialState(quizSection),
   );
+
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [allAnswersAreCorrect, setAllAnswersAreCorrect] = useState(false);
   const [score, setScore] = useState<number | null>(null);
@@ -92,6 +101,9 @@ export const CourseQuizContainer: React.FC<Props> = ({
     }
 
     setSelectedAnswers(updatedSelectedAnswers);
+
+    // Update local storage
+    setQuizProgress(quizSection.id, updatedSelectedAnswers);
   };
 
   const calculateScore = () => {

@@ -78,6 +78,10 @@ export type CourseQuizAnswer = {
   isNewAnswer?: boolean;
 };
 
+export type QuizAnswerIndex = number;
+export type QuizSelectedAnswers = QuizAnswerIndex[];
+export type QuizProgressState = QuizSelectedAnswers[];
+
 export type ChangeDirection = "next" | "prev";
 
 export type ErrorOptions = {

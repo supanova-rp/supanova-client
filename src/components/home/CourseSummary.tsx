@@ -8,8 +8,10 @@ import {
   UserCourseProgress,
 } from "src/types";
 import {
+  getIsQuizSection,
   getIsVideoSection,
-  setVideoProgressTime,
+  resetQuizProgress,
+  resetVideoProgressTime,
 } from "src/utils/course-utils";
 
 import SectionTableRow from "./SectionTableRow";
@@ -59,9 +61,19 @@ export const CourseSummary: React.FC<Props> = ({
 
   const currentSectionProgressIndex = getCurrentSectionProgressIndex();
 
-  const resetVideoProgress = () => {
+  const resetVideoSectionProgress = () => {
     course.sections.forEach(section => {
-      setVideoProgressTime(section.id, 0);
+      if (getIsVideoSection(section)) {
+        resetVideoProgressTime(section.id);
+      }
+    });
+  };
+
+  const resetQuizSectionProgress = () => {
+    course.sections.forEach(section => {
+      if (getIsQuizSection(section)) {
+        resetQuizProgress(section.id);
+      }
     });
   };
 
@@ -73,7 +85,8 @@ export const CourseSummary: React.FC<Props> = ({
       },
       onSuccess: () => {
         refetchProgress();
-        resetVideoProgress();
+        resetVideoSectionProgress();
+        resetQuizSectionProgress();
       },
       onError: () => {},
     });
