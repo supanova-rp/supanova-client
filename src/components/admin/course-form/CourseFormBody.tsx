@@ -9,6 +9,7 @@ import {
 } from "src/types";
 
 import CourseFormSection from "./CourseFormSection";
+import { CourseMaterials } from "./CourseMaterials";
 import { MoveSectionFn } from "./utils";
 import AddMoreInputs from "../../AddMoreInputs";
 import FormInput from "../../FormInput";
@@ -28,10 +29,16 @@ interface Props {
     quizId: ID,
     quizQuestionsAndAnswers: CourseQuizQuestion[],
   ) => void;
-  onFileUploaded: (sectionId: ID, videoUrl: string) => void;
-  onFileUploadProgress: (data: AxiosProgressEvent, sectionId: ID) => void;
-  onFileUploadCancelled: (sectionId: ID) => void;
+  onVideoFileUploaded: (sectionId: ID, videoUrl: string) => void;
+  onVideoFileUploadProgress: (data: AxiosProgressEvent, sectionId: ID) => void;
+  onVideoFileUploadCancelled: (sectionId: ID) => void;
   handleRemoveSection: (sectionId: ID) => void;
+  onCourseMaterialUploaded: (id: ID, videoUrl: string) => void;
+  onCourseMaterialUploadProgress: (data: AxiosProgressEvent, id: ID) => void;
+  onCourseMaterialUploadCancelled: (id: ID) => void;
+  handleRemoveMaterial: (id: ID) => void;
+  onChangeMaterialName: (id: ID, name: string) => void;
+  onClickAddCourseMaterial: () => void;
   onClickAddNewVideoSection: () => void;
   onClickAddNewQuizSection: () => void;
   onClickAddNewQuizQuestion: (quizId: ID) => void;
@@ -53,11 +60,17 @@ const CourseFormBody: React.FC<Props> = ({
   onChangeCourseField,
   onChangeSectionTitle,
   onHandleUpdateQuiz,
-  onFileUploaded,
-  onFileUploadProgress,
-  onFileUploadCancelled,
+  onVideoFileUploaded,
+  onVideoFileUploadProgress,
+  onVideoFileUploadCancelled,
   handleRemoveSection,
+  onCourseMaterialUploaded,
+  onCourseMaterialUploadProgress,
+  onCourseMaterialUploadCancelled,
+  handleRemoveMaterial,
   onMoveSection,
+  onChangeMaterialName,
+  onClickAddCourseMaterial,
   onClickRemoveQuizQuestion,
   onClickAddNewVideoSection,
   onClickAddNewQuizSection,
@@ -93,6 +106,17 @@ const CourseFormBody: React.FC<Props> = ({
           formGroupClassname="mb-4 course-description"
         />
 
+        <CourseMaterials
+          materials={course.materials}
+          courseId={course.id}
+          onChangeMaterialName={onChangeMaterialName}
+          onClickAddCourseMaterial={onClickAddCourseMaterial}
+          onCourseMaterialUploaded={onCourseMaterialUploaded}
+          onCourseMaterialUploadProgress={onCourseMaterialUploadProgress}
+          onCourseMaterialUploadCancelled={onCourseMaterialUploadCancelled}
+          handleRemoveMaterial={handleRemoveMaterial}
+        />
+
         {!isEditing ? <h5 className="mt-5 mb-1">Add Course Sections</h5> : null}
 
         {course.sections.map((section, index) => {
@@ -100,6 +124,7 @@ const CourseFormBody: React.FC<Props> = ({
             <CourseFormSection
               key={section.id}
               section={section}
+              courseId={course.id}
               isEditing={isEditing}
               isFirstSection={index === 0}
               isLastSection={index === course.sections.length - 1}
@@ -110,9 +135,9 @@ const CourseFormBody: React.FC<Props> = ({
               onChangeSectionTitle={onChangeSectionTitle}
               onHandleUpdateQuiz={onHandleUpdateQuiz}
               onMoveSection={onMoveSection}
-              onFileUploaded={onFileUploaded}
-              onFileUploadProgress={onFileUploadProgress}
-              onFileUploadCancelled={onFileUploadCancelled}
+              onVideoFileUploaded={onVideoFileUploaded}
+              onVideoFileUploadProgress={onVideoFileUploadProgress}
+              onVideoFileUploadCancelled={onVideoFileUploadCancelled}
               handleRemoveSection={handleRemoveSection}
             />
           );

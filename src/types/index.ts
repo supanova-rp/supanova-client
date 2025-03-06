@@ -15,10 +15,11 @@ export type UploadProgress = number | null | undefined;
 export type SaveFormEndpoint = "/edit-course" | "/add-course";
 
 export type Course = {
-  id: number;
+  id: ID;
   title: string;
   description: string;
   sections: CourseSection[];
+  materials: CourseMaterial[];
 };
 
 export type CourseTitle = {
@@ -27,6 +28,12 @@ export type CourseTitle = {
 };
 
 export type onChangeCourseFieldKey = "description" | "title";
+
+export type CourseMaterial = {
+  id: ID;
+  name: string;
+  uploadProgress?: UploadProgress;
+};
 
 export type CourseSection = CourseVideoSection | CourseQuizSection;
 
@@ -175,3 +182,8 @@ export type MobileNavbarIcon = {
 };
 
 export type ID = string;
+
+export enum FileUploadType {
+  Video = "video",
+  Material = "material",
+}

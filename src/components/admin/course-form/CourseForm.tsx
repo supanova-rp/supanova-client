@@ -1,7 +1,9 @@
 import { AxiosProgressEvent } from "axios";
 import { Component } from "react";
+import uuid from "react-uuid";
 import {
   Course,
+  CourseMaterial,
   CourseQuizQuestion,
   CourseQuizSection,
   CourseSection,
@@ -41,24 +43,68 @@ export default class CourseForm extends Component<CourseFormProps> {
     });
   };
 
-  onFileUploadCancelled = (sectionId: ID) => {
+  onVideoFileUploadCancelled = (sectionId: ID) => {
     const { course, onUpdateCourse } = this.props;
 
     onUpdateCourse(getUpdatedCourse(course, sectionId, "uploadProgress", null));
   };
 
-  onFileUploaded = (sectionId: ID, videoUrl: string) => {
+  onVideoFileUploaded = (sectionId: ID, videoUrl: string) => {
     const { course, onUpdateCourse } = this.props;
 
     onUpdateCourse(getUpdatedCourse(course, sectionId, "videoUrl", videoUrl));
   };
 
-  onFileUploadProgress = (data: AxiosProgressEvent, sectionId: ID) => {
+  onVideoFileUploadProgress = (data: AxiosProgressEvent, sectionId: ID) => {
     const { course, onUpdateCourse } = this.props;
 
     onUpdateCourse(
       getUpdatedCourse(course, sectionId, "uploadProgress", data.progress),
     );
+  };
+
+  onCourseMaterialUploadCancelled = (id: ID) => {
+    const { course, onUpdateCourse } = this.props;
+
+    onUpdateCourse({
+      ...course,
+      materials: course.materials.map(material => {
+        if (material.id === id) {
+          return { ...material, uploadProgress: null };
+        }
+
+        return material;
+      }),
+    });
+  };
+
+  onCourseMaterialUploaded = (id: ID, url: string) => {
+    // TODO: is this needed if we just use the ID to retrieve the material?
+    console.log(">>>> course material uploaded: ", id, url, this.props.course);
+  };
+
+  onCourseMaterialUploadProgress = (data: AxiosProgressEvent, id: ID) => {
+    const { course, onUpdateCourse } = this.props;
+
+    onUpdateCourse({
+      ...course,
+      materials: course.materials.map(material => {
+        if (material.id === id) {
+          return { ...material, uploadProgress: data.progress };
+        }
+
+        return material;
+      }),
+    });
+  };
+
+  handleRemoveMaterial = (materialId: ID) => {
+    const { course, onUpdateCourse } = this.props;
+
+    onUpdateCourse({
+      ...course,
+      materials: course.materials.filter(m => m.id !== materialId),
+    });
   };
 
   onChangeSectionTitle = (sectionId: ID, inputValue: string) => {
@@ -76,6 +122,39 @@ export default class CourseForm extends Component<CourseFormProps> {
     onUpdateCourse(
       getUpdatedCourse(course, quizId, "questions", quizQuestionsAndAnswers),
     );
+  };
+
+  onChangeMaterialName = (materialId: ID, inputValue: string) => {
+    const { course, onUpdateCourse } = this.props;
+
+    onUpdateCourse({
+      ...course,
+      materials: course.materials.map(material => {
+        if (material.id === materialId) {
+          return {
+            ...material,
+            name: inputValue,
+          };
+        }
+
+        return material;
+      }),
+    });
+  };
+
+  onClickAddCourseMaterial = () => {
+    const { course, onUpdateCourse } = this.props;
+
+    const courseMaterial: CourseMaterial = {
+      id: uuid(),
+      name: "",
+      // isNewMaterial TODO: is this needed for inserting new materials?
+    };
+
+    onUpdateCourse({
+      ...course,
+      materials: [...course.materials, courseMaterial],
+    });
   };
 
   onClickAddNewVideoSection = () => {
@@ -223,11 +302,17 @@ export default class CourseForm extends Component<CourseFormProps> {
         onChangeCourseField={this.onChangeCourseField}
         onChangeSectionTitle={this.onChangeSectionTitle}
         onHandleUpdateQuiz={this.onHandleUpdateQuiz}
-        onFileUploaded={this.onFileUploaded}
-        onFileUploadProgress={this.onFileUploadProgress}
-        onFileUploadCancelled={this.onFileUploadCancelled}
+        onVideoFileUploaded={this.onVideoFileUploaded}
+        onVideoFileUploadProgress={this.onVideoFileUploadProgress}
+        onVideoFileUploadCancelled={this.onVideoFileUploadCancelled}
         handleRemoveSection={this.handleRemoveSection}
+        onCourseMaterialUploadCancelled={this.onCourseMaterialUploadCancelled}
+        onCourseMaterialUploaded={this.onCourseMaterialUploaded}
+        onCourseMaterialUploadProgress={this.onCourseMaterialUploadProgress}
+        handleRemoveMaterial={this.handleRemoveMaterial}
         onMoveSection={this.onMoveSection}
+        onChangeMaterialName={this.onChangeMaterialName}
+        onClickAddCourseMaterial={this.onClickAddCourseMaterial}
         onClickAddNewVideoSection={this.onClickAddNewVideoSection}
         onClickAddNewQuizSection={this.onClickAddNewQuizSection}
         onClickAddNewQuizQuestion={this.onClickAddNewQuizQuestion}

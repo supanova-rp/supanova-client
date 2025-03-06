@@ -1,5 +1,5 @@
 import { AxiosProgressEvent } from "axios";
-import { CourseVideoSection, ID } from "src/types";
+import { CourseVideoSection, FileUploadType, ID } from "src/types";
 
 import FilePicker from "./FilePicker";
 import FormInput from "../../FormInput";
@@ -7,25 +7,27 @@ import RemoveInput from "../../RemoveInput";
 
 interface VideoSectionProps {
   section: CourseVideoSection;
+  courseId: ID;
   canRemoveVideoSection?: boolean;
   abortController: AbortController;
   fileInputRef: React.RefObject<HTMLInputElement>;
   onChangeSectionTitle: (sectionId: ID, title: string) => void;
   onClickRemoveSection: () => void;
   handleFileUploaded: (sectionId: ID, videoUrl: string) => void;
-  onFileUploadProgress: (data: AxiosProgressEvent, sectionId: ID) => void;
+  onVideoFileUploadProgress: (data: AxiosProgressEvent, sectionId: ID) => void;
   onClickCancelFileUpload: () => void;
 }
 
 const VideoSection: React.FC<VideoSectionProps> = ({
   section,
+  courseId,
   canRemoveVideoSection,
   abortController,
   fileInputRef,
   onChangeSectionTitle,
   onClickRemoveSection,
   handleFileUploaded,
-  onFileUploadProgress,
+  onVideoFileUploadProgress,
   onClickCancelFileUpload,
 }) => {
   const { id, title, videoUrl, uploadProgress } = section;
@@ -49,11 +51,13 @@ const VideoSection: React.FC<VideoSectionProps> = ({
           onChange={e => onChangeSectionTitle(id, e.target.value)}
           Component={
             <FilePicker
-              sectionId={id}
+              fileId={id}
+              courseId={courseId}
+              fileType={FileUploadType.Video}
               abortController={abortController}
               fileInputRef={fileInputRef}
               onFileUploaded={handleFileUploaded}
-              onFileUploadProgress={onFileUploadProgress}
+              onFileUploadProgress={onVideoFileUploadProgress}
               uploadProgress={uploadProgress}
               onClickCancelFileUpload={onClickCancelFileUpload}
             />

@@ -73,7 +73,7 @@ export const everyQuizQuestionHasCorrectAnswer = (
 
 export const getInitialCourseState = (): Course => {
   return {
-    id: Date.now(),
+    id: uuid(),
     title: "",
     description: "",
     sections: [
@@ -85,6 +85,7 @@ export const getInitialCourseState = (): Course => {
         uploadProgress: null,
       },
     ],
+    materials: [],
   };
 };
 

@@ -7,6 +7,7 @@ import TickIcon from "../../../assets/icons/tickIcon.svg?react";
 import { colors } from "../../../constants/colorPalette";
 import { useWakeLock } from "../../../hooks/useWakeLock";
 import {
+  FileUploadType,
   ID,
   InputChangeEvent,
   UploadProgress,
@@ -14,17 +15,34 @@ import {
 } from "../../../types/index";
 
 interface Props {
-  sectionId: ID;
+  fileId: ID;
+  courseId: ID;
+  fileType: FileUploadType;
   abortController: AbortController;
   fileInputRef: React.RefObject<HTMLInputElement>;
-  onFileUploaded: (sectionId: ID, videoUrl: string) => void;
-  onFileUploadProgress: (data: AxiosProgressEvent, sectionId: ID) => void;
+  onFileUploaded: (fileId: ID, videoUrl: string) => void;
+  onFileUploadProgress: (data: AxiosProgressEvent, fileId: ID) => void;
   uploadProgress: UploadProgress;
   onClickCancelFileUpload: React.MouseEventHandler<HTMLButtonElement>;
 }
 
+const fileTypeMap = {
+  [FileUploadType.Video]: {
+    endpoint: "/get-video-upload-url",
+    label: "Video",
+    accept: "video/mp4, video/quicktime",
+  },
+  [FileUploadType.Material]: {
+    endpoint: "/get-material-upload-url",
+    label: "File",
+    accept: "*",
+  },
+};
+
 const FilePicker: React.FC<Props> = ({
-  sectionId,
+  fileType,
+  fileId,
+  courseId,
   abortController,
   fileInputRef,
   onFileUploaded,
@@ -33,7 +51,7 @@ const FilePicker: React.FC<Props> = ({
   onClickCancelFileUpload,
 }) => {
   const { releaseWakeLock, requestWakeLock } = useWakeLock();
-  const requestUploadUrl = useRequest("/get-upload-url");
+  const requestUploadUrl = useRequest(fileTypeMap[fileType].endpoint);
 
   const uploadFileToS3 = async (uploadUrl: string, file: File) => {
     requestWakeLock();
@@ -41,18 +59,19 @@ const FilePicker: React.FC<Props> = ({
     try {
       await axios.put(uploadUrl, file, {
         headers: {
+          // TODO: use file type that matches file?
           "Content-Type": "multipart/form-data",
         },
         signal: abortController.signal,
         onUploadProgress: (data: AxiosProgressEvent) =>
-          onFileUploadProgress(data, sectionId),
+          onFileUploadProgress(data, fileId),
       });
 
       releaseWakeLock();
 
       const videoUrl = uploadUrl.split("?")[0];
 
-      onFileUploaded(sectionId, videoUrl);
+      onFileUploaded(fileId, videoUrl);
     } catch (error) {
       releaseWakeLock();
 
@@ -72,6 +91,10 @@ const FilePicker: React.FC<Props> = ({
 
   const handleFileSelected = (e: InputChangeEvent) => {
     requestUploadUrl({
+      requestBody: {
+        fileId,
+        courseId,
+      },
       onSuccess: (result: any) => onSuccess(e, result),
       onError,
     });
@@ -102,15 +125,15 @@ const FilePicker: React.FC<Props> = ({
 
   return (
     <div className="d-flex align-items-center mt-3">
-      <label htmlFor={`inputTag-${sectionId}`} className="secondary-btn">
-        Select Video
+      <label htmlFor={`inputTag-${fileId}`} className="secondary-btn">
+        Select {fileTypeMap[fileType].label}
         <input
           ref={fileInputRef}
           name="file-picker"
           className="file-picker"
-          id={`inputTag-${sectionId}`}
+          id={`inputTag-${fileId}`}
           type="file"
-          accept="video/mp4, video/quicktime"
+          accept={fileTypeMap[fileType].accept}
           onChange={handleFileSelected}
         />
       </label>
