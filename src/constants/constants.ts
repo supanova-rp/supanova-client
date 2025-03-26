@@ -30,6 +30,8 @@ export const feedbackMessages = {
   videoMissing: "Every section needs a video.",
   correctAnswerMissing: "Every quiz question needs a correct answer.",
   getProgressError: "Oops something went wrong! Failed to get course progress.",
+  getMaterialsError:
+    "Oops something went wrong! Failed to get course materials.",
   getCourseError: "Oops something went wrong! Failed to get course.",
   getEditCourseError: "Failed to load course.",
   addCourseSuccess: "Successfully created a new course!",

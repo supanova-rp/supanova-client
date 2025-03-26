@@ -4,18 +4,19 @@ import ErrorIcon from "../assets/icons/errorIcon.svg?react";
 
 interface Props {
   errorMessage: string;
-  isCoursesDashboard: boolean;
-  clickHandlerFunction: () => void;
+  size?: "medium" | "large";
+  onClick: () => void;
 }
 
 const ErrorCard: React.FC<Props> = ({
   errorMessage,
-  clickHandlerFunction,
-  isCoursesDashboard,
+  size = "medium",
+  onClick,
 }) => {
-  const feedbackCardContentClassname = isCoursesDashboard
-    ? "feedback-card-content-medium"
-    : "feedback-card-content-large";
+  const feedbackCardContentClassname =
+    size === "medium"
+      ? "feedback-card-content-medium"
+      : "feedback-card-content-large";
 
   return (
     <div className="feedback-card-container">
@@ -24,7 +25,7 @@ const ErrorCard: React.FC<Props> = ({
         <h3 className="error-title">Error</h3>
         <p className="feedback-description">Something went wrong...</p>
         <p className="feedback-description">{errorMessage}</p>
-        <Button onClick={clickHandlerFunction} className="error-button">
+        <Button onClick={onClick} className="error-button">
           Try again
         </Button>
       </div>

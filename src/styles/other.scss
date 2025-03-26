@@ -30,3 +30,17 @@
   background-color: white;
   right: 0;
 }
+
+.download-link {
+  color: rgb(26, 13, 171);
+  text-decoration: none;
+  
+  &:hover {
+    text-decoration: underline;
+    color: rgb(26, 13, 171);
+  }
+
+  .pdf-icon {
+    margin-right: 6px;
+  }
+}

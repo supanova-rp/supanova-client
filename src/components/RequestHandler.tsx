@@ -26,8 +26,8 @@ const RequestHandler = ({
     return (
       <ErrorCard
         errorMessage={error}
-        isCoursesDashboard={isCoursesDashboard}
-        clickHandlerFunction={onClick}
+        size={isCoursesDashboard ? "medium" : "large"}
+        onClick={onClick}
       />
     );
   }

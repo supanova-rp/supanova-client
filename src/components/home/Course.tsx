@@ -10,6 +10,7 @@ import {
 import { getVideoProgressTime } from "src/utils/course-utils";
 
 import { CourseComplete } from "./CourseComplete";
+import { CourseMaterials } from "./CourseMaterials";
 import { CourseQuizContainer } from "./CourseQuizContainer";
 import { CourseSummary } from "./CourseSummary";
 import CourseVideoContainer from "./CourseVideoContainer";
@@ -136,6 +137,8 @@ const Course: React.FC<CoursesProps> = ({
           onSelectVideo={onSelectVideo}
           onSelectQuiz={onSelectQuiz}
         />
+
+        <CourseMaterials courseId={course.id} />
       </div>
     );
   }

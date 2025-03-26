@@ -1,8 +1,8 @@
-import { Course } from "src/types";
+import { Course, ID } from "src/types";
 
 interface Props {
   courses: Course[];
-  onClickEditCourse: (courseId: number) => void;
+  onClickEditCourse: (courseId: ID) => void;
 }
 const CoursesList: React.FC<Props> = ({ courses, onClickEditCourse }) => {
   return (

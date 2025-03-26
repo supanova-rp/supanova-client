@@ -1,6 +1,7 @@
 import uuid from "react-uuid";
 import {
   Course,
+  CourseMaterial,
   CourseQuizQuestion,
   CourseQuizSection,
   CourseSection,
@@ -76,6 +77,7 @@ export const getInitialCourseState = (): Course => {
     id: uuid(),
     title: "",
     description: "",
+    materials: [],
     sections: [
       {
         id: `${Date.now()}`,
@@ -85,7 +87,6 @@ export const getInitialCourseState = (): Course => {
         uploadProgress: null,
       },
     ],
-    materials: [],
   };
 };
 
@@ -221,6 +222,15 @@ export const getSectionsWithPositions = (course: Course) => {
   });
 
   return sectionsWithPositions;
+};
+
+export const getMaterialsWithPosition = (course: Course): CourseMaterial[] => {
+  return course.materials.map((material, materialIndex) => {
+    return {
+      ...material,
+      position: materialIndex,
+    };
+  });
 };
 
 export const getUpdatedSections = (

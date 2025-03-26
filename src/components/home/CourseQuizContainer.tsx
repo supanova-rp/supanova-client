@@ -11,11 +11,12 @@ import Quiz from "./Quiz";
 import {
   ChangeDirection,
   CourseQuizSection,
+  ID,
   QuizProgressState,
 } from "../../types/index";
 
 interface Props {
-  courseId: number;
+  courseId: ID;
   canGoBack: boolean;
   isLastSection: boolean;
   isCurrentSectionCompleted: boolean;

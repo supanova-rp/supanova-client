@@ -1,12 +1,12 @@
 import { AxiosProgressEvent } from "axios";
 import React from "react";
 import AddMoreInputs from "src/components/AddMoreInputs";
-import { CourseMaterial as CourseMaterialType, ID } from "src/types";
+import { CourseMaterial, ID } from "src/types";
 
-import CourseMaterial from "./CourseMaterial";
+import CourseMaterialForm from "./CourseMaterialForm";
 
 interface Props {
-  materials: CourseMaterialType[];
+  materials: CourseMaterial[];
   courseId: ID;
   onChangeMaterialName: (id: ID, name: string) => void;
   onClickAddCourseMaterial: () => void;
@@ -16,7 +16,7 @@ interface Props {
   handleRemoveMaterial: (id: ID) => void;
 }
 
-export const CourseMaterials: React.FC<Props> = ({
+export const CourseMaterialsForm: React.FC<Props> = ({
   materials,
   courseId,
   onChangeMaterialName,
@@ -35,7 +35,7 @@ export const CourseMaterials: React.FC<Props> = ({
 
       {materials.map(material => {
         return (
-          <CourseMaterial
+          <CourseMaterialForm
             key={material.id}
             material={material}
             courseId={courseId}

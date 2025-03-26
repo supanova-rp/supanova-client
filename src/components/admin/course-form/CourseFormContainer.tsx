@@ -14,6 +14,7 @@ import {
   CourseQuizQuestionServer,
   ErrorOptions,
   FormSubmitEvent,
+  ID,
   RequestBody,
   SaveFormEndpoint,
 } from "src/types";
@@ -43,7 +44,7 @@ interface CourseFormContainerProps {
   getRequestBody: (course: Course, initialCourse: Course) => RequestBody;
   onCourseSavedSuccess: (editedCourse: Course) => void;
   onCourseFormCancelled: () => void;
-  onCourseDeletedSuccess: (courseId: number) => void;
+  onCourseDeletedSuccess: (courseId: ID) => void;
 }
 
 export default class CourseFormContainer extends Component<CourseFormContainerProps> {

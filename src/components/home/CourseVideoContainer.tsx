@@ -5,10 +5,10 @@ import { setVideoProgressTime } from "src/utils/course-utils";
 import CourseSectionContainer from "./CourseSectionContainer";
 import useUpdateProgress from "./hooks/useUpdateProgress";
 import Video from "./Video";
-import { ChangeDirection, CourseVideoSection } from "../../types/index";
+import { ChangeDirection, CourseVideoSection, ID } from "../../types/index";
 
 interface CourseProps {
-  courseId: number;
+  courseId: ID;
   courseTitle: string;
   videoSection: CourseVideoSection;
   initialCurrentVideoTime: number;

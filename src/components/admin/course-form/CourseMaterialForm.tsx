@@ -6,14 +6,10 @@ import Row from "src/components/Row";
 import { useFileUpload } from "src/hooks/useFileUpload";
 
 import FilePicker from "./FilePicker";
-import {
-  CourseMaterial as CourseMaterialType,
-  FileUploadType,
-  ID,
-} from "../../../types/index";
+import { CourseMaterial, FileUploadType, ID } from "../../../types/index";
 
 interface Props {
-  material: CourseMaterialType;
+  material: CourseMaterial;
   courseId: ID;
   onChangeMaterialName: (id: ID, value: string) => void;
   onCourseMaterialUploaded: (id: ID, videoUrl: string) => void;
@@ -22,7 +18,7 @@ interface Props {
   handleRemoveMaterial: (sectionId: ID) => void;
 }
 
-const CourseMaterial: React.FC<Props> = ({
+const CourseMaterialForm: React.FC<Props> = ({
   material,
   courseId,
   onChangeMaterialName,
@@ -81,4 +77,4 @@ const CourseMaterial: React.FC<Props> = ({
   );
 };
 
-export default CourseMaterial;
+export default CourseMaterialForm;

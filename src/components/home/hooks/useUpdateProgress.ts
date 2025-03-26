@@ -9,7 +9,7 @@ interface UpdateProgressHookResult {
 }
 
 const useUpdateProgress = (
-  courseId: number,
+  courseId: ID,
   onUpdateProgressSuccess: () => void,
   onUpdateProgressError?: () => void,
 ): UpdateProgressHookResult => {

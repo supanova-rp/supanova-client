@@ -9,7 +9,7 @@ import {
 } from "src/types";
 
 import CourseFormSection from "./CourseFormSection";
-import { CourseMaterials } from "./CourseMaterials";
+import { CourseMaterialsForm } from "./CourseMaterialsForm";
 import { MoveSectionFn } from "./utils";
 import AddMoreInputs from "../../AddMoreInputs";
 import FormInput from "../../FormInput";
@@ -106,7 +106,7 @@ const CourseFormBody: React.FC<Props> = ({
           formGroupClassname="mb-4 course-description"
         />
 
-        <CourseMaterials
+        <CourseMaterialsForm
           materials={course.materials}
           courseId={course.id}
           onChangeMaterialName={onChangeMaterialName}

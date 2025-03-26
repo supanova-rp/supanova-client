@@ -35,6 +35,12 @@ export type CourseMaterial = {
   uploadProgress?: UploadProgress;
 };
 
+export type CourseMaterialResponse = {
+  id: ID;
+  name: string;
+  url: string;
+};
+
 export type CourseSection = CourseVideoSection | CourseQuizSection;
 
 export enum SectionTypes {
@@ -148,23 +154,23 @@ export type UploadUrlResponse = {
 };
 
 export type EditCoursesRequestBody = {
-  edited_course_id?: number;
+  edited_course_id?: ID;
   course?: Course;
   deleted_section_ids_map?: DeletedSectionIdsMap;
 };
 
 type DeletedSectionIdsMap = {
-  videoSectionIds: number[] | [];
-  quizSectionIds: number[] | [];
-  questionIds: number[] | [];
-  answerIds: number[] | [];
+  videoSectionIds: ID[] | [];
+  quizSectionIds: ID[] | [];
+  questionIds: ID[] | [];
+  answerIds: ID[] | [];
 };
 
 export type RequestBody = {
   title?: string;
   description?: string;
   sections?: CourseSection[];
-  edited_course_id?: number;
+  edited_course_id?: ID;
   edited_course?: Course;
   deleted_sections_ids?: DeletedSectionIdsMap;
 };

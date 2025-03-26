@@ -10,6 +10,7 @@ import AdminHeader from "../AdminHeader";
 import CourseFormContainer from "../course-form/CourseFormContainer";
 import {
   getInitialCourseState,
+  getMaterialsWithPosition,
   getSectionsWithPositions,
 } from "../course-form/utils";
 
@@ -40,8 +41,10 @@ export default class AddCourse extends Component {
 
   static getRequestBody = (course: Course) => {
     return {
+      id: course.id,
       title: course.title,
       description: course.description,
+      materials: getMaterialsWithPosition(course),
       sections: getSectionsWithPositions(course),
     };
   };

@@ -6,13 +6,14 @@ import {
 } from "src/constants/constants";
 
 import CoursesList from "./CoursesList";
-import { Course } from "../../../types/index";
+import { Course, ID } from "../../../types/index";
 import RequestHandler from "../../RequestHandler";
 import RequestWrapper from "../../RequestWrapper";
 import AdminHeader from "../AdminHeader";
 import CourseFormContainer from "../course-form/CourseFormContainer";
 import {
   getDeletedSectionsIds,
+  getMaterialsWithPosition,
   getSectionsWithPositions,
 } from "../course-form/utils";
 
@@ -20,7 +21,7 @@ type EditCoursesState = {
   isLoading: boolean;
   getCoursesErrorMessage: null | string;
   allCourses: [] | Course[];
-  editingCourseId: null | number;
+  editingCourseId: ID | null;
 };
 
 export default class EditCourses extends Component {
@@ -35,7 +36,7 @@ export default class EditCourses extends Component {
     this.setState({ isLoading: true, getCoursesErrorMessage: null });
   };
 
-  onClickEditCourse = (courseId: number) => {
+  onClickEditCourse = (courseId: ID) => {
     this.setState({ editingCourseId: courseId });
   };
 
@@ -62,7 +63,7 @@ export default class EditCourses extends Component {
     toast.success(feedbackMessages.saveCourseSuccess, REACT_TOAST_DURATION);
   };
 
-  onCourseDeletedSuccess = (courseId: number) => {
+  onCourseDeletedSuccess = (courseId: ID) => {
     const { allCourses } = this.state;
     const coursesWithoutDeletedCourse = allCourses.filter(
       course => course.id !== courseId,
@@ -81,6 +82,7 @@ export default class EditCourses extends Component {
       edited_course_id: course.id,
       edited_course: {
         ...course,
+        materials: getMaterialsWithPosition(course),
         sections: getSectionsWithPositions(course),
       },
       deleted_section_ids_map: getDeletedSectionsIds(course, initialCourse),

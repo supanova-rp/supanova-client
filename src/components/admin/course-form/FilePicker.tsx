@@ -31,11 +31,13 @@ const fileTypeMap = {
     endpoint: "/get-video-upload-url",
     label: "Video",
     accept: "video/mp4, video/quicktime",
+    contentType: "multipart/form-data",
   },
   [FileUploadType.Material]: {
     endpoint: "/get-material-upload-url",
     label: "File",
-    accept: "*",
+    accept: "application/pdf",
+    contentType: "application/pdf",
   },
 };
 
@@ -51,7 +53,9 @@ const FilePicker: React.FC<Props> = ({
   onClickCancelFileUpload,
 }) => {
   const { releaseWakeLock, requestWakeLock } = useWakeLock();
-  const requestUploadUrl = useRequest(fileTypeMap[fileType].endpoint);
+  const { endpoint, label, accept, contentType } = fileTypeMap[fileType];
+
+  const requestUploadUrl = useRequest(endpoint);
 
   const uploadFileToS3 = async (uploadUrl: string, file: File) => {
     requestWakeLock();
@@ -59,8 +63,7 @@ const FilePicker: React.FC<Props> = ({
     try {
       await axios.put(uploadUrl, file, {
         headers: {
-          // TODO: use file type that matches file?
-          "Content-Type": "multipart/form-data",
+          "Content-Type": contentType,
         },
         signal: abortController.signal,
         onUploadProgress: (data: AxiosProgressEvent) =>
@@ -126,14 +129,14 @@ const FilePicker: React.FC<Props> = ({
   return (
     <div className="d-flex align-items-center mt-3">
       <label htmlFor={`inputTag-${fileId}`} className="secondary-btn">
-        Select {fileTypeMap[fileType].label}
+        Select {label}
         <input
           ref={fileInputRef}
           name="file-picker"
           className="file-picker"
           id={`inputTag-${fileId}`}
           type="file"
-          accept={fileTypeMap[fileType].accept}
+          accept={accept}
           onChange={handleFileSelected}
         />
       </label>
