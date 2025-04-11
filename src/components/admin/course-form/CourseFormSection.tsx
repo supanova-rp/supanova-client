@@ -30,6 +30,7 @@ interface Props {
   onVideoFileUploaded: (sectionId: ID, videoUrl: string) => void;
   onVideoFileUploadProgress: (data: AxiosProgressEvent, sectionId: ID) => void;
   onVideoFileUploadCancelled: (sectionId: ID) => void;
+  onChangeVideoStorageKey: (sectionId: ID, storageKey: ID) => void;
   handleRemoveSection: (sectionId: ID) => void;
   onMoveSection: MoveSectionFn;
 }
@@ -49,6 +50,7 @@ const CourseFormSection: React.FC<Props> = ({
   onVideoFileUploaded,
   onVideoFileUploadProgress,
   onVideoFileUploadCancelled,
+  onChangeVideoStorageKey,
   handleRemoveSection,
   onMoveSection,
 }) => {
@@ -112,6 +114,7 @@ const CourseFormSection: React.FC<Props> = ({
         onVideoFileUploadProgress={onVideoFileUploadProgress}
         onClickCancelFileUpload={handleCancelFileUpload}
         onClickRemoveSection={onClickRemoveSection}
+        onChangeVideoStorageKey={onChangeVideoStorageKey}
       />
 
       <MoveSection

@@ -10,9 +10,9 @@ interface Props {
   courseId: ID;
   onChangeMaterialName: (id: ID, name: string) => void;
   onClickAddCourseMaterial: () => void;
-  onCourseMaterialUploaded: (id: ID, videoUrl: string) => void;
   onCourseMaterialUploadProgress: (data: AxiosProgressEvent, id: ID) => void;
   onCourseMaterialUploadCancelled: (id: ID) => void;
+  onChangeMaterialStorageKey: (materialID: ID, storageKey: ID) => void;
   handleRemoveMaterial: (id: ID) => void;
 }
 
@@ -21,32 +21,38 @@ export const CourseMaterialsForm: React.FC<Props> = ({
   courseId,
   onChangeMaterialName,
   onClickAddCourseMaterial,
-  onCourseMaterialUploaded,
   onCourseMaterialUploadProgress,
   onCourseMaterialUploadCancelled,
+  onChangeMaterialStorageKey,
   handleRemoveMaterial,
 }) => {
   return (
     <div>
+      <h4 className="mb-4 pt-2">Course Materials</h4>
+
+      {materials?.length
+        ? materials.map(material => {
+            return (
+              <CourseMaterialForm
+                key={material.id}
+                material={material}
+                courseId={courseId}
+                onChangeMaterialName={onChangeMaterialName}
+                onCourseMaterialUploadProgress={onCourseMaterialUploadProgress}
+                onCourseMaterialUploadCancelled={
+                  onCourseMaterialUploadCancelled
+                }
+                onChangeMaterialStorageKey={onChangeMaterialStorageKey}
+                handleRemoveMaterial={handleRemoveMaterial}
+              />
+            );
+          })
+        : null}
+
       <AddMoreInputs
         title="Add course material"
         onClick={onClickAddCourseMaterial}
       />
-
-      {materials.map(material => {
-        return (
-          <CourseMaterialForm
-            key={material.id}
-            material={material}
-            courseId={courseId}
-            onChangeMaterialName={onChangeMaterialName}
-            onCourseMaterialUploaded={onCourseMaterialUploaded}
-            onCourseMaterialUploadProgress={onCourseMaterialUploadProgress}
-            onCourseMaterialUploadCancelled={onCourseMaterialUploadCancelled}
-            handleRemoveMaterial={handleRemoveMaterial}
-          />
-        );
-      })}
     </div>
   );
 };

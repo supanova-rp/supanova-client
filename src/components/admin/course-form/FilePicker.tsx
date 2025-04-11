@@ -1,5 +1,6 @@
 import axios, { AxiosProgressEvent } from "axios";
 import React from "react";
+import uuid from "react-uuid";
 import useRequest from "src/hooks/useRequest";
 
 import ProgressBar from "./ProgressBar";
@@ -24,6 +25,7 @@ interface Props {
   onFileUploadProgress: (data: AxiosProgressEvent, fileId: ID) => void;
   uploadProgress: UploadProgress;
   onClickCancelFileUpload: React.MouseEventHandler<HTMLButtonElement>;
+  onNewFileSelected: (newFileId: ID, oldId: ID) => void;
 }
 
 const fileTypeMap = {
@@ -51,6 +53,7 @@ const FilePicker: React.FC<Props> = ({
   onFileUploadProgress,
   uploadProgress,
   onClickCancelFileUpload,
+  onNewFileSelected,
 }) => {
   const { releaseWakeLock, requestWakeLock } = useWakeLock();
   const { endpoint, label, accept, contentType } = fileTypeMap[fileType];
@@ -93,9 +96,13 @@ const FilePicker: React.FC<Props> = ({
   };
 
   const handleFileSelected = (e: InputChangeEvent) => {
+    const storageKey = uuid();
+
+    onNewFileSelected(fileId, storageKey);
+
     requestUploadUrl({
       requestBody: {
-        fileId,
+        storageKey,
         courseId,
       },
       onSuccess: (result: any) => onSuccess(e, result),

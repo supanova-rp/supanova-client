@@ -12,9 +12,9 @@ interface Props {
   material: CourseMaterial;
   courseId: ID;
   onChangeMaterialName: (id: ID, value: string) => void;
-  onCourseMaterialUploaded: (id: ID, videoUrl: string) => void;
   onCourseMaterialUploadProgress: (data: AxiosProgressEvent, id: ID) => void;
   onCourseMaterialUploadCancelled: (id: ID) => void;
+  onChangeMaterialStorageKey: (materialID: ID, storageKey: ID) => void;
   handleRemoveMaterial: (sectionId: ID) => void;
 }
 
@@ -22,12 +22,16 @@ const CourseMaterialForm: React.FC<Props> = ({
   material,
   courseId,
   onChangeMaterialName,
-  onCourseMaterialUploaded,
   onCourseMaterialUploadProgress,
   onCourseMaterialUploadCancelled,
+  onChangeMaterialStorageKey,
   handleRemoveMaterial,
 }) => {
   const { id, name, uploadProgress } = material;
+
+  // We don't need to do anything once material has been uploaded as we use the ID of the material
+  // to retreive it from S3, not the url
+  const onMaterialUploaded = () => {};
 
   const {
     abortController,
@@ -38,7 +42,7 @@ const CourseMaterialForm: React.FC<Props> = ({
   } = useFileUpload(
     id,
     uploadProgress,
-    onCourseMaterialUploaded,
+    onMaterialUploaded,
     onCourseMaterialUploadCancelled,
   );
 
@@ -52,7 +56,7 @@ const CourseMaterialForm: React.FC<Props> = ({
     <Row>
       <FormInput
         formId={`course-material-${id}`}
-        formGroupClassname="my-4 section-input"
+        formGroupClassname="mb-4 mt-2 section-input"
         label="Course material name"
         type="text"
         value={name}
@@ -68,11 +72,20 @@ const CourseMaterialForm: React.FC<Props> = ({
             onFileUploadProgress={onCourseMaterialUploadProgress}
             uploadProgress={uploadProgress}
             onClickCancelFileUpload={handleCancelFileUpload}
+            onNewFileSelected={onChangeMaterialStorageKey}
           />
         }
       />
 
-      <RemoveInput onClickFunction={onClickRemove} />
+      <div
+        style={{
+          alignSelf: "center",
+          marginLeft: 6,
+          paddingBottom: 32,
+        }}
+      >
+        <RemoveInput onClickFunction={onClickRemove} />
+      </div>
     </Row>
   );
 };

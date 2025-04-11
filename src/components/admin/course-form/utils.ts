@@ -84,6 +84,7 @@ export const getInitialCourseState = (): Course => {
         title: "",
         type: SectionTypes.Video,
         videoUrl: "",
+        storageKey: "",
         uploadProgress: null,
       },
     ],
@@ -182,6 +183,21 @@ export const getDeletedSectionsIds = (
     questionIds: idsOfDeletedQuizQuestions,
     answerIds: idsOfDeletedQuizAnswers,
   };
+};
+
+export const getDeletedMaterialIds = (
+  course: Course,
+  initialCourse: Course,
+) => {
+  const allMaterialIDsBeforeEdit = (initialCourse.materials || []).map(m => {
+    return m.id;
+  });
+
+  const allMaterialIDsAfterEdit = (course.materials || []).map(m => {
+    return m.id;
+  });
+
+  return getDeletedIds(allMaterialIDsBeforeEdit, allMaterialIDsAfterEdit);
 };
 
 const addPositionField = <T>(items: T[] = []) => {

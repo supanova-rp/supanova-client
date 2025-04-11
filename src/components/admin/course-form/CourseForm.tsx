@@ -7,6 +7,7 @@ import {
   CourseQuizQuestion,
   CourseQuizSection,
   CourseSection,
+  CourseVideoSection,
   ID,
   onChangeCourseFieldKey,
   SectionTypes,
@@ -78,11 +79,6 @@ export default class CourseForm extends Component<CourseFormProps> {
     });
   };
 
-  onCourseMaterialUploaded = (id: ID, url: string) => {
-    // TODO: is this needed if we just use the ID to retrieve the material?
-    console.log(">>>> course material uploaded: ", id, url, this.props.course);
-  };
-
   onCourseMaterialUploadProgress = (data: AxiosProgressEvent, id: ID) => {
     const { course, onUpdateCourse } = this.props;
 
@@ -113,6 +109,14 @@ export default class CourseForm extends Component<CourseFormProps> {
     onUpdateCourse(getUpdatedCourse(course, sectionId, "title", inputValue));
   };
 
+  onChangeVideoStorageKey = (sectionId: ID, storageKey: string) => {
+    const { course, onUpdateCourse } = this.props;
+
+    onUpdateCourse(
+      getUpdatedCourse(course, sectionId, "storageKey", storageKey),
+    );
+  };
+
   onHandleUpdateQuiz = (
     quizId: ID,
     quizQuestionsAndAnswers: CourseQuizQuestion[],
@@ -122,6 +126,24 @@ export default class CourseForm extends Component<CourseFormProps> {
     onUpdateCourse(
       getUpdatedCourse(course, quizId, "questions", quizQuestionsAndAnswers),
     );
+  };
+
+  onChangeMaterialStorageKey = (materialID: ID, storageKey: ID) => {
+    const { course, onUpdateCourse } = this.props;
+
+    onUpdateCourse({
+      ...course,
+      materials: course.materials.map(material => {
+        if (material.id === materialID) {
+          return {
+            ...material,
+            storageKey,
+          };
+        }
+
+        return material;
+      }),
+    });
   };
 
   onChangeMaterialName = (materialId: ID, inputValue: string) => {
@@ -148,7 +170,7 @@ export default class CourseForm extends Component<CourseFormProps> {
     const courseMaterial: CourseMaterial = {
       id: uuid(),
       name: "",
-      // isNewMaterial TODO: is this needed for inserting new materials?
+      storageKey: "",
     };
 
     onUpdateCourse({
@@ -160,11 +182,12 @@ export default class CourseForm extends Component<CourseFormProps> {
   onClickAddNewVideoSection = () => {
     const { course, isEditing, onUpdateCourse } = this.props;
 
-    const newSection: CourseSection = {
+    const newSection: CourseVideoSection = {
       id: `${Date.now()}`,
       title: "",
       type: SectionTypes.Video,
       videoUrl: null,
+      storageKey: "",
       isNewSection: isEditing,
     };
 
@@ -305,10 +328,11 @@ export default class CourseForm extends Component<CourseFormProps> {
         onVideoFileUploaded={this.onVideoFileUploaded}
         onVideoFileUploadProgress={this.onVideoFileUploadProgress}
         onVideoFileUploadCancelled={this.onVideoFileUploadCancelled}
+        onChangeVideoStorageKey={this.onChangeVideoStorageKey}
         handleRemoveSection={this.handleRemoveSection}
         onCourseMaterialUploadCancelled={this.onCourseMaterialUploadCancelled}
-        onCourseMaterialUploaded={this.onCourseMaterialUploaded}
         onCourseMaterialUploadProgress={this.onCourseMaterialUploadProgress}
+        onChangeMaterialStorageKey={this.onChangeMaterialStorageKey}
         handleRemoveMaterial={this.handleRemoveMaterial}
         onMoveSection={this.onMoveSection}
         onChangeMaterialName={this.onChangeMaterialName}

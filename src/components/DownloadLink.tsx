@@ -1,5 +1,7 @@
 import React from "react";
+import toast from "react-hot-toast";
 import PDFIcon from "src/assets/icons/pdf.svg?react";
+import { REACT_TOAST_DURATION } from "src/constants/constants";
 
 import Row from "./Row";
 
@@ -23,8 +25,10 @@ export const DownloadLink: React.FC<Props> = ({ url, name }) => {
       document.body.removeChild(a);
 
       window.URL.revokeObjectURL(blobUrl);
-    } catch (error) {
-      console.error("Download failed:", error);
+    } catch (err) {
+      toast.error("Download failed... please try again", REACT_TOAST_DURATION);
+
+      console.error("Download failed: ", err);
     }
   };
 

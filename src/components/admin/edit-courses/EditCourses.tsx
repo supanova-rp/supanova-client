@@ -12,6 +12,7 @@ import RequestWrapper from "../../RequestWrapper";
 import AdminHeader from "../AdminHeader";
 import CourseFormContainer from "../course-form/CourseFormContainer";
 import {
+  getDeletedMaterialIds,
   getDeletedSectionsIds,
   getMaterialsWithPosition,
   getSectionsWithPositions,
@@ -86,6 +87,7 @@ export default class EditCourses extends Component {
         sections: getSectionsWithPositions(course),
       },
       deleted_section_ids_map: getDeletedSectionsIds(course, initialCourse),
+      deleted_materials_ids: getDeletedMaterialIds(course, initialCourse),
     };
   };
 

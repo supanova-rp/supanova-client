@@ -1,7 +1,5 @@
 import { Button } from "react-bootstrap";
 
-import ErrorIcon from "../assets/icons/errorIcon.svg?react";
-
 interface Props {
   errorMessage: string;
   size?: "medium" | "large";
@@ -21,8 +19,7 @@ const ErrorCard: React.FC<Props> = ({
   return (
     <div className="feedback-card-container">
       <div className={feedbackCardContentClassname}>
-        <ErrorIcon className="feedback-icon" />
-        <h3 className="error-title">Error</h3>
+        <h3 className="error-title">Oops</h3>
         <p className="feedback-description">Something went wrong...</p>
         <p className="feedback-description">{errorMessage}</p>
         <Button onClick={onClick} className="error-button">

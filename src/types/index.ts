@@ -32,6 +32,7 @@ export type onChangeCourseFieldKey = "description" | "title";
 export type CourseMaterial = {
   id: ID;
   name: string;
+  storageKey: string;
   uploadProgress?: UploadProgress;
 };
 
@@ -53,6 +54,7 @@ export type CourseVideoSection = {
   type: SectionTypes;
   title: string;
   videoUrl: string | null;
+  storageKey: string;
   isNewSection?: boolean;
   uploadProgress?: UploadProgress;
   questions?: never;
@@ -107,6 +109,7 @@ export type getUpdatedSectionsKey =
   | "title"
   | "videoUrl"
   | "uploadProgress"
+  | "storageKey"
   | "questions";
 
 export type User = {

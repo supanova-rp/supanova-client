@@ -16,6 +16,7 @@ interface VideoSectionProps {
   handleFileUploaded: (sectionId: ID, videoUrl: string) => void;
   onVideoFileUploadProgress: (data: AxiosProgressEvent, sectionId: ID) => void;
   onClickCancelFileUpload: () => void;
+  onChangeVideoStorageKey: (sectionId: ID, storageKey: ID) => void;
 }
 
 const VideoSection: React.FC<VideoSectionProps> = ({
@@ -29,6 +30,7 @@ const VideoSection: React.FC<VideoSectionProps> = ({
   handleFileUploaded,
   onVideoFileUploadProgress,
   onClickCancelFileUpload,
+  onChangeVideoStorageKey,
 }) => {
   const { id, title, videoUrl, uploadProgress } = section;
 
@@ -60,6 +62,7 @@ const VideoSection: React.FC<VideoSectionProps> = ({
               onFileUploadProgress={onVideoFileUploadProgress}
               uploadProgress={uploadProgress}
               onClickCancelFileUpload={onClickCancelFileUpload}
+              onNewFileSelected={onChangeVideoStorageKey}
             />
           }
         />

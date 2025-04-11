@@ -36,7 +36,7 @@ export const CourseMaterials: React.FC<Props> = ({ courseId }) => {
   if (error) {
     return (
       <ErrorCard
-        errorMessage="Error loading course materials"
+        errorMessage="Failed to load course materials"
         onClick={refetch}
       />
     );

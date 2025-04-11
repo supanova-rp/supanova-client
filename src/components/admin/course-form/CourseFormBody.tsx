@@ -32,12 +32,13 @@ interface Props {
   onVideoFileUploaded: (sectionId: ID, videoUrl: string) => void;
   onVideoFileUploadProgress: (data: AxiosProgressEvent, sectionId: ID) => void;
   onVideoFileUploadCancelled: (sectionId: ID) => void;
+  onChangeVideoStorageKey: (sectionId: ID, storageKey: ID) => void;
   handleRemoveSection: (sectionId: ID) => void;
-  onCourseMaterialUploaded: (id: ID, videoUrl: string) => void;
   onCourseMaterialUploadProgress: (data: AxiosProgressEvent, id: ID) => void;
   onCourseMaterialUploadCancelled: (id: ID) => void;
   handleRemoveMaterial: (id: ID) => void;
   onChangeMaterialName: (id: ID, name: string) => void;
+  onChangeMaterialStorageKey: (materialID: ID, storageKey: ID) => void;
   onClickAddCourseMaterial: () => void;
   onClickAddNewVideoSection: () => void;
   onClickAddNewQuizSection: () => void;
@@ -63,13 +64,14 @@ const CourseFormBody: React.FC<Props> = ({
   onVideoFileUploaded,
   onVideoFileUploadProgress,
   onVideoFileUploadCancelled,
+  onChangeVideoStorageKey,
   handleRemoveSection,
-  onCourseMaterialUploaded,
   onCourseMaterialUploadProgress,
   onCourseMaterialUploadCancelled,
   handleRemoveMaterial,
   onMoveSection,
   onChangeMaterialName,
+  onChangeMaterialStorageKey,
   onClickAddCourseMaterial,
   onClickRemoveQuizQuestion,
   onClickAddNewVideoSection,
@@ -111,13 +113,13 @@ const CourseFormBody: React.FC<Props> = ({
           courseId={course.id}
           onChangeMaterialName={onChangeMaterialName}
           onClickAddCourseMaterial={onClickAddCourseMaterial}
-          onCourseMaterialUploaded={onCourseMaterialUploaded}
           onCourseMaterialUploadProgress={onCourseMaterialUploadProgress}
           onCourseMaterialUploadCancelled={onCourseMaterialUploadCancelled}
+          onChangeMaterialStorageKey={onChangeMaterialStorageKey}
           handleRemoveMaterial={handleRemoveMaterial}
         />
 
-        {!isEditing ? <h5 className="mt-5 mb-1">Add Course Sections</h5> : null}
+        <h4 className="mt-5 mb-2">Course Sections</h4>
 
         {course.sections.map((section, index) => {
           return (
@@ -138,6 +140,7 @@ const CourseFormBody: React.FC<Props> = ({
               onVideoFileUploaded={onVideoFileUploaded}
               onVideoFileUploadProgress={onVideoFileUploadProgress}
               onVideoFileUploadCancelled={onVideoFileUploadCancelled}
+              onChangeVideoStorageKey={onChangeVideoStorageKey}
               handleRemoveSection={handleRemoveSection}
             />
           );
