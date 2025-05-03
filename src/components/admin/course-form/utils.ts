@@ -77,6 +77,8 @@ export const getInitialCourseState = (): Course => {
     id: uuid(),
     title: "",
     description: "",
+    completionTitle: "",
+    completionMessage: "",
     materials: [],
     sections: [
       {

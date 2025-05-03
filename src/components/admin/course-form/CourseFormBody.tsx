@@ -108,6 +108,26 @@ const CourseFormBody: React.FC<Props> = ({
           formGroupClassname="mb-4 course-description"
         />
 
+        <FormInput
+          formId="course-completion-title"
+          value={course.completionTitle}
+          label="Course Completion Title"
+          onChange={e => onChangeCourseField("completionTitle", e.target.value)}
+          type="text"
+          formGroupClassname="mb-4 course-completion-title"
+        />
+
+        <FormInput
+          formId="course-completion-message"
+          value={course.completionMessage}
+          label="Course Completion Message"
+          onChange={e =>
+            onChangeCourseField("completionMessage", e.target.value)
+          }
+          type="text"
+          formGroupClassname="mb-4 course-completion-message"
+        />
+
         <CourseMaterialsForm
           materials={course.materials}
           courseId={course.id}

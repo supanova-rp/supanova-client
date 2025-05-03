@@ -44,6 +44,8 @@ export default class AddCourse extends Component {
       id: course.id,
       title: course.title,
       description: course.description,
+      completionTitle: course.completionTitle,
+      completionMessage: course.completionMessage,
       materials: getMaterialsWithPosition(course),
       sections: getSectionsWithPositions(course),
     };

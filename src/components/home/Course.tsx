@@ -115,10 +115,7 @@ const Course: React.FC<CoursesProps> = ({
   };
 
   if (isCourseComplete) {
-    // TODO: update pdfUrl with actual pdf
-    return (
-      <CourseComplete pdfUrl="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" />
-    );
+    return <CourseComplete course={course} />;
   }
 
   if (typeof currentSectionIndex !== "number") {

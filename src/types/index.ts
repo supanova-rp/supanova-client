@@ -18,6 +18,8 @@ export type Course = {
   id: ID;
   title: string;
   description: string;
+  completionTitle: string;
+  completionMessage: string;
   sections: CourseSection[];
   materials: CourseMaterial[];
 };
@@ -27,7 +29,11 @@ export type CourseTitle = {
   title: string;
 };
 
-export type onChangeCourseFieldKey = "description" | "title";
+export type onChangeCourseFieldKey =
+  | "description"
+  | "title"
+  | "completionTitle"
+  | "completionMessage";
 
 export type CourseMaterial = {
   id: ID;
