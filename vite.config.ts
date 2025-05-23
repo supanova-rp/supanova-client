@@ -6,10 +6,14 @@ import svgr from "vite-plugin-svgr";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), svgr(), sentryVitePlugin({
-    org: "jamie-garner-ltd",
-    project: "supanova"
-  })],
+  plugins: [
+    react(),
+    svgr(),
+    sentryVitePlugin({
+      org: "jamie-garner-ltd",
+      project: "supanova",
+    }),
+  ],
   resolve: {
     alias: {
       src: "/src",
@@ -20,6 +24,6 @@ export default defineConfig({
   },
   build: {
     outDir: "dist/supanova-client",
-    sourcemap: true
+    sourcemap: true,
   },
 });
