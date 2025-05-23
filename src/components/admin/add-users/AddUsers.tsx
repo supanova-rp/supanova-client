@@ -228,6 +228,15 @@ const AddUsers = () => {
         onClick={onClickAddNewUser}
         marginTop="mt-3"
       />
+
+      <button
+        type="button"
+        onClick={() => {
+          throw new Error("Test error!");
+        }}
+      >
+        Button that sends an error to Sentry for testing error alerts
+      </button>
     </>
   );
 };

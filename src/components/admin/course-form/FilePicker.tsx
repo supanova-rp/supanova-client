@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/browser";
 import axios, { AxiosProgressEvent } from "axios";
 import React from "react";
 import uuid from "react-uuid";
@@ -81,6 +82,7 @@ const FilePicker: React.FC<Props> = ({
     } catch (error) {
       releaseWakeLock();
 
+      Sentry.captureException(error);
       console.log(error);
     }
   };
@@ -92,6 +94,7 @@ const FilePicker: React.FC<Props> = ({
   };
 
   const onError = (error: string) => {
+    Sentry.captureException(error);
     console.log(error);
   };
 
