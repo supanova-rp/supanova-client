@@ -9,6 +9,7 @@ export const useFileUpload = (
 ) => {
   const abortControllerRef = useRef<AbortController>(new AbortController());
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const uploadProgressRef = useRef(uploadProgress);
 
   const cancelUploadRequest = () => {
     if (fileInputRef.current) {
@@ -24,14 +25,21 @@ export const useFileUpload = (
     onFileUploadCancelled(id);
   };
 
+  useEffect(() => {
+    uploadProgressRef.current = uploadProgress;
+  }, [uploadProgress]);
+
   // Clean up on unmount if upload is in progress
+  // Use a ref to upload progress so we don't have to put uploadProgress in the dependency array
+  // otherwise it will trigger handleCancelFileUpload when it closes
   useEffect(() => {
     return () => {
-      if (uploadProgress && uploadProgress !== 1) {
+      const latestProgress = uploadProgressRef.current;
+      if (latestProgress && latestProgress !== 1) {
         handleCancelFileUpload();
       }
     };
-  }, [uploadProgress]);
+  }, []);
 
   const handleFileUploaded = (sectionId: ID, videoUrl: string) => {
     abortControllerRef.current = new AbortController();
