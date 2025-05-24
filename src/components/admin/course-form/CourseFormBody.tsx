@@ -34,6 +34,7 @@ interface Props {
   onVideoFileUploadCancelled: (sectionId: ID) => void;
   onChangeVideoStorageKey: (sectionId: ID, storageKey: ID) => void;
   handleRemoveSection: (sectionId: ID) => void;
+  onCourseMaterialUploaded: (id: ID) => void;
   onCourseMaterialUploadProgress: (data: AxiosProgressEvent, id: ID) => void;
   onCourseMaterialUploadCancelled: (id: ID) => void;
   handleRemoveMaterial: (id: ID) => void;
@@ -73,6 +74,7 @@ const CourseFormBody: React.FC<Props> = ({
   onChangeMaterialName,
   onChangeMaterialStorageKey,
   onClickAddCourseMaterial,
+  onCourseMaterialUploaded,
   onClickRemoveQuizQuestion,
   onClickAddNewVideoSection,
   onClickAddNewQuizSection,
@@ -133,6 +135,7 @@ const CourseFormBody: React.FC<Props> = ({
           courseId={course.id}
           onChangeMaterialName={onChangeMaterialName}
           onClickAddCourseMaterial={onClickAddCourseMaterial}
+          onCourseMaterialUploaded={onCourseMaterialUploaded}
           onCourseMaterialUploadProgress={onCourseMaterialUploadProgress}
           onCourseMaterialUploadCancelled={onCourseMaterialUploadCancelled}
           onChangeMaterialStorageKey={onChangeMaterialStorageKey}

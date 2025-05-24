@@ -10,6 +10,7 @@ interface Props {
   courseId: ID;
   onChangeMaterialName: (id: ID, name: string) => void;
   onClickAddCourseMaterial: () => void;
+  onCourseMaterialUploaded: (id: ID) => void;
   onCourseMaterialUploadProgress: (data: AxiosProgressEvent, id: ID) => void;
   onCourseMaterialUploadCancelled: (id: ID) => void;
   onChangeMaterialStorageKey: (materialID: ID, storageKey: ID) => void;
@@ -21,6 +22,7 @@ export const CourseMaterialsForm: React.FC<Props> = ({
   courseId,
   onChangeMaterialName,
   onClickAddCourseMaterial,
+  onCourseMaterialUploaded,
   onCourseMaterialUploadProgress,
   onCourseMaterialUploadCancelled,
   onChangeMaterialStorageKey,
@@ -38,6 +40,7 @@ export const CourseMaterialsForm: React.FC<Props> = ({
                 material={material}
                 courseId={courseId}
                 onChangeMaterialName={onChangeMaterialName}
+                onCourseMaterialUploaded={onCourseMaterialUploaded}
                 onCourseMaterialUploadProgress={onCourseMaterialUploadProgress}
                 onCourseMaterialUploadCancelled={
                   onCourseMaterialUploadCancelled

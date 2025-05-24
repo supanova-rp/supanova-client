@@ -12,6 +12,7 @@ interface Props {
   material: CourseMaterial;
   courseId: ID;
   onChangeMaterialName: (id: ID, value: string) => void;
+  onCourseMaterialUploaded: (id: ID) => void;
   onCourseMaterialUploadProgress: (data: AxiosProgressEvent, id: ID) => void;
   onCourseMaterialUploadCancelled: (id: ID) => void;
   onChangeMaterialStorageKey: (materialID: ID, storageKey: ID) => void;
@@ -22,16 +23,13 @@ const CourseMaterialForm: React.FC<Props> = ({
   material,
   courseId,
   onChangeMaterialName,
+  onCourseMaterialUploaded,
   onCourseMaterialUploadProgress,
   onCourseMaterialUploadCancelled,
   onChangeMaterialStorageKey,
   handleRemoveMaterial,
 }) => {
   const { id, name, uploadProgress } = material;
-
-  // We don't need to do anything once material has been uploaded as we use the ID of the material
-  // to retreive it from S3, not the url
-  const onMaterialUploaded = () => {};
 
   const {
     abortController,
@@ -42,7 +40,7 @@ const CourseMaterialForm: React.FC<Props> = ({
   } = useFileUpload(
     id,
     uploadProgress,
-    onMaterialUploaded,
+    onCourseMaterialUploaded,
     onCourseMaterialUploadCancelled,
   );
 

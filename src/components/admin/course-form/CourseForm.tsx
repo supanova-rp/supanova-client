@@ -53,7 +53,20 @@ export default class CourseForm extends Component<CourseFormProps> {
   onVideoFileUploaded = (sectionId: ID, videoUrl: string) => {
     const { course, onUpdateCourse } = this.props;
 
-    onUpdateCourse(getUpdatedCourse(course, sectionId, "videoUrl", videoUrl));
+    const withUpdatedUrl = getUpdatedCourse(
+      course,
+      sectionId,
+      "videoUrl",
+      videoUrl,
+    );
+    const withUpdatedProgress = getUpdatedCourse(
+      withUpdatedUrl,
+      sectionId,
+      "uploadProgress",
+      1,
+    );
+
+    onUpdateCourse(withUpdatedProgress);
   };
 
   onVideoFileUploadProgress = (data: AxiosProgressEvent, sectionId: ID) => {
@@ -87,6 +100,21 @@ export default class CourseForm extends Component<CourseFormProps> {
       materials: course.materials.map(material => {
         if (material.id === id) {
           return { ...material, uploadProgress: data.progress };
+        }
+
+        return material;
+      }),
+    });
+  };
+
+  onCourseMaterialUploaded = (id: ID) => {
+    const { course, onUpdateCourse } = this.props;
+
+    onUpdateCourse({
+      ...course,
+      materials: course.materials.map(material => {
+        if (material.id === id) {
+          return { ...material, uploadProgress: 1 };
         }
 
         return material;
@@ -330,6 +358,7 @@ export default class CourseForm extends Component<CourseFormProps> {
         onVideoFileUploadCancelled={this.onVideoFileUploadCancelled}
         onChangeVideoStorageKey={this.onChangeVideoStorageKey}
         handleRemoveSection={this.handleRemoveSection}
+        onCourseMaterialUploaded={this.onCourseMaterialUploaded}
         onCourseMaterialUploadCancelled={this.onCourseMaterialUploadCancelled}
         onCourseMaterialUploadProgress={this.onCourseMaterialUploadProgress}
         onChangeMaterialStorageKey={this.onChangeMaterialStorageKey}
