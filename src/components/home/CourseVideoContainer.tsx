@@ -15,6 +15,7 @@ interface CourseProps {
   canGoBack: boolean;
   isLastSection: boolean;
   isCurrentSectionCompleted: boolean;
+  courseCompleteLoading: boolean;
   refetchProgress: (shouldLoad: boolean) => void;
   onChangeSection: (direction: ChangeDirection) => void;
   onCourseComplete: () => void;
@@ -29,6 +30,7 @@ const CourseVideoContainer: React.FC<CourseProps> = ({
   canGoBack,
   isLastSection,
   isCurrentSectionCompleted,
+  courseCompleteLoading,
   refetchProgress,
   onChangeSection,
   onCourseComplete,
@@ -77,7 +79,7 @@ const CourseVideoContainer: React.FC<CourseProps> = ({
     <CourseSectionContainer
       canGoBack={canGoBack}
       courseTitle={courseTitle}
-      loading={loading}
+      loading={loading || courseCompleteLoading}
       error={error ? feedbackMessages.genericErrorTryAgain : undefined}
       continueText={isLastSection ? "Finish" : "Continue"}
       onChangeSection={onChangeSection}

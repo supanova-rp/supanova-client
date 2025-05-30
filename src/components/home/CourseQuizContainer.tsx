@@ -20,6 +20,7 @@ interface Props {
   canGoBack: boolean;
   isLastSection: boolean;
   isCurrentSectionCompleted: boolean;
+  courseCompleteLoading: boolean;
   courseTitle: string;
   quizSection: CourseQuizSection;
   refetchProgress: (shouldLoad?: boolean) => void;
@@ -34,6 +35,7 @@ export const CourseQuizContainer: React.FC<Props> = ({
   courseTitle,
   isLastSection,
   isCurrentSectionCompleted,
+  courseCompleteLoading,
   quizSection,
   refetchProgress,
   onChangeSection,
@@ -160,7 +162,7 @@ export const CourseQuizContainer: React.FC<Props> = ({
       onChangeSection={onChangeSection}
       onClickContinue={onSubmitQuiz}
       onClickBackChevron={onClickBackChevron}
-      loading={loading}
+      loading={loading || courseCompleteLoading}
       error={error ? feedbackMessages.genericErrorTryAgain : undefined}
     >
       <Quiz
@@ -170,7 +172,7 @@ export const CourseQuizContainer: React.FC<Props> = ({
         selectedAnswers={selectedAnswers}
         showFeedbackModal={showFeedbackModal}
         isLastSection={isLastSection}
-        loading={loading}
+        loading={loading || courseCompleteLoading}
         onChangeAnswer={onChangeAnswer}
         onClickModalConfirm={onClickModalConfirm}
       />

@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/browser";
 import uuid from "react-uuid";
 import {
   API_DOMAIN,
@@ -93,10 +94,12 @@ export const request = async ({
     } else if (response.status === 401) {
       onUnauthorised();
     } else {
+      Sentry.captureException(result.error);
       onError(result.error);
     }
   } catch (error) {
     console.log(`error from ${method} request to ${endpoint}`, error);
+    Sentry.captureException(error);
 
     onError(error as string);
   }

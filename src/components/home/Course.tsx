@@ -29,6 +29,8 @@ const Course: React.FC<CoursesProps> = ({
   refetchProgress,
 }) => {
   const navigate = useNavigate();
+
+  // TODO: could refactor to useLazyQuery
   const setCourseCompleted = useRequest("/set-course-completed");
 
   const { sections } = course;
@@ -40,6 +42,10 @@ const Course: React.FC<CoursesProps> = ({
   const [initialCurrentVideoTime, setInitialCurrentVideoTime] =
     useState<number>(0);
   const [isCourseComplete, setCourseComplete] = useState<boolean>(false);
+  const [courseCompleteError, setCourseCompleteError] =
+    useState<boolean>(false);
+  const [courseCompleteLoading, setCourseCompleteLoading] =
+    useState<boolean>(false);
 
   const onSelectVideo = (sectionIndex: number) => {
     const sectionId = sections[sectionIndex].id;
@@ -104,18 +110,35 @@ const Course: React.FC<CoursesProps> = ({
     setCourseCompleted({
       requestBody: {
         courseId: course.id,
+        courseName: course.title,
       },
-      onSuccess: () => {},
-      onError: () => {},
+      onSuccess: () => {
+        setCourseComplete(true);
+        setCourseCompleteError(false);
+        setCourseCompleteLoading(false);
+        scrollToTop();
+      },
+      onError: () => {
+        setCourseComplete(true); // Still set course to complete, we'll show the error notification next to CourseComplete card
+        setCourseCompleteError(true);
+        setCourseCompleteLoading(false);
+      },
+      onRequestBegin: () => {
+        setCourseCompleteError(false);
+        setCourseCompleteLoading(true);
+      },
     });
-
-    setCourseComplete(true);
-
-    scrollToTop();
   };
 
   if (isCourseComplete) {
-    return <CourseComplete course={course} />;
+    return (
+      <CourseComplete
+        course={course}
+        error={courseCompleteError}
+        loading={courseCompleteLoading}
+        onPressTryAgain={onCourseComplete}
+      />
+    );
   }
 
   if (typeof currentSectionIndex !== "number") {
@@ -158,6 +181,7 @@ const Course: React.FC<CoursesProps> = ({
         canGoBack={canGoBack}
         isLastSection={isLastSection}
         isCurrentSectionCompleted={isCurrentSectionCompleted}
+        courseCompleteLoading={courseCompleteLoading}
         refetchProgress={refetchProgress}
         onChangeSection={onChangeSection}
         onCourseComplete={onCourseComplete}
@@ -176,6 +200,7 @@ const Course: React.FC<CoursesProps> = ({
         quizSection={currentSection}
         isLastSection={isLastSection}
         isCurrentSectionCompleted={isCurrentSectionCompleted}
+        courseCompleteLoading={courseCompleteLoading}
         refetchProgress={refetchProgress}
         onChangeSection={onChangeSection}
         onCourseComplete={onCourseComplete}

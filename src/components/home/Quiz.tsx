@@ -34,7 +34,7 @@ const Quiz: React.FC<Props> = ({
       return "Try again";
     }
 
-    return isLastSection ? "Finish" : "Continue";
+    return "Continue";
   };
 
   const getFeedbackText = () => {
@@ -43,7 +43,7 @@ const Quiz: React.FC<Props> = ({
     }
 
     return isLastSection
-      ? "You got everything correct! Congratulations, you have completed the course!"
+      ? "You got everything correct!"
       : "You got everything correct! Continue to the next section of the course.";
   };
 
