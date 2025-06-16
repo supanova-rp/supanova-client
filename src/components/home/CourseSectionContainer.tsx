@@ -13,7 +13,8 @@ interface Props extends PropsWithChildren {
   className?: string;
   loading?: boolean;
   error?: string;
-  onChangeSection: (direction: ChangeDirection) => void;
+  hasDirectionButtons?: boolean;
+  onChangeSection?: (direction: ChangeDirection) => void;
   onClickContinue?: () => void;
   onCourseComplete?: () => void;
   onClickBackChevron: () => void;
@@ -27,6 +28,7 @@ const CourseSectionContainer: React.FC<Props> = ({
   canGoBack,
   loading,
   error,
+  hasDirectionButtons = true,
   onChangeSection,
   onClickContinue,
   onClickBackChevron,
@@ -52,6 +54,10 @@ const CourseSectionContainer: React.FC<Props> = ({
   };
 
   const renderBack = () => {
+    if (!onChangeSection) {
+      return null;
+    }
+
     return (
       <Button
         onClick={() => onChangeSection("prev")}
@@ -65,6 +71,10 @@ const CourseSectionContainer: React.FC<Props> = ({
   };
 
   const renderDirectionButtons = () => {
+    if (!hasDirectionButtons) {
+      return null;
+    }
+
     if (canGoBack) {
       return (
         <div>

@@ -25,6 +25,7 @@ body, html, #root {
   --success-color: #198754;
   --warning-color: #ffc007;
   --hover-color-error: #e44c5b;
+  --linear-gradient-orange: #a46108;
 }
 
 .main-button {
@@ -91,12 +92,13 @@ hr {
   opacity: 1;
 }
 
-@import "./authentication";
 @import "./admin";
-@import "./sidebar";
-@import "./navbar";
-@import "./home";
+@import "./authentication";
+@import "./course-intro";
 @import "./feedback";
+@import "./home";
 @import "./modals";
-@import "./quiz";
+@import "./navbar";
 @import "./other";
+@import "./quiz";
+@import "./sidebar";

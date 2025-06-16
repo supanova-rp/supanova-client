@@ -135,6 +135,7 @@ export type UserToCourses = {
 };
 
 export type UserCourseProgress = {
+  completedIntro: boolean;
   completedSectionIds: ID[];
 };
 

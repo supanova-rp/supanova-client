@@ -14,20 +14,24 @@ import {
   resetVideoProgressTime,
 } from "src/utils/course-utils";
 
-import SectionTableRow from "./SectionTableRow";
+import SectionTableRow, { SectionTableRowTypes } from "./SectionTableRow";
 
 interface Props {
   course: Course;
+  completedIntro: boolean;
   completedSectionIds: UserCourseProgress["completedSectionIds"];
   refetchProgress: (shouldLoad?: boolean) => void;
+  onSelectIntroduction: () => void;
   onSelectVideo: (sectionIndex: number) => void;
   onSelectQuiz: (sectionIndex: number) => void;
 }
 
 export const CourseSummary: React.FC<Props> = ({
   course,
+  completedIntro,
   completedSectionIds,
   refetchProgress,
+  onSelectIntroduction,
   onSelectVideo,
   onSelectQuiz,
 }) => {
@@ -96,6 +100,10 @@ export const CourseSummary: React.FC<Props> = ({
     sectionId: ID,
     sectionIndex: number,
   ): SectionProgressState => {
+    if (!completedIntro) {
+      return SectionProgressState.Locked;
+    }
+
     if (completedSectionIds.includes(sectionId)) {
       return SectionProgressState.Completed;
     }
@@ -111,6 +119,14 @@ export const CourseSummary: React.FC<Props> = ({
     return SectionProgressState.Empty;
   };
 
+  const getIntroProgressState = (): SectionProgressState => {
+    if (completedIntro) {
+      return SectionProgressState.Completed;
+    }
+
+    return SectionProgressState.Current;
+  };
+
   return (
     <div
       key={`${course.title} ${course.id}`}
@@ -119,13 +135,24 @@ export const CourseSummary: React.FC<Props> = ({
       <p className="course-desc">{course.description}</p>
       <table className="table table-bordered mt-3">
         <tbody>
+          <SectionTableRow
+            rowType={SectionTableRowTypes.Introduction}
+            sectionProgressState={getIntroProgressState()}
+            title="Introduction"
+            onClickFunc={onSelectIntroduction}
+          />
+
           {course.sections.map((section, sectionIndex) => {
             const isVideoSection = getIsVideoSection(section);
 
             return (
               <SectionTableRow
                 key={section.id}
-                isVideoSection={isVideoSection}
+                rowType={
+                  isVideoSection
+                    ? SectionTableRowTypes.Video
+                    : SectionTableRowTypes.Quiz
+                }
                 sectionProgressState={getSectionProgressState(
                   section.id,
                   sectionIndex,

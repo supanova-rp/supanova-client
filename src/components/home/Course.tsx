@@ -10,6 +10,7 @@ import {
 import { getVideoProgressTime } from "src/utils/course-utils";
 
 import { CourseComplete } from "./CourseComplete";
+import { CourseIntro } from "./CourseIntro";
 import { CourseMaterials } from "./CourseMaterials";
 import { CourseQuizContainer } from "./CourseQuizContainer";
 import { CourseSummary } from "./CourseSummary";
@@ -35,6 +36,7 @@ const Course: React.FC<CoursesProps> = ({
 
   const { sections } = course;
   const completedSectionIds = courseProgress?.completedSectionIds || [];
+  const completedIntro = courseProgress?.completedIntro;
 
   const [currentSectionIndex, setCurrentSectionIndex] = useState<number | null>(
     null,
@@ -42,6 +44,8 @@ const Course: React.FC<CoursesProps> = ({
   const [initialCurrentVideoTime, setInitialCurrentVideoTime] =
     useState<number>(0);
   const [isCourseComplete, setCourseComplete] = useState<boolean>(false);
+  const [isShowingIntroduction, setShowingIntroduction] =
+    useState<boolean>(false);
   const [courseCompleteError, setCourseCompleteError] =
     useState<boolean>(false);
   const [courseCompleteLoading, setCourseCompleteLoading] =
@@ -60,11 +64,27 @@ const Course: React.FC<CoursesProps> = ({
     setCurrentSectionIndex(sectionIndex);
   };
 
+  const onSelectIntroduction = () => {
+    setShowingIntroduction(true);
+  };
+
   const scrollToTop = () => {
     const containerEl = document.querySelector("#root");
     if (containerEl) {
       containerEl.scrollTo(0, 0);
     }
+  };
+
+  const onPressBeginCourse = () => {
+    setCurrentSectionIndex(0);
+    setShowingIntroduction(false);
+    scrollToTop();
+    refetchProgress(false);
+  };
+
+  const onPressIntroBack = () => {
+    setShowingIntroduction(false);
+    scrollToTop();
   };
 
   const onSelectQuiz = (sectionIndex: number) => {
@@ -141,6 +161,17 @@ const Course: React.FC<CoursesProps> = ({
     );
   }
 
+  if (isShowingIntroduction) {
+    return (
+      <CourseIntro
+        courseId={course.id}
+        courseTitle={course.title}
+        onPressBack={onPressIntroBack}
+        onPressBeginCourse={onPressBeginCourse}
+      />
+    );
+  }
+
   if (typeof currentSectionIndex !== "number") {
     return (
       <div className="w-100">
@@ -152,8 +183,10 @@ const Course: React.FC<CoursesProps> = ({
 
         <CourseSummary
           course={course}
+          completedIntro={completedIntro}
           completedSectionIds={completedSectionIds}
           refetchProgress={refetchProgress}
+          onSelectIntroduction={onSelectIntroduction}
           onSelectVideo={onSelectVideo}
           onSelectQuiz={onSelectQuiz}
         />
