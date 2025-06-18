@@ -5,6 +5,7 @@ import {
   EMAIL_JS_PUBLIC_KEY,
   EMAIL_JS_SERVICE_ID,
   EMAIL_JS_TEMPLATE_ID,
+  feedbackMessages,
 } from "src/constants/constants";
 
 import {
@@ -89,13 +90,13 @@ export const request = async ({
     console.log(`response from ${method} request to ${endpoint}`, response);
     console.log(`result from ${method} request to ${endpoint}`, result);
 
-    if (!result.error) {
+    if (response.status >= 200 && response.status < 300) {
       onSuccess(result);
     } else if (response.status === 401) {
       onUnauthorised();
     } else {
-      Sentry.captureException(result.error);
-      onError(result.error);
+      Sentry.captureException(result?.error || feedbackMessages.genericError);
+      onError(result?.error || feedbackMessages.genericError);
     }
   } catch (error) {
     console.log(`error from ${method} request to ${endpoint}`, error);
@@ -128,4 +129,16 @@ export const getAddUsersDefaultState = () => {
       alreadyRegistered: false,
     },
   ];
+};
+
+export const generateRandomString = (length = 10) => {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "";
+  for (let i = 0; i < length; i++) {
+    const randIndex = Math.floor(Math.random() * characters.length);
+    result += characters[randIndex];
+  }
+
+  return result;
 };

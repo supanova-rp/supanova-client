@@ -11,9 +11,9 @@ type AuthCardProps = React.PropsWithChildren & {
   title: string;
   subTitle: string;
   buttonText: string;
-  footerText: string;
-  footerLinkText: string;
-  footerLinkPath: string;
+  footerText?: string;
+  footerLinkText?: string;
+  footerLinkPath?: string;
   isLoading: boolean;
   onSubmit: (event: FormSubmitEvent) => Promise<void>;
 };
@@ -69,11 +69,13 @@ const AuthCard: React.FC<AuthCardProps> = ({
               )}
             </Button>
 
-            <AuthFooter
-              footerText={footerText}
-              footerLinkPath={footerLinkPath}
-              footerLinkText={footerLinkText}
-            />
+            {footerText && footerLinkPath && footerLinkText ? (
+              <AuthFooter
+                footerText={footerText}
+                footerLinkPath={footerLinkPath}
+                footerLinkText={footerLinkText}
+              />
+            ) : null}
           </Form>
         </Card.Body>
       </Card>

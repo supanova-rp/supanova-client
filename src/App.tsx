@@ -6,7 +6,6 @@ import AdminRoute from "./components/admin/AdminRoute";
 import ForgotPassword from "./components/authentication/ForgotPassword";
 import Login from "./components/authentication/Login";
 import RedirectLoggedInUser from "./components/authentication/RedirectLoggedInUser";
-import Register from "./components/authentication/Register";
 import { DashboardContainer } from "./components/dashboard/DashboardContainer";
 import CourseContainer from "./components/home/CourseContainer";
 import PageErrorScreen from "./components/PageErrorScreen";
@@ -35,14 +34,6 @@ const App = () => {
               element={
                 <RedirectLoggedInUser>
                   <Login />
-                </RedirectLoggedInUser>
-              }
-            />
-            <Route
-              path="/register"
-              element={
-                <RedirectLoggedInUser>
-                  <Register />
                 </RedirectLoggedInUser>
               }
             />

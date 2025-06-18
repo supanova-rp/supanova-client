@@ -52,9 +52,6 @@ const Login = () => {
       title="Welcome!"
       subTitle="Log in to your Supanova account"
       buttonText="Log in"
-      footerText="Don't have an account?"
-      footerLinkText="Register"
-      footerLinkPath="/register"
       isLoading={isLoading}
       onSubmit={onHandleLogin}
     >

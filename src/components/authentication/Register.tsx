@@ -15,6 +15,9 @@ import FormInput from "../FormInput";
 
 const formGroupClassname = "mb-2 auth-form-input";
 
+// NOTE - THIS COMPONENT IS NOT USED CURRENTLY BUT MAY BE IN FUTURE IF
+// WE ALLOW USERS TO REGISTER THEMSELVES
+
 const Register = () => {
   const [emailInput, setEmailInput] = useState<string>("");
   const [passwordInput, setPasswordInput] = useState<string>("");

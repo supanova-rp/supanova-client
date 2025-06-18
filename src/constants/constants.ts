@@ -10,6 +10,7 @@ export const ADMINS_TABS = {
   ADD_COURSE: "Add Course",
   EDIT_COURSES: "Edit Courses",
   ASSIGN_USERS: "Assign Users",
+  REGISTER_USER: "Register User",
   ADD_USERS: "Add Users",
 };
 
@@ -45,6 +46,7 @@ export const feedbackMessages = {
   passwordResetError: "Failed to reset password. Try again.",
   accountInvalid: "Account doesn't exist. Please register first.",
   accountAlreadyExists: "Account already exists. Log in instead.",
+  accountAlreadyExistsRegisterUser: "This email address is already in use",
   registrationError: "Failed to create an account. Try again.",
   loginError: "Login failed. Try again.",
   loginValidationError: "Wrong email and/or password.",
