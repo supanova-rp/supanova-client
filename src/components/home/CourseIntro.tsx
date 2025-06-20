@@ -16,7 +16,7 @@ const header2 = "Before you begin, here are a few key things to know:";
 const textLines = [
   {
     header: "Set yourself up for success",
-    text: "Find a quiet space free from distractions. Keep a pen and paper handy in case you want to make notes or jot down any questions for your 'Call with the RPA' afterwards.",
+    text: "Find a quiet space free from distractions. Keep a pen and paper handy in case you want to make notes or jot down any questions for your ‘Call with the RPA’ after the course. You can take the course on your computer, tablet, or phone - whatever works best for you.",
   },
   {
     header: "Course structure",
@@ -28,15 +28,19 @@ const textLines = [
   },
   {
     header: "How to progress",
-    text: "Watch each video in full, then complete the quiz that follows. You'll need to pass each quiz to unlock the next module, and all quizzes must be passed to complete the course.",
+    text: "Watch each video in full, then complete the quiz that follows. You’ll need to pass each quiz to unlock the next module, and all quizzes must be passed to complete the course.",
   },
   {
     header: "Quizzes",
     text: "A score of 100% is required to pass each quiz, but you have unlimited attempts. If you're unsure about a question, revisit the relevant part of the video or consult the Course Notes.",
   },
   {
+    header: "Types of questions",
+    text: "Some quiz questions require a single correct answer, while others may require multiple answers. This will be clearly stated in each question - read carefully before answering.",
+  },
+  {
     header: "Time commitment",
-    text: "Each module typically takes between 10 and 30 minutes to complete.",
+    text: "Each module typically takes between 10 and 30 minutes to complete. You can adjust the playback speed of the videos to suit your learning style - speed it up if the content is straightforward, or slow it down if you’d like more time to take things in.",
   },
   {
     header: "Need help?",
