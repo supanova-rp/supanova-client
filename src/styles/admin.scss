@@ -202,25 +202,6 @@
   width: 11rem;
 }
 
-.add-users-form-container {
-  display: flex;
-  flex-direction: column;
-
-  @media screen and (min-width: 768px) {
-    align-items: center;
-    flex-direction: row;
-  }
-}
-
-.add-users-input-container {
-  display: flex;
-  flex-direction: column;
-
-  @media screen and (min-width: 768px) {
-    flex-direction: row;
-  }
-}
-
 .register-user-form {
   .text-input {
     max-width: 350px;

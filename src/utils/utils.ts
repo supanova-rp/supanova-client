@@ -1,36 +1,7 @@
 import * as Sentry from "@sentry/browser";
-import uuid from "react-uuid";
-import {
-  API_DOMAIN,
-  EMAIL_JS_PUBLIC_KEY,
-  EMAIL_JS_SERVICE_ID,
-  EMAIL_JS_TEMPLATE_ID,
-  feedbackMessages,
-} from "src/constants/constants";
+import { API_DOMAIN, feedbackMessages } from "src/constants/constants";
 
-import {
-  UserInfoToUpdate,
-  User,
-  FirebaseUser,
-  AdminTabValue,
-} from "../types/index";
-
-export const updateUsers = (
-  users: User[],
-  userId: string,
-  userInfoToUpdate: UserInfoToUpdate,
-) => {
-  return users.map(user => {
-    if (user.id === userId) {
-      return {
-        ...user,
-        ...userInfoToUpdate,
-      };
-    }
-
-    return user;
-  });
-};
+import { FirebaseUser, AdminTabValue } from "../types/index";
 
 export const getClassNameSidebarTab = (
   activeTab: string | null,
@@ -104,31 +75,6 @@ export const request = async ({
 
     onError(error as string);
   }
-};
-
-export const getEmailJsParams = (username: string, email: string) => {
-  return {
-    service_id: EMAIL_JS_SERVICE_ID,
-    template_id: EMAIL_JS_TEMPLATE_ID,
-    user_id: EMAIL_JS_PUBLIC_KEY,
-    template_params: {
-      user_name: username,
-      user_email: email,
-    },
-  };
-};
-
-export const getAddUsersDefaultState = () => {
-  return [
-    {
-      id: uuid(),
-      name: "",
-      email: "",
-      added: false,
-      addUserError: false,
-      alreadyRegistered: false,
-    },
-  ];
 };
 
 export const generateRandomString = (length = 10) => {

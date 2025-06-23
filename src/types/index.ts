@@ -118,15 +118,6 @@ export type getUpdatedSectionsKey =
   | "storageKey"
   | "questions";
 
-export type User = {
-  id: string;
-  name: string;
-  email: string;
-  added: boolean;
-  addUserError: boolean;
-  alreadyRegistered: boolean;
-};
-
 export type UserToCourses = {
   id: string;
   name: string;
@@ -145,12 +136,6 @@ export enum SectionProgressState {
   Locked = "locked",
   Empty = "empty", // Edge case state that would only happen if a new section is added after user has already made progress further than the new section
 }
-
-export type UserInfoToUpdate = {
-  added?: boolean;
-  addUserError?: boolean;
-  alreadyRegistered?: boolean;
-};
 
 export type PasswordsShowing = {
   password: boolean;

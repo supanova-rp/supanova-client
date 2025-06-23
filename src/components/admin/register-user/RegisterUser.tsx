@@ -13,6 +13,7 @@ import { FormSubmitEvent } from "src/types";
 import { generateRandomString } from "src/utils/utils";
 
 import FormInput from "../../FormInput";
+import AdminHeader from "../AdminHeader";
 
 const formGroupClassname = "mb-2";
 
@@ -76,13 +77,36 @@ export const RegisterUser = () => {
 
   return (
     <div>
+      <AdminHeader title="Register Users" />
+
       {userCreated ? (
         <Card className="mb-3 content-card-compact card-info">
           <div>
-            <h5>User successfully registered:</h5>
-            <div>Name: {userCreated.name}</div>
-            <div>Email: {userCreated.email}</div>
-            <div>Password: {userCreated.password}</div>
+            <h5 className="mb-3">User successfully registered!</h5>
+            <div>
+              <b>Name: </b>
+              {userCreated.name}
+            </div>
+            <div>
+              <b>Email:</b> {userCreated.email}
+            </div>
+            <div>
+              <b>Password:</b> {userCreated.password}
+            </div>
+
+            <div className="mt-3">
+              Now you can email this user with their password and assign them to
+              the correct courses
+            </div>
+
+            <div className="mt-3">
+              <b>
+                NOTE - Make a note of this password before pressing
+                &apos;Done&apos; or leaving this page otherwise it will be lost
+                forever (and we will have to reset their password on firebase or
+                re-create their user)
+              </b>
+            </div>
           </div>
 
           <Button

@@ -1,5 +1,4 @@
 import AddCourseIcon from "../assets/icons/addCourseIcon.svg?react";
-import AddUserIcon from "../assets/icons/addUserIcon.svg?react";
 import AssignUserIcon from "../assets/icons/assignUserIcon.svg?react";
 import EditCourseIcon from "../assets/icons/editCourseIcon.svg?react";
 import HomeIcon from "../assets/icons/homeIcon.svg?react";
@@ -10,18 +9,13 @@ export const ADMINS_TABS = {
   ADD_COURSE: "Add Course",
   EDIT_COURSES: "Edit Courses",
   ASSIGN_USERS: "Assign Users",
-  REGISTER_USER: "Register User",
-  ADD_USERS: "Add Users",
+  REGISTER_USER: "Register Users",
 };
 
 export enum CourseTabs {
   Courses = "Courses",
   Instructor = "Instructor",
 }
-
-export const EMAIL_JS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-export const EMAIL_JS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
-export const EMAIL_JS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
 export const unauthedRoutes = ["/register", "/forgot-password"];
 
@@ -51,12 +45,11 @@ export const feedbackMessages = {
   loginError: "Login failed. Try again.",
   loginValidationError: "Wrong email and/or password.",
   logoutError: "Failed to log out. Please try again.",
-  adminAccessError:
-    "You are trying to access a page that requires Admin access...",
+  notFoundError: "The page you were looking for could not be found...",
   adminVerificationError: "Failed to very if user is Admin.",
 };
 
-const { ADD_COURSE, ADD_USERS, ASSIGN_USERS, EDIT_COURSES } = ADMINS_TABS;
+const { ADD_COURSE, ASSIGN_USERS, EDIT_COURSES } = ADMINS_TABS;
 
 export const bottomMobileNavbarIcons = [
   {
@@ -73,11 +66,6 @@ export const bottomMobileNavbarIcons = [
     id: 3,
     icon: AssignUserIcon,
     tabName: ASSIGN_USERS,
-  },
-  {
-    id: 4,
-    icon: AddUserIcon,
-    tabName: ADD_USERS,
   },
   {
     id: 5,

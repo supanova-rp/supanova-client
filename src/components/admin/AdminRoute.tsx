@@ -8,7 +8,6 @@ import PageErrorScreen from "../PageErrorScreen";
 const AdminRoute = ({ children }: React.PropsWithChildren) => {
   const { isLoading, isAdmin } = useAuth();
 
-  // TODO: test if this still works as a non admin
   if (isLoading) {
     return (
       <div className="d-flex flex-column align-items-center justify-content-center h-100">
@@ -19,7 +18,7 @@ const AdminRoute = ({ children }: React.PropsWithChildren) => {
 
   if (!isAdmin) {
     return (
-      <PageErrorScreen title="Oops!" text={feedbackMessages.adminAccessError} />
+      <PageErrorScreen title="Oops!" text={feedbackMessages.notFoundError} />
     );
   }
 

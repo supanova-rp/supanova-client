@@ -9,6 +9,7 @@ import RedirectLoggedInUser from "./components/authentication/RedirectLoggedInUs
 import { DashboardContainer } from "./components/dashboard/DashboardContainer";
 import CourseContainer from "./components/home/CourseContainer";
 import PageErrorScreen from "./components/PageErrorScreen";
+import { feedbackMessages } from "./constants/constants";
 import { AppProvider } from "./contexts/AppContext";
 import { AuthProvider } from "./contexts/AuthContext";
 
@@ -42,7 +43,7 @@ const App = () => {
               element={
                 <PageErrorScreen
                   title="Oops"
-                  text="The page you were looking for could not be found..."
+                  text={feedbackMessages.notFoundError}
                 />
               }
             />

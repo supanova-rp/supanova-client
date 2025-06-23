@@ -4,15 +4,13 @@ import { ADMINS_TABS } from "src/constants/constants";
 import { AdminTabValue } from "src/types";
 
 import AddCourse from "./add-course/AddCourse";
-import AddUsers from "./add-users/AddUsers";
 import AssignUsers from "./assign-users/AssignUsers";
 import EditCourses from "./edit-courses/EditCourses";
 import { RegisterUser } from "./register-user/RegisterUser";
 import AdminSidebarContainer from "./sidebar/AdminSidebarContainer";
 import BottomMobileNavbar from "../nav/BottomMobileNavbar";
 
-const { ADD_COURSE, ADD_USERS, ASSIGN_USERS, EDIT_COURSES, REGISTER_USER } =
-  ADMINS_TABS;
+const { ADD_COURSE, ASSIGN_USERS, EDIT_COURSES, REGISTER_USER } = ADMINS_TABS;
 
 const Admin = () => {
   const [activeTab, setActiveTab] = useState<AdminTabValue>(ADD_COURSE);
@@ -28,10 +26,6 @@ const Admin = () => {
 
     if (activeTab === ASSIGN_USERS) {
       return <AssignUsers />;
-    }
-
-    if (activeTab === ADD_USERS) {
-      return <AddUsers />;
     }
 
     if (activeTab === REGISTER_USER) {
