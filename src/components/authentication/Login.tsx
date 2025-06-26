@@ -48,7 +48,7 @@ const Login = () => {
 
   return (
     <AuthCard
-      cardClassname="auth-card"
+      cardClassname=""
       title="Welcome!"
       subTitle="Log in to your Supanova account"
       buttonText="Log in"
@@ -82,7 +82,7 @@ const Login = () => {
       />
 
       <div className="auth-link-container">
-        <Link to="/forgot-password" className="auth-link">
+        <Link to="/reset-password" className="auth-link">
           Forgot password?
         </Link>
       </div>

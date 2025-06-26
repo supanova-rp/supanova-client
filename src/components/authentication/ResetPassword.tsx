@@ -10,7 +10,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { FormSubmitEvent } from "../../types/index";
 import FormInput from "../FormInput";
 
-const ForgotPassword = () => {
+const ResetPassword = () => {
   const [emailInput, setEmailInput] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -42,12 +42,12 @@ const ForgotPassword = () => {
 
   return (
     <AuthCard
-      cardClassname="forgot-password-card"
-      title="Forgot password?"
+      cardClassname="reset-password-card"
+      title="Reset password"
       subTitle="Reset your password below"
       isLoading={isLoading}
       buttonText="Reset password"
-      buttonClassName="forgot-password-button"
+      buttonClassName="reset-password-button"
       onSubmit={onHandleResetPassword}
       footerText="Have an account?"
       footerLinkText="Login"
@@ -55,8 +55,8 @@ const ForgotPassword = () => {
     >
       <FormInput
         formId="email"
-        formGroupClassname="mb-2"
-        inputContainerClassname="forgot-password-input"
+        formGroupClassname="mb-4 reset-password-form"
+        inputContainerClassname="text-input"
         label="Email"
         type="email"
         value={emailInput}
@@ -66,4 +66,4 @@ const ForgotPassword = () => {
   );
 };
 
-export default ForgotPassword;
+export default ResetPassword;

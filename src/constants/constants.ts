@@ -17,7 +17,7 @@ export enum CourseTabs {
   Instructor = "Instructor",
 }
 
-export const unauthedRoutes = ["/register", "/forgot-password"];
+export const unauthedRoutes = ["/login", "/reset-password"];
 
 export const feedbackMessages = {
   genericError: "Oops something went wrong!",

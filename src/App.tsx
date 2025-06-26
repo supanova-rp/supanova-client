@@ -3,9 +3,9 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import Admin from "./components/admin/Admin";
 import AdminRoute from "./components/admin/AdminRoute";
-import ForgotPassword from "./components/authentication/ForgotPassword";
 import Login from "./components/authentication/Login";
 import RedirectLoggedInUser from "./components/authentication/RedirectLoggedInUser";
+import ResetPassword from "./components/authentication/ResetPassword";
 import { DashboardContainer } from "./components/dashboard/DashboardContainer";
 import CourseContainer from "./components/home/CourseContainer";
 import PageErrorScreen from "./components/PageErrorScreen";
@@ -29,7 +29,7 @@ const App = () => {
                 </AdminRoute>
               }
             />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route
               path="/login"
               element={

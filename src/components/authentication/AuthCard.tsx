@@ -32,7 +32,7 @@ const AuthCard: React.FC<AuthCardProps> = ({
   isLoading,
   onSubmit,
 }) => {
-  const forgotPasswordButtonClassname = buttonClassName || "auth-button";
+  const resetPasswordButtonClassname = buttonClassName || "auth-button";
 
   return (
     <div className="auth-container">
@@ -48,12 +48,12 @@ const AuthCard: React.FC<AuthCardProps> = ({
             <h2 className="text-center mb-2">{title}</h2>
             <p className="auth-paragraph">{subTitle}</p>
           </div>
-          <Form onSubmit={onSubmit} className="login-form">
+          <Form onSubmit={onSubmit} className="auth-form">
             {children}
             <Button
               disabled={isLoading}
               type="submit"
-              className={`main-button ${forgotPasswordButtonClassname}`}
+              className={`main-button ${resetPasswordButtonClassname}`}
             >
               {isLoading ? (
                 <>

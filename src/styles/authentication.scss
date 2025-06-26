@@ -50,7 +50,7 @@
   }
 }
 
-.login-form {
+.auth-form {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -68,6 +68,10 @@
 .auth-form-input {
   width: 100%;
   position: relative;
+}
+
+.reset-password-form {
+  width: 100%;
 }
 
 .text-input input, .password-input input {
@@ -88,7 +92,7 @@
   width: 356px;
 }
 
-.forgot-password-card {
+.reset-password-card {
   width: 345px;
   min-height: 350px;
   padding: 20px 5px;
@@ -98,14 +102,14 @@
     padding: 20px;
   }
 
-  .forgot-password-alert {
+  .reset-password-alert {
     margin: 20px 0;
     padding: 9px;
     width: 356px;
   }
 }
 
-.forgot-password-button {
+.reset-password-button {
   width: 100%;
 }
 
