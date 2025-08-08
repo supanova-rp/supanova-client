@@ -35,6 +35,7 @@ export const feedbackMessages = {
   deleteCourseError: "Failed to delete course. Try again.",
   deleteCourseSuccess: "Successfully deleted course!",
   saveChangesError: "Failed to save changes. Try again.",
+  quizStateLoadError: "Failed to retrieve saved quiz answers",
   passwordMismatch: "Passwords don't match.",
   passwordResetSuccess: "Password reset. Check your inbox.",
   passwordResetError: "Failed to reset password. Try again.",

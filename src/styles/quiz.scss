@@ -34,6 +34,11 @@
       color: inherit;
     }
   }
+
+  &.disabled {
+    cursor: default;
+    border: 1px solid var(--border-color-lighter-grey);
+  }
 }
 
 .quiz-answer-selected {

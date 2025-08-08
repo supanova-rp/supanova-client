@@ -12,6 +12,7 @@ interface Props {
   allAnswersAreCorrect: boolean;
   isLastSection: boolean;
   loading: boolean;
+  disabled?: boolean;
   onChangeAnswer: (questionIndex: number, answerIndex: number) => void;
   onClickModalConfirm: () => void;
 }
@@ -24,6 +25,7 @@ const Quiz: React.FC<Props> = ({
   allAnswersAreCorrect,
   isLastSection,
   loading,
+  disabled = false,
   onChangeAnswer,
   onClickModalConfirm,
 }) => {
@@ -61,6 +63,7 @@ const Quiz: React.FC<Props> = ({
                 key={answer.id}
                 answer={answer}
                 answerIndex={answerIndex}
+                disabled={disabled}
                 questionIndex={questionIndex}
                 selectedAnswers={selectedAnswers}
                 onClickAnswer={onChangeAnswer}

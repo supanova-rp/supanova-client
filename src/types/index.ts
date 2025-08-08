@@ -102,6 +102,10 @@ export type CourseQuizAnswer = {
 export type QuizAnswerIndex = number;
 export type QuizSelectedAnswers = QuizAnswerIndex[];
 export type QuizProgressState = QuizSelectedAnswers[];
+export type QuizStateResponse = {
+  quizId?: string;
+  quizState?: QuizSelectedAnswers[];
+};
 
 export type ChangeDirection = "next" | "prev";
 

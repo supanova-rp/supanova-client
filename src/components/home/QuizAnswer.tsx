@@ -5,6 +5,7 @@ interface Props {
   answer: CourseQuizAnswer;
   answerIndex: number;
   questionIndex: number;
+  disabled: boolean;
   selectedAnswers: any[];
   onClickAnswer: (questionIndex: number, answerIndex: number) => void;
 }
@@ -13,19 +14,27 @@ const QuizAnswer: React.FC<Props> = ({
   answer,
   answerIndex,
   questionIndex,
+  disabled,
   selectedAnswers,
   onClickAnswer,
 }) => {
   const handleClickAnswer = () => {
-    onClickAnswer(questionIndex, answerIndex);
+    if (!disabled) {
+      onClickAnswer(questionIndex, answerIndex);
+    }
   };
 
   const selectedClass = selectedAnswers[questionIndex].includes(answerIndex)
     ? "quiz-answer-selected"
     : "";
 
+  const disabledClass = disabled ? "disabled" : "";
+
   return (
-    <div className={`quiz-answer ${selectedClass}`} onClick={handleClickAnswer}>
+    <div
+      className={`quiz-answer ${selectedClass} ${disabledClass}`}
+      onClick={handleClickAnswer}
+    >
       <span>{answer.answer}</span>
     </div>
   );

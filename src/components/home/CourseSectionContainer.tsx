@@ -12,6 +12,7 @@ interface Props extends PropsWithChildren {
   continueText?: string;
   className?: string;
   loading?: boolean;
+  loadingContinue?: boolean;
   error?: string;
   hasDirectionButtons?: boolean;
   onChangeSection?: (direction: ChangeDirection) => void;
@@ -27,6 +28,7 @@ const CourseSectionContainer: React.FC<Props> = ({
   className = "",
   canGoBack,
   loading,
+  loadingContinue = false,
   error,
   hasDirectionButtons = true,
   onChangeSection,
@@ -34,7 +36,7 @@ const CourseSectionContainer: React.FC<Props> = ({
   onClickBackChevron,
 }) => {
   const renderContinue = () => {
-    if (loading) {
+    if (loading || loadingContinue) {
       return (
         <Button type="button" className="main-button continue-button" disabled>
           <PulseLoader color={colors.white} size={8} />

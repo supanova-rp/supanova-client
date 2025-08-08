@@ -1,9 +1,12 @@
+import * as Sentry from "@sentry/browser";
 import { useState } from "react";
-import { feedbackMessages } from "src/constants/constants";
+import toast from "react-hot-toast";
 import {
-  getQuizProgressInitialState,
-  setQuizProgress,
-} from "src/utils/course-utils";
+  feedbackMessages,
+  REACT_TOAST_DURATION,
+} from "src/constants/constants";
+import { useLazyQuery } from "src/hooks/useLazyQuery";
+import { useQuery } from "src/hooks/useQuery";
 
 import CourseSectionContainer from "./CourseSectionContainer";
 import useUpdateProgress from "./hooks/useUpdateProgress";
@@ -13,6 +16,7 @@ import {
   CourseQuizSection,
   ID,
   QuizProgressState,
+  QuizStateResponse,
 } from "../../types/index";
 
 interface Props {
@@ -43,8 +47,28 @@ export const CourseQuizContainer: React.FC<Props> = ({
   onClickBackChevron,
 }) => {
   const [selectedAnswers, setSelectedAnswers] = useState<QuizProgressState>(
-    getQuizProgressInitialState(quizSection),
+    new Array(quizSection.questions.length).fill([]),
   );
+
+  const { loading: loadingQuizState } = useQuery<QuizStateResponse>(
+    "/get-quiz-state",
+    {
+      requestBody: {
+        quizId: quizSection.id,
+      },
+      onSuccess: res => {
+        if (res?.quizState) {
+          setSelectedAnswers(res.quizState);
+        }
+      },
+      onError: error => {
+        Sentry.captureException(error);
+        toast.error(feedbackMessages.quizStateLoadError, REACT_TOAST_DURATION);
+      },
+    },
+  );
+
+  const { request: saveQuizState } = useLazyQuery<null>("/set-quiz-state");
 
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [allAnswersAreCorrect, setAllAnswersAreCorrect] = useState(false);
@@ -105,8 +129,10 @@ export const CourseQuizContainer: React.FC<Props> = ({
 
     setSelectedAnswers(updatedSelectedAnswers);
 
-    // Update local storage
-    setQuizProgress(quizSection.id, updatedSelectedAnswers);
+    saveQuizState({
+      quizId: quizSection.id,
+      quizState: JSON.stringify(updatedSelectedAnswers),
+    });
   };
 
   const calculateScore = () => {
@@ -163,6 +189,7 @@ export const CourseQuizContainer: React.FC<Props> = ({
       onClickContinue={onSubmitQuiz}
       onClickBackChevron={onClickBackChevron}
       loading={loading || courseCompleteLoading}
+      loadingContinue={loadingQuizState}
       error={error ? feedbackMessages.genericErrorTryAgain : undefined}
     >
       <Quiz

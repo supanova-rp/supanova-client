@@ -1,5 +1,6 @@
 import { Button } from "react-bootstrap";
 import { useAuth } from "src/contexts/AuthContext";
+import { useLazyQuery } from "src/hooks/useLazyQuery";
 import useRequest from "src/hooks/useRequest";
 import {
   Course,
@@ -10,7 +11,6 @@ import {
 import {
   getIsQuizSection,
   getIsVideoSection,
-  resetQuizProgress,
   resetVideoProgressTime,
 } from "src/utils/course-utils";
 
@@ -37,6 +37,7 @@ export const CourseSummary: React.FC<Props> = ({
 }) => {
   const { isAdmin } = useAuth();
   const resetProgress = useRequest("/reset-progress");
+  const { request: resetQuizState } = useLazyQuery<null>("/reset-quiz-state");
 
   const getCurrentSectionProgressIndex = () => {
     if (completedSectionIds.length === 0) {
@@ -76,7 +77,9 @@ export const CourseSummary: React.FC<Props> = ({
   const resetQuizSectionProgress = () => {
     course.sections.forEach(section => {
       if (getIsQuizSection(section)) {
-        resetQuizProgress(section.id);
+        resetQuizState({
+          quizId: section.id,
+        });
       }
     });
   };
