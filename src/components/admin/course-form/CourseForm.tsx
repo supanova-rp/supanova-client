@@ -19,6 +19,7 @@ import {
   getInitialEmptyQuizQuestionAndAnswers,
   getCourseWithNewQuizQuestion,
   getUpdatedCourse,
+  isVideoSection,
 } from "./utils";
 
 interface CourseFormProps {
@@ -47,26 +48,43 @@ export default class CourseForm extends Component<CourseFormProps> {
   onVideoFileUploadCancelled = (sectionId: ID) => {
     const { course, onUpdateCourse } = this.props;
 
-    onUpdateCourse(getUpdatedCourse(course, sectionId, "uploadProgress", null));
+    onUpdateCourse({
+      ...course,
+      sections: course.sections.map(section => {
+        if (isVideoSection(section) && section.id === sectionId) {
+          return {
+            ...section,
+            uploadProgress: null,
+            uploaded: !!section.storageKey, // if there's already a storage key then a file has already been uploaded before
+            storageKeyBeingUploaded: "",
+          };
+        }
+
+        return section;
+      }),
+    });
   };
 
   onVideoFileUploaded = (sectionId: ID, videoUrl: string) => {
     const { course, onUpdateCourse } = this.props;
 
-    const withUpdatedUrl = getUpdatedCourse(
-      course,
-      sectionId,
-      "videoUrl",
-      videoUrl,
-    );
-    const withUpdatedProgress = getUpdatedCourse(
-      withUpdatedUrl,
-      sectionId,
-      "uploadProgress",
-      1,
-    );
+    onUpdateCourse({
+      ...course,
+      sections: course.sections.map(section => {
+        if (isVideoSection(section) && section.id === sectionId) {
+          return {
+            ...section,
+            videoUrl,
+            uploadProgress: 1,
+            uploaded: true,
+            storageKey: section.storageKeyBeingUploaded || "",
+            storageKeyBeingUploaded: "",
+          };
+        }
 
-    onUpdateCourse(withUpdatedProgress);
+        return section;
+      }),
+    });
   };
 
   onVideoFileUploadProgress = (data: AxiosProgressEvent, sectionId: ID) => {
@@ -84,7 +102,12 @@ export default class CourseForm extends Component<CourseFormProps> {
       ...course,
       materials: course.materials.map(material => {
         if (material.id === id) {
-          return { ...material, uploadProgress: null };
+          return {
+            ...material,
+            uploadProgress: null,
+            uploaded: !!material.storageKey, // if there's already a storage key then a file has already been uploaded before
+            storageKeyBeingUploaded: "",
+          };
         }
 
         return material;
@@ -114,7 +137,13 @@ export default class CourseForm extends Component<CourseFormProps> {
       ...course,
       materials: course.materials.map(material => {
         if (material.id === id) {
-          return { ...material, uploadProgress: 1 };
+          return {
+            ...material,
+            uploadProgress: 1,
+            uploaded: true,
+            storageKey: material.storageKeyBeingUploaded || "",
+            storageKeyBeingUploaded: "",
+          };
         }
 
         return material;
@@ -140,9 +169,20 @@ export default class CourseForm extends Component<CourseFormProps> {
   onChangeVideoStorageKey = (sectionId: ID, storageKey: string) => {
     const { course, onUpdateCourse } = this.props;
 
-    onUpdateCourse(
-      getUpdatedCourse(course, sectionId, "storageKey", storageKey),
-    );
+    onUpdateCourse({
+      ...course,
+      sections: course.sections.map(section => {
+        if (isVideoSection(section) && section.id === sectionId) {
+          return {
+            ...section,
+            storageKeyBeingUploaded: storageKey,
+            uploaded: false,
+          };
+        }
+
+        return section;
+      }),
+    });
   };
 
   onHandleUpdateQuiz = (
@@ -165,7 +205,8 @@ export default class CourseForm extends Component<CourseFormProps> {
         if (material.id === materialID) {
           return {
             ...material,
-            storageKey,
+            storageKeyBeingUploaded: storageKey,
+            uploaded: false,
           };
         }
 
@@ -199,6 +240,8 @@ export default class CourseForm extends Component<CourseFormProps> {
       id: uuid(),
       name: "",
       storageKey: "",
+      storageKeyBeingUploaded: "",
+      uploaded: false,
     };
 
     onUpdateCourse({
@@ -216,7 +259,9 @@ export default class CourseForm extends Component<CourseFormProps> {
       type: SectionTypes.Video,
       videoUrl: null,
       storageKey: "",
+      storageKeyBeingUploaded: "",
       isNewSection: isEditing,
+      uploaded: false,
     };
 
     const updatedCourseWithNewVideoSection = getCourseWithNewSection(

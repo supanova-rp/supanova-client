@@ -35,11 +35,14 @@ export type onChangeCourseFieldKey =
   | "completionTitle"
   | "completionMessage";
 
+// TODO: separate an editable course material type from viewable one (currently CourseMaterialResponse)
 export type CourseMaterial = {
   id: ID;
   name: string;
   storageKey: string;
+  storageKeyBeingUploaded: string; // If upload is cancelled, this will be reset. If upload finishes it is moved to storageKey
   uploadProgress?: UploadProgress;
+  uploaded: boolean;
 };
 
 export type CourseMaterialResponse = {
@@ -61,8 +64,10 @@ export type CourseVideoSection = {
   title: string;
   videoUrl: string | null;
   storageKey: string;
-  isNewSection?: boolean;
+  storageKeyBeingUploaded: string; // If upload is cancelled, this will be reset. If upload finishes it is moved to storageKey
+  isNewSection: boolean;
   uploadProgress?: UploadProgress;
+  uploaded: boolean;
   questions?: never;
 };
 
@@ -71,9 +76,6 @@ export type CourseQuizSection = {
   type: SectionTypes;
   questions: CourseQuizQuestion[];
   isNewSection: boolean;
-  title?: never;
-  uploadProgress?: never;
-  videoUrl?: never;
 };
 
 export type CourseQuizQuestion = {
@@ -115,10 +117,11 @@ export type ErrorOptions = {
   error?: null | string;
 };
 
-export type getUpdatedSectionsKey =
+export type SectionFieldKeys =
   | "title"
   | "videoUrl"
   | "uploadProgress"
+  | "uploaded"
   | "storageKey"
   | "questions";
 

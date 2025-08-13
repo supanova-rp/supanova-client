@@ -8,7 +8,7 @@ import {
   CourseVideoSection,
   ID,
   SectionTypes,
-  getUpdatedSectionsKey,
+  SectionFieldKeys,
 } from "src/types";
 
 export type MoveSectionFn = (id: ID, direction: "up" | "down") => void;
@@ -16,13 +16,13 @@ export type MoveSectionFn = (id: ID, direction: "up" | "down") => void;
 export const isVideoSection = (
   section: CourseSection,
 ): section is CourseVideoSection => {
-  return section.videoUrl !== undefined;
+  return section.type === SectionTypes.Video;
 };
 
 export const isQuizSection = (
   section: CourseSection,
 ): section is CourseQuizSection => {
-  return section.videoUrl === undefined;
+  return section.type === SectionTypes.Quiz;
 };
 
 export const getVideoSections = (course: Course) => {
@@ -35,9 +35,7 @@ export const getQuizSections = (course: Course) => {
 
 export const isVideoUploadInProgress = (course: Course) => {
   return course.sections.some(section => {
-    return (
-      typeof section.uploadProgress === "number" && section.uploadProgress < 1
-    );
+    return isVideoSection(section) && !section.uploaded;
   });
 };
 
@@ -60,7 +58,7 @@ export const everyQuizQuestionHasCorrectAnswer = (
 
       if (
         !currentQuizQuestion.answers.some(
-          quizAnswer => quizAnswer.isCorrectAnswer, // TODO: check
+          quizAnswer => quizAnswer.isCorrectAnswer,
         )
       ) {
         everyQuizQuestionHasAtLeast1CorrectAnswer = false;
@@ -87,7 +85,10 @@ export const getInitialCourseState = (): Course => {
         type: SectionTypes.Video,
         videoUrl: "",
         storageKey: "",
+        storageKeyBeingUploaded: "",
         uploadProgress: null,
+        uploaded: false,
+        isNewSection: true,
       },
     ],
   };
@@ -254,7 +255,7 @@ export const getMaterialsWithPosition = (course: Course): CourseMaterial[] => {
 export const getUpdatedSections = (
   sections: CourseSection[],
   sectionId: ID,
-  key: getUpdatedSectionsKey,
+  key: SectionFieldKeys,
   value: any,
 ) => {
   const updatedSections = sections.map(section => {
@@ -274,7 +275,7 @@ export const getUpdatedSections = (
 export const getUpdatedCourse = (
   course: Course,
   sectionId: ID,
-  key: getUpdatedSectionsKey,
+  key: SectionFieldKeys,
   value: any,
 ) => {
   return {

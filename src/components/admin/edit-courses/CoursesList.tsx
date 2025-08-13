@@ -1,5 +1,7 @@
 import { Course, ID } from "src/types";
 
+import { isVideoSection } from "../course-form/utils";
+
 interface Props {
   courses: Course[];
   onClickEditCourse: (courseId: ID) => void;
@@ -22,10 +24,10 @@ const CoursesList: React.FC<Props> = ({ courses, onClickEditCourse }) => {
               {course.sections.map((section, index) => {
                 return (
                   <p
-                    key={`${index}-${section.title}`}
+                    key={`${index}-${section.id}`}
                     className="text-secondary courses-list-section-title"
                   >
-                    {section?.type === "quiz" ? "Quiz" : section.title}
+                    {isVideoSection(section) ? section.title : "Quiz"}
                   </p>
                 );
               })}

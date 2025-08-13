@@ -32,7 +32,7 @@ const VideoSection: React.FC<VideoSectionProps> = ({
   onClickCancelFileUpload,
   onChangeVideoStorageKey,
 }) => {
-  const { id, title, videoUrl, uploadProgress } = section;
+  const { id, title, videoUrl, uploadProgress, uploaded } = section;
 
   return (
     <div className="d-flex flex-column" key={`video-section-${id}`}>
@@ -60,6 +60,7 @@ const VideoSection: React.FC<VideoSectionProps> = ({
               fileInputRef={fileInputRef}
               onFileUploaded={handleFileUploaded}
               onFileUploadProgress={onVideoFileUploadProgress}
+              uploaded={uploaded}
               uploadProgress={uploadProgress}
               onClickCancelFileUpload={onClickCancelFileUpload}
               onNewFileSelected={onChangeVideoStorageKey}

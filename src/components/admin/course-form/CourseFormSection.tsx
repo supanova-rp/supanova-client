@@ -5,7 +5,7 @@ import { useFileUpload } from "src/hooks/useFileUpload";
 
 import MoveSection from "./MoveSection";
 import QuizSection from "./QuizSection";
-import { MoveSectionFn, isQuizSection } from "./utils";
+import { MoveSectionFn, isQuizSection, isVideoSection } from "./utils";
 import VideoSection from "./VideoSection";
 import { CourseQuizQuestion, CourseSection, ID } from "../../../types/index";
 
@@ -54,6 +54,8 @@ const CourseFormSection: React.FC<Props> = ({
   handleRemoveSection,
   onMoveSection,
 }) => {
+  const uploadProgress = isVideoSection(section) ? section.uploadProgress : 0;
+
   const {
     abortController,
     fileInputRef,
@@ -62,7 +64,7 @@ const CourseFormSection: React.FC<Props> = ({
     cancelUploadRequest,
   } = useFileUpload(
     section.id,
-    section.uploadProgress,
+    uploadProgress,
     onVideoFileUploaded,
     onVideoFileUploadCancelled,
   );

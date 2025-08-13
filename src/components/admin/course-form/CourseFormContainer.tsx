@@ -25,6 +25,7 @@ import {
   everyVideoSectionHasVideo,
   getQuizSections,
   getVideoSections,
+  isVideoSection,
   isVideoUploadInProgress,
 } from "./utils";
 import WarningIcon from "../../../assets/icons/warningIcon.svg?react";
@@ -149,7 +150,7 @@ export default class CourseFormContainer extends Component<CourseFormContainerPr
     const { course } = this.state;
 
     const updatedSectionsWithQuizQuestions = course.sections.map(section => {
-      if (section.videoUrl) {
+      if (isVideoSection(section)) {
         return section;
       }
 

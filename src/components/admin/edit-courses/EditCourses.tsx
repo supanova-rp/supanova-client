@@ -4,6 +4,8 @@ import {
   REACT_TOAST_DURATION,
   feedbackMessages,
 } from "src/constants/constants";
+import { CourseServerModel } from "src/types/server";
+import { coursesResponseToEditCourses } from "src/utils/server-to-client-mapping";
 
 import CoursesList from "./CoursesList";
 import { Course, ID } from "../../../types/index";
@@ -91,9 +93,9 @@ export default class EditCourses extends Component {
     };
   };
 
-  onSuccess = (result: Course[]) => {
+  onSuccess = (result: CourseServerModel[]) => {
     this.setState({
-      allCourses: result,
+      allCourses: coursesResponseToEditCourses(result),
       isLoading: false,
     });
   };

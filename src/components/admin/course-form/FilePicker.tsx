@@ -24,6 +24,7 @@ interface Props {
   fileInputRef: React.RefObject<HTMLInputElement>;
   onFileUploaded: (fileId: ID, videoUrl: string) => void;
   onFileUploadProgress: (data: AxiosProgressEvent, fileId: ID) => void;
+  uploaded: boolean;
   uploadProgress: UploadProgress;
   onClickCancelFileUpload: React.MouseEventHandler<HTMLButtonElement>;
   onNewFileSelected: (newFileId: ID, oldId: ID) => void;
@@ -52,6 +53,7 @@ const FilePicker: React.FC<Props> = ({
   fileInputRef,
   onFileUploaded,
   onFileUploadProgress,
+  uploaded,
   uploadProgress,
   onClickCancelFileUpload,
   onNewFileSelected,
@@ -114,7 +116,7 @@ const FilePicker: React.FC<Props> = ({
   };
 
   const renderUploadProgressIcon = () => {
-    if (!uploadProgress) {
+    if (!uploadProgress || uploaded) {
       return null;
     }
 

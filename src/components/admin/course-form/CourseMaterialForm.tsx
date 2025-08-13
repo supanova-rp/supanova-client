@@ -29,7 +29,7 @@ const CourseMaterialForm: React.FC<Props> = ({
   onChangeMaterialStorageKey,
   handleRemoveMaterial,
 }) => {
-  const { id, name, uploadProgress } = material;
+  const { id, name, uploadProgress, uploaded } = material;
 
   const {
     abortController,
@@ -68,6 +68,7 @@ const CourseMaterialForm: React.FC<Props> = ({
             fileInputRef={fileInputRef}
             onFileUploaded={handleFileUploaded}
             onFileUploadProgress={onCourseMaterialUploadProgress}
+            uploaded={uploaded}
             uploadProgress={uploadProgress}
             onClickCancelFileUpload={handleCancelFileUpload}
             onNewFileSelected={onChangeMaterialStorageKey}
