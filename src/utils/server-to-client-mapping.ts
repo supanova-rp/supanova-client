@@ -44,26 +44,28 @@ const isVideoSection = (
   return section.type === SectionTypes.Video;
 };
 
+export const courseResponseToEditCourses = (
+  course: CourseServerModel,
+): Course => {
+  const editableSections = course.sections.map(section => {
+    if (isVideoSection(section)) {
+      return videoServerModelFrom(section);
+    }
+
+    return section;
+  });
+
+  const editableCourseMaterials = course.materials.map(materialServerModelFrom);
+
+  return {
+    ...course,
+    sections: editableSections,
+    materials: editableCourseMaterials,
+  };
+};
+
 export const coursesResponseToEditCourses = (
   courses: CourseServerModel[],
 ): Course[] => {
-  return courses.map(course => {
-    const editableSections = course.sections.map(section => {
-      if (isVideoSection(section)) {
-        return videoServerModelFrom(section);
-      }
-
-      return section;
-    });
-
-    const editableCourseMaterials = course.materials.map(
-      materialServerModelFrom,
-    );
-
-    return {
-      ...course,
-      sections: editableSections,
-      materials: editableCourseMaterials,
-    };
-  });
+  return courses.map(courseResponseToEditCourses);
 };

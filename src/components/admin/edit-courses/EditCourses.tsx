@@ -5,7 +5,10 @@ import {
   feedbackMessages,
 } from "src/constants/constants";
 import { CourseServerModel } from "src/types/server";
-import { coursesResponseToEditCourses } from "src/utils/server-to-client-mapping";
+import {
+  courseResponseToEditCourses,
+  coursesResponseToEditCourses,
+} from "src/utils/server-to-client-mapping";
 
 import CoursesList from "./CoursesList";
 import { Course, ID } from "../../../types/index";
@@ -47,12 +50,12 @@ export default class EditCourses extends Component {
     this.setState({ editingCourseId: null });
   };
 
-  onCourseEditedSuccess = (editedCourse: Course) => {
+  onCourseEditedSuccess = (editedCourse: CourseServerModel) => {
     const { allCourses, editingCourseId } = this.state;
 
     const updatedCoursesWithEditedCourse = allCourses.map(course => {
       if (course.id === editingCourseId) {
-        return editedCourse;
+        return courseResponseToEditCourses(editedCourse);
       }
 
       return course;

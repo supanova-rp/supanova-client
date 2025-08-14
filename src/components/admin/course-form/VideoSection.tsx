@@ -2,6 +2,7 @@ import { AxiosProgressEvent } from "axios";
 import { CourseVideoSection, FileUploadType, ID } from "src/types";
 
 import FilePicker from "./FilePicker";
+import VideoThumbnail from "./VideoThumbnail";
 import FormInput from "../../FormInput";
 import RemoveInput from "../../RemoveInput";
 
@@ -68,24 +69,7 @@ const VideoSection: React.FC<VideoSectionProps> = ({
           }
         />
 
-        {videoUrl ? (
-          <div className="video-container-admin">
-            <video
-              id="my-player"
-              className="video-admin mb-4"
-              controls
-              controlsList="nodownload" // <-- removes download option
-              disablePictureInPicture
-              playsInline // <-- required for iOS
-              preload="auto"
-            >
-              <source
-                src={`${videoUrl}#t=0.001`} // <-- https://muffinman.io/blog/hack-for-ios-safari-to-display-html-video-thumbnail
-                type="video/mp4"
-              />
-            </video>
-          </div>
-        ) : null}
+        <VideoThumbnail key={videoUrl} videoUrl={videoUrl} />
       </div>
     </div>
   );
