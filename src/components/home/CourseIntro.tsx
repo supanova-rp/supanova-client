@@ -24,7 +24,7 @@ const textLines = [
   },
   {
     header: "Course Notes",
-    text: "A downloadable set of Course Notes is available below the list of modules. These notes are a quick reference guide to key points but are not a substitute for watching the videos, which provide the full depth of content.",
+    text: "A downloadable set of Course Notes is available above the list of modules and next to each video. These notes are a quick reference guide to key points but are not a substitute for watching the videos, which provide the full depth of content.",
   },
   {
     header: "How to progress",

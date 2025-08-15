@@ -116,7 +116,13 @@ const FilePicker: React.FC<Props> = ({
   };
 
   const renderUploadProgressIcon = () => {
-    if (!uploadProgress || uploaded) {
+    if (uploaded) {
+      return (
+        <TickIcon stroke={colors.green} className="tick-upload-icon ms-2" />
+      );
+    }
+
+    if (!uploadProgress) {
       return null;
     }
 
@@ -135,7 +141,7 @@ const FilePicker: React.FC<Props> = ({
       );
     }
 
-    return <TickIcon stroke={colors.green} className="tick-upload-icon ms-2" />;
+    return null;
   };
 
   return (
