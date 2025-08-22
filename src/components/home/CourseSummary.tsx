@@ -4,6 +4,7 @@ import { useLazyQuery } from "src/hooks/useLazyQuery";
 import useRequest from "src/hooks/useRequest";
 import {
   Course,
+  CourseMaterialViewModel,
   ID,
   SectionProgressState,
   UserCourseProgress,
@@ -14,10 +15,12 @@ import {
   resetVideoProgressTime,
 } from "src/utils/course-utils";
 
+import { CourseMaterials } from "./CourseMaterials";
 import SectionTableRow, { SectionTableRowTypes } from "./SectionTableRow";
 
 interface Props {
   course: Course;
+  courseMaterials: CourseMaterialViewModel[];
   completedIntro: boolean;
   completedSectionIds: UserCourseProgress["completedSectionIds"];
   refetchProgress: (shouldLoad?: boolean) => void;
@@ -28,6 +31,7 @@ interface Props {
 
 export const CourseSummary: React.FC<Props> = ({
   course,
+  courseMaterials,
   completedIntro,
   completedSectionIds,
   refetchProgress,
@@ -136,6 +140,13 @@ export const CourseSummary: React.FC<Props> = ({
       className="course-summary-container"
     >
       <p className="course-desc">{course.description}</p>
+
+      <div style={{ paddingBottom: 24, paddingTop: 8 }}>
+        <CourseMaterials materials={courseMaterials} headerType="small" />
+      </div>
+
+      <h5 className="mb-3">Course content</h5>
+
       <table className="table table-bordered mt-3">
         <tbody>
           <SectionTableRow

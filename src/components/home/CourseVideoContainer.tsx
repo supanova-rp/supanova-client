@@ -2,15 +2,22 @@ import { SyntheticEvent } from "react";
 import { feedbackMessages } from "src/constants/constants";
 import { setVideoProgressTime } from "src/utils/course-utils";
 
+import { CourseMaterials } from "./CourseMaterials";
 import CourseSectionContainer from "./CourseSectionContainer";
 import useUpdateProgress from "./hooks/useUpdateProgress";
 import Video from "./Video";
-import { ChangeDirection, CourseVideoSection, ID } from "../../types/index";
+import {
+  ChangeDirection,
+  CourseMaterialViewModel,
+  CourseVideoSection,
+  ID,
+} from "../../types/index";
 
 interface CourseProps {
   courseId: ID;
   courseTitle: string;
   videoSection: CourseVideoSection;
+  courseMaterials: CourseMaterialViewModel[];
   initialCurrentVideoTime: number;
   canGoBack: boolean;
   isLastSection: boolean;
@@ -26,6 +33,7 @@ const CourseVideoContainer: React.FC<CourseProps> = ({
   courseId,
   courseTitle,
   videoSection,
+  courseMaterials,
   initialCurrentVideoTime,
   canGoBack,
   isLastSection,
@@ -76,24 +84,30 @@ const CourseVideoContainer: React.FC<CourseProps> = ({
   };
 
   return (
-    <CourseSectionContainer
-      canGoBack={canGoBack}
-      courseTitle={courseTitle}
-      loading={loading || courseCompleteLoading}
-      error={error ? feedbackMessages.genericErrorTryAgain : undefined}
-      continueText={isLastSection ? "Finish" : "Continue"}
-      onChangeSection={onChangeSection}
-      onClickContinue={onClickContinue}
-      onClickBackChevron={onClickBackChevron}
-    >
-      <Video
-        title={title}
-        videoUrl={videoUrl}
-        initialCurrentVideoTime={initialCurrentVideoTime}
-        onVideoEnded={onVideoEnded}
-        onVideoTimeUpdate={onVideoTimeUpdate}
-      />
-    </CourseSectionContainer>
+    <>
+      <CourseSectionContainer
+        canGoBack={canGoBack}
+        courseTitle={courseTitle}
+        loading={loading || courseCompleteLoading}
+        error={error ? feedbackMessages.genericErrorTryAgain : undefined}
+        continueText={isLastSection ? "Finish" : "Continue"}
+        onChangeSection={onChangeSection}
+        onClickContinue={onClickContinue}
+        onClickBackChevron={onClickBackChevron}
+      >
+        <Video
+          title={title}
+          videoUrl={videoUrl}
+          initialCurrentVideoTime={initialCurrentVideoTime}
+          onVideoEnded={onVideoEnded}
+          onVideoTimeUpdate={onVideoTimeUpdate}
+        />
+      </CourseSectionContainer>
+
+      <div style={{ marginTop: 24 }}>
+        <CourseMaterials materials={courseMaterials} headerType="small" />
+      </div>
+    </>
   );
 };
 

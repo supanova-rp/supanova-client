@@ -2,7 +2,11 @@ import { useParams } from "react-router-dom";
 import { feedbackMessages } from "src/constants/constants";
 import { useAuth } from "src/contexts/AuthContext";
 import { useQuery } from "src/hooks/useQuery";
-import { Course as CourseType, UserCourseProgress } from "src/types";
+import {
+  CourseMaterialViewModel,
+  Course as CourseType,
+  UserCourseProgress,
+} from "src/types";
 
 import Course from "./Course";
 import SidebarContainer from "./SidebarContainer";
@@ -37,13 +41,26 @@ const CourseContainer = () => {
     defaultError: feedbackMessages.getProgressError,
   });
 
+  const {
+    data: materials,
+    loading: loadingMaterials,
+    error: materialsError,
+    refetch: refetchMaterials,
+  } = useQuery<CourseMaterialViewModel[]>("/materials", {
+    requestBody: {
+      courseId: id,
+    },
+    defaultError: feedbackMessages.getMaterialsError,
+  });
+
   const refetchQueries = () => {
     refetchCourse();
     refetchProgress();
+    refetchMaterials();
   };
 
-  const loading = loadingProgress || loadingCourse;
-  const error = courseError || progressError;
+  const loading = loadingProgress || loadingCourse || loadingMaterials;
+  const error = courseError || progressError || materialsError;
 
   return (
     <>
@@ -65,6 +82,7 @@ const CourseContainer = () => {
               <Course
                 course={course}
                 courseProgress={courseProgress}
+                courseMaterials={materials || []}
                 refetchProgress={refetchProgress}
               />
             ) : null}

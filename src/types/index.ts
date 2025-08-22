@@ -35,7 +35,7 @@ export type onChangeCourseFieldKey =
   | "completionTitle"
   | "completionMessage";
 
-// TODO: separate an editable course material type from viewable one (currently CourseMaterialResponse)
+// TODO: separate an editable course material type from viewable one (currently CourseMaterialViewModel)
 export type CourseMaterial = {
   id: ID;
   name: string;
@@ -45,7 +45,7 @@ export type CourseMaterial = {
   uploaded: boolean;
 };
 
-export type CourseMaterialResponse = {
+export type CourseMaterialViewModel = {
   id: ID;
   name: string;
   url: string;

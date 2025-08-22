@@ -6,12 +6,12 @@ import {
   ChangeDirection,
   ID,
   UserCourseProgress,
+  CourseMaterialViewModel,
 } from "src/types";
 import { getVideoProgressTime } from "src/utils/course-utils";
 
 import { CourseComplete } from "./CourseComplete";
 import { CourseIntro } from "./CourseIntro";
-import { CourseMaterials } from "./CourseMaterials";
 import { CourseQuizContainer } from "./CourseQuizContainer";
 import { CourseSummary } from "./CourseSummary";
 import CourseVideoContainer from "./CourseVideoContainer";
@@ -21,12 +21,14 @@ import { isQuizSection, isVideoSection } from "../admin/course-form/utils";
 interface CoursesProps {
   course: CourseType;
   courseProgress: UserCourseProgress;
+  courseMaterials: CourseMaterialViewModel[];
   refetchProgress: (shouldLoad?: boolean) => void;
 }
 
 const Course: React.FC<CoursesProps> = ({
   course,
   courseProgress,
+  courseMaterials,
   refetchProgress,
 }) => {
   const navigate = useNavigate();
@@ -183,6 +185,7 @@ const Course: React.FC<CoursesProps> = ({
 
         <CourseSummary
           course={course}
+          courseMaterials={courseMaterials}
           completedIntro={completedIntro}
           completedSectionIds={completedSectionIds}
           refetchProgress={refetchProgress}
@@ -190,8 +193,6 @@ const Course: React.FC<CoursesProps> = ({
           onSelectVideo={onSelectVideo}
           onSelectQuiz={onSelectQuiz}
         />
-
-        <CourseMaterials courseId={course.id} />
       </div>
     );
   }
@@ -210,6 +211,7 @@ const Course: React.FC<CoursesProps> = ({
         courseId={course.id}
         courseTitle={course.title}
         videoSection={currentSection}
+        courseMaterials={courseMaterials}
         initialCurrentVideoTime={initialCurrentVideoTime}
         canGoBack={canGoBack}
         isLastSection={isLastSection}
