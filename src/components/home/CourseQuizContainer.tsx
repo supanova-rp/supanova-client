@@ -33,6 +33,11 @@ interface Props {
   onClickBackChevron: () => void;
 }
 
+type QuizResult = {
+  score: number;
+  incorrectIds: string[];
+};
+
 export const CourseQuizContainer: React.FC<Props> = ({
   courseId,
   canGoBack,
@@ -49,6 +54,14 @@ export const CourseQuizContainer: React.FC<Props> = ({
   const [selectedAnswers, setSelectedAnswers] = useState<QuizProgressState>(
     new Array(quizSection.questions.length).fill([]),
   );
+  const [attempts, setAttempts] = useState(0);
+  const [incorrectQuestionIds, setIncorrectQuestionIds] = useState<string[]>(
+    [],
+  );
+
+  const { request: incrementAttempts } = useLazyQuery<null>(
+    "/increment-attempts",
+  );
 
   const { loading: loadingQuizState } = useQuery<QuizStateResponse>(
     "/get-quiz-state",
@@ -59,6 +72,7 @@ export const CourseQuizContainer: React.FC<Props> = ({
       onSuccess: res => {
         if (res?.quizState) {
           setSelectedAnswers(res.quizState);
+          setAttempts(res?.attempts || 0);
         }
       },
       onError: error => {
@@ -135,8 +149,9 @@ export const CourseQuizContainer: React.FC<Props> = ({
     });
   };
 
-  const calculateScore = () => {
+  const calculateQuizResult = (): QuizResult => {
     let correctAnswersCount = 0;
+    const incorrectIds: string[] = [];
 
     quizSection.questions.forEach((question, questionIndex) => {
       const selectedAnswerIndices = selectedAnswers[questionIndex];
@@ -151,29 +166,45 @@ export const CourseQuizContainer: React.FC<Props> = ({
         correctAnswerIndices.length === selectedAnswerIndices.length
       ) {
         correctAnswersCount++;
+      } else {
+        incorrectIds.push(question.id);
       }
     });
 
-    return correctAnswersCount;
+    return {
+      score: correctAnswersCount,
+      incorrectIds,
+    };
   };
 
   const onSubmitQuiz = () => {
-    const correctAnswersCount = calculateScore();
+    const quizResult = calculateQuizResult();
     const totalQuestions = quizSection.questions.length;
 
-    setAllAnswersAreCorrect(correctAnswersCount === totalQuestions);
+    setAllAnswersAreCorrect(quizResult.score === totalQuestions);
 
-    setScore(correctAnswersCount);
+    setScore(quizResult.score);
     setShowFeedbackModal(true);
+    setAttempts(a => a + 1);
+    setIncorrectQuestionIds(quizResult.incorrectIds);
+
+    incrementAttempts({
+      quizId: quizSection.id,
+    });
+  };
+
+  const handleClickSubmitQuiz = () => {
+    // Skip submission and just go to next section if already completed
+    if (isCurrentSectionCompleted) {
+      handleSectionComplete();
+    } else {
+      onSubmitQuiz();
+    }
   };
 
   const onClickModalConfirm = () => {
     if (allAnswersAreCorrect) {
-      if (isCurrentSectionCompleted) {
-        handleSectionComplete(); // no need to update progress
-      } else {
-        requestUpdateProgress(quizSection.id);
-      }
+      requestUpdateProgress(quizSection.id);
     } else {
       onCloseModal();
     }
@@ -183,10 +214,10 @@ export const CourseQuizContainer: React.FC<Props> = ({
     <CourseSectionContainer
       canGoBack={canGoBack}
       courseTitle={courseTitle}
-      continueText="Submit"
+      continueText={isCurrentSectionCompleted ? "Continue" : "Submit"}
       className="quiz-container"
       onChangeSection={onChangeSection}
-      onClickContinue={onSubmitQuiz}
+      onClickContinue={handleClickSubmitQuiz}
       onClickBackChevron={onClickBackChevron}
       loading={loading || courseCompleteLoading}
       loadingContinue={loadingQuizState}
@@ -195,8 +226,11 @@ export const CourseQuizContainer: React.FC<Props> = ({
       <Quiz
         quizSection={quizSection}
         score={score}
+        attempts={attempts}
+        incorrectQuestionIds={incorrectQuestionIds}
         allAnswersAreCorrect={allAnswersAreCorrect}
         selectedAnswers={selectedAnswers}
+        disabled={isCurrentSectionCompleted}
         showFeedbackModal={showFeedbackModal}
         isLastSection={isLastSection}
         loading={loading || courseCompleteLoading}

@@ -107,6 +107,7 @@ export type QuizProgressState = QuizSelectedAnswers[];
 export type QuizStateResponse = {
   quizId?: string;
   quizState?: QuizSelectedAnswers[];
+  attempts?: number;
 };
 
 export type ChangeDirection = "next" | "prev";

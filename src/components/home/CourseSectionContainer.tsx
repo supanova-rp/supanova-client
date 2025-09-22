@@ -1,4 +1,4 @@
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, ReactNode } from "react";
 import { Button } from "react-bootstrap";
 import { PulseLoader } from "react-spinners";
 import { colors } from "src/constants/colorPalette";
@@ -7,6 +7,7 @@ import { ChangeDirection } from "src/types";
 import Header from "./Header";
 
 interface Props extends PropsWithChildren {
+  footer?: ReactNode;
   canGoBack: boolean;
   courseTitle: string;
   continueText?: string;
@@ -23,6 +24,7 @@ interface Props extends PropsWithChildren {
 
 const CourseSectionContainer: React.FC<Props> = ({
   children,
+  footer,
   courseTitle,
   continueText = "Continue",
   className = "",
@@ -99,6 +101,7 @@ const CourseSectionContainer: React.FC<Props> = ({
       {children}
       {renderDirectionButtons()}
       {error ? <p className="continue-error">{error}</p> : null}
+      {footer}
     </div>
   );
 };

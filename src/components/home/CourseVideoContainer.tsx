@@ -61,7 +61,7 @@ const CourseVideoContainer: React.FC<CourseProps> = ({
 
   const { loading, error, requestUpdateProgress } = useUpdateProgress(
     courseId,
-    onUpdateProgressSuccess,
+    onUpdateProgressSuccess
   );
 
   const onClickContinue = () => {
@@ -94,6 +94,11 @@ const CourseVideoContainer: React.FC<CourseProps> = ({
         onChangeSection={onChangeSection}
         onClickContinue={onClickContinue}
         onClickBackChevron={onClickBackChevron}
+        footer={
+          <div style={{ marginTop: 24 }}>
+            <CourseMaterials materials={courseMaterials} headerType="small" />
+          </div>
+        }
       >
         <Video
           title={title}
@@ -103,10 +108,6 @@ const CourseVideoContainer: React.FC<CourseProps> = ({
           onVideoTimeUpdate={onVideoTimeUpdate}
         />
       </CourseSectionContainer>
-
-      <div style={{ marginTop: 24 }}>
-        <CourseMaterials materials={courseMaterials} headerType="small" />
-      </div>
     </>
   );
 };
