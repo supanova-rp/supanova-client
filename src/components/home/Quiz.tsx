@@ -2,7 +2,6 @@ import React from "react";
 import { CourseQuizSection } from "src/types";
 
 import QuizAnswer from "./QuizAnswer";
-import CrossIcon from "../../assets/icons/closeIcon.svg?react";
 import Modal from "../modals/Modal";
 
 interface Props {
