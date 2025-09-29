@@ -52,15 +52,16 @@ export const CourseQuizContainer: React.FC<Props> = ({
   onClickBackChevron,
 }) => {
   const [selectedAnswers, setSelectedAnswers] = useState<QuizProgressState>(
-    new Array(quizSection.questions.length).fill([]),
+    new Array(quizSection.questions.length).fill([])
   );
+
   const [attempts, setAttempts] = useState(0);
   const [incorrectQuestionIds, setIncorrectQuestionIds] = useState<string[]>(
-    [],
+    []
   );
 
   const { request: incrementAttempts } = useLazyQuery<null>(
-    "/increment-attempts",
+    "/increment-attempts"
   );
 
   const { loading: loadingQuizState } = useQuery<QuizStateResponse>(
@@ -69,17 +70,19 @@ export const CourseQuizContainer: React.FC<Props> = ({
       requestBody: {
         quizId: quizSection.id,
       },
-      onSuccess: res => {
+      onSuccess: (res) => {
         if (res?.quizState) {
           setSelectedAnswers(res.quizState);
-          setAttempts(res?.attempts || 0);
+        }
+        if (res?.attempts) {
+          setAttempts(res.attempts);
         }
       },
-      onError: error => {
+      onError: (error) => {
         Sentry.captureException(error);
         toast.error(feedbackMessages.quizStateLoadError, REACT_TOAST_DURATION);
       },
-    },
+    }
   );
 
   const { request: saveQuizState } = useLazyQuery<null>("/set-quiz-state");
@@ -114,7 +117,7 @@ export const CourseQuizContainer: React.FC<Props> = ({
   const { loading, error, requestUpdateProgress } = useUpdateProgress(
     courseId,
     onUpdateProgressSuccess,
-    onUpdateProgressError,
+    onUpdateProgressError
   );
 
   const onChangeAnswer = (questionIndex: number, answerIndex: number) => {
@@ -124,14 +127,14 @@ export const CourseQuizContainer: React.FC<Props> = ({
     // If it is single answer only - deselect everything except the answerIndex answer
     if (!quizSection.questions[questionIndex].isMultiAnswer) {
       currentSelectedAnswers = currentSelectedAnswers.filter(
-        (index: any) => index === answerIndex,
+        (index: any) => index === answerIndex
       );
     }
 
     if (currentSelectedAnswers.includes(answerIndex)) {
       // Deselect the answer if already selected
       updatedSelectedAnswers[questionIndex] = currentSelectedAnswers.filter(
-        (index: any) => index !== answerIndex,
+        (index: any) => index !== answerIndex
       );
     } else {
       // Select the answer if not selected
@@ -157,11 +160,11 @@ export const CourseQuizContainer: React.FC<Props> = ({
       const selectedAnswerIndices = selectedAnswers[questionIndex];
       const correctAnswerIndices = question.answers
         .map((answer, index) => (answer.isCorrectAnswer ? index : null))
-        .filter(index => index !== null);
+        .filter((index) => index !== null);
 
       if (
-        correctAnswerIndices.every(index =>
-          selectedAnswerIndices.includes(index),
+        correctAnswerIndices.every((index) =>
+          selectedAnswerIndices.includes(index)
         ) &&
         correctAnswerIndices.length === selectedAnswerIndices.length
       ) {
@@ -185,7 +188,7 @@ export const CourseQuizContainer: React.FC<Props> = ({
 
     setScore(quizResult.score);
     setShowFeedbackModal(true);
-    setAttempts(a => a + 1);
+    setAttempts((a) => a + 1);
     setIncorrectQuestionIds(quizResult.incorrectIds);
 
     incrementAttempts({
