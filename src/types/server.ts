@@ -31,3 +31,7 @@ export type CourseMaterialServerModel = {
   name: string;
   storageKey: string;
 };
+
+export type CourseVideoServerModel = {
+  url: string;
+};

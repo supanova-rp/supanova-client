@@ -1,17 +1,21 @@
 import { SyntheticEvent } from "react";
 import { feedbackMessages } from "src/constants/constants";
+import { useQuery } from "src/hooks/useQuery";
+import {
+  ChangeDirection,
+  CourseMaterialViewModel,
+  CourseVideoSection,
+  ID,
+} from "src/types/index";
+import { CourseVideoServerModel } from "src/types/server";
 import { setVideoProgressTime } from "src/utils/course-utils";
 
 import { CourseMaterials } from "./CourseMaterials";
 import CourseSectionContainer from "./CourseSectionContainer";
 import useUpdateProgress from "./hooks/useUpdateProgress";
 import Video from "./Video";
-import {
-  ChangeDirection,
-  CourseMaterialViewModel,
-  CourseVideoSection,
-  ID,
-} from "../../types/index";
+import VideoLoader from "./VideoLoader";
+import ErrorCard from "../ErrorCard";
 
 interface CourseProps {
   courseId: ID;
@@ -44,7 +48,20 @@ const CourseVideoContainer: React.FC<CourseProps> = ({
   onCourseComplete,
   onClickBackChevron,
 }) => {
-  const { id: sectionId, videoUrl, title } = videoSection;
+  const { id: sectionId, storageKey, title } = videoSection;
+
+  const {
+    data: videoData,
+    loading: loadingUrl,
+    error: urlError,
+    refetch: refetchUrl,
+  } = useQuery<CourseVideoServerModel>("/video-url", {
+    requestBody: {
+      courseId,
+      storageKey,
+    },
+    defaultError: feedbackMessages.getVideoError,
+  });
 
   const handleSectionComplete = () => {
     if (isLastSection) {
@@ -61,7 +78,7 @@ const CourseVideoContainer: React.FC<CourseProps> = ({
 
   const { loading, error, requestUpdateProgress } = useUpdateProgress(
     courseId,
-    onUpdateProgressSuccess
+    onUpdateProgressSuccess,
   );
 
   const onClickContinue = () => {
@@ -83,32 +100,52 @@ const CourseVideoContainer: React.FC<CourseProps> = ({
     setVideoProgressTime(sectionId, currentTime);
   };
 
+  const renderVideo = () => {
+    if (loadingUrl) {
+      return <VideoLoader title={title} />;
+    }
+
+    if (urlError || !videoData?.url) {
+      return (
+        <div className="video-error-container">
+          <ErrorCard
+            errorMessage={urlError || ""}
+            size="full"
+            onClick={refetchUrl}
+          />
+        </div>
+      );
+    }
+
+    return (
+      <Video
+        title={title}
+        videoUrl={videoData.url}
+        initialCurrentVideoTime={initialCurrentVideoTime}
+        onVideoEnded={onVideoEnded}
+        onVideoTimeUpdate={onVideoTimeUpdate}
+      />
+    );
+  };
+
   return (
-    <>
-      <CourseSectionContainer
-        canGoBack={canGoBack}
-        courseTitle={courseTitle}
-        loading={loading || courseCompleteLoading}
-        error={error ? feedbackMessages.genericErrorTryAgain : undefined}
-        continueText={isLastSection ? "Finish" : "Continue"}
-        onChangeSection={onChangeSection}
-        onClickContinue={onClickContinue}
-        onClickBackChevron={onClickBackChevron}
-        footer={
-          <div style={{ marginTop: 24 }}>
-            <CourseMaterials materials={courseMaterials} headerType="small" />
-          </div>
-        }
-      >
-        <Video
-          title={title}
-          videoUrl={videoUrl}
-          initialCurrentVideoTime={initialCurrentVideoTime}
-          onVideoEnded={onVideoEnded}
-          onVideoTimeUpdate={onVideoTimeUpdate}
-        />
-      </CourseSectionContainer>
-    </>
+    <CourseSectionContainer
+      canGoBack={canGoBack}
+      courseTitle={courseTitle}
+      loading={loading || courseCompleteLoading}
+      error={error ? feedbackMessages.genericErrorTryAgain : undefined}
+      continueText={isLastSection ? "Finish" : "Continue"}
+      onChangeSection={onChangeSection}
+      onClickContinue={onClickContinue}
+      onClickBackChevron={onClickBackChevron}
+      footer={
+        <div style={{ marginTop: 24 }}>
+          <CourseMaterials materials={courseMaterials} headerType="small" />
+        </div>
+      }
+    >
+      {renderVideo()}
+    </CourseSectionContainer>
   );
 };
 

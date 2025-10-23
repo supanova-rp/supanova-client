@@ -5,6 +5,17 @@
   justify-content: center;
 }
 
+.feedback-card-content-full {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  border: 2px solid var(--hover-color-grey);
+  padding: 36px 16px;
+  box-shadow: 0 3px 7px hsl(228deg 66% 45% / 15%);
+  border-radius: 8px;
+}
+
 .feedback-card-content-large {
   display: flex;
   flex-direction: column;

@@ -28,6 +28,7 @@ export const feedbackMessages = {
   getMaterialsError:
     "Oops something went wrong! Failed to get course materials.",
   getCourseError: "Oops something went wrong! Failed to get course.",
+  getVideoError: "Failed to get video.",
   getEditCourseError: "Failed to load course.",
   addCourseSuccess: "Successfully created a new course!",
   saveCourseError: "Failed to save course. Try again.",

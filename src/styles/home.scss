@@ -171,6 +171,7 @@
 
 .video-js-course-view {
   width: 100%;
+  height: 100%;
   margin-top: 8px;
   margin-bottom: 16px;
 
@@ -192,6 +193,44 @@
 
   @media screen and (min-width: 1625px) {
     width: 70rem;
+  }
+}
+
+.video-loader-spinner-container {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.video-loader-spinner {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-top-color: rgb(33, 33, 33);
+  border-right-color: rgba(33, 33, 33, 1);
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.video-error-container {
+  margin-bottom: 32px;
+  width: 200px;
+
+  @media screen and (min-width: 368px) {
+    width: 300px;
+  }
+
+  @media screen and (min-width: 568px) {
+    width: 400px;
   }
 }
 
