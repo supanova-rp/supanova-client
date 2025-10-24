@@ -18,7 +18,6 @@ const videoServerModelFrom = (
     id: section.id,
     type: SectionTypes.Video,
     title: section.title,
-    videoUrl: section.videoUrl,
     storageKey: section.storageKey,
     storageKeyBeingUploaded: "",
     isNewSection: false,

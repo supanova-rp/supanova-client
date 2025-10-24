@@ -1,9 +1,24 @@
+import { useQuery } from "src/hooks/useQuery";
+import { ID } from "src/types";
+import { CourseVideoServerModel } from "src/types/server";
+
 interface VideoThumbnailProps {
-  videoUrl: string | null;
+  courseId: ID;
+  storageKey: string;
 }
 
-const VideoThumbnail: React.FC<VideoThumbnailProps> = ({ videoUrl }) => {
-  if (!videoUrl) {
+const VideoThumbnail: React.FC<VideoThumbnailProps> = ({
+  courseId,
+  storageKey,
+}) => {
+  const { data } = useQuery<CourseVideoServerModel>("/video-url", {
+    requestBody: {
+      courseId,
+      storageKey,
+    },
+  });
+
+  if (!data?.url) {
     return null;
   }
 
@@ -19,7 +34,7 @@ const VideoThumbnail: React.FC<VideoThumbnailProps> = ({ videoUrl }) => {
         preload="auto"
       >
         <source
-          src={`${videoUrl}#t=0.001`} // <-- https://muffinman.io/blog/hack-for-ios-safari-to-display-html-video-thumbnail
+          src={`${data.url}#t=0.001`} // <-- https://muffinman.io/blog/hack-for-ios-safari-to-display-html-video-thumbnail
           type="video/mp4"
         />
       </video>

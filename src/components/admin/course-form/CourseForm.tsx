@@ -65,7 +65,7 @@ export default class CourseForm extends Component<CourseFormProps> {
     });
   };
 
-  onVideoFileUploaded = (sectionId: ID, videoUrl: string) => {
+  onVideoFileUploaded = (sectionId: ID) => {
     const { course, onUpdateCourse } = this.props;
 
     onUpdateCourse({
@@ -74,7 +74,6 @@ export default class CourseForm extends Component<CourseFormProps> {
         if (isVideoSection(section) && section.id === sectionId) {
           return {
             ...section,
-            videoUrl,
             uploadProgress: 1,
             uploaded: true,
             storageKey: section.storageKeyBeingUploaded || "",
@@ -257,7 +256,6 @@ export default class CourseForm extends Component<CourseFormProps> {
       id: `${Date.now()}`,
       title: "",
       type: SectionTypes.Video,
-      videoUrl: null,
       storageKey: "",
       storageKeyBeingUploaded: "",
       isNewSection: isEditing,

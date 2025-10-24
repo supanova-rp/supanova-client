@@ -42,7 +42,9 @@ export const isVideoUploadInProgress = (course: Course) => {
 export const everyVideoSectionHasVideo = (
   videoSections: CourseVideoSection[],
 ) => {
-  return videoSections.every(videoSection => videoSection.videoUrl);
+  return videoSections.every(videoSection => {
+    return videoSection.storageKey && videoSection.uploaded;
+  });
 };
 
 export const everyQuizQuestionHasCorrectAnswer = (
@@ -83,7 +85,6 @@ export const getInitialCourseState = (): Course => {
         id: `${Date.now()}`,
         title: "",
         type: SectionTypes.Video,
-        videoUrl: "",
         storageKey: "",
         storageKeyBeingUploaded: "",
         uploadProgress: null,

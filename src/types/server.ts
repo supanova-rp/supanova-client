@@ -21,7 +21,6 @@ export type CourseVideoSectionServerModel = {
   id: ID;
   type: SectionTypes;
   title: string;
-  videoUrl: string | null;
   storageKey: string;
   questions?: never;
 };

@@ -62,7 +62,6 @@ export type CourseVideoSection = {
   id: ID;
   type: SectionTypes;
   title: string;
-  videoUrl: string | null;
   storageKey: string;
   storageKeyBeingUploaded: string; // If upload is cancelled, this will be reset. If upload finishes it is moved to storageKey
   isNewSection: boolean;
@@ -120,7 +119,6 @@ export type ErrorOptions = {
 
 export type SectionFieldKeys =
   | "title"
-  | "videoUrl"
   | "uploadProgress"
   | "uploaded"
   | "storageKey"
