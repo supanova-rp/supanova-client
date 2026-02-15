@@ -10,6 +10,7 @@ export const ADMINS_TABS = {
   EDIT_COURSES: "Edit Courses",
   ASSIGN_USERS: "Assign Users",
   REGISTER_USER: "Register Users",
+  USER_PROGRESS: "User Progress",
 };
 
 export enum CourseTabs {
