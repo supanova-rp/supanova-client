@@ -194,3 +194,25 @@ export enum FileUploadType {
   Video = "video",
   Material = "material",
 }
+
+export type ProgressAdminView = {
+  userID: ID;
+  name: string;
+  email: string;
+  progress: ProgressForCourseAdminView[];
+};
+
+export type ProgressForCourseAdminView = {
+  courseID: ID;
+  courseName: string;
+  completedIntro: boolean;
+  completedCourse: boolean;
+  courseSectionProgress: CourseSectionProgress[];
+};
+
+export type CourseSectionProgress = {
+  id: ID;
+  title: string;
+  type: string;
+  completed: boolean;
+};

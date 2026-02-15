@@ -1,5 +1,7 @@
 import React from "react";
 import { Button } from "react-bootstrap";
+import { ADMINS_TABS } from "src/constants/constants";
+import { useAuth } from "src/contexts/AuthContext";
 import { getClassNameSidebarTab } from "src/utils/utils";
 
 interface Props {
@@ -16,6 +18,7 @@ const Sidebar: React.FC<Props> = ({
   setActiveTab,
 }) => {
   const positionFixedClassname = isAdminDashboard ? "position-fixed w-100" : "";
+  const { currentUser } = useAuth();
 
   return (
     <div
@@ -25,6 +28,13 @@ const Sidebar: React.FC<Props> = ({
       aria-orientation="vertical"
     >
       {tabs.map((tab, index) => {
+        if (
+          tab === ADMINS_TABS.USER_PROGRESS &&
+          currentUser?.email !== "jamiegarner123@gmail.com"
+        ) {
+          return null;
+        }
+
         return (
           <Button
             key={tab}
