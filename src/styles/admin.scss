@@ -221,10 +221,42 @@
   background-color: #fff;
 }
 
-.progress-user-id {
-  margin-bottom: 12px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid #dee2e6;
+.progress-user-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.progress-expand-icon {
+  transition: transform 0.2s;
+
+  &.expanded {
+    transform: rotate(90deg);
+  }
+}
+
+.progress-user-info {
+  flex: 1;
+}
+
+.progress-user-name {
+  margin: 0;
+}
+
+.progress-user-email {
+  margin: 0;
+  color: #6c757d;
+  font-size: 0.875rem;
 }
 
 .progress-course-row {
@@ -239,11 +271,24 @@
 
 .progress-course-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: 8px;
+  width: 100%;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  padding-left: 2px;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.progress-course-name {
+  flex: 1;
+  font-weight: 500;
 }
 
 .progress-course-id {
@@ -276,6 +321,8 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
+  padding-top: 8px;
+  padding-left: 6px;
 }
 
 .progress-sections-label {
