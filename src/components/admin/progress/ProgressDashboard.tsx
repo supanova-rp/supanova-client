@@ -6,13 +6,11 @@ import { feedbackMessages } from "src/constants/constants";
 import { useQuery } from "src/hooks/useQuery";
 import { ID, ProgressAdminView } from "src/types";
 
+import UserProgressBreakdown from "./UserProgressBreakdown";
 import AdminHeader from "../AdminHeader";
 
 const ProgressDashboard = () => {
   const [expandedUsers, setExpandedUsers] = useState<Set<ID>>(new Set());
-  const [expandedCourses, setExpandedCourses] = useState<Set<string>>(
-    new Set(),
-  );
   const { data, loading, error, refetch } = useQuery<ProgressAdminView[]>(
     "/admin/get-all-progress",
     {
@@ -27,20 +25,6 @@ const ProgressDashboard = () => {
         next.delete(userID);
       } else {
         next.add(userID);
-      }
-
-      return next;
-    });
-  };
-
-  const toggleCourse = (userID: ID, courseID: ID) => {
-    const key = `${userID}-${courseID}`;
-    setExpandedCourses(prev => {
-      const next = new Set(prev);
-      if (next.has(key)) {
-        next.delete(key);
-      } else {
-        next.add(key);
       }
 
       return next;
@@ -77,86 +61,9 @@ const ProgressDashboard = () => {
                     <p className="progress-user-email">{userProgress.email}</p>
                   </div>
                 </button>
-                {isExpanded && userProgress.progress.length === 0 ? (
-                  <p className="text-secondary">No course progress yet</p>
+                {isExpanded ? (
+                  <UserProgressBreakdown userProgress={userProgress} />
                 ) : null}
-                {isExpanded && userProgress.progress.length > 0
-                  ? userProgress.progress.map(courseProgress => {
-                      const isCourseExpanded = expandedCourses.has(
-                        `${userProgress.userID}-${courseProgress.courseID}`,
-                      );
-                      return (
-                        <div
-                          key={courseProgress.courseID}
-                          className="progress-course-row"
-                        >
-                          <button
-                            type="button"
-                            className="progress-course-header"
-                            onClick={() =>
-                              toggleCourse(
-                                userProgress.userID,
-                                courseProgress.courseID,
-                              )
-                            }
-                          >
-                            <ChevronRight
-                              stroke={colors.orange}
-                              width={18}
-                              className={`progress-expand-icon ${isCourseExpanded ? "expanded" : ""}`}
-                            />
-                            <span className="progress-course-name">
-                              {courseProgress.courseName}
-                            </span>
-                            <div className="progress-status-badges">
-                              <span
-                                className={`progress-badge ${
-                                  courseProgress.completedIntro
-                                    ? "completed"
-                                    : "pending"
-                                }`}
-                              >
-                                Completed Intro
-                              </span>
-                              <span
-                                className={`progress-badge ${
-                                  courseProgress.completedCourse
-                                    ? "completed"
-                                    : "pending"
-                                }`}
-                              >
-                                Completed Course
-                              </span>
-                            </div>
-                          </button>
-                          {isCourseExpanded ? (
-                            <div className="progress-sections">
-                              <span className="progress-sections-label">
-                                Sections:
-                              </span>
-                              <ul className="progress-section-list">
-                                {courseProgress.courseSectionProgress.map(
-                                  section => (
-                                    <li
-                                      key={section.id}
-                                      className="progress-section-item"
-                                    >
-                                      <div
-                                        className={`progress-section-square ${section.completed ? "completed" : "pending"}`}
-                                      />
-                                      <span className="progress-section-title">
-                                        {section.title}
-                                      </span>
-                                    </li>
-                                  ),
-                                )}
-                              </ul>
-                            </div>
-                          ) : null}
-                        </div>
-                      );
-                    })
-                  : null}
               </div>
             );
           })}

@@ -12,10 +12,12 @@ import CourseSectionContainer from "./CourseSectionContainer";
 import useUpdateProgress from "./hooks/useUpdateProgress";
 import Quiz from "./Quiz";
 import {
+  AttemptData,
   ChangeDirection,
   CourseQuizSection,
   ID,
   QuizProgressState,
+  QuizSelectedAnswers,
   QuizStateResponse,
 } from "../../types/index";
 
@@ -60,9 +62,7 @@ export const CourseQuizContainer: React.FC<Props> = ({
     [],
   );
 
-  const { request: incrementAttempts } = useLazyQuery<null>(
-    "/increment-attempts",
-  );
+  const { request: saveAttempt } = useLazyQuery<null>("/quiz/save-attempt");
 
   const { loading: loadingQuizState } = useQuery<QuizStateResponse>(
     "/get-quiz-state",
@@ -87,6 +87,7 @@ export const CourseQuizContainer: React.FC<Props> = ({
   );
 
   const { request: saveQuizState } = useLazyQuery<null>("/set-quiz-state");
+  const { request: saveQuizStateV2 } = useLazyQuery<null>("/quiz/save-state");
 
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [allAnswersAreCorrect, setAllAnswersAreCorrect] = useState(false);
@@ -121,6 +122,33 @@ export const CourseQuizContainer: React.FC<Props> = ({
     onUpdateProgressError,
   );
 
+  const getQuizAttemptData = (answers: QuizSelectedAnswers[]): AttemptData => {
+    const questions = quizSection.questions.map((question, questionIndex) => {
+      const answerIds = answers[questionIndex]
+        .map(answerIndex => question.answers[answerIndex]?.id)
+        .filter(Boolean) as string[];
+
+      const correctAnswerIds = question.answers
+        .filter(answer => answer.isCorrectAnswer)
+        .map(answer => answer.id);
+
+      const correct =
+        correctAnswerIds.length === answerIds.length &&
+        correctAnswerIds.every(id => answerIds.includes(id));
+
+      return {
+        questionID: question.id,
+        selectedAnswerIDs: answerIds,
+        correct,
+      };
+    });
+
+    return {
+      quizID: quizSection.id,
+      questions,
+    };
+  };
+
   const onChangeAnswer = (questionIndex: number, answerIndex: number) => {
     const updatedSelectedAnswers = [...selectedAnswers];
     let currentSelectedAnswers = updatedSelectedAnswers[questionIndex];
@@ -150,6 +178,11 @@ export const CourseQuizContainer: React.FC<Props> = ({
     saveQuizState({
       quizId: quizSection.id,
       quizState: JSON.stringify(updatedSelectedAnswers),
+    });
+
+    saveQuizStateV2({
+      quizID: quizSection.id,
+      quizState: getQuizAttemptData(updatedSelectedAnswers),
     });
   };
 
@@ -192,9 +225,7 @@ export const CourseQuizContainer: React.FC<Props> = ({
     setAttempts(a => a + 1);
     setIncorrectQuestionIds(quizResult.incorrectIds);
 
-    incrementAttempts({
-      quizId: quizSection.id,
-    });
+    saveAttempt(getQuizAttemptData(selectedAnswers));
   };
 
   const handleClickSubmitQuiz = () => {
