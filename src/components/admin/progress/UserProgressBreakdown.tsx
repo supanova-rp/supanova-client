@@ -7,7 +7,7 @@ import { useQuery } from "src/hooks/useQuery";
 import {
   ID,
   ProgressAdminView,
-  QuizAttemptHistory as QuizAttemptHistoryType,
+  QuizAttempts as QuizAttemptHistoryType,
 } from "src/types";
 
 import QuizAttemptHistoryPanel from "./QuizAttemptHistoryPanel";
@@ -131,6 +131,7 @@ const UserProgressBreakdown = ({ userProgress }: Props) => {
                             {isAttemptHistoryExpanded ? (
                               <QuizAttemptHistoryPanel
                                 attempts={quizHistory.attempts}
+                                currentAttempt={quizHistory.currentAttempt}
                               />
                             ) : null}
                           </div>

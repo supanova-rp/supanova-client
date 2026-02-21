@@ -12,10 +12,10 @@ import CourseSectionContainer from "./CourseSectionContainer";
 import useUpdateProgress from "./hooks/useUpdateProgress";
 import Quiz from "./Quiz";
 import {
-  AttemptData,
   ChangeDirection,
   CourseQuizSection,
   ID,
+  QuizAttemptAnswers,
   QuizProgressState,
   QuizSelectedAnswers,
   QuizStateResponse,
@@ -122,8 +122,10 @@ export const CourseQuizContainer: React.FC<Props> = ({
     onUpdateProgressError,
   );
 
-  const getQuizAttemptData = (answers: QuizSelectedAnswers[]): AttemptData => {
-    const questions = quizSection.questions.map((question, questionIndex) => {
+  const getQuizAttemptAnswers = (
+    answers: QuizSelectedAnswers[],
+  ): QuizAttemptAnswers[] => {
+    return quizSection.questions.map((question, questionIndex) => {
       const answerIds = answers[questionIndex]
         .map(answerIndex => question.answers[answerIndex]?.id)
         .filter(Boolean) as string[];
@@ -142,11 +144,6 @@ export const CourseQuizContainer: React.FC<Props> = ({
         correct,
       };
     });
-
-    return {
-      quizID: quizSection.id,
-      questions,
-    };
   };
 
   const onChangeAnswer = (questionIndex: number, answerIndex: number) => {
@@ -182,7 +179,7 @@ export const CourseQuizContainer: React.FC<Props> = ({
 
     saveQuizStateV2({
       quizID: quizSection.id,
-      quizState: getQuizAttemptData(updatedSelectedAnswers),
+      answers: getQuizAttemptAnswers(updatedSelectedAnswers),
     });
   };
 
@@ -225,7 +222,10 @@ export const CourseQuizContainer: React.FC<Props> = ({
     setAttempts(a => a + 1);
     setIncorrectQuestionIds(quizResult.incorrectIds);
 
-    saveAttempt(getQuizAttemptData(selectedAnswers));
+    saveAttempt({
+      quizID: quizSection.id,
+      answers: getQuizAttemptAnswers(selectedAnswers),
+    });
   };
 
   const handleClickSubmitQuiz = () => {
