@@ -1,7 +1,6 @@
 import { useMemo } from "react";
-import { QuizAttemptAnswers, QuizAttempt } from "src/types";
+import { QuizAttempt, QuizAttemptAnswers } from "src/types";
 import { CourseQuizSectionServerModel } from "src/types/server";
-import { sanitiseArray } from "src/utils/array";
 
 import QuizAttemptItem, { QuestionMap } from "./QuizAttemptItem";
 
@@ -42,22 +41,18 @@ const QuizAttemptHistoryPanel = ({
     );
   }, [quizSection]);
 
-  const filteredCurrentAttempt = sanitiseArray(currentAnswers).filter(
-    a => a.selectedAnswerIDs.length > 0,
-  );
-
   return (
     <div className="quiz-attempt-list">
-      {filteredCurrentAttempt && filteredCurrentAttempt.length > 0 ? (
+      {currentAnswers && currentAnswers.length > 0 ? (
         <QuizAttemptItem
           label="Current attempt (in progress)"
-          answers={filteredCurrentAttempt}
+          answers={currentAnswers}
           showAll
           questionMap={questionMap}
         />
       ) : null}
-      {filteredCurrentAttempt &&
-      filteredCurrentAttempt.length > 0 &&
+      {currentAnswers &&
+      currentAnswers.length > 0 &&
       attempts &&
       attempts.length > 0 ? (
         <hr className="quiz-attempt-divider" />
