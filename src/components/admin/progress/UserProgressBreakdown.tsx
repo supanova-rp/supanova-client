@@ -112,7 +112,8 @@ const UserProgressBreakdown = ({ userProgress, quizSectionsByID }: Props) => {
                           <span className="progress-section-title">
                             {section.title}
                           </span>
-                          {quizHistory != null && (
+                          {(!!quizHistory?.attempts ||
+                            !!quizHistory?.currentAttempt) && (
                             <ExpandCollapseButton
                               isExpanded={isAttemptHistoryExpanded}
                               onClick={() => toggleAttemptHistory(section.id)}
