@@ -15,7 +15,7 @@ export type CourseServerModel = {
 
 export type CourseSectionServerModel =
   | CourseVideoSectionServerModel
-  | CourseQuizSection; // TODO: add ServerModel for this later
+  | CourseQuizSection; // TODO: replace with CourseQuizSectionServerModel (later)
 
 export type CourseVideoSectionServerModel = {
   id: ID;
@@ -33,4 +33,27 @@ export type CourseMaterialServerModel = {
 
 export type CourseVideoServerModel = {
   url: string;
+};
+
+export type CourseQuizSectionServerModel = {
+  id: ID;
+  title: string;
+  position: number;
+  type: SectionTypes.Quiz;
+  questions: CourseQuizQuestionServerModel[];
+};
+
+export type CourseQuizQuestionServerModel = {
+  id: ID;
+  question: string;
+  position: number;
+  isMultiAnswer: boolean;
+  answers: CourseQuizAnswerServerModel[];
+};
+
+export type CourseQuizAnswerServerModel = {
+  id: ID;
+  answer: string;
+  position: number;
+  isCorrectAnswer: boolean;
 };

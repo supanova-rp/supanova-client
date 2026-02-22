@@ -1,0 +1,24 @@
+.expand-collapse-icon {
+  transition: transform 0.2s;
+
+  &.expanded {
+    transform: rotate(90deg);
+  }
+}
+
+.expand-collapse-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  padding-left: 2px;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}

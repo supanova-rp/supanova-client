@@ -1,94 +1,81 @@
-import { useState } from "react";
-import { Button } from "react-bootstrap";
+import { useMemo } from "react";
 import { QuizAttemptAnswers, QuizAttempt } from "src/types";
+import { CourseQuizSectionServerModel } from "src/types/server";
+
+import QuizAttemptItem, { QuestionMap } from "./QuizAttemptItem";
 
 type Props = {
   attempts?: QuizAttempt[];
   currentAttempt?: QuizAttemptAnswers[];
+  quizSection?: CourseQuizSectionServerModel;
 };
 
-const QuizAttemptHistoryPanel = ({ attempts, currentAttempt }: Props) => {
-  const [currentAttemptExpanded, setCurrentAttemptExpanded] = useState(false);
-  const [expandedAttempts, setExpandedAttempts] = useState<Set<number>>(
-    new Set(),
+const QuizAttemptHistoryPanel = ({
+  attempts,
+  currentAttempt,
+  quizSection,
+}: Props) => {
+  const questionMap: QuestionMap = useMemo(() => {
+    if (!quizSection) {
+      return new Map();
+    }
+
+    return new Map(
+      quizSection.questions.map(q => [
+        q.id,
+        {
+          text: q.question,
+          position: q.position,
+          answerMap: new Map(
+            q.answers.map(a => [
+              a.id,
+              {
+                text: a.answer,
+                position: a.position,
+                isCorrectAnswer: a.isCorrectAnswer,
+              },
+            ]),
+          ),
+        },
+      ]),
+    );
+  }, [quizSection]);
+
+  const filteredCurrentAttempt = currentAttempt?.filter(
+    a => a.selectedAnswerIDs.length > 0,
   );
 
-  const toggleAttempt = (attemptNumber: number) => {
-    setExpandedAttempts(prev => {
-      const next = new Set(prev);
-      if (next.has(attemptNumber)) {
-        next.delete(attemptNumber);
-      } else {
-        next.add(attemptNumber);
-      }
-
-      return next;
-    });
-  };
-
   return (
-    <ul className="quiz-attempt-list">
-      {currentAttempt ? (
-        <li className="quiz-attempt-item">
-          <Button
-            variant="link"
-            className="nav-link quiz-attempt-header"
-            onClick={() => setCurrentAttemptExpanded(prev => !prev)}
-          >
-            Current attempt (in progress)
-          </Button>
-          {currentAttemptExpanded ? (
-            <ul className="quiz-attempt-questions">
-              {currentAttempt
-                .filter(a => !a.correct)
-                .map(answer => (
-                  <li key={answer.questionID} className="quiz-attempt-question">
-                    <span className="quiz-attempt-question-id">
-                      {answer.questionID}
-                    </span>
-                    <span className="quiz-attempt-answers">
-                      {answer.selectedAnswerIDs.join(", ")}
-                    </span>
-                  </li>
-                ))}
-            </ul>
-          ) : null}
-        </li>
+    <div className="quiz-attempt-list">
+      {filteredCurrentAttempt && filteredCurrentAttempt.length > 0 ? (
+        <QuizAttemptItem
+          label="Current attempt (in progress)"
+          answers={filteredCurrentAttempt}
+          showAll
+          questionMap={questionMap}
+        />
       ) : null}
-      {attempts?.map(attempt => {
-        const isExpanded = expandedAttempts.has(attempt.attemptNumber);
-        return (
-          <li key={attempt.attemptNumber} className="quiz-attempt-item">
-            <Button
-              variant="link"
-              className="nav-link quiz-attempt-header"
-              onClick={() => toggleAttempt(attempt.attemptNumber)}
-            >
-              Attempt {attempt.attemptNumber}
-            </Button>
-            {isExpanded ? (
-              <ul className="quiz-attempt-questions">
-                {attempt.answers
-                  .filter(a => !a.correct)
-                  .map(answer => (
-                    <li
-                      key={answer.questionID}
-                      className="quiz-attempt-question"
-                    >
-                      <span className="quiz-attempt-question-id">
-                        {answer.questionID}
-                      </span>
-                      <span className="quiz-attempt-answers">
-                        {answer.selectedAnswerIDs.join(", ")}
-                      </span>
-                    </li>
-                  ))}
-              </ul>
-            ) : null}
-          </li>
-        );
-      })}
-    </ul>
+      {filteredCurrentAttempt &&
+      filteredCurrentAttempt.length > 0 &&
+      attempts &&
+      attempts.length > 0 ? (
+        <hr className="quiz-attempt-divider" />
+      ) : null}
+      {attempts && attempts.length > 0 ? (
+        <div className="quiz-attempt-label">
+          <span className="quiz-attempt-label-title">Past attempts</span> (only
+          incorrectly answered questions shown)
+        </div>
+      ) : null}
+      {attempts?.map(attempt => (
+        <QuizAttemptItem
+          key={attempt.attemptNumber}
+          label={`Attempt ${attempt.attemptNumber}`}
+          answers={attempt.answers}
+          questionMap={questionMap}
+        />
+      ))}
+    </div>
   );
 };
 

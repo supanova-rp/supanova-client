@@ -41,7 +41,9 @@ export const CourseSummary: React.FC<Props> = ({
 }) => {
   const { isAdmin } = useAuth();
   const resetProgress = useRequest("/reset-progress");
-  const { request: resetQuizState } = useLazyQuery<null>("/reset-quiz-state");
+  const { request: resetQuizState } = useLazyQuery<null>(
+    "/admin/quiz/reset-progress",
+  );
 
   const getCurrentSectionProgressIndex = () => {
     if (completedSectionIds.length === 0) {
@@ -82,7 +84,7 @@ export const CourseSummary: React.FC<Props> = ({
     course.sections.forEach(section => {
       if (getIsQuizSection(section)) {
         resetQuizState({
-          quizId: section.id,
+          quizID: section.id,
         });
       }
     });

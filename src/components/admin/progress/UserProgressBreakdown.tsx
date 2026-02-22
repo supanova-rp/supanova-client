@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { Button } from "react-bootstrap";
-import ChevronRight from "src/assets/icons/chevronRight.svg?react";
-import { colors } from "src/constants/colorPalette";
+import ExpandCollapseButton from "src/components/ExpandCollapseButton";
 import { feedbackMessages } from "src/constants/constants";
 import { useQuery } from "src/hooks/useQuery";
 import {
@@ -9,14 +7,16 @@ import {
   ProgressAdminView,
   QuizAttempts as QuizAttemptHistoryType,
 } from "src/types";
+import type { CourseQuizSectionServerModel } from "src/types/server";
 
 import QuizAttemptHistoryPanel from "./QuizAttemptHistoryPanel";
 
 type Props = {
   userProgress: ProgressAdminView;
+  quizSectionsByID: Map<ID, CourseQuizSectionServerModel>;
 };
 
-const UserProgressBreakdown = ({ userProgress }: Props) => {
+const UserProgressBreakdown = ({ userProgress, quizSectionsByID }: Props) => {
   const [expandedCourses, setExpandedCourses] = useState<Set<ID>>(new Set());
   const [expandedAttemptHistories, setExpandedAttemptHistories] = useState<
     Set<ID>
@@ -71,16 +71,10 @@ const UserProgressBreakdown = ({ userProgress }: Props) => {
         const isCourseExpanded = expandedCourses.has(courseProgress.courseID);
         return (
           <div key={courseProgress.courseID} className="progress-course-row">
-            <button
-              type="button"
-              className="progress-course-header"
+            <ExpandCollapseButton
+              isExpanded={isCourseExpanded}
               onClick={() => toggleCourse(courseProgress.courseID)}
             >
-              <ChevronRight
-                stroke={colors.orange}
-                width={18}
-                className={`progress-expand-icon ${isCourseExpanded ? "expanded" : ""}`}
-              />
               <span className="progress-course-name">
                 {courseProgress.courseName}
               </span>
@@ -100,7 +94,7 @@ const UserProgressBreakdown = ({ userProgress }: Props) => {
                   Completed Course
                 </span>
               </div>
-            </button>
+            </ExpandCollapseButton>
             {isCourseExpanded ? (
               <div className="progress-sections">
                 <span className="progress-sections-label">Sections:</span>
@@ -111,31 +105,29 @@ const UserProgressBreakdown = ({ userProgress }: Props) => {
                       expandedAttemptHistories.has(section.id);
                     return (
                       <li key={section.id} className="progress-section-item">
-                        <div
-                          className={`progress-section-square ${section.completed ? "completed" : "pending"}`}
-                        />
-                        <span className="progress-section-title">
-                          {section.title}
-                        </span>
-                        {quizHistory != null && (
-                          <div className="progress-attempt-history">
-                            <Button
-                              variant="link"
-                              className="nav-link progress-section-attempts-btn"
+                        <div className="progress-section-item-header">
+                          <div
+                            className={`progress-section-square ${section.completed ? "completed" : "pending"}`}
+                          />
+                          <span className="progress-section-title">
+                            {section.title}
+                          </span>
+                          {quizHistory != null && (
+                            <ExpandCollapseButton
+                              isExpanded={isAttemptHistoryExpanded}
                               onClick={() => toggleAttemptHistory(section.id)}
-                            >
-                              {isAttemptHistoryExpanded
-                                ? "Hide attempts"
-                                : "Show attempts"}
-                            </Button>
-                            {isAttemptHistoryExpanded ? (
-                              <QuizAttemptHistoryPanel
-                                attempts={quizHistory.attempts}
-                                currentAttempt={quizHistory.currentAttempt}
-                              />
-                            ) : null}
+                            />
+                          )}
+                        </div>
+                        {isAttemptHistoryExpanded ? (
+                          <div className="quiz-attempt-history-card">
+                            <QuizAttemptHistoryPanel
+                              attempts={quizHistory?.attempts}
+                              currentAttempt={quizHistory?.currentAttempt}
+                              quizSection={quizSectionsByID.get(section.id)}
+                            />
                           </div>
-                        )}
+                        ) : null}
                       </li>
                     );
                   })}

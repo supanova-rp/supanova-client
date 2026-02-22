@@ -1,10 +1,10 @@
 import { useState } from "react";
-import ChevronRight from "src/assets/icons/chevronRight.svg?react";
+import ExpandCollapseButton from "src/components/ExpandCollapseButton";
 import RequestHandler from "src/components/RequestHandler";
-import { colors } from "src/constants/colorPalette";
 import { feedbackMessages } from "src/constants/constants";
 import { useQuery } from "src/hooks/useQuery";
 import { ID, ProgressAdminView } from "src/types";
+import { CourseQuizSectionServerModel } from "src/types/server";
 
 import UserProgressBreakdown from "./UserProgressBreakdown";
 import AdminHeader from "../AdminHeader";
@@ -17,6 +17,22 @@ const ProgressDashboard = () => {
       defaultError: feedbackMessages.genericError,
     },
   );
+
+  const {
+    data: quizSections,
+    loading: quizSectionsLoading,
+    error: quizSectionsError,
+    refetch: refetchQuizSections,
+  } = useQuery<CourseQuizSectionServerModel[]>("/quiz/get-all-sections", {
+    defaultError: feedbackMessages.genericError,
+  });
+
+  const refetchAll = () => {
+    refetch();
+    refetchQuizSections();
+  };
+
+  const quizSectionsByID = new Map((quizSections ?? []).map(s => [s.id, s]));
 
   const toggleUser = (userID: ID) => {
     setExpandedUsers(prev => {
@@ -35,9 +51,9 @@ const ProgressDashboard = () => {
     <>
       <AdminHeader title="User Progress" />
       <RequestHandler
-        error={error}
-        onClick={refetch}
-        isLoading={loading}
+        error={error || quizSectionsError}
+        onClick={refetchAll}
+        isLoading={loading || quizSectionsLoading}
         shouldShowWarning={!data?.length}
         warningMessage="No user progress data available."
       >
@@ -46,23 +62,21 @@ const ProgressDashboard = () => {
             const isExpanded = expandedUsers.has(userProgress.userID);
             return (
               <div key={userProgress.userID} className="progress-user-card">
-                <button
-                  type="button"
+                <ExpandCollapseButton
+                  isExpanded={isExpanded}
                   className="progress-user-header"
                   onClick={() => toggleUser(userProgress.userID)}
                 >
-                  <ChevronRight
-                    stroke={colors.orange}
-                    width={22}
-                    className={`progress-expand-icon ${isExpanded ? "expanded" : ""}`}
-                  />
                   <div className="progress-user-info">
                     <h5 className="progress-user-name">{userProgress.name}</h5>
                     <p className="progress-user-email">{userProgress.email}</p>
                   </div>
-                </button>
+                </ExpandCollapseButton>
                 {isExpanded ? (
-                  <UserProgressBreakdown userProgress={userProgress} />
+                  <UserProgressBreakdown
+                    userProgress={userProgress}
+                    quizSectionsByID={quizSectionsByID}
+                  />
                 ) : null}
               </div>
             );

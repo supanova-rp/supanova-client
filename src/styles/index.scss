@@ -24,6 +24,8 @@ body, html, #root {
   --hover-color-orange: #db810d;
   --error-color: #dc3545;
   --success-color: #198754;
+  --light-green: #d4edda;
+  --light-red: #f8d7da;
   --warning-color: #ffc007;
   --hover-color-error: #e44c5b;
   --linear-gradient-orange: #a46108;
@@ -97,6 +99,7 @@ hr {
 @import "./authentication";
 @import "./course-intro";
 @import "./feedback";
+@import "./generic";
 @import "./home";
 @import "./modals";
 @import "./navbar";
