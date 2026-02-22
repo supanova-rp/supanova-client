@@ -210,6 +210,24 @@ export type ProgressForCourseAdminView = {
   courseSectionProgress: CourseSectionProgress[];
 };
 
+export type QuizAttempts = {
+  quizID: ID;
+  total: number;
+  attempts: QuizAttempt[];
+  currentAttempt?: QuizAttemptAnswers[];
+};
+
+export type QuizAttempt = {
+  attemptNumber: number;
+  answers: QuizAttemptAnswers[];
+};
+
+export type QuizAttemptAnswers = {
+  questionID: ID;
+  selectedAnswerIDs: ID[];
+  correct: boolean;
+};
+
 export type CourseSectionProgress = {
   id: ID;
   title: string;

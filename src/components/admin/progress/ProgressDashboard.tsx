@@ -1,24 +1,39 @@
 import { useState } from "react";
-import ChevronRight from "src/assets/icons/chevronRight.svg?react";
+import ExpandCollapseButton from "src/components/ExpandCollapseButton";
 import RequestHandler from "src/components/RequestHandler";
-import { colors } from "src/constants/colorPalette";
 import { feedbackMessages } from "src/constants/constants";
 import { useQuery } from "src/hooks/useQuery";
 import { ID, ProgressAdminView } from "src/types";
+import { CourseQuizSectionServerModel } from "src/types/server";
 
+import UserProgressBreakdown from "./UserProgressBreakdown";
 import AdminHeader from "../AdminHeader";
 
 const ProgressDashboard = () => {
   const [expandedUsers, setExpandedUsers] = useState<Set<ID>>(new Set());
-  const [expandedCourses, setExpandedCourses] = useState<Set<string>>(
-    new Set(),
-  );
+  const [isHappyBirthdayExpanded, setIsHappyBirthdayExpanded] = useState(false);
   const { data, loading, error, refetch } = useQuery<ProgressAdminView[]>(
     "/admin/get-all-progress",
     {
       defaultError: feedbackMessages.genericError,
     },
   );
+
+  const {
+    data: quizSections,
+    loading: quizSectionsLoading,
+    error: quizSectionsError,
+    refetch: refetchQuizSections,
+  } = useQuery<CourseQuizSectionServerModel[]>("/quiz/get-all-sections", {
+    defaultError: feedbackMessages.genericError,
+  });
+
+  const refetchAll = () => {
+    refetch();
+    refetchQuizSections();
+  };
+
+  const quizSectionsByID = new Map((quizSections ?? []).map(s => [s.id, s]));
 
   const toggleUser = (userID: ID) => {
     setExpandedUsers(prev => {
@@ -33,130 +48,75 @@ const ProgressDashboard = () => {
     });
   };
 
-  const toggleCourse = (userID: ID, courseID: ID) => {
-    const key = `${userID}-${courseID}`;
-    setExpandedCourses(prev => {
-      const next = new Set(prev);
-      if (next.has(key)) {
-        next.delete(key);
-      } else {
-        next.add(key);
-      }
-
-      return next;
-    });
-  };
-
   return (
     <>
       <AdminHeader title="User Progress" />
       <RequestHandler
-        error={error}
-        onClick={refetch}
-        isLoading={loading}
+        error={error || quizSectionsError}
+        onClick={refetchAll}
+        isLoading={loading || quizSectionsLoading}
         shouldShowWarning={!data?.length}
         warningMessage="No user progress data available."
       >
         <div className="progress-dashboard">
+          <div className="progress-user-card">
+            <ExpandCollapseButton
+              isExpanded={isHappyBirthdayExpanded}
+              className="progress-user-header"
+              onClick={() => setIsHappyBirthdayExpanded(prev => !prev)}
+            >
+              <div className="progress-user-info">
+                <h5 className="progress-user-name">Happy Birthday Joel!</h5>
+              </div>
+            </ExpandCollapseButton>
+            {isHappyBirthdayExpanded ? (
+              <div
+                className="progress-user-breakdown"
+                style={{ paddingTop: 12 }}
+              >
+                <p>
+                  This dashboard tracks how far users have gotten in each course
+                  (green dot completed section, grey dot not completed section),
+                  whether they&apos;ve completed the intro or entire course.
+                </p>
+                <p>
+                  It also shows any previous attempts they had at the quizzes
+                  (showing which questions they answered incorrectly) and if it
+                  hasn&apos;t been completed yet it will also show what
+                  they&apos;ve selected so far in their current attempt.
+                </p>
+                <p>
+                  NOTE - one caveat with the quiz attempt history, the backend
+                  wasn&apos;t collecting this data before so this will only work
+                  for future quiz attempts/submissions as there is no data for
+                  anything before this feature was added :(. Anyway, hope you
+                  like it, let me know if any bugs :3.
+                </p>
+                <p>From Jambo!</p>
+              </div>
+            ) : null}
+          </div>
+
           {data?.map(userProgress => {
             const isExpanded = expandedUsers.has(userProgress.userID);
             return (
               <div key={userProgress.userID} className="progress-user-card">
-                <button
-                  type="button"
+                <ExpandCollapseButton
+                  isExpanded={isExpanded}
                   className="progress-user-header"
                   onClick={() => toggleUser(userProgress.userID)}
                 >
-                  <ChevronRight
-                    stroke={colors.orange}
-                    width={22}
-                    className={`progress-expand-icon ${isExpanded ? "expanded" : ""}`}
-                  />
                   <div className="progress-user-info">
                     <h5 className="progress-user-name">{userProgress.name}</h5>
                     <p className="progress-user-email">{userProgress.email}</p>
                   </div>
-                </button>
-                {isExpanded && userProgress.progress.length === 0 ? (
-                  <p className="text-secondary">No course progress yet</p>
+                </ExpandCollapseButton>
+                {isExpanded ? (
+                  <UserProgressBreakdown
+                    userProgress={userProgress}
+                    quizSectionsByID={quizSectionsByID}
+                  />
                 ) : null}
-                {isExpanded && userProgress.progress.length > 0
-                  ? userProgress.progress.map(courseProgress => {
-                      const isCourseExpanded = expandedCourses.has(
-                        `${userProgress.userID}-${courseProgress.courseID}`,
-                      );
-                      return (
-                        <div
-                          key={courseProgress.courseID}
-                          className="progress-course-row"
-                        >
-                          <button
-                            type="button"
-                            className="progress-course-header"
-                            onClick={() =>
-                              toggleCourse(
-                                userProgress.userID,
-                                courseProgress.courseID,
-                              )
-                            }
-                          >
-                            <ChevronRight
-                              stroke={colors.orange}
-                              width={18}
-                              className={`progress-expand-icon ${isCourseExpanded ? "expanded" : ""}`}
-                            />
-                            <span className="progress-course-name">
-                              {courseProgress.courseName}
-                            </span>
-                            <div className="progress-status-badges">
-                              <span
-                                className={`progress-badge ${
-                                  courseProgress.completedIntro
-                                    ? "completed"
-                                    : "pending"
-                                }`}
-                              >
-                                Completed Intro
-                              </span>
-                              <span
-                                className={`progress-badge ${
-                                  courseProgress.completedCourse
-                                    ? "completed"
-                                    : "pending"
-                                }`}
-                              >
-                                Completed Course
-                              </span>
-                            </div>
-                          </button>
-                          {isCourseExpanded ? (
-                            <div className="progress-sections">
-                              <span className="progress-sections-label">
-                                Sections:
-                              </span>
-                              <ul className="progress-section-list">
-                                {courseProgress.courseSectionProgress.map(
-                                  section => (
-                                    <li
-                                      key={section.id}
-                                      className="progress-section-item"
-                                    >
-                                      <div
-                                        className={`progress-section-square ${section.completed ? "completed" : "pending"}`}
-                                      />
-                                      <span className="progress-section-title">
-                                        {section.title}
-                                      </span>
-                                    </li>
-                                  ),
-                                )}
-                              </ul>
-                            </div>
-                          ) : null}
-                        </div>
-                      );
-                    })
-                  : null}
               </div>
             );
           })}

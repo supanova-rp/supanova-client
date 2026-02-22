@@ -56,9 +56,18 @@ export const request = async ({
       }),
     });
 
+    console.log(`response from ${method} request to ${endpoint}`, response);
+
+    if (response.status === 204) {
+      console.log(
+        `result from ${method} request to ${endpoint}: 204 (No Content)`,
+      );
+      onSuccess({});
+      return;
+    }
+
     const result = await response.json();
 
-    console.log(`response from ${method} request to ${endpoint}`, response);
     console.log(`result from ${method} request to ${endpoint}`, result);
 
     if (response.status >= 200 && response.status < 300) {
