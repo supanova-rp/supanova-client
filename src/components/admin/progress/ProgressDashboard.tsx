@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Button } from "react-bootstrap";
 import ExpandCollapseButton from "src/components/ExpandCollapseButton";
 import RequestHandler from "src/components/RequestHandler";
 import { feedbackMessages } from "src/constants/constants";
@@ -95,6 +96,12 @@ const ProgressDashboard = () => {
                 <p>From Jambo!</p>
               </div>
             ) : null}
+          </div>
+
+          <div className="d-flex justify-content-end">
+            <Button variant="primary" size="sm" onClick={refetchAll}>
+              Refresh data
+            </Button>
           </div>
 
           {data?.map(userProgress => {

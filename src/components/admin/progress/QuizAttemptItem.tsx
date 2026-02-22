@@ -24,7 +24,9 @@ type Props = {
 const QuizAttemptItem = ({ label, answers, showAll, questionMap }: Props) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const displayedAnswers = showAll ? answers : answers.filter(a => !a.correct);
+  const displayedAnswers = showAll
+    ? answers
+    : answers.filter(a => !a.correct && a.selectedAnswerIDs.length > 0);
 
   const sortByPosition = (items: QuizAttemptAnswers[]) =>
     [...items].sort((a, b) => {
