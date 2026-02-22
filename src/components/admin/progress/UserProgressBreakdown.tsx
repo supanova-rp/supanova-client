@@ -113,7 +113,7 @@ const UserProgressBreakdown = ({ userProgress, quizSectionsByID }: Props) => {
                             {section.title}
                           </span>
                           {(!!quizHistory?.attempts ||
-                            !!quizHistory?.currentAttempt) && (
+                            !!quizHistory?.currentAnswers) && (
                             <ExpandCollapseButton
                               isExpanded={isAttemptHistoryExpanded}
                               onClick={() => toggleAttemptHistory(section.id)}
@@ -124,7 +124,7 @@ const UserProgressBreakdown = ({ userProgress, quizSectionsByID }: Props) => {
                           <div className="quiz-attempt-history-card">
                             <QuizAttemptHistoryPanel
                               attempts={quizHistory?.attempts}
-                              currentAttempt={quizHistory?.currentAttempt}
+                              currentAnswers={quizHistory?.currentAnswers}
                               quizSection={quizSectionsByID.get(section.id)}
                             />
                           </div>

@@ -1,18 +1,19 @@
 import { useMemo } from "react";
 import { QuizAttemptAnswers, QuizAttempt } from "src/types";
 import { CourseQuizSectionServerModel } from "src/types/server";
+import { sanitiseArray } from "src/utils/array";
 
 import QuizAttemptItem, { QuestionMap } from "./QuizAttemptItem";
 
 type Props = {
   attempts?: QuizAttempt[];
-  currentAttempt?: QuizAttemptAnswers[];
+  currentAnswers?: QuizAttemptAnswers[];
   quizSection?: CourseQuizSectionServerModel;
 };
 
 const QuizAttemptHistoryPanel = ({
   attempts,
-  currentAttempt,
+  currentAnswers,
   quizSection,
 }: Props) => {
   const questionMap: QuestionMap = useMemo(() => {
@@ -41,7 +42,7 @@ const QuizAttemptHistoryPanel = ({
     );
   }, [quizSection]);
 
-  const filteredCurrentAttempt = currentAttempt?.filter(
+  const filteredCurrentAttempt = sanitiseArray(currentAnswers).filter(
     a => a.selectedAnswerIDs.length > 0,
   );
 
