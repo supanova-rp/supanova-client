@@ -84,14 +84,18 @@ const ProgressDashboard = () => {
                   It also shows any previous attempts they had at the quizzes
                   (showing which questions they answered incorrectly) and if it
                   hasn&apos;t been completed yet it will also show what
-                  they&apos;ve selected so far in their current attempt.
+                  they&apos;ve selected so far in their current attempt (for the
+                  current attempt it shows all selected answers, not just the
+                  ones that are incorrect).
                 </p>
                 <p>
                   NOTE - one caveat with the quiz attempt history, the backend
                   wasn&apos;t collecting this data before so this will only work
                   for future quiz attempts/submissions as there is no data for
-                  anything before this feature was added :(. Anyway, hope you
-                  like it, let me know if any bugs :3.
+                  anything before this feature was added :(. Once there is data
+                  for a quiz then there will be an arrow next to the Quiz
+                  section which you can expand and see the current/past attempt
+                  data. Anyway, hope you like it, let me know if any bugs :3.
                 </p>
                 <p>From Jambo!</p>
               </div>
