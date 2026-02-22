@@ -33,8 +33,13 @@ const QuizAttemptItem = ({ label, answers, showAll, questionMap }: Props) => {
       return posA - posB;
     });
 
-  const getQuestionText = (questionID: string) =>
-    questionMap.get(questionID)?.text ?? questionID;
+  const getQuestionInfo = (questionID: string) => {
+    const question = questionMap.get(questionID);
+    return {
+      text: question?.text ?? questionID,
+      position: question?.position ?? 0,
+    };
+  };
 
   const getAllAnswers = (questionID: string) => {
     const question = questionMap.get(questionID);
@@ -51,6 +56,8 @@ const QuizAttemptItem = ({ label, answers, showAll, questionMap }: Props) => {
       }));
   };
 
+  const allCorrect = answers.every(a => a.correct);
+
   return (
     <div className="quiz-attempt-item">
       <ExpandCollapseButton
@@ -61,39 +68,53 @@ const QuizAttemptItem = ({ label, answers, showAll, questionMap }: Props) => {
       </ExpandCollapseButton>
       {isExpanded ? (
         <div className="quiz-attempt-questions">
-          {sortByPosition(displayedAnswers).map(attemptAnswer => {
-            const allAnswers = getAllAnswers(attemptAnswer.questionID);
-            const selectedSet = new Set(attemptAnswer.selectedAnswerIDs);
+          {allCorrect ? (
+            <div className="quiz-attempt-all-correct">
+              <CheckIcon stroke="green" width={16} height={16} />
+              <span>All questions were answered correctly</span>
+            </div>
+          ) : null}
+          {!allCorrect &&
+            sortByPosition(displayedAnswers).map(attemptAnswer => {
+              const allAnswers = getAllAnswers(attemptAnswer.questionID);
+              const selectedSet = new Set(attemptAnswer.selectedAnswerIDs);
+              const { text: questionText, position: questionPosition } =
+                getQuestionInfo(attemptAnswer.questionID);
 
-            return (
-              <div
-                key={attemptAnswer.questionID}
-                className="quiz-attempt-question"
-              >
-                <span className="quiz-attempt-question-text">
-                  {getQuestionText(attemptAnswer.questionID)}
-                </span>
-                {!attemptAnswer.correct && <XMarkIcon width={14} height={14} />}
-                <ul className="quiz-attempt-answer-list">
-                  {allAnswers.map(answer => (
-                    <li
-                      key={answer.id}
-                      className={`quiz-attempt-answer ${selectedSet.has(answer.id) ? "selected" : ""} ${answer.isCorrectAnswer ? "correct" : ""}`}
-                    >
-                      {selectedSet.has(answer.id) && answer.isCorrectAnswer ? (
-                        <CheckIcon stroke="green" width={16} height={16} />
-                      ) : null}
-                      {selectedSet.has(answer.id) &&
-                        !answer.isCorrectAnswer && (
-                          <XMarkIcon stroke="red" width={16} height={16} />
-                        )}
-                      {answer.text}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            );
-          })}
+              return (
+                <div
+                  key={attemptAnswer.questionID}
+                  className="quiz-attempt-question"
+                >
+                  <div className="quiz-attempt-question-text">
+                    {`${questionPosition + 1}. ${questionText}`}
+                  </div>
+                  <ul className="quiz-attempt-answer-list">
+                    {allAnswers.map(answer => (
+                      <li
+                        key={answer.id}
+                        className={`quiz-attempt-answer ${selectedSet.has(answer.id) ? "selected" : ""} ${answer.isCorrectAnswer ? "correct" : ""}`}
+                      >
+                        {selectedSet.has(answer.id) &&
+                        answer.isCorrectAnswer ? (
+                          <CheckIcon stroke="green" width={16} height={16} />
+                        ) : null}
+                        {selectedSet.has(answer.id) &&
+                          !answer.isCorrectAnswer && (
+                            <XMarkIcon
+                              stroke="red"
+                              strokeWidth={2}
+                              width={18}
+                              height={18}
+                            />
+                          )}
+                        {answer.text}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              );
+            })}
         </div>
       ) : null}
     </div>

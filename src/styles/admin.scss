@@ -341,7 +341,7 @@
 
 .quiz-attempt-answer-list {
   list-style: none;
-  padding: 0;
+  padding: 0 0 0 2px;
   margin: 4px 0 0;
 }
 
@@ -349,6 +349,11 @@
   padding: 4px 8px;
   margin-bottom: 3px;
   color: #6c757d;
+
+  svg {
+    padding-right: 2px;
+    padding-bottom: 1px;
+  }
 
   &.correct {
     background-color: var(--light-green);
@@ -372,6 +377,27 @@
   &.selected.correct {
     background-color: var(--light-green);
   }
+}
+
+.quiz-attempt-question {
+  padding-left: 8px;
+  padding-top: 8px;
+}
+
+.quiz-attempt-question-text {
+  padding-bottom: 4px;
+}
+
+.quiz-attempt-all-correct {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  background-color: var(--light-green);
+  border-radius: 6px;
+  width: fit-content;
+  margin-left: 12px;
+  margin-top: 10px;
 }
 
 .quiz-attempt-list {
