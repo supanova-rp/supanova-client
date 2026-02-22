@@ -1,18 +1,18 @@
 import { useMemo } from "react";
-import { QuizAttemptAnswers, QuizAttempt } from "src/types";
+import { QuizAttempt, QuizAttemptAnswers } from "src/types";
 import { CourseQuizSectionServerModel } from "src/types/server";
 
 import QuizAttemptItem, { QuestionMap } from "./QuizAttemptItem";
 
 type Props = {
   attempts?: QuizAttempt[];
-  currentAttempt?: QuizAttemptAnswers[];
+  currentAnswers?: QuizAttemptAnswers[];
   quizSection?: CourseQuizSectionServerModel;
 };
 
 const QuizAttemptHistoryPanel = ({
   attempts,
-  currentAttempt,
+  currentAnswers,
   quizSection,
 }: Props) => {
   const questionMap: QuestionMap = useMemo(() => {
@@ -41,22 +41,18 @@ const QuizAttemptHistoryPanel = ({
     );
   }, [quizSection]);
 
-  const filteredCurrentAttempt = currentAttempt?.filter(
-    a => a.selectedAnswerIDs.length > 0,
-  );
-
   return (
     <div className="quiz-attempt-list">
-      {filteredCurrentAttempt && filteredCurrentAttempt.length > 0 ? (
+      {currentAnswers && currentAnswers.length > 0 ? (
         <QuizAttemptItem
           label="Current attempt (in progress)"
-          answers={filteredCurrentAttempt}
+          answers={currentAnswers}
           showAll
           questionMap={questionMap}
         />
       ) : null}
-      {filteredCurrentAttempt &&
-      filteredCurrentAttempt.length > 0 &&
+      {currentAnswers &&
+      currentAnswers.length > 0 &&
       attempts &&
       attempts.length > 0 ? (
         <hr className="quiz-attempt-divider" />

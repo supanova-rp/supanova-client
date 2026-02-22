@@ -8,6 +8,7 @@ import {
   QuizAttempts as QuizAttemptHistoryType,
 } from "src/types";
 import type { CourseQuizSectionServerModel } from "src/types/server";
+import { sanitiseArray } from "src/utils/array";
 
 import QuizAttemptHistoryPanel from "./QuizAttemptHistoryPanel";
 
@@ -103,6 +104,11 @@ const UserProgressBreakdown = ({ userProgress, quizSectionsByID }: Props) => {
                     const quizHistory = attemptsByQuizID.get(section.id);
                     const isAttemptHistoryExpanded =
                       expandedAttemptHistories.has(section.id);
+
+                    const populatedCurrentAnswers = sanitiseArray(
+                      quizHistory?.currentAnswers,
+                    ).filter(a => a.selectedAnswerIDs.length > 0);
+
                     return (
                       <li key={section.id} className="progress-section-item">
                         <div className="progress-section-item-header">
@@ -113,7 +119,7 @@ const UserProgressBreakdown = ({ userProgress, quizSectionsByID }: Props) => {
                             {section.title}
                           </span>
                           {(!!quizHistory?.attempts ||
-                            !!quizHistory?.currentAttempt) && (
+                            populatedCurrentAnswers.length > 0) && (
                             <ExpandCollapseButton
                               isExpanded={isAttemptHistoryExpanded}
                               onClick={() => toggleAttemptHistory(section.id)}
@@ -124,7 +130,7 @@ const UserProgressBreakdown = ({ userProgress, quizSectionsByID }: Props) => {
                           <div className="quiz-attempt-history-card">
                             <QuizAttemptHistoryPanel
                               attempts={quizHistory?.attempts}
-                              currentAttempt={quizHistory?.currentAttempt}
+                              currentAnswers={populatedCurrentAnswers}
                               quizSection={quizSectionsByID.get(section.id)}
                             />
                           </div>

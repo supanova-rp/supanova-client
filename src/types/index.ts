@@ -214,7 +214,7 @@ export type QuizAttempts = {
   quizID: ID;
   total: number;
   attempts: QuizAttempt[];
-  currentAttempt?: QuizAttemptAnswers[];
+  currentAnswers?: QuizAttemptAnswers[];
 };
 
 export type QuizAttempt = {
