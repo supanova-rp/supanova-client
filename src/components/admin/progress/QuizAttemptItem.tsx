@@ -58,7 +58,7 @@ const QuizAttemptItem = ({ label, answers, showAll, questionMap }: Props) => {
       }));
   };
 
-  const allCorrect = answers.every(a => a.correct);
+  const showAllCorrectMessage = !showAll && answers.every(a => a.correct);
 
   return (
     <div className="quiz-attempt-item">
@@ -70,13 +70,13 @@ const QuizAttemptItem = ({ label, answers, showAll, questionMap }: Props) => {
       </ExpandCollapseButton>
       {isExpanded ? (
         <div className="quiz-attempt-questions">
-          {allCorrect ? (
+          {showAllCorrectMessage ? (
             <div className="quiz-attempt-all-correct">
               <CheckIcon stroke="green" width={16} height={16} />
               <span>All questions were answered correctly</span>
             </div>
           ) : null}
-          {!allCorrect &&
+          {!showAllCorrectMessage &&
             sortByPosition(displayedAnswers).map(attemptAnswer => {
               const allAnswers = getAllAnswers(attemptAnswer.questionID);
               const selectedSet = new Set(attemptAnswer.selectedAnswerIDs);
