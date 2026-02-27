@@ -95,7 +95,20 @@ const ProgressDashboard = () => {
                   anything before this feature was added :(. Once there is data
                   for a quiz then there will be an arrow next to the Quiz
                   section which you can expand and see the current/past attempt
-                  data. Anyway, hope you like it, let me know if any bugs :3.
+                  data.
+                </p>
+                <p>
+                  You can see some examples of how it would look if you go on my
+                  user, then go to the Top Up course or RPS course, or if you do
+                  any quiz on your user from now on and then go to your user.
+                  The green background highlight shows what is actually right,
+                  green background plus a green tick means it was correct AND
+                  they selected it, red background and red cross means it&apos;s
+                  incorrect and they selected it. Any questions that arent
+                  answered in the current attempt so far dont show up. For past
+                  attempts that have been submitted, only incorrectly answered
+                  questions show up. Anyway, hope you like it, let me know if
+                  any bugs :3.
                 </p>
                 <p>From Jambo!</p>
               </div>
