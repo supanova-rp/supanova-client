@@ -72,7 +72,7 @@ export const CourseQuizContainer: React.FC<Props> = ({
       },
       onSuccess: res => {
         if (res?.quizState) {
-          setSelectedAnswers(res.quizState);
+          setSelectedAnswers(JSON.parse(res?.quizState));
         }
 
         if (res?.attempts) {

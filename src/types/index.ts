@@ -105,7 +105,7 @@ export type QuizSelectedAnswers = QuizAnswerIndex[];
 export type QuizProgressState = QuizSelectedAnswers[];
 export type QuizStateResponse = {
   quizId?: string;
-  quizState?: QuizSelectedAnswers[];
+  quizState?: string; // needs to be parsed into QuizProgressState
   attempts?: number;
 };
 
