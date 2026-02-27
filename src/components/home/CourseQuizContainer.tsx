@@ -68,7 +68,7 @@ export const CourseQuizContainer: React.FC<Props> = ({
     "/get-quiz-state",
     {
       requestBody: {
-        quizId: quizSection.id,
+        quizID: quizSection.id,
       },
       onSuccess: res => {
         if (res?.quizState) {
@@ -173,8 +173,8 @@ export const CourseQuizContainer: React.FC<Props> = ({
     setSelectedAnswers(updatedSelectedAnswers);
 
     saveQuizState({
-      quizId: quizSection.id,
-      quizState: JSON.stringify(updatedSelectedAnswers),
+      quizID: quizSection.id,
+      state: JSON.stringify(updatedSelectedAnswers),
     });
 
     saveQuizStateV2({
