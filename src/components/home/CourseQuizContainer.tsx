@@ -68,11 +68,12 @@ export const CourseQuizContainer: React.FC<Props> = ({
     "/get-quiz-state",
     {
       requestBody: {
-        quizID: quizSection.id,
+        quizId: quizSection.id,
       },
       onSuccess: res => {
         if (res?.quizState) {
-          setSelectedAnswers(JSON.parse(res?.quizState));
+          setSelectedAnswers(res?.quizState);
+          // setSelectedAnswers(JSON.parse(res?.quizState));
         }
 
         if (res?.attempts) {
@@ -173,8 +174,8 @@ export const CourseQuizContainer: React.FC<Props> = ({
     setSelectedAnswers(updatedSelectedAnswers);
 
     saveQuizState({
-      quizID: quizSection.id,
-      state: JSON.stringify(updatedSelectedAnswers),
+      quizId: quizSection.id,
+      quizState: JSON.stringify(updatedSelectedAnswers),
     });
 
     saveQuizStateV2({
