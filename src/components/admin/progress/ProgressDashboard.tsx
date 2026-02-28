@@ -81,12 +81,17 @@ const ProgressDashboard = () => {
                   whether they&apos;ve completed the intro or entire course.
                 </p>
                 <p>
-                  It also shows any previous attempts they had at the quizzes
-                  (showing which questions they answered incorrectly) and if it
-                  hasn&apos;t been completed yet it will also show what
-                  they&apos;ve selected so far in their current attempt (for the
-                  current attempt it shows all selected answers, not just the
-                  ones that are incorrect).
+                  It also shows any previously submitted attempts they had at
+                  the quizzes (showing which questions they answered
+                  incorrectly) and if it hasn&apos;t been completed yet it will
+                  also show what they&apos;ve selected so far in their current
+                  attempt (for the current attempt it shows all selected
+                  answers, not just the ones that are incorrect). Any questions
+                  that arent answered in the current attempt so far dont show
+                  up. The green background highlight shows what is actually
+                  right, green background plus a green tick means it was correct
+                  AND they selected it, red background and red cross means
+                  it&apos;s incorrect and they selected it.
                 </p>
                 <p>
                   NOTE - one caveat with the quiz attempt history, the backend
@@ -101,14 +106,7 @@ const ProgressDashboard = () => {
                   You can see some examples of how it would look if you go on my
                   user, then go to the Top Up course or RPS course, or if you do
                   any quiz on your user from now on and then go to your user.
-                  The green background highlight shows what is actually right,
-                  green background plus a green tick means it was correct AND
-                  they selected it, red background and red cross means it&apos;s
-                  incorrect and they selected it. Any questions that arent
-                  answered in the current attempt so far dont show up. For past
-                  attempts that have been submitted, only incorrectly answered
-                  questions show up. Anyway, hope you like it, let me know if
-                  any bugs :3.
+                  Anyway, hope you like it, let me know if any bugs :3.
                 </p>
                 <p>From Jambo!</p>
               </div>
