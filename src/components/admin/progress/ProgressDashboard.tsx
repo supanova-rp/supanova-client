@@ -12,7 +12,7 @@ import AdminHeader from "../AdminHeader";
 
 const ProgressDashboard = () => {
   const [expandedUsers, setExpandedUsers] = useState<Set<ID>>(new Set());
-  const [isHappyBirthdayExpanded, setIsHappyBirthdayExpanded] = useState(false);
+  const [search, setSearch] = useState("");
   const { data, loading, error, refetch } = useQuery<ProgressAdminView[]>(
     "/admin/get-all-progress",
     {
@@ -35,6 +35,15 @@ const ProgressDashboard = () => {
   };
 
   const quizSectionsByID = new Map((quizSections ?? []).map(s => [s.id, s]));
+
+  const filteredData = search
+    ? data?.filter(u => {
+        const q = search.toLowerCase();
+        return (
+          u.name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q)
+        );
+      })
+    : data;
 
   const toggleUser = (userID: ID) => {
     setExpandedUsers(prev => {
@@ -60,66 +69,32 @@ const ProgressDashboard = () => {
         warningMessage="No user progress data available."
       >
         <div className="progress-dashboard">
-          <div className="progress-user-card">
-            <ExpandCollapseButton
-              isExpanded={isHappyBirthdayExpanded}
-              className="progress-user-header"
-              onClick={() => setIsHappyBirthdayExpanded(prev => !prev)}
-            >
-              <div className="progress-user-info">
-                <h5 className="progress-user-name">Happy Birthday Joel!</h5>
-              </div>
-            </ExpandCollapseButton>
-            {isHappyBirthdayExpanded ? (
-              <div
-                className="progress-user-breakdown"
-                style={{ paddingTop: 12 }}
-              >
-                <p>
-                  This dashboard tracks how far users have gotten in each course
-                  (green dot completed section, grey dot not completed section),
-                  whether they&apos;ve completed the intro or entire course.
-                </p>
-                <p>
-                  It also shows any previously submitted attempts they had at
-                  the quizzes (showing which questions they answered
-                  incorrectly) and if it hasn&apos;t been completed yet it will
-                  also show what they&apos;ve selected so far in their current
-                  attempt (for the current attempt it shows all selected
-                  answers, not just the ones that are incorrect). Any questions
-                  that arent answered in the current attempt so far dont show
-                  up. The green background highlight shows what is actually
-                  right, green background plus a green tick means it was correct
-                  AND they selected it, red background and red cross means
-                  it&apos;s incorrect and they selected it.
-                </p>
-                <p>
-                  NOTE - one caveat with the quiz attempt history, the backend
-                  wasn&apos;t collecting this data before so this will only work
-                  for future quiz attempts/submissions as there is no data for
-                  anything before this feature was added :(. Once there is data
-                  for a quiz then there will be an arrow next to the Quiz
-                  section which you can expand and see the current/past attempt
-                  data.
-                </p>
-                <p>
-                  You can see some examples of how it would look if you go on my
-                  user, then go to the Top Up course or RPS course, or if you do
-                  any quiz on your user from now on and then go to your user.
-                  Anyway, hope you like it, let me know if any bugs :3.
-                </p>
-                <p>From Jambo!</p>
-              </div>
-            ) : null}
-          </div>
-
-          <div className="d-flex justify-content-end">
+          <div className="d-flex align-items-center gap-3 justify-content-between">
+            <div className="progress-search">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Search by name or email"
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+              />
+              {search ? (
+                <button
+                  type="button"
+                  className="progress-search-clear"
+                  onClick={() => setSearch("")}
+                  aria-label="Clear search"
+                >
+                  &times;
+                </button>
+              ) : null}
+            </div>
             <Button variant="primary" size="sm" onClick={refetchAll}>
               Refresh data
             </Button>
           </div>
 
-          {data?.map(userProgress => {
+          {filteredData?.map(userProgress => {
             const isExpanded = expandedUsers.has(userProgress.userID);
             return (
               <div key={userProgress.userID} className="progress-user-card">
