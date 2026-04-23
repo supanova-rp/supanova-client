@@ -1,4 +1,4 @@
-# SupanovaClient
+# Supanova Client
 
 Front end for Supanova Radiation Protection Services learning platform
 
