@@ -50,7 +50,7 @@ const App = () => {
           </Routes>
         </AppProvider>
       </AuthProvider>
-      <Toaster position="top-right" />
+      <Toaster position="top-center" />
     </BrowserRouter>
   );
 };
