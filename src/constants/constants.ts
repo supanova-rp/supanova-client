@@ -11,6 +11,7 @@ export const ADMINS_TABS = {
   ASSIGN_USERS: "Assign Users",
   REGISTER_USER: "Register Users",
   USER_PROGRESS: "User Progress",
+  DUPLICATE_COURSE: "Duplicate Course",
 };
 
 export enum CourseTabs {
@@ -36,6 +37,8 @@ export const feedbackMessages = {
   saveCourseSuccess: "Successfully saved course!",
   deleteCourseError: "Failed to delete course. Try again.",
   deleteCourseSuccess: "Successfully deleted course!",
+  duplicateCourseError: "Failed to duplicate course. Try again.",
+  duplicateCourseSuccess: "Successfully duplicated course!",
   saveChangesError: "Failed to save changes. Try again.",
   quizStateLoadError: "Failed to retrieve saved quiz answers",
   passwordMismatch: "Passwords don't match.",

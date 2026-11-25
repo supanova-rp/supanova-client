@@ -5,14 +5,21 @@ import { AdminTabValue } from "src/types";
 
 import AddCourse from "./add-course/AddCourse";
 import AssignUsers from "./assign-users/AssignUsers";
+import DuplicateCourse from "./duplicate-course/DuplicateCourse";
 import EditCourses from "./edit-courses/EditCourses";
 import ProgressDashboard from "./progress/ProgressDashboard";
 import { RegisterUser } from "./register-user/RegisterUser";
 import AdminSidebarContainer from "./sidebar/AdminSidebarContainer";
 import BottomMobileNavbar from "../nav/BottomMobileNavbar";
 
-const { ADD_COURSE, ASSIGN_USERS, EDIT_COURSES, REGISTER_USER, USER_PROGRESS } =
-  ADMINS_TABS;
+const {
+  ADD_COURSE,
+  ASSIGN_USERS,
+  DUPLICATE_COURSE,
+  EDIT_COURSES,
+  REGISTER_USER,
+  USER_PROGRESS,
+} = ADMINS_TABS;
 
 const Admin = () => {
   const [activeTab, setActiveTab] = useState<AdminTabValue>(ADD_COURSE);
@@ -36,6 +43,10 @@ const Admin = () => {
 
     if (activeTab === USER_PROGRESS) {
       return <ProgressDashboard />;
+    }
+
+    if (activeTab === DUPLICATE_COURSE) {
+      return <DuplicateCourse />;
     }
 
     return null;

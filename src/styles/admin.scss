@@ -208,6 +208,17 @@
   }
 }
 
+.duplicate-course-form {
+  max-width: 450px;
+
+  // The help text renders inline, where vertical padding has no effect
+  .form-text {
+    display: inline-block;
+    margin-top: 0;
+    padding-top: 6px;
+  }
+}
+
 .progress-dashboard {
   display: flex;
   flex-direction: column;
